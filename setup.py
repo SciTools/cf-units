@@ -21,6 +21,6 @@ setup(
     url='http://scitools.org.uk/iris/',
     author='UK Met Office',
     packages=['units', 'units/tests'],
-    data_files=[('units', ['CHANGES', 'COPYING', 'COPYING.LESSER'])],
+    data_files=[('units', ['COPYING', 'COPYING.LESSER'])],
     tests_require=['nose'],
 )
