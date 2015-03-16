@@ -1,19 +1,19 @@
 # (C) British Crown Copyright 2010 - 2015, Met Office
 #
-# This file is part of Iris.
+# This file is part of cf_units.
 #
-# Iris is free software: you can redistribute it and/or modify it under
+# cf_units is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the
 # Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# Iris is distributed in the hope that it will be useful,
+# cf_units is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License for more details.
 #
 # You should have received a copy of the GNU Lesser General Public License
-# along with Iris.  If not, see <http://www.gnu.org/licenses/>.
+# along with cf_units.  If not, see <http://www.gnu.org/licenses/>.
 """
 Units of measure.
 
@@ -723,7 +723,7 @@ def suppress_unit_warnings():
     _ut_ignore = _func_type((_UT_IGNORE, _lib_ud))
     _default_handler = _ut_set_error_message_handler(_ut_ignore)
     with warnings.catch_warnings():
-        # Also suppress invalid units warnings from the Iris loader code.
+        # Also suppress invalid units warnings from the cf_units loader code.
         warnings.filterwarnings("ignore", message=".*invalid units")
         yield
     _ut_set_error_message_handler(_default_handler)
@@ -1678,7 +1678,7 @@ class Unit(util._OrderedHashable):
         Note that, UDUNITS-2 does not support raising a
         non-dimensionless unit by a fractional power.
         Approximate floating point power behaviour has been implemented
-        specifically for Iris.
+        specifically for cf_units.
 
         Args:
 
