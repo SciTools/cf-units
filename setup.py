@@ -18,7 +18,7 @@ def extract_version():
 setup(
     name='units',
     version=extract_version(),
-    url='http://scitools.org.uk/iris/',
+    url='https://github.com/SciTools/cf_units',
     author='UK Met Office',
     packages=['units', 'units/tests'],
     data_files=[('units', ['COPYING', 'COPYING.LESSER'])],
