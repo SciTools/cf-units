@@ -17,4 +17,7 @@
 
 __version__ = '0.0.1'
 
-from .unit import *
+from .cf_units import *
+from .cf_units import (CALENDAR_STANDARD, CALENDARS, UT_NAMES, UT_DEFINITION,
+                       FLOAT32, FLOAT64, julian_day2date, date2julian_day,
+                       is_time, is_vertical)
