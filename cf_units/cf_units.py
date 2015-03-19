@@ -55,7 +55,7 @@ __all__ = ['Unit', 'date2num', 'decode_time', 'encode_clock', 'encode_date',
 #
 # default constants
 #
-IRIS_EPOCH = '1970-01-01 00:00:00'
+EPOCH = '1970-01-01 00:00:00'
 _STRING_BUFFER_DEPTH = 128
 _UNKNOWN_UNIT_STRING = 'unknown'
 _UNKNOWN_UNIT_SYMBOL = '?'
@@ -385,8 +385,8 @@ def encode_time(year, month, day, hour, minute, second):
 
     For example:
 
-        >>> import unit
-        >>> unit.encode_time(1970, 1, 1, 0, 0, 0)
+        >>> import cf_units
+        >>> cf_units.encode_time(1970, 1, 1, 0, 0, 0)
         -978307200.0
 
     """
@@ -419,8 +419,8 @@ def encode_date(year, month, day):
 
     For example:
 
-        >>> import unit
-        >>> unit.encode_date(1970, 1, 1)
+        >>> import cf_units
+        >>> cf_units.encode_date(1970, 1, 1)
         -978307200.0
 
     """
@@ -447,8 +447,8 @@ def encode_clock(hour, minute, second):
 
     For example:
 
-        >>> import unit
-        >>> unit.encode_clock(0, 0, 0)
+        >>> import cf_units
+        >>> cf_units.encode_clock(0, 0, 0)
         0.0
 
     """
@@ -475,8 +475,8 @@ def decode_time(time):
 
     For example:
 
-        >>> import unit
-        >>> unit.decode_time(unit.encode_time(1970, 1, 1, 0, 0, 0))
+        >>> import cf_units
+        >>> cf_units.decode_time(cf_units.encode_time(1970, 1, 1, 0, 0, 0))
         (1970, 1, 1, 0, 0, 0.0, 1.086139178596568e-07)
 
     """
@@ -522,19 +522,19 @@ def julian_day2date(julian_day, calendar):
     * julian_day (float):
         Julian day with a resolution of 1 second.
     * calendar (string):
-        Name of the calendar, see unit.CALENDARS.
+        Name of the calendar, see cf_units.CALENDARS.
 
     Returns:
         datetime or netcdftime.datetime.
 
     For example:
 
-        >>> import unit
+        >>> import cf_units
         >>> import datetime
-        >>> unit.julian_day2date(
-        ...     unit.date2julian_day(datetime.datetime(1970, 1, 1, 0, 0, 0),
-        ...                          unit.CALENDAR_STANDARD),
-        ...     unit.CALENDAR_STANDARD)
+        >>> cf_units.julian_day2date(
+        ...    cf_units.date2julian_day(datetime.datetime(1970, 1, 1, 0, 0, 0),
+        ...                             cf_units.CALENDAR_STANDARD),
+        ...     cf_units.CALENDAR_STANDARD)
         datetime.datetime(1970, 1, 1, 0, 0)
 
     """
@@ -562,17 +562,17 @@ def date2julian_day(date, calendar):
     * date (netcdftime.date):
         Date and time representation.
     * calendar (string):
-        Name of the calendar, see unit.CALENDARS.
+        Name of the calendar, see cf_units.CALENDARS.
 
     Returns:
         float.
 
     For example:
 
-        >>> import unit
+        >>> import cf_units
         >>> import datetime
-        >>> unit.date2julian_day(datetime.datetime(1970, 1, 1, 0, 0, 0),
-        ...                      unit.CALENDAR_STANDARD)
+        >>> cf_units.date2julian_day(datetime.datetime(1970, 1, 1, 0, 0, 0),
+        ...                          cf_units.CALENDAR_STANDARD)
         2440587.5
 
     """
@@ -606,22 +606,22 @@ def date2num(date, unit, calendar):
         The <time-origin> is a date/time reference point. A valid choice
         would be unit='hours since 1800-01-01 00:00:00 -6:00'.
     * calendar (string):
-        Name of the calendar, see unit.CALENDARS.
+        Name of the calendar, see cf_units.CALENDARS.
 
     Returns:
         float, or numpy.ndarray of float.
 
     For example:
 
-        >>> import unit
+        >>> import cf_units
         >>> import datetime
         >>> dt1 = datetime.datetime(1970, 1, 1, 6, 0, 0)
         >>> dt2 = datetime.datetime(1970, 1, 1, 7, 0, 0)
-        >>> unit.date2num(dt1, 'hours since 1970-01-01 00:00:00',
-        ...               unit.CALENDAR_STANDARD)
+        >>> cf_units.date2num(dt1, 'hours since 1970-01-01 00:00:00',
+        ...               cf_units.CALENDAR_STANDARD)
         6.0
-        >>> unit.date2num([dt1, dt2], 'hours since 1970-01-01 00:00:00',
-        ...               unit.CALENDAR_STANDARD)
+        >>> cf_units.date2num([dt1, dt2], 'hours since 1970-01-01 00:00:00',
+        ...               cf_units.CALENDAR_STANDARD)
         array([ 6.,  7.])
 
     """
@@ -633,7 +633,7 @@ def date2num(date, unit, calendar):
     #
     unit_string = unit.rstrip(" UTC")
     if unit_string.endswith(" since epoch"):
-        unit_string = unit_string.replace("epoch", IRIS_EPOCH)
+        unit_string = unit_string.replace("epoch", EPOCH)
     return netcdftime.date2num(date, unit_string, calendar)
 
 
@@ -673,20 +673,20 @@ def num2date(time_value, unit, calendar):
         point. A valid choice would be
         unit='hours since 1800-01-01 00:00:00 -6:00'.
     * calendar (string):
-        Name of the calendar, see unit.CALENDARS.
+        Name of the calendar, see cf_units.CALENDARS.
 
     Returns:
         datetime, or numpy.ndarray of datetime object.
 
     For example:
 
-        >>> import unit
+        >>> import cf_units
         >>> import datetime
-        >>> unit.num2date(6, 'hours since 1970-01-01 00:00:00',
-        ...               unit.CALENDAR_STANDARD)
+        >>> cf_units.num2date(6, 'hours since 1970-01-01 00:00:00',
+        ...                   cf_units.CALENDAR_STANDARD)
         datetime.datetime(1970, 1, 1, 6, 0)
-        >>> unit.num2date([6, 7], 'hours since 1970-01-01 00:00:00',
-        ...               unit.CALENDAR_STANDARD)
+        >>> cf_units.num2date([6, 7], 'hours since 1970-01-01 00:00:00',
+        ...                   cf_units.CALENDAR_STANDARD)
         array([datetime.datetime(1970, 1, 1, 6, 0),
                datetime.datetime(1970, 1, 1, 7, 0)], dtype=object)
 
@@ -699,7 +699,7 @@ def num2date(time_value, unit, calendar):
     #
     unit_string = unit.rstrip(" UTC")
     if unit_string.endswith(" since epoch"):
-        unit_string = unit_string.replace("epoch", IRIS_EPOCH)
+        unit_string = unit_string.replace("epoch", EPOCH)
     return netcdftime.num2date(time_value, unit_string, calendar)
 
 
@@ -780,10 +780,10 @@ def is_time(unit):
 
     For example:
 
-        >>> import unit
-        >>> unit.is_time('hours')
+        >>> import cf_units
+        >>> cf_units.is_time('hours')
         True
-        >>> unit.is_time('meters')
+        >>> cf_units.is_time('meters')
         False
 
     """
@@ -803,10 +803,10 @@ def is_vertical(unit):
 
     For example:
 
-        >>> import unit
-        >>> unit.is_vertical('millibar')
+        >>> import cf_units
+        >>> cf_units.is_vertical('millibar')
         True
-        >>> unit.is_vertical('km')
+        >>> cf_units.is_vertical('km')
         True
 
     """
@@ -838,7 +838,7 @@ class Unit(util._OrderedHashable):
     'Reference to the ctypes quantity defining the UDUNITS-2 unit.'
 
     calendar = None
-    'Represents the unit calendar name, see unit.CALENDARS'
+    'Represents the unit calendar name, see cf_units.CALENDARS'
 
     origin = None
     'The original string used to create this unit.'
@@ -889,7 +889,7 @@ class Unit(util._OrderedHashable):
         Units can also be set to "unknown" (or None).
         For example:
 
-            >>> from unit import Unit
+            >>> from cf_units import Unit
             >>> volts = Unit('volts')
             >>> no_unit = Unit('no_unit')
             >>> unknown = Unit('unknown')
@@ -908,7 +908,7 @@ class Unit(util._OrderedHashable):
             unit = unit[:unit.lower().rfind(' utc')]
 
         if unit.endswith(" since epoch"):
-            unit = unit.replace("epoch", IRIS_EPOCH)
+            unit = unit.replace("epoch", EPOCH)
 
         if unit.lower() in _UNKNOWN_UNIT:
             # TODO - removing the option of an unknown unit. Currently
@@ -1004,11 +1004,11 @@ class Unit(util._OrderedHashable):
 
         For example:
 
-            >>> import unit
-            >>> u = unit.Unit('hours')
+            >>> import cf_units
+            >>> u = cf_units.Unit('hours')
             >>> u.is_time()
             True
-            >>> v = unit.Unit('meter')
+            >>> v = cf_units.Unit('meter')
             >>> v.is_time()
             False
 
@@ -1030,11 +1030,11 @@ class Unit(util._OrderedHashable):
 
         For example:
 
-            >>> import unit
-            >>> u = unit.Unit('millibar')
+            >>> import cf_units
+            >>> u = cf_units.Unit('millibar')
             >>> u.is_vertical()
             True
-            >>> v = unit.Unit('km')
+            >>> v = cf_units.Unit('km')
             >>> v.is_vertical()
             True
 
@@ -1064,8 +1064,8 @@ class Unit(util._OrderedHashable):
 
         For example:
 
-            >>> import unit
-            >>> u = unit.Unit('days since epoch')
+            >>> import cf_units
+            >>> u = cf_units.Unit('days since epoch')
             >>> u.is_time_reference()
             True
 
@@ -1085,9 +1085,9 @@ class Unit(util._OrderedHashable):
 
         For example:
 
-            >>> import unit
-            >>> u = unit.Unit('hours since epoch',
-            ...               calendar=unit.CALENDAR_STANDARD)
+            >>> import cf_units
+            >>> u = cf_units.Unit('hours since epoch',
+            ...                   calendar=cf_units.CALENDAR_STANDARD)
             >>> u.title(10)
             '1970-01-01 10:00:00'
 
@@ -1114,8 +1114,8 @@ class Unit(util._OrderedHashable):
 
         For example:
 
-            >>> import unit
-            >>> u = unit.Unit('degrees')
+            >>> import cf_units
+            >>> u = cf_units.Unit('degrees')
             >>> u.modulus
             360.0
 
@@ -1142,9 +1142,9 @@ class Unit(util._OrderedHashable):
 
         For example:
 
-            >>> import unit
-            >>> u = unit.Unit('meters')
-            >>> v = unit.Unit('kilometers')
+            >>> import cf_units
+            >>> u = cf_units.Unit('meters')
+            >>> v = cf_units.Unit('kilometers')
             >>> u.is_convertible(v)
             True
 
@@ -1167,11 +1167,11 @@ class Unit(util._OrderedHashable):
 
         For example:
 
-            >>> import unit
-            >>> u = unit.Unit('meters')
+            >>> import cf_units
+            >>> u = cf_units.Unit('meters')
             >>> u.is_dimensionless()
             False
-            >>> u = unit.Unit('1')
+            >>> u = cf_units.Unit('1')
             >>> u.is_dimensionless()
             True
 
@@ -1188,11 +1188,11 @@ class Unit(util._OrderedHashable):
 
         For example:
 
-            >>> import unit
-            >>> u = unit.Unit('unknown')
+            >>> import cf_units
+            >>> u = cf_units.Unit('unknown')
             >>> u.is_unknown()
             True
-            >>> u = unit.Unit('meters')
+            >>> u = cf_units.Unit('meters')
             >>> u.is_unknown()
             False
 
@@ -1212,11 +1212,11 @@ class Unit(util._OrderedHashable):
 
         For example:
 
-            >>> import unit
-            >>> u = unit.Unit('no unit')
+            >>> import cf_units
+            >>> u = cf_units.Unit('no unit')
             >>> u.is_no_unit()
             True
-            >>> u = unit.Unit('meters')
+            >>> u = cf_units.Unit('meters')
             >>> u.is_no_unit()
             False
 
@@ -1229,7 +1229,7 @@ class Unit(util._OrderedHashable):
 
         Args:
 
-        * option (unit.UT_FORMATS):
+        * option (cf_units.UT_FORMATS):
             Set the encoding option of the formatted string representation.
             Valid encoding options may be one of the following enumerations:
 
@@ -1241,20 +1241,20 @@ class Unit(util._OrderedHashable):
             * Unit.UT_DEFINITION
 
             Multiple options may be combined within a list. The default
-            option is unit.UT_ASCII.
+            option is cf_units.UT_ASCII.
 
         Returns:
             string.
 
         For example:
 
-            >>> import unit
-            >>> u = unit.Unit('meters')
+            >>> import cf_units
+            >>> u = cf_units.Unit('meters')
             >>> u.format()
             'm'
-            >>> u.format(unit.UT_NAMES)
+            >>> u.format(cf_units.UT_NAMES)
             'meter'
-            >>> u.format(unit.UT_DEFINITION)
+            >>> u.format(cf_units.UT_DEFINITION)
             'm'
 
         """
@@ -1282,16 +1282,16 @@ class Unit(util._OrderedHashable):
         *(read-only)* The full name of the unit.
 
         Formats the binary unit into a string representation using
-        method :func:`unit.Unit.format` with keyword argument
-        option=unit.UT_NAMES.
+        method :func:`cf_units.Unit.format` with keyword argument
+        option=cf_units.UT_NAMES.
 
         Returns:
             string.
 
         For example:
 
-            >>> import unit
-            >>> u = unit.Unit('watts')
+            >>> import cf_units
+            >>> u = cf_units.Unit('watts')
             >>> u.name
             'watt'
 
@@ -1304,15 +1304,15 @@ class Unit(util._OrderedHashable):
         *(read-only)* The symbolic representation of the unit.
 
         Formats the binary unit into a string representation using
-        method :func:`unit.Unit.format`.
+        method :func:`cf_units.Unit.format`.
 
         Returns:
             string.
 
         For example:
 
-            >>> import unit
-            >>> u = unit.Unit('watts')
+            >>> import cf_units
+            >>> u = cf_units.Unit('watts')
             >>> u.symbol
             'W'
 
@@ -1331,16 +1331,16 @@ class Unit(util._OrderedHashable):
         *(read-only)* The symbolic decomposition of the unit.
 
         Formats the binary unit into a string representation using
-        method :func:`unit.Unit.format` with keyword argument
-        option=unit.UT_DEFINITION.
+        method :func:`cf_units.Unit.format` with keyword argument
+        option=cf_units.UT_DEFINITION.
 
         Returns:
             string.
 
         For example:
 
-            >>> import unit
-            >>> u = unit.Unit('watts')
+            >>> import cf_units
+            >>> u = cf_units.Unit('watts')
             >>> u.definition
             'm2.kg.s-3'
 
@@ -1360,16 +1360,16 @@ class Unit(util._OrderedHashable):
         Args:
 
         * origin (float): Time origin as returned by the
-          :func:`unit.encode_time` method.
+          :func:`cf_units.encode_time` method.
 
         Returns:
             None.
 
         For example:
 
-            >>> import unit
-            >>> u = unit.Unit('hours')
-            >>> u.offset_by_time(unit.encode_time(1970, 1, 1, 0, 0, 0))
+            >>> import cf_units
+            >>> u = cf_units.Unit('hours')
+            >>> u.offset_by_time(cf_units.encode_time(1970, 1, 1, 0, 0, 0))
             Unit('hour since 1970-01-01 00:00:00.0000000 UTC')
 
         """
@@ -1393,8 +1393,8 @@ class Unit(util._OrderedHashable):
 
         For example:
 
-            >>> import unit
-            >>> u = unit.Unit('meters')
+            >>> import cf_units
+            >>> u = cf_units.Unit('meters')
             >>> u.invert()
             Unit('meter^-1')
 
@@ -1424,8 +1424,8 @@ class Unit(util._OrderedHashable):
 
         For example:
 
-            >>> import unit
-            >>> u = unit.Unit('meters^2')
+            >>> import cf_units
+            >>> u = cf_units.Unit('meters^2')
             >>> u.root(2)
             Unit('meter')
 
@@ -1470,8 +1470,8 @@ class Unit(util._OrderedHashable):
 
         For example:
 
-            >>> import unit
-            >>> u = unit.Unit('meters')
+            >>> import cf_units
+            >>> u = cf_units.Unit('meters')
             >>> u.log(2)
             Unit('lb(re 1 meter)')
 
@@ -1503,8 +1503,8 @@ class Unit(util._OrderedHashable):
 
         For example:
 
-            >>> import unit
-            >>> u = unit.Unit('meters')
+            >>> import cf_units
+            >>> u = cf_units.Unit('meters')
             >>> str(u)
             'meters'
 
@@ -1520,8 +1520,8 @@ class Unit(util._OrderedHashable):
 
         For example:
 
-            >>> import unit
-            >>> u = unit.Unit('meters')
+            >>> import cf_units
+            >>> u = cf_units.Unit('meters')
             >>> repr(u)
             "Unit('meters')"
 
@@ -1610,9 +1610,9 @@ class Unit(util._OrderedHashable):
 
         For example:
 
-            >>> import unit
-            >>> u = unit.Unit('meters')
-            >>> v = unit.Unit('hertz')
+            >>> import cf_units
+            >>> u = cf_units.Unit('meters')
+            >>> v = cf_units.Unit('hertz')
             >>> u*v
             Unit('meter-second^-1')
 
@@ -1636,9 +1636,9 @@ class Unit(util._OrderedHashable):
 
         For example:
 
-            >>> import unit
-            >>> u = unit.Unit('m.s-1')
-            >>> v = unit.Unit('hertz')
+            >>> import cf_units
+            >>> u = cf_units.Unit('m.s-1')
+            >>> v = cf_units.Unit('hertz')
             >>> u/v
             Unit('meter')
 
@@ -1662,9 +1662,9 @@ class Unit(util._OrderedHashable):
 
         For example:
 
-            >>> import unit
-            >>> u = unit.Unit('m.s-1')
-            >>> v = unit.Unit('hertz')
+            >>> import cf_units
+            >>> u = cf_units.Unit('m.s-1')
+            >>> v = cf_units.Unit('hertz')
             >>> u/v
             Unit('meter')
 
@@ -1689,8 +1689,8 @@ class Unit(util._OrderedHashable):
 
         For example:
 
-            >>> import unit
-            >>> u = unit.Unit('meters')
+            >>> import cf_units
+            >>> u = cf_units.Unit('meters')
             >>> u**2
             Unit('meter^2')
 
@@ -1750,7 +1750,7 @@ class Unit(util._OrderedHashable):
 
         For example:
 
-            >>> from unit import Unit
+            >>> from cf_units import Unit
             >>> Unit('meters') == Unit('millimeters')
             False
             >>> Unit('meters') == 'm'
@@ -1784,7 +1784,7 @@ class Unit(util._OrderedHashable):
 
         For example:
 
-            >>> from unit import Unit
+            >>> from cf_units import Unit
             >>> Unit('meters') != Unit('millimeters')
             True
             >>> Unit('meters') != 'm'
@@ -1807,8 +1807,8 @@ class Unit(util._OrderedHashable):
         * other (string/Unit):
             Target unit to convert to.
         * ctype (ctypes.c_float/ctypes.c_double):
-            Floating point 32-bit single-precision (unit.FLOAT32) or
-            64-bit double-precision (unit.FLOAT64) of conversion. The
+            Floating point 32-bit single-precision (cf_units.FLOAT32) or
+            64-bit double-precision (cf_units.FLOAT64) of conversion. The
             default is 64-bit double-precision conversion.
 
         Returns:
@@ -1816,13 +1816,13 @@ class Unit(util._OrderedHashable):
 
         For example:
 
-            >>> import unit
+            >>> import cf_units
             >>> import numpy as np
-            >>> c = unit.Unit('deg_c')
-            >>> f = unit.Unit('deg_f')
+            >>> c = cf_units.Unit('deg_c')
+            >>> f = cf_units.Unit('deg_f')
             >>> print(c.convert(0, f))
             32.0
-            >>> c.convert(0, f, unit.FLOAT32)
+            >>> c.convert(0, f, cf_units.FLOAT32)
             32.0
             >>> a64 = np.arange(10, dtype=np.float64)
             >>> c.convert(a64, f)
@@ -1914,9 +1914,9 @@ class Unit(util._OrderedHashable):
 
         For example:
 
-            >>> import unit
-            >>> u = unit.Unit('hours since 1970-01-01 00:00:00',
-            ...               calendar=unit.CALENDAR_STANDARD)
+            >>> import cf_units
+            >>> u = cf_units.Unit('hours since 1970-01-01 00:00:00',
+            ...                   calendar=cf_units.CALENDAR_STANDARD)
             >>> ut = u.utime()
             >>> ut.num2date(2)
             datetime.datetime(1970, 1, 1, 2, 0)
@@ -1954,10 +1954,10 @@ class Unit(util._OrderedHashable):
 
         For example:
 
-            >>> import unit
+            >>> import cf_units
             >>> import datetime
-            >>> u = unit.Unit('hours since 1970-01-01 00:00:00',
-            ...               calendar=unit.CALENDAR_STANDARD)
+            >>> u = cf_units.Unit('hours since 1970-01-01 00:00:00',
+            ...                   calendar=cf_units.CALENDAR_STANDARD)
             >>> u.date2num(datetime.datetime(1970, 1, 1, 5))
             5.00000000372529
             >>> u.date2num([datetime.datetime(1970, 1, 1, 5),
@@ -1998,9 +1998,9 @@ class Unit(util._OrderedHashable):
 
         For example:
 
-            >>> import unit
-            >>> u = unit.Unit('hours since 1970-01-01 00:00:00',
-            ...               calendar=unit.CALENDAR_STANDARD)
+            >>> import cf_units
+            >>> u = cf_units.Unit('hours since 1970-01-01 00:00:00',
+            ...                   calendar=cf_units.CALENDAR_STANDARD)
             >>> u.num2date(6)
             datetime.datetime(1970, 1, 1, 6, 0)
             >>> u.num2date([6, 7])
