@@ -19,6 +19,7 @@
 from __future__ import (absolute_import, division, print_function)
 
 import ConfigParser
+import os.path
 
 # Load the optional "site.cfg" file if it exists.
 config = ConfigParser.SafeConfigParser()
@@ -35,3 +36,13 @@ def get_option(section, option, default=None):
     if config.has_option(section, option):
         value = config.get(section, option)
     return value
+
+# Figure out the full path to the "cf_units" package.
+ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
+
+# The full path to the configuration directory of the active cf_units instance.
+CONFIG_PATH = os.path.join(ROOT_PATH, 'etc')
+
+# Load the optional "site.cfg" file if it exists.
+config = ConfigParser.SafeConfigParser()
+config.read([os.path.join(CONFIG_PATH, 'site.cfg')])
