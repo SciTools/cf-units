@@ -634,7 +634,8 @@ def date2num(date, unit, calendar):
     unit_string = unit.rstrip(" UTC")
     if unit_string.endswith(" since epoch"):
         unit_string = unit_string.replace("epoch", EPOCH)
-    return netcdftime.date2num(date, unit_string, calendar)
+    cdftime = netcdftime.utime(unit_string, calendar=calendar)
+    return cdftime.date2num(date)
 
 
 def num2date(time_value, unit, calendar):
@@ -700,7 +701,8 @@ def num2date(time_value, unit, calendar):
     unit_string = unit.rstrip(" UTC")
     if unit_string.endswith(" since epoch"):
         unit_string = unit_string.replace("epoch", EPOCH)
-    return netcdftime.num2date(time_value, unit_string, calendar)
+    cdftime = netcdftime.utime(unit_string, calendar=calendar)
+    return cdftime.num2date(time_value)
 
 
 def _handler(func):
@@ -1857,7 +1859,7 @@ class Unit(util._OrderedHashable):
                 result = ut2.date2num(ut1.num2date(value_copy))
                 # Preserve the datatype of the input array if it was float32.
                 if (isinstance(value, np.ndarray) and
-                    value.dtype == np.float32):
+                   value.dtype == np.float32):
                     result = result.astype(np.float32)
             else:
                 ut_converter = _ut_get_converter(self.ut_unit, other.ut_unit)
