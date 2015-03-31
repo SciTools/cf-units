@@ -1,0 +1,7 @@
+# Mandatory dependencies.
+netcdf4
+udunits=2.*
+
+# Testing/documentation dependencies.
+nose
+pep8=1.5.7

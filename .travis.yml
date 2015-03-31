@@ -1,0 +1,45 @@
+language: python
+
+python:
+  - 2.7
+  #- 3.4
+
+install:
+  # Install miniconda
+  # -----------------
+  - export CONDA_BASE=http://repo.continuum.io/miniconda/Miniconda
+  - if [[ "$TRAVIS_PYTHON_VERSION" == 2* ]]; then
+      wget ${CONDA_BASE}-3.7.0-Linux-x86_64.sh -O miniconda.sh;
+    else
+      wget ${CONDA_BASE}3-3.7.0-Linux-x86_64.sh -O miniconda.sh;
+    fi
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+
+  # Create the basic testing environment
+  # ------------------------------------
+  - conda config --set always_yes yes --set changeps1 no
+  - conda config --set show_channel_urls True
+  - conda update --quiet conda
+  - ENV_NAME='test-environment'
+  - conda create --quiet -n $ENV_NAME python=$TRAVIS_PYTHON_VERSION
+  - source activate $ENV_NAME
+
+  # Customise the testing environment
+  # ---------------------------------
+  - conda config --add channels scitools
+  - conda install --quiet --file conda-requirements.txt
+
+  # Output debug info
+  - conda list
+  - conda info -a
+
+  # cf_units.
+  - PREFIX=$HOME/miniconda/envs/$ENV_NAME
+  - SITE_CFG=cf_units/etc/site.cfg
+  - echo "[System]" >> $SITE_CFG
+  - echo "udunits2_path = $PREFIX/lib/libudunits2.so" >> $SITE_CFG
+  - python setup.py --quiet install
+
+script:
+      nosetests --verbose --nocapture cf_units/tests/test_unit.py
