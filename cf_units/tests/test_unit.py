@@ -26,6 +26,11 @@ import copy
 import datetime as datetime
 import operator
 
+try:
+    from operator import truediv
+except ImportError:
+    from operator import div as truediv
+
 import numpy as np
 
 from cf_units import cf_units as unit
@@ -244,7 +249,7 @@ class TestOffset(unittest.TestCase):
 
     def test_offset_pass_2(self):
         u = Unit("meter")
-        self.assertEqual(u + 1000L, "m @ 1000")
+        self.assertEqual(u + 1000, "m @ 1000")
 
 
 class TestOffsetByTime(unittest.TestCase):
@@ -376,7 +381,7 @@ class TestMultiply(unittest.TestCase):
 
     def test_multiply_pass_2(self):
         u = Unit("amp")
-        self.assertEqual((u * 1000L).format(), "1000 A")
+        self.assertEqual((u * 1000).format(), "1000 A")
 
     def test_multiply_pass_3(self):
         u = Unit("amp")
@@ -387,7 +392,7 @@ class TestMultiply(unittest.TestCase):
 class TestDivide(unittest.TestCase):
     def test_divide_fail_0(self):
         u = Unit("watts")
-        self.assertRaises(ValueError, operator.div, u, "naughty")
+        self.assertRaises(ValueError, truediv, u, "naughty")
 
     def test_divide_fail_1(self):
         u = Unit('unknown')
@@ -398,14 +403,14 @@ class TestDivide(unittest.TestCase):
     def test_divide_fail_3(self):
         u = Unit('unknown')
         v = Unit('no unit')
-        self.assertRaises(ValueError, operator.div, u, v)
-        self.assertRaises(ValueError, operator.div, v, u)
+        self.assertRaises(ValueError, truediv, u, v)
+        self.assertRaises(ValueError, truediv, v, u)
 
     def test_divide_fail_5(self):
         u = Unit('meters')
         v = Unit('no unit')
-        self.assertRaises(ValueError, operator.div, u, v)
-        self.assertRaises(ValueError, operator.div, v, u)
+        self.assertRaises(ValueError, truediv, u, v)
+        self.assertRaises(ValueError, truediv, v, u)
 
     def test_divide_pass_0(self):
         u = Unit("watts")
@@ -417,7 +422,7 @@ class TestDivide(unittest.TestCase):
 
     def test_divide_pass_2(self):
         u = Unit("watts")
-        self.assertEqual((u / 1000L).format(), "0.001 W")
+        self.assertEqual((u / 1000).format(), "0.001 W")
 
     def test_divide_pass_3(self):
         u = Unit("watts")
@@ -434,7 +439,7 @@ class TestPower(unittest.TestCase):
         self.assertRaises(TypeError, operator.pow, u, Unit('no unit'))
         self.assertEqual(u ** 2, Unit('A^2'))
         self.assertEqual(u ** 3.0, Unit('A^3'))
-        self.assertEqual(u ** 4L, Unit('A^4'))
+        self.assertEqual(u ** 4, Unit('A^4'))
         self.assertRaises(ValueError, operator.pow, u, 2.4)
 
         u = Unit("m^2")
@@ -447,7 +452,7 @@ class TestPower(unittest.TestCase):
         self.assertRaises(TypeError, operator.pow, u, Unit('m'))
         self.assertEqual(u ** 2, Unit('unknown'))
         self.assertEqual(u ** 3.0, Unit('unknown'))
-        self.assertEqual(u ** 4L, Unit('unknown'))
+        self.assertEqual(u ** 4, Unit('unknown'))
 
     def test_power_nounit(self):
         u = Unit('no unit')

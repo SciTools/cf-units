@@ -27,6 +27,8 @@ See also: `UDUNITS-2
 
 from __future__ import (absolute_import, division, print_function)
 
+import six
+
 from contextlib import contextmanager
 import copy
 import ctypes
@@ -39,7 +41,7 @@ import netcdftime
 import numpy as np
 
 from . import config
-from . import util
+from .util import approx_equal
 
 
 __all__ = ['CALENDAR_STANDARD',
@@ -329,13 +331,13 @@ if _lib_ud is None:
     _ut_scale.argtypes = [ctypes.c_double, ctypes.c_void_p]
     _ut_scale.restype = ctypes.c_void_p
 
-    # convenience dictionary for the Unit convert method
+    # Convenience dictionary for the Unit convert method.
     _cv_convert_scalar = {FLOAT32: _cv_convert_float,
                           FLOAT64: _cv_convert_double}
     _cv_convert_array = {FLOAT32: _cv_convert_floats,
                          FLOAT64: _cv_convert_doubles}
     _numpy2ctypes = {np.float32: FLOAT32, np.float64: FLOAT64}
-    _ctypes2numpy = {v: k for k, v in _numpy2ctypes.iteritems()}
+    _ctypes2numpy = {v: k for k, v in _numpy2ctypes.items()}
 
 
 @contextmanager
@@ -748,7 +750,7 @@ def num2date(time_value, unit, calendar):
 ########################################################################
 
 def _Unit(category, ut_unit, calendar=None, origin=None):
-    unit = util._OrderedHashable.__new__(Unit)
+    unit = _OrderedHashable.__new__(Unit)
     unit._init(category, ut_unit, calendar, origin)
     return unit
 
@@ -769,7 +771,7 @@ def as_unit(unit):
         result = unit
     else:
         result = None
-        use_cache = isinstance(unit, basestring) or unit is None
+        use_cache = isinstance(unit, six.string_types) or unit is None
         if use_cache:
             result = _CACHE.get(unit)
         if result is None:
@@ -825,7 +827,10 @@ def is_vertical(unit):
     return as_unit(unit).is_vertical()
 
 
-class Unit(util._OrderedHashable):
+from .util import _OrderedHashable
+
+
+class Unit(_OrderedHashable):
     """
     A class to represent S.I. units and support common operations to
     manipulate such units in a consistent manner as per UDUNITS-2.
@@ -840,7 +845,46 @@ class Unit(util._OrderedHashable):
     This class also supports time and calendar defintion and manipulation.
 
     """
-    # Declare the attribute names relevant to the _OrderedHashable behaviour.
+    def _init_from_tuple(self, values):
+        for name, value in zip(self._names, values):
+            object.__setattr__(self, name, value)
+
+    def _as_tuple(self):
+        return tuple(getattr(self, name) for name in self._names)
+
+    # Provide hash semantics
+
+    def _identity(self):
+        return self._as_tuple()
+
+    def __hash__(self):
+        return hash(self._identity())
+
+    def __eq__(self, other):
+        return (isinstance(other, type(self)) and
+                self._identity() == other._identity())
+
+    def __ne__(self, other):
+        # Since we've defined __eq__ we should also define __ne__.
+        return not self == other
+
+    # Provide default ordering semantics
+
+    def __lt__(self, other):
+        return self._identity() < other._identity()
+
+    # Prevent attribute updates
+
+    def __setattr__(self, name, value):
+        raise AttributeError('Instances of %s are immutable' %
+                             type(self).__name__)
+
+    def __delattr__(self, name):
+        raise AttributeError('Instances of %s are immutable' %
+                             type(self).__name__)
+
+    # Declare the attribute names relevant to the ordered and hashable
+    #  behaviour.
     _names = ('category', 'ut_unit', 'calendar', 'origin')
 
     category = None
@@ -934,14 +978,14 @@ class Unit(util._OrderedHashable):
             unit = _NO_UNIT_STRING
         else:
             category = _CATEGORY_UDUNIT
-            ut_unit = _ut_parse(_ud_system, unit, UT_ASCII)
+            ut_unit = _ut_parse(_ud_system, unit.encode('ascii'), UT_ASCII)
             # _ut_parse returns 0 on failure
             if ut_unit is None:
                 self._raise_error('Failed to parse unit "%s"' % unit)
             if _OP_SINCE in unit.lower():
                 if calendar is None:
                     calendar_ = CALENDAR_GREGORIAN
-                elif isinstance(calendar, basestring):
+                elif isinstance(calendar, six.string_types):
                     if calendar.lower() in CALENDARS:
                         calendar_ = calendar.lower()
                     else:
@@ -951,7 +995,7 @@ class Unit(util._OrderedHashable):
                     msg = 'Expected string-like calendar argument, got {!r}.'
                     raise TypeError(msg.format(type(calendar)))
 
-        self._init(category, ut_unit, calendar_, unit)
+        self._init_from_tuple((category, ut_unit, calendar_, unit,))
 
     def _raise_error(self, msg):
         """
@@ -1028,7 +1072,7 @@ class Unit(util._OrderedHashable):
         if self.is_unknown() or self.is_no_unit():
             result = False
         else:
-            day = _ut_get_unit_by_name(_ud_system, 'day')
+            day = _ut_get_unit_by_name(_ud_system, b'day')
             result = _ut_are_convertible(self.ut_unit, day) != 0
         return result
 
@@ -1054,10 +1098,10 @@ class Unit(util._OrderedHashable):
         if self.is_unknown() or self.is_no_unit():
             result = False
         else:
-            bar = _ut_get_unit_by_name(_ud_system, 'bar')
+            bar = _ut_get_unit_by_name(_ud_system, b'bar')
             result = _ut_are_convertible(self.ut_unit, bar) != 0
             if not result:
-                meter = _ut_get_unit_by_name(_ud_system, 'meter')
+                meter = _ut_get_unit_by_name(_ud_system, b'meter')
                 result = _ut_are_convertible(self.ut_unit, meter) != 0
         return result
 
@@ -1286,7 +1330,7 @@ class Unit(util._OrderedHashable):
                                ctypes.sizeof(string_buffer), bitmask)
             if depth < 0:
                 self._raise_error('Failed to format %r' % self)
-        return string_buffer.value
+        return string_buffer.value.decode()
 
     @property
     def name(self):
@@ -1386,7 +1430,7 @@ class Unit(util._OrderedHashable):
 
         """
 
-        if not isinstance(origin, (int, float, long)):
+        if not isinstance(origin, (float, six.integer_types)):
             raise TypeError('a numeric type for the origin argument is'
                             ' required')
         ut_unit = _ut_offset_by_time(self.ut_unit, ctypes.c_double(origin))
@@ -1429,7 +1473,7 @@ class Unit(util._OrderedHashable):
 
         Args:
 
-        * root (int/long): Value by which the unit root is taken.
+        * root (int): Value by which the unit root is taken.
 
         Returns:
             None.
@@ -1449,7 +1493,7 @@ class Unit(util._OrderedHashable):
         try:
             root = ctypes.c_int(root)
         except TypeError:
-            raise TypeError('An int or long type for the root argument'
+            raise TypeError('An int type for the root argument'
                             ' is required')
 
         if self.is_unknown():
@@ -1475,7 +1519,7 @@ class Unit(util._OrderedHashable):
 
         Args:
 
-        * base (int/float/long): Value of the logorithmic base.
+        * base (int/float): Value of the logorithmic base.
 
         Returns:
             None.
@@ -1614,7 +1658,7 @@ class Unit(util._OrderedHashable):
 
         Args:
 
-        * other (int/float/long/string/Unit): Multiplication scale
+        * other (int/float/string/Unit): Multiplication scale
           factor or unit.
 
         Returns:
@@ -1641,7 +1685,7 @@ class Unit(util._OrderedHashable):
 
         Args:
 
-        * other (int/float/long/string/Unit): Division scale factor or unit.
+        * other (int/float/string/Unit): Division scale factor or unit.
 
         Returns:
             Unit.
@@ -1667,7 +1711,7 @@ class Unit(util._OrderedHashable):
 
         Args:
 
-        * other (int/float/long/string/Unit): Division scale factor or unit.
+        * other (int/float/string/Unit): Division scale factor or unit.
 
         Returns:
             Unit.
@@ -1694,7 +1738,7 @@ class Unit(util._OrderedHashable):
 
         Args:
 
-        * power (int/float/long): Value by which the unit power is raised.
+        * power (int/float): Value by which the unit power is raised.
 
         Returns:
             Unit.
@@ -1725,15 +1769,15 @@ class Unit(util._OrderedHashable):
             # But if the power is of the form 1/N, where N is an integer
             # (within a certain acceptable accuracy) then we can find the Nth
             # root.
-            if not util.approx_equal(power, 0.0) and abs(power) < 1:
-                if not util.approx_equal(1 / power, round(1 / power)):
+            if not approx_equal(power, 0.0) and abs(power) < 1:
+                if not approx_equal(1 / power, round(1 / power)):
                     raise ValueError('Cannot raise a unit by a decimal.')
                 root = int(round(1 / power))
                 result = self.root(root)
             else:
                 # Failing that, check for powers which are (very nearly) simple
                 # integer values.
-                if not util.approx_equal(power, round(power)):
+                if not approx_equal(power, round(power)):
                     msg = 'Cannot raise a unit by a decimal (got %s).' % power
                     raise ValueError(msg)
                 power = int(round(power))
@@ -1746,7 +1790,7 @@ class Unit(util._OrderedHashable):
 
     def _identity(self):
         # Redefine the comparison/hash/ordering identity as used by
-        # util._OrderedHashable.
+        # _OrderedHashable.
         return (self.name, self.calendar)
 
     def __eq__(self, other):
@@ -1814,7 +1858,7 @@ class Unit(util._OrderedHashable):
 
         Args:
 
-        * value (int/float/long/numpy.ndarray):
+        * value (int/float/numpy.ndarray):
             Value/s to be converted.
         * other (string/Unit):
             Target unit to convert to.
@@ -1881,8 +1925,8 @@ class Unit(util._OrderedHashable):
                         if issubclass(value_copy.dtype.type, np.integer):
                             value_copy = value_copy.astype(
                                 _ctypes2numpy[ctype])
-                        # strict type check of numpy array
-                        if value_copy.dtype.type not in _numpy2ctypes.keys():
+                        # Strict type check of numpy array.
+                        if value_copy.dtype.type not in _numpy2ctypes:
                             raise TypeError(
                                 "Expect a numpy array of '%s' or '%s'" %
                                 tuple(sorted(_numpy2ctypes.keys())))
@@ -1895,7 +1939,7 @@ class Unit(util._OrderedHashable):
                                                  value_copy.size, pointer)
                         result = value_copy
                     else:
-                        if ctype not in _cv_convert_scalar.keys():
+                        if ctype not in _cv_convert_scalar:
                             raise ValueError('Invalid target type. Can only '
                                              'convert to float or double.')
                         # Utilise global convenience dictionary
