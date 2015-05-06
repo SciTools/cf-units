@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with cf_units.  If not, see <http://www.gnu.org/licenses/>.
 
-__version__ = '0.0.1'
+__version__ = '0.1.0'
 
 from .cf_units import *
 from .cf_units import (CALENDAR_STANDARD, CALENDARS, UT_NAMES, UT_DEFINITION,
