@@ -39,7 +39,6 @@ install:
   - SITE_CFG=cf_units/etc/site.cfg
   - echo "[System]" >> $SITE_CFG
   - echo "udunits2_path = $PREFIX/lib/libudunits2.so" >> $SITE_CFG
-  - python setup.py --quiet install
 
 script:
-      nosetests --verbose --nocapture cf_units/tests/test_unit.py
+  - python setup.py test

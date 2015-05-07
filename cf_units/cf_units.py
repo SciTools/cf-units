@@ -42,8 +42,32 @@ from . import config
 from . import util
 
 
-__all__ = ['Unit', 'date2num', 'decode_time', 'encode_clock', 'encode_date',
-           'encode_time', 'num2date']
+__all__ = ['CALENDAR_STANDARD',
+           'CALENDAR_GREGORIAN',
+           'CALENDAR_PROLEPTIC_GREGORIAN',
+           'CALENDAR_NO_LEAP',
+           'CALENDAR_JULIAN',
+           'CALENDAR_ALL_LEAP',
+           'CALENDAR_365_DAY',
+           'CALENDAR_366_DAY',
+           'CALENDAR_360_DAY',
+           'CALENDARS',
+           'UT_NAMES',
+           'UT_DEFINITION',
+           'FLOAT32',
+           'FLOAT64',
+           'julian_day2date',
+           'date2julian_day',
+           'is_time',
+           'is_vertical',
+           'Unit',
+           'date2num',
+           'decode_time',
+           'encode_clock',
+           'encode_date',
+           'encode_time',
+           'num2date',
+           'suppress_unit_warnings']
 
 
 ########################################################################
