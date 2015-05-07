@@ -4,5 +4,5 @@ netcdf4
 udunits=2.*
 
 # Testing/documentation dependencies.
-nose
+pytest
 pep8=1.5.7

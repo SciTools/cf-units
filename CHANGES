@@ -1,0 +1,38 @@
+This file is no longer updated and is provided for historical purposes only.
+Please see docs/cf_units/src/whatsnew/ for a changelog.
+
+
+Release 1.4 (14 June 2013)
+==========================
+* Modified logic in Unit.convert to handle numpy scalars
+  https://github.com/SciTools/iris/pull/472
+
+* Change unit print-out
+  https://github.com/SciTools/iris/pull/465
+
+
+----------------------------
+
+
+Release 1.3 (27 March 2013)
+===========================
+
+Bugs fixed
+----------
+* Converting between reference times now works correctly for
+  units with non-Gregorian calendars.
+
+Deprecations
+------------
+* The boolean methods/properties on the `Unit` class have been updated
+  to `is_...()` methods, in line with the project's naming conventions.
+
+  ========================== ======================
+  Deprecated property/method New method
+  ========================== ======================
+  convertible()              is_convertible()
+  dimensionless              is_dimensionless()
+  no_unit                    is_no_unit()
+  time_reference             is_time_reference()
+  unknown                    is_unknown()
+  ========================== ======================
