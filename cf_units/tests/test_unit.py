@@ -34,15 +34,7 @@ from cf_units import cf_units as unit
 Unit = unit.Unit
 
 
-class TestUnit(unittest.TestCase):
-    def setUp(self):
-        unit._handler(unit._ut_ignore)
-
-    def tearDown(self):
-        unit._handler(unit._default_handler)
-
-
-class TestCreation(TestUnit):
+class TestCreation(unittest.TestCase):
     #
     # test: unit creation
     #
@@ -75,7 +67,7 @@ class TestCreation(TestUnit):
             u = Unit('hours since 1970-01-01 00:00:00', calendar='wibble')
 
 
-class TestModulus(TestUnit):
+class TestModulus(unittest.TestCase):
     #
     # test: modulus property
     #
@@ -92,7 +84,7 @@ class TestModulus(TestUnit):
         self.assertEqual(u.modulus, None)
 
 
-class TestConvertible(TestUnit):
+class TestConvertible(unittest.TestCase):
     #
     # test: convertible method
     #
@@ -125,7 +117,7 @@ class TestConvertible(TestUnit):
         self.assertFalse(v.is_convertible(u))
 
 
-class TestDimensionless(TestUnit):
+class TestDimensionless(unittest.TestCase):
     #
     # test: dimensionless property
     #
@@ -146,7 +138,7 @@ class TestDimensionless(TestUnit):
         self.assertFalse(u.is_dimensionless())
 
 
-class TestFormat(TestUnit):
+class TestFormat(unittest.TestCase):
     #
     # test: format method
     #
@@ -175,7 +167,7 @@ class TestFormat(TestUnit):
         self.assertEqual(u.format(), 'no_unit')
 
 
-class TestName(TestUnit):
+class TestName(unittest.TestCase):
     #
     # test: name property
     #
@@ -192,7 +184,7 @@ class TestName(TestUnit):
         self.assertEqual(u.name, 'no_unit')
 
 
-class TestSymbol(TestUnit):
+class TestSymbol(unittest.TestCase):
     #
     # test: symbol property
     #
@@ -209,7 +201,7 @@ class TestSymbol(TestUnit):
         self.assertEqual(u.symbol, unit._NO_UNIT_SYMBOL)
 
 
-class TestDefinition(TestUnit):
+class TestDefinition(unittest.TestCase):
     #
     # test: definition property
     #
@@ -226,7 +218,7 @@ class TestDefinition(TestUnit):
         self.assertEqual(u.definition, unit._NO_UNIT_SYMBOL)
 
 
-class TestOffset(TestUnit):
+class TestOffset(unittest.TestCase):
     #
     # test: offset method
     #
@@ -255,7 +247,7 @@ class TestOffset(TestUnit):
         self.assertEqual(u + 1000L, "m @ 1000")
 
 
-class TestOffsetByTime(TestUnit):
+class TestOffsetByTime(unittest.TestCase):
     #
     # test: offset_by_time method
     #
@@ -283,7 +275,7 @@ class TestOffsetByTime(TestUnit):
         self.assertEqual(v, "(3600 s) @ 20070115T120600.00000000 UTC")
 
 
-class TestInvert(TestUnit):
+class TestInvert(unittest.TestCase):
     #
     # test: invert method
     #
@@ -301,7 +293,7 @@ class TestInvert(TestUnit):
         self.assertEqual(u.invert().invert(), "N")
 
 
-class TestRoot(TestUnit):
+class TestRoot(unittest.TestCase):
     #
     # test: root method
     #
@@ -330,7 +322,7 @@ class TestRoot(TestUnit):
         self.assertEqual(u.root(2), "V")
 
 
-class TestLog(TestUnit):
+class TestLog(unittest.TestCase):
     #
     # test: log method
     #
@@ -351,7 +343,7 @@ class TestLog(TestUnit):
         self.assertEqual(u.log(10), "lg(re 100 Pa)")
 
 
-class TestMultiply(TestUnit):
+class TestMultiply(unittest.TestCase):
     def test_multiply_fail_0(self):
         u = Unit("amp")
         self.assertRaises(ValueError, operator.mul, u, "naughty")
@@ -392,7 +384,7 @@ class TestMultiply(TestUnit):
         self.assertEqual((u * v).format(), "W")
 
 
-class TestDivide(TestUnit):
+class TestDivide(unittest.TestCase):
     def test_divide_fail_0(self):
         u = Unit("watts")
         self.assertRaises(ValueError, operator.div, u, "naughty")
@@ -433,7 +425,7 @@ class TestDivide(TestUnit):
         self.assertEqual((u / v).format(), "A")
 
 
-class TestPower(TestUnit):
+class TestPower(unittest.TestCase):
     def test_power(self):
         u = Unit("amp")
         self.assertRaises(TypeError, operator.pow, u, "naughty")
@@ -464,7 +456,7 @@ class TestPower(TestUnit):
         self.assertRaises(ValueError, operator.pow, u, 2)
 
 
-class TestCopy(TestUnit):
+class TestCopy(unittest.TestCase):
     #
     # test: copy method
     #
@@ -481,7 +473,7 @@ class TestCopy(TestUnit):
         self.assertTrue(copy.copy(u).is_no_unit())
 
 
-class TestStringify(TestUnit):
+class TestStringify(unittest.TestCase):
     #
     # test: __str__ method
     #
@@ -503,7 +495,7 @@ class TestStringify(TestUnit):
         self.assertEqual(repr(u), comp)
 
 
-class TestRichComparison(TestUnit):
+class TestRichComparison(unittest.TestCase):
     #
     # test: __eq__ method
     #
@@ -551,7 +543,7 @@ class TestRichComparison(TestUnit):
         self.assertTrue(u != n)
 
 
-class TestOrdering(TestUnit):
+class TestOrdering(unittest.TestCase):
     def test_order(self):
         m = Unit("meter")
         u = Unit('unknown')
@@ -560,7 +552,7 @@ class TestOrdering(TestUnit):
         self.assertEqual(sorted(start), [m, n, u])
 
 
-class TestTimeEncoding(TestUnit):
+class TestTimeEncoding(unittest.TestCase):
     #
     # test: encode_time module function
     #
@@ -592,7 +584,7 @@ class TestTimeEncoding(TestUnit):
                          (2006, 1, 15, 12, 6, 0))
 
 
-class TestConvert(TestUnit):
+class TestConvert(unittest.TestCase):
     #
     # test: convert method
     #
@@ -707,7 +699,7 @@ class TestConvert(TestUnit):
             u1.convert(u1point, u2)
 
 
-class TestNumsAndDates(TestUnit):
+class TestNumsAndDates(unittest.TestCase):
     #
     # test: num2date method
     #
@@ -726,7 +718,7 @@ class TestNumsAndDates(TestUnit):
         self.assertEqual(str(u.num2date(u.date2num(d))), "2010-11-02 13:00:00")
 
 
-class TestUnknown(TestUnit):
+class TestUnknown(unittest.TestCase):
     #
     # test: unknown units
     #
@@ -751,7 +743,7 @@ class TestUnknown(TestUnit):
         self.assertFalse(u.is_unknown())
 
 
-class TestNoUnit(TestUnit):
+class TestNoUnit(unittest.TestCase):
     #
     # test: no unit
     #
@@ -772,7 +764,7 @@ class TestNoUnit(TestUnit):
         self.assertTrue(u.is_no_unit())
 
 
-class TestTimeReference(TestUnit):
+class TestTimeReference(unittest.TestCase):
     #
     # test: time reference
     #
@@ -785,7 +777,7 @@ class TestTimeReference(TestUnit):
         self.assertFalse(u.is_time_reference())
 
 
-class TestTitle(TestUnit):
+class TestTitle(unittest.TestCase):
     #
     # test: title
     #
@@ -798,7 +790,7 @@ class TestTitle(TestUnit):
         self.assertEqual(u.title(10), '1970-01-01 10:00:00')
 
 
-class TestImmutable(TestUnit):
+class TestImmutable(unittest.TestCase):
     def _set_attr(self, unit, name):
         setattr(unit, name, -999)
         raise ValueError("'Unit' attribute '%s' is mutable!" % name)
@@ -824,7 +816,7 @@ class TestImmutable(TestUnit):
         self.assertEqual(len(h), 2)
 
 
-class TestInPlace(TestUnit):
+class TestInPlace(unittest.TestCase):
 
     def test1(self):
         # Check conversions do not change original object
