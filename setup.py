@@ -30,6 +30,15 @@ def file_walk_relative(top, remove=''):
         for file in files:
             yield os.path.join(root, file).replace(remove, '')
 
+rootpath = os.path.abspath(os.path.dirname(__file__))
+
+
+def read(*parts):
+    return open(os.path.join(rootpath, *parts), 'r').read()
+
+
+long_description = '{}'.format(read('README.rst'))
+
 setup(
     name='cf_units',
     version=extract_version(),
@@ -40,4 +49,17 @@ setup(
                                                       remove='cf_units/'))},
     data_files=[('cf_units', ['COPYING', 'COPYING.LESSER'])],
     tests_require=['nose'],
+    long_description=long_description,
+    classifiers=['Development Status :: 4 - Beta',
+                 'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)',
+                 'Operating System :: MacOS :: MacOS X',
+                 'Operating System :: Microsoft :: Windows',
+                 'Operating System :: POSIX',
+                 'Operating System :: POSIX :: AIX',
+                 'Operating System :: POSIX :: Linux',
+                 'Programming Language :: Python',
+                 'Programming Language :: Python :: 2',
+                 'Programming Language :: Python :: 2.7',
+                 'Topic :: Scientific/Engineering'],
+    description='Units of measure as required by the Climate and Forecast (CF) metadata conventions',
 )

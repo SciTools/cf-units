@@ -1,4 +1,4 @@
-include *.md
+include *.rst
 include *.txt
 recursive-include cf_units *.py
 include cf_units/etc/site.cfg.template
