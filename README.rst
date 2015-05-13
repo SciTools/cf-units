@@ -15,9 +15,11 @@ netcdftime calendar functionality.
 
 Code
 ----
-cf_units is licenced under GNU Lesser General Public License (LGPLv3).
-Te full text of the licence can be found in the COPYING and COPYING.LESSER
-files.  Development occurs at https://github.com/SciTools/cf_units.
+cf_units is licenced under the GNU Lesser General Public License (LGPLv3).
+The full text of the licence can be found in the COPYING and COPYING.LESSER
+files.
+
+Development occurs at https://github.com/SciTools/cf_units.
 
 
 See also:
