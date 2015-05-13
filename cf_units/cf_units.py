@@ -42,8 +42,32 @@ from . import config
 from . import util
 
 
-__all__ = ['Unit', 'date2num', 'decode_time', 'encode_clock', 'encode_date',
-           'encode_time', 'num2date']
+__all__ = ['CALENDAR_STANDARD',
+           'CALENDAR_GREGORIAN',
+           'CALENDAR_PROLEPTIC_GREGORIAN',
+           'CALENDAR_NO_LEAP',
+           'CALENDAR_JULIAN',
+           'CALENDAR_ALL_LEAP',
+           'CALENDAR_365_DAY',
+           'CALENDAR_366_DAY',
+           'CALENDAR_360_DAY',
+           'CALENDARS',
+           'UT_NAMES',
+           'UT_DEFINITION',
+           'FLOAT32',
+           'FLOAT64',
+           'julian_day2date',
+           'date2julian_day',
+           'is_time',
+           'is_vertical',
+           'Unit',
+           'date2num',
+           'decode_time',
+           'encode_clock',
+           'encode_date',
+           'encode_time',
+           'num2date',
+           'suppress_errors']
 
 
 ########################################################################
@@ -312,28 +336,40 @@ if _lib_ud is None:
                          FLOAT64: _cv_convert_doubles}
     _numpy2ctypes = {np.float32: FLOAT32, np.float64: FLOAT64}
     _ctypes2numpy = {v: k for k, v in _numpy2ctypes.iteritems()}
-#
-# load the UDUNITS-2 xml-formatted unit-database
-#
-if not _ud_system:
+
+
+@contextmanager
+def suppress_errors():
+    """
+    Suppresses all error messages from UDUNITS-2.
+
+    """
     _func_type = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_char_p,
                                   use_errno=True)
     _set_handler_type = ctypes.CFUNCTYPE(_func_type, _func_type)
     _ut_set_error_message_handler = _set_handler_type((_UT_HANDLER, _lib_ud))
     _ut_ignore = _func_type((_UT_IGNORE, _lib_ud))
-    # ignore standard UDUNITS-2 start-up preamble redirected to stderr stream
     _default_handler = _ut_set_error_message_handler(_ut_ignore)
-    # Load the unit-database from the default location (modified via
-    # the UDUNITS2_XML_PATH environment variable) and if that fails look
-    # relative to sys.prefix to support environments such as conda.
-    _ud_system = _ut_read_xml(None)
-    if _ud_system is None:
-        _alt_xml_path = os.path.join(sys.prefix, 'share',
-                                     'udunits', 'udunits2.xml')
-        _ud_system = _ut_read_xml(_alt_xml_path)
-    # reinstate old error handler
-    _ut_set_error_message_handler(_default_handler)
-    del _func_type
+    try:
+        yield
+    finally:
+        _ut_set_error_message_handler(_default_handler)
+
+
+#
+# load the UDUNITS-2 xml-formatted unit-database
+#
+if not _ud_system:
+    # Ignore standard noisy UDUNITS-2 start-up.
+    with suppress_errors():
+        # Load the unit-database from the default location (modified via
+        # the UDUNITS2_XML_PATH environment variable) and if that fails look
+        # relative to sys.prefix to support environments such as conda.
+        _ud_system = _ut_read_xml(None)
+        if _ud_system is None:
+            _alt_xml_path = os.path.join(sys.prefix, 'share',
+                                         'udunits', 'udunits2.xml')
+            _ud_system = _ut_read_xml(_alt_xml_path)
     if not _ud_system:
         _status_msg = 'UNKNOWN'
         _error_msg = ''
@@ -703,32 +739,6 @@ def num2date(time_value, unit, calendar):
         unit_string = unit_string.replace("epoch", EPOCH)
     cdftime = netcdftime.utime(unit_string, calendar=calendar)
     return cdftime.num2date(time_value)
-
-
-def _handler(func):
-    """Set the error message handler."""
-
-    _ut_set_error_message_handler(func)
-
-
-@contextmanager
-def suppress_unit_warnings():
-    """
-    Suppresses all warnings raised because of invalid units in loaded data.
-
-    """
-    # Suppress any warning messages raised by UDUNITS2.
-    _func_type = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_char_p,
-                                  use_errno=True)
-    _set_handler_type = ctypes.CFUNCTYPE(_func_type, _func_type)
-    _ut_set_error_message_handler = _set_handler_type((_UT_HANDLER, _lib_ud))
-    _ut_ignore = _func_type((_UT_IGNORE, _lib_ud))
-    _default_handler = _ut_set_error_message_handler(_ut_ignore)
-    with warnings.catch_warnings():
-        # Also suppress invalid units warnings from the cf_units loader code.
-        warnings.filterwarnings("ignore", message=".*invalid units")
-        yield
-    _ut_set_error_message_handler(_default_handler)
 
 
 ########################################################################

@@ -1,8 +1,22 @@
 import os
+import sys
 try:
     from setuptools import setup
+    from setuptools.command.test import test as TestCommand
 except ImportError:
     from distutils.core import setup
+
+
+class PyTest(TestCommand):
+    def finalize_options(self):
+        TestCommand.finalize_options(self)
+        self.test_args = ['--verbose']
+        self.test_suite = True
+
+    def run_tests(self):
+        import pytest
+        errno = pytest.main(self.test_args)
+        sys.exit(errno)
 
 
 def extract_version():
@@ -13,7 +27,8 @@ def extract_version():
         for line in fd:
             if (line.startswith('__version__')):
                 _, version = line.split('=')
-                version = version.strip()[1:-1]  # Remove quotation characters.
+                # Remove quotation characters.
+                version = version.strip()[1:-1]
                 break
     return version
 
@@ -48,18 +63,5 @@ setup(
     package_data={'cf_units': list(file_walk_relative('cf_units/etc',
                                                       remove='cf_units/'))},
     data_files=[('cf_units', ['COPYING', 'COPYING.LESSER'])],
-    tests_require=['nose'],
-    long_description=long_description,
-    classifiers=['Development Status :: 4 - Beta',
-                 'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)',
-                 'Operating System :: MacOS :: MacOS X',
-                 'Operating System :: Microsoft :: Windows',
-                 'Operating System :: POSIX',
-                 'Operating System :: POSIX :: AIX',
-                 'Operating System :: POSIX :: Linux',
-                 'Programming Language :: Python',
-                 'Programming Language :: Python :: 2',
-                 'Programming Language :: Python :: 2.7',
-                 'Topic :: Scientific/Engineering'],
-    description='Units of measure as required by the Climate and Forecast (CF) metadata conventions',
-)
+    tests_require=['pytest'],
+    cmdclass={'test': PyTest},)
