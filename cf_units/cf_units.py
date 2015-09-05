@@ -26,7 +26,7 @@ See also: `UDUNITS-2
 """
 
 from __future__ import (absolute_import, division, print_function)
-
+from six.moves import range, zip
 import six
 
 from contextlib import contextmanager
@@ -371,7 +371,7 @@ if not _ud_system:
         if _ud_system is None:
             _alt_xml_path = os.path.join(sys.prefix, 'share',
                                          'udunits', 'udunits2.xml')
-            _ud_system = _ut_read_xml(_alt_xml_path)
+            _ud_system = _ut_read_xml(_alt_xml_path.encode())
     if not _ud_system:
         _status_msg = 'UNKNOWN'
         _error_msg = ''
@@ -1330,7 +1330,7 @@ class Unit(_OrderedHashable):
                                ctypes.sizeof(string_buffer), bitmask)
             if depth < 0:
                 self._raise_error('Failed to format %r' % self)
-        return string_buffer.value.decode()
+        return str(string_buffer.value.decode('ascii'))
 
     @property
     def name(self):
@@ -1876,8 +1876,8 @@ class Unit(_OrderedHashable):
             >>> import numpy as np
             >>> c = cf_units.Unit('deg_c')
             >>> f = cf_units.Unit('deg_f')
-            >>> print(c.convert(0, f))
-            32.0
+            >>> c.convert(0, f)
+            31.999999999999886
             >>> c.convert(0, f, cf_units.FLOAT32)
             32.0
             >>> a64 = np.arange(10, dtype=np.float64)
