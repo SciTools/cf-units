@@ -21,6 +21,7 @@ Miscellaneous utility functions.
 
 from __future__ import (absolute_import, division, print_function)
 
+from six import with_metaclass
 import abc
 import collections
 
@@ -82,7 +83,8 @@ class _MetaOrderedHashable(abc.ABCMeta):
             cls, name, bases, namespace)
 
 
-class _OrderedHashable(collections.Hashable):
+class _OrderedHashable(with_metaclass(_MetaOrderedHashable,
+                                      collections.Hashable)):
     """
     Convenience class for creating "immutable", hashable, and ordered classes.
 
@@ -100,64 +102,4 @@ class _OrderedHashable(collections.Hashable):
         its attributes are themselves hashable.
 
     """
-
-    # The metaclass adds default __init__ methods when appropriate.
-    __metaclass__ = _MetaOrderedHashable
-
-    @abc.abstractproperty
-    def _names(self):
-        """
-        Override this attribute to declare the names of all the attributes
-        relevant to the hash/comparison semantics.
-
-        """
-        pass
-
-    def _init_from_tuple(self, values):
-        for name, value in zip(self._names, values):
-            object.__setattr__(self, name, value)
-
-    def __repr__(self):
-        class_name = type(self).__name__
-        attributes = ', '.join('%s=%r' % (name, value)
-                               for (name, value)
-                               in zip(self._names, self._as_tuple()))
-        return '%s(%s)' % (class_name, attributes)
-
-    def _as_tuple(self):
-        return tuple(getattr(self, name) for name in self._names)
-
-    # Prevent attribute updates
-
-    def __setattr__(self, name, value):
-        raise AttributeError('Instances of %s are immutable' %
-                             type(self).__name__)
-
-    def __delattr__(self, name):
-        raise AttributeError('Instances of %s are immutable' %
-                             type(self).__name__)
-
-    # Provide hash semantics
-
-    def _identity(self):
-        return self._as_tuple()
-
-    def __hash__(self):
-        return hash(self._identity())
-
-    def __eq__(self, other):
-        return (isinstance(other, type(self)) and
-                self._identity() == other._identity())
-
-    def __ne__(self, other):
-        # Since we've defined __eq__ we should also define __ne__.
-        return not self == other
-
-    # Provide default ordering semantics
-
-    def __cmp__(self, other):
-        if isinstance(other, _OrderedHashable):
-            result = cmp(self._identity(), other._identity())
-        else:
-            result = NotImplemented
-        return result
+    pass
