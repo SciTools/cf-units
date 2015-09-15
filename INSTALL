@@ -1,0 +1,103 @@
+You can either install cf_units using the conda package manager or from source.
+
+Installing using conda
+----------------------
+
+cf_units is available using conda for the following platforms:
+ * Linux 32-bit and 64-bit,
+ * Mac OSX 64-bit, and
+ * Windows 32-bit and 64-bit.
+
+To install cf_units using conda, you must first download and install conda,
+for example from http://conda.pydata.org/miniconda.html.
+
+Once conda is installed, you can install cf_units using conda on any platform with
+the following command::
+
+  conda install -c scitools cf_units
+
+Further documentation on using conda and the features it provides can be found
+at http://conda.pydata.org/docs/intro.html.
+
+
+Installing from source
+----------------------
+
+The latest cf_units source release is available from
+https://github.com/SciTools/cf_units.
+
+cf_units makes use of Numpy, netCDF4-python, and Unidata udunits2. These
+dependencies must be in place before you can successfully install
+cf_units. Once you have satisfied the requirements detailed below,
+extract the cf_units source package, cd to the new directory, and enter::
+
+  python setup.py install
+
+
+Build and runtime requirements
+==============================
+These are external packages which you will need to have installed before
+installing and running cf_units.
+
+Many of these packages are available in Linux package managers
+such as aptitude and yum. For example, it may be possible to install
+Numpy using::
+
+  apt-get install python-numpy
+
+If you are installing dependencies with a package manager on Linux,
+you may need to install the development packages (look for a "-dev"
+postfix) in addition to the core packages.
+
+python 2.7 or later (http://www.python.org/)
+    cf_units requires Python 2.7 or later, but is not currently compatible with
+    Python 3.
+
+numpy 1.6 or later (http://numpy.scipy.org/)
+    Python package for scientific computing including a powerful N-dimensional
+    array object.
+
+netcdf4-python 0.9.9 or later (http://netcdf4-python.googlecode.com/)
+    Python interface to the netCDF version 4 C library.
+
+udunits2 2.1.24 or later
+    (http://www.unidata.ucar.edu/downloads/udunits/index.jsp)
+    C library for units of physical quantities.
+
+setuptools 0.6c11 or later (http://pypi.python.org/pypi/setuptools/)
+    Python package for installing/removing python packages.
+
+
+Optional
+''''''''
+These packages are required for the full cf_units test suite to run.
+
+pep8 1.4.6* (https://pypi.python.org/pypi/pep8)
+    Python package for software testing.
+
+nose 1.1.2 or later (http://nose.readthedocs.org/en/latest/)
+    Python package for software testing.
+
+* Those packages have been tested with a specific build.
+
+
+Custom site configuration
+=========================
+The default site configuration values can be overridden by creating the file
+``cf_units/etc/site.cfg``. For example, the following snippet can be used to
+specify a non-standard location for your udunits library::
+
+  [System]
+  udunits2_path = /path/to/libudunits2.so
+
+An example configuration file is available in ``cf_units/etc/site.cfg.template``.
+See :py:func:`cf_units.config` for further configuration options.
+
+
+Packaged distributions
+======================
+The Enthought Python Distribution (EPD)
+http://www.enthought.com/products/epd.php for Windows, OS X or
+Redhat provides some of the dependencies for cf_units as does `Python (x, y)
+http://www.pythonxy.com/ which tends to be updated a
+bit more frequently.
