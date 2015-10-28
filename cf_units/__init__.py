@@ -16,6 +16,7 @@
 # along with cf_units.  If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import (absolute_import, division, print_function)
+from six.moves import (filter, input, map, range, zip)  # noqa
 
 __version__ = '0.1.1'
 

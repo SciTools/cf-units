@@ -16,6 +16,7 @@
 # along with cf_units.  If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import (absolute_import, division, print_function)
+from six.moves import (filter, input, map, range, zip)  # noqa
 
 from datetime import datetime
 from fnmatch import fnmatch
@@ -69,7 +70,8 @@ DOCS_DIRS = [DOC_DIR for DOC_DIR in DOCS_DIRS if os.path.basename(DOC_DIR) not
 
 
 class StandardReportWithExclusions(pep8.StandardReport):
-    expected_bad_files = []
+    expected_bad_files = ['*/cf_units/__init__.py',
+                          '*/cf_units/cf_units.py']
     optional_bad_files = []
     expected_bad_files += optional_bad_files
     matched_exclusions = set()
@@ -272,6 +274,10 @@ class TestFutureImports(unittest.TestCase):
         r"print_function(,\s*unicode_literals)?\)$",
         flags=re.MULTILINE)
 
+    six_import_pattern = re.compile(
+        r"^from six.moves import \(filter, input, map, range, zip\)  # noqa$",
+        flags=re.MULTILINE)
+
     def test_future_imports(self):
         # Tests that every single Python file includes the appropriate
         # __future__ import to enforce consistent behaviour.
@@ -296,6 +302,12 @@ class TestFutureImports(unittest.TestCase):
 
                     if re.search(self.future_imports_pattern, content) is None:
                         print('The file {} has no valid __future__ imports '
+                              'and has not been excluded from the imports '
+                              'test.'.format(full_fname))
+                        failed = True
+
+                    if re.search(self.six_import_pattern, content) is None:
+                        print('The file {} has no valid six import '
                               'and has not been excluded from the imports '
                               'test.'.format(full_fname))
                         failed = True
