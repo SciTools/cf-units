@@ -70,8 +70,7 @@ DOCS_DIRS = [DOC_DIR for DOC_DIR in DOCS_DIRS if os.path.basename(DOC_DIR) not
 
 
 class StandardReportWithExclusions(pep8.StandardReport):
-    expected_bad_files = ['*/cf_units/__init__.py',
-                          '*/cf_units/cf_units.py']
+    expected_bad_files = []
     optional_bad_files = []
     expected_bad_files += optional_bad_files
     matched_exclusions = set()
