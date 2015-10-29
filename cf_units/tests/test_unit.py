@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2010 - 2014, Met Office
+# (C) British Crown Copyright 2010 - 2015, Met Office
 #
 # This file is part of cf_units.
 #
@@ -39,24 +39,19 @@ from cf_units import cf_units as unit
 Unit = unit.Unit
 
 
-class TestCreation(unittest.TestCase):
-    #
-    # test: unit creation
-    #
-    def test_unit_fail_0(self):
-        self.assertRaises(ValueError, Unit, 'wibble')
+class Test_unit__creation(unittest.TestCase):
 
-    def test_unit_pass_0(self):
-        u = Unit('    meter')
-        self.assertTrue(u.name, 'meter')
+    def test_is_valid_unit_string(self):
+        unit_strs = ['    meter',
+                     'meter    ',
+                     '    meter   ']
+        for unit_str in unit_strs:
+            u = Unit(unit_str)
+            self.assertTrue(u.name, 'meter')
 
-    def test_unit_pass_1(self):
-        u = Unit('meter   ')
-        self.assertTrue(u.name, 'meter')
-
-    def test_unit_pass_2(self):
-        u = Unit('   meter   ')
-        self.assertTrue(u.name, 'meter')
+    def test_not_valid_unit_str(self):
+        with self.assertRaisesRegexp(ValueError, 'Failed to parse unit'):
+            Unit('wibble')
 
     def test_calendar(self):
         calendar = unit.CALENDAR_365_DAY
@@ -67,398 +62,463 @@ class TestCreation(unittest.TestCase):
         u = Unit('hours since 1970-01-01 00:00:00')
         self.assertEqual(u.calendar, unit.CALENDAR_GREGORIAN)
 
-    def test_unknown_calendar(self):
-        with self.assertRaises(ValueError):
-            u = Unit('hours since 1970-01-01 00:00:00', calendar='wibble')
+    def test_unsupported_calendar(self):
+        with self.assertRaisesRegexp(ValueError, 'unsupported calendar'):
+            Unit('hours since 1970-01-01 00:00:00', calendar='wibble')
 
 
-class TestModulus(unittest.TestCase):
-    #
-    # test: modulus property
-    #
-    def test_modulus_pass_0(self):
-        u = Unit("degrees")
+class Test_modulus(unittest.TestCase):
+
+    def test_modulus__degrees(self):
+        u = Unit('degrees')
         self.assertEqual(u.modulus, 360.0)
 
-    def test_modulus_pass_1(self):
-        u = Unit("radians")
+    def test_modulus__radians(self):
+        u = Unit('radians')
         self.assertEqual(u.modulus, np.pi*2)
 
-    def test_modulus_pass_2(self):
-        u = Unit("meter")
+    def test_no_modulus(self):
+        u = Unit('meter')
         self.assertEqual(u.modulus, None)
 
 
-class TestConvertible(unittest.TestCase):
-    #
-    # test: convertible method
-    #
-    def test_convertible_fail_0(self):
-        u = Unit("meter")
-        v = Unit("newton")
+class Test_is_convertible(unittest.TestCase):
+
+    def test_convert_distance_to_force(self):
+        u = Unit('meter')
+        v = Unit('newton')
         self.assertFalse(u.is_convertible(v))
 
-    def test_convertible_pass_0(self):
-        u = Unit("meter")
-        v = Unit("mile")
+    def test_convert_distance_units(self):
+        u = Unit('meter')
+        v = Unit('mile')
         self.assertTrue(u.is_convertible(v))
 
-    def test_convertible_fail_1(self):
+    def test_convert_to_unknown(self):
         u = Unit('meter')
         v = Unit('unknown')
         self.assertFalse(u.is_convertible(v))
         self.assertFalse(v.is_convertible(u))
 
-    def test_convertible_fail_2(self):
+    def test_convert_to_no_unit(self):
         u = Unit('meter')
         v = Unit('no unit')
         self.assertFalse(u.is_convertible(v))
         self.assertFalse(v.is_convertible(u))
 
-    def test_convertible_fail_3(self):
+    def test_convert_unknown_to_no_unit(self):
         u = Unit('unknown')
         v = Unit('no unit')
         self.assertFalse(u.is_convertible(v))
         self.assertFalse(v.is_convertible(u))
 
 
-class TestDimensionless(unittest.TestCase):
-    #
-    # test: dimensionless property
-    #
-    def test_dimensionless_fail_0(self):
-        u = Unit("meter")
-        self.assertFalse(u.is_dimensionless())
+class Test_is_dimensionless(unittest.TestCase):
 
-    def test_dimensionless_pass_0(self):
-        u = Unit("1")
+    def test_dimensionless(self):
+        u = Unit('1')
         self.assertTrue(u.is_dimensionless())
 
-    def test_dimensionless_fail_1(self):
+    def test_distance_dimensionless(self):
+        u = Unit('meter')
+        self.assertFalse(u.is_dimensionless())
+
+    def test_unknown_dimensionless(self):
         u = Unit('unknown')
         self.assertFalse(u.is_dimensionless())
 
-    def test_dimensionless_fail_2(self):
+    def test_no_unit_dimensionless(self):
         u = Unit('no unit')
         self.assertFalse(u.is_dimensionless())
 
 
-class TestFormat(unittest.TestCase):
-    #
-    # test: format method
-    #
-    def test_format_pass_0(self):
-        u = Unit("watt")
-        self.assertEqual(u.format(), "W")
+class Test_format(unittest.TestCase):
 
-    def test_format_pass_1(self):
-        u = Unit("watt")
-        self.assertEqual(u.format(unit.UT_ASCII), "W")
+    def test_basic(self):
+        u = Unit('watt')
+        self.assertEqual(u.format(), 'W')
 
-    def test_format_pass_2(self):
-        u = Unit("watt")
-        self.assertEqual(u.format(unit.UT_NAMES), "watt")
+    def test_format_ascii(self):
+        u = Unit('watt')
+        self.assertEqual(u.format(unit.UT_ASCII), 'W')
 
-    def test_format_pass_3(self):
-        u = Unit("watt")
-        self.assertEqual(u.format(unit.UT_DEFINITION), "m2.kg.s-3")
+    def test_format_ut_names(self):
+        u = Unit('watt')
+        self.assertEqual(u.format(unit.UT_NAMES), 'watt')
 
-    def test_format_pass_4(self):
+    def test_format_unit_definition(self):
+        u = Unit('watt')
+        self.assertEqual(u.format(unit.UT_DEFINITION), 'm2.kg.s-3')
+
+    def test_format_unknown(self):
         u = Unit('?')
         self.assertEqual(u.format(), 'unknown')
 
-    def test_format_pass_5(self):
+    def test_format_no_unit(self):
         u = Unit('nounit')
         self.assertEqual(u.format(), 'no_unit')
 
 
-class TestName(unittest.TestCase):
-    #
-    # test: name property
-    #
-    def test_name_pass_0(self):
-        u = Unit("newton")
+class Test_name(unittest.TestCase):
+
+    def test_basic(self):
+        u = Unit('newton')
         self.assertEqual(u.name, 'newton')
 
-    def test_name_pass_1(self):
+    def test_unknown(self):
         u = Unit('unknown')
         self.assertEqual(u.name, 'unknown')
 
-    def test_name_pass_2(self):
+    def test_no_unit(self):
         u = Unit('no unit')
         self.assertEqual(u.name, 'no_unit')
 
 
-class TestSymbol(unittest.TestCase):
-    #
-    # test: symbol property
-    #
-    def test_symbol_pass_0(self):
-        u = Unit("joule")
+class Test_symbol(unittest.TestCase):
+
+    def test_basic(self):
+        u = Unit('joule')
         self.assertEqual(u.symbol, 'J')
 
-    def test_symbol_pass_1(self):
+    def test_unknown(self):
         u = Unit('unknown')
         self.assertEqual(u.symbol, unit._UNKNOWN_UNIT_SYMBOL)
 
-    def test_symbol_pass_2(self):
+    def test_no_unit(self):
         u = Unit('no unit')
         self.assertEqual(u.symbol, unit._NO_UNIT_SYMBOL)
 
 
-class TestDefinition(unittest.TestCase):
-    #
-    # test: definition property
-    #
-    def test_definition_pass_0(self):
-        u = Unit("joule")
+class Test_definition(unittest.TestCase):
+
+    def test_basic(self):
+        u = Unit('joule')
         self.assertEqual(u.definition, 'm2.kg.s-2')
 
-    def test_definition_pass_1(self):
+    def test_unknown(self):
         u = Unit('unknown')
         self.assertEqual(u.definition, unit._UNKNOWN_UNIT_SYMBOL)
 
-    def test_definition_pass_2(self):
+    def test_no_unit(self):
         u = Unit('no unit')
         self.assertEqual(u.definition, unit._NO_UNIT_SYMBOL)
 
 
-class TestOffset(unittest.TestCase):
-    #
-    # test: offset method
-    #
-    def test_offset_fail_0(self):
-        u = Unit("meter")
-        self.assertRaises(TypeError, operator.add, u, "naughty")
+class Test__apply_offset(unittest.TestCase):
 
-    def test_offset_fail_1(self):
+    def test_add_integer_offset(self):
+        u = Unit('meter')
+        self.assertEqual(u + 10, 'm @ 10')
+
+    def test_add_float_offset(self):
+        u = Unit('meter')
+        self.assertEqual(u + 100.0, 'm @ 100')
+
+    def test_not_numerical_offset(self):
+        u = Unit('meter')
+        with self.assertRaisesRegexp(TypeError, 'unsupported operand type'):
+            operator.add(u, 'not_a_number')
+
+    def test_unit_unknown(self):
         u = Unit('unknown')
         self.assertEqual(u + 10, 'unknown')
 
-    def test_offset_fail_2(self):
+    def test_no_unit(self):
         u = Unit('no unit')
-        self.assertRaises(ValueError, operator.add, u, 10)
-
-    def test_offset_pass_0(self):
-        u = Unit("meter")
-        self.assertEqual(u + 10, "m @ 10")
-
-    def test_offset_pass_1(self):
-        u = Unit("meter")
-        self.assertEqual(u + 100.0, "m @ 100")
-
-    def test_offset_pass_2(self):
-        u = Unit("meter")
-        self.assertEqual(u + 1000, "m @ 1000")
+        with self.assertRaisesRegexp(ValueError, 'Cannot offset'):
+            operator.add(u, 10)
 
 
-class TestOffsetByTime(unittest.TestCase):
-    #
-    # test: offset_by_time method
-    #
-    def test_offset_by_time_fail_0(self):
-        u = Unit("hour")
-        self.assertRaises(TypeError, u.offset_by_time, "naughty")
+class Test_offset_by_time(unittest.TestCase):
 
-    def test_offset_by_time_fail_1(self):
-        u = Unit("mile")
-        self.assertRaises(ValueError, u.offset_by_time, 10)
-
-    def test_offset_by_time_fail_2(self):
-        u = Unit('unknown')
-        self.assertRaises(ValueError, u.offset_by_time,
-                          unit.encode_time(1970, 1, 1, 0, 0, 0))
-
-    def test_offset_by_time_fail_3(self):
-        u = Unit('no unit')
-        self.assertRaises(ValueError, u.offset_by_time,
-                          unit.encode_time(1970, 1, 1, 0, 0, 0))
-
-    def test_offset_by_time_pass_0(self):
-        u = Unit("hour")
+    def test_offset(self):
+        u = Unit('hour')
         v = u.offset_by_time(unit.encode_time(2007, 1, 15, 12, 6, 0))
-        self.assertEqual(v, "(3600 s) @ 20070115T120600.00000000 UTC")
+        self.assertEqual(v, '(3600 s) @ 20070115T120600.00000000 UTC')
+
+    def test_not_numerical_offset(self):
+        u = Unit('hour')
+        with self.assertRaisesRegexp(TypeError, 'numeric type'):
+            u.offset_by_time('not_a_number')
+
+    def test_not_time_unit(self):
+        u = Unit('mile')
+        with self.assertRaisesRegexp(ValueError, 'Failed to offset'):
+            u.offset_by_time(10)
+
+    def test_unit_unknown(self):
+        u = Unit('unknown')
+        msg = 'Failed to offset'
+        with self.assertRaisesRegexp(ValueError, msg), unit.suppress_errors():
+            u.offset_by_time(unit.encode_time(1970, 1, 1, 0, 0, 0))
+
+    def test_no_unit(self):
+        u = Unit('no unit')
+        msg = 'Failed to offset'
+        with self.assertRaisesRegexp(ValueError, msg), unit.suppress_errors():
+            u.offset_by_time(unit.encode_time(1970, 1, 1, 0, 0, 0))
 
 
-class TestInvert(unittest.TestCase):
-    #
-    # test: invert method
-    #
-    def test_invert_fail_0(self):
+class Test_invert(unittest.TestCase):
+
+    def test_basic(self):
+        u = Unit('newton')
+        self.assertEqual(u.invert(), 'm-1.kg-1.s2')
+
+    def test_double_invert(self):
+        # Double-inverting a unit should take you back to where you started.
+        u = Unit('newton')
+        self.assertEqual(u.invert().invert(), u)
+
+    def test_invert_unknown(self):
         u = Unit('unknown')
         self.assertEqual(u.invert(), u)
 
-    def test_invert_fail_1(self):
+    def test_invert_no_unit(self):
         u = Unit('no unit')
-        self.assertRaises(ValueError, u.invert)
-
-    def test_invert_pass_0(self):
-        u = Unit("newton")
-        self.assertEqual(u.invert(), "m-1.kg-1.s2")
-        self.assertEqual(u.invert().invert(), "N")
+        with self.assertRaisesRegexp(ValueError, 'Cannot invert'):
+            u.invert()
 
 
-class TestRoot(unittest.TestCase):
-    #
-    # test: root method
-    #
-    def test_root_fail_0(self):
-        u = Unit("volt")
-        self.assertRaises(TypeError, u.root, "naughty")
+class Test_root(unittest.TestCase):
 
-    def test_root_fail_1(self):
-        u = Unit("volt")
-        self.assertRaises(TypeError, u.root, 1.2)
+    def setUp(self):
+        unit.suppress_errors()
 
-    def test_root_fail_2(self):
-        u = Unit("volt")
-        self.assertRaises(ValueError, u.root, 2)
+    def test_square_root(self):
+        u = Unit('volt^2')
+        self.assertEqual(u.root(2), 'V')
 
-    def test_root_fail_3(self):
+    def test_not_numeric(self):
+        u = Unit('volt')
+        with self.assertRaisesRegexp(TypeError, 'numeric type'):
+            u.offset_by_time('not_a_number')
+
+    def test_not_integer(self):
+        u = Unit('volt')
+        with self.assertRaisesRegexp(TypeError, 'int type .* required'):
+            u.root(1.2)
+
+    def test_meaningless_operation(self):
+        u = Unit('volt')
+        msg = 'UT_MEANINGLESS'
+        with self.assertRaisesRegexp(ValueError, msg), unit.suppress_errors():
+            u.root(2)
+
+    def test_unit_unknown(self):
         u = Unit('unknown')
         self.assertEqual(u.root(2), u)
 
-    def test_root_fail_4(self):
+    def test_no_unit(self):
         u = Unit('no unit')
-        self.assertRaises(ValueError, u.root, 2)
-
-    def test_root_pass_0(self):
-        u = Unit("volt^2")
-        self.assertEqual(u.root(2), "V")
+        with self.assertRaisesRegexp(ValueError, 'Cannot take the logarithm'):
+            u.root(2)
 
 
-class TestLog(unittest.TestCase):
-    #
-    # test: log method
-    #
-    def test_log_fail_0(self):
-        u = Unit("hPa")
-        self.assertRaises(TypeError, u.log, "naughty")
+class Test_log(unittest.TestCase):
 
-    def test_log_fail_1(self):
+    def test_base_2(self):
+        u = Unit('hPa')
+        self.assertEqual(u.log(2), 'lb(re 100 Pa)')
+
+    def test_base_10(self):
+        u = Unit('hPa')
+        self.assertEqual(u.log(10), 'lg(re 100 Pa)')
+
+    def test_not_numeric(self):
+        u = Unit('hPa')
+        with self.assertRaisesRegexp(TypeError, 'numeric type'):
+            u.log('not_a_number')
+
+    def test_unit_unknown(self):
         u = Unit('unknown')
         self.assertEqual(u.log(10), u)
 
-    def test_log_fail_2(self):
+    def test_no_unit(self):
         u = Unit('no unit')
-        self.assertRaises(ValueError, u.log, 10)
-
-    def test_log_pass_0(self):
-        u = Unit("hPa")
-        self.assertEqual(u.log(10), "lg(re 100 Pa)")
+        with self.assertRaisesRegexp(ValueError, 'Cannot take the logarithm'):
+            u.log(10)
 
 
-class TestMultiply(unittest.TestCase):
-    def test_multiply_fail_0(self):
-        u = Unit("amp")
-        self.assertRaises(ValueError, operator.mul, u, "naughty")
+class Test_multiply(unittest.TestCase):
 
-    def test_multiply_fail_1(self):
+    def test_multiply_by_int(self):
+        u = Unit('amp')
+        self.assertEqual((u * 10).format(), '10 A')
+
+    def test_multiply_by_float(self):
+        u = Unit('amp')
+        self.assertEqual((u * 100.0).format(), '100 A')
+
+    def test_multiply_electrical_units(self):
+        u = Unit('amp')
+        v = Unit('volt')
+        self.assertEqual((u * v).format(), 'W')
+
+    def test_multiply_not_numeric(self):
+        u = Unit('amp')
+        with self.assertRaisesRegexp(ValueError, 'Failed to parse unit'):
+            operator.mul(u, 'not_a_number')
+
+    def test_multiply_with_unknown_unit(self):
         u = Unit('unknown')
         v = Unit('meters')
         self.assertTrue((u * v).is_unknown())
         self.assertTrue((v * u).is_unknown())
 
-    def test_multiply_fail_3(self):
-        u = Unit('unknown')
-        v = Unit('no unit')
-        self.assertRaises(ValueError, operator.mul, u, v)
-        self.assertRaises(ValueError, operator.mul, v, u)
-
-    def test_multiply_fail_5(self):
+    def test_multiply_with_no_unit(self):
         u = Unit('meters')
         v = Unit('no unit')
-        self.assertRaises(ValueError, operator.mul, u, v)
-        self.assertRaises(ValueError, operator.mul, v, u)
+        with self.assertRaisesRegexp(ValueError, 'Cannot multiply'):
+            operator.mul(u, v)
+            operator.mul(v, u)
 
-    def test_multiply_pass_0(self):
-        u = Unit("amp")
-        self.assertEqual((u * 10).format(), "10 A")
-
-    def test_multiply_pass_1(self):
-        u = Unit("amp")
-        self.assertEqual((u * 100.0).format(), "100 A")
-
-    def test_multiply_pass_2(self):
-        u = Unit("amp")
-        self.assertEqual((u * 1000).format(), "1000 A")
-
-    def test_multiply_pass_3(self):
-        u = Unit("amp")
-        v = Unit("volt")
-        self.assertEqual((u * v).format(), "W")
+    def test_multiply_unknown_and_no_unit(self):
+        u = Unit('unknown')
+        v = Unit('no unit')
+        with self.assertRaisesRegexp(ValueError, 'Cannot multiply'):
+            operator.mul(u, v)
+            operator.mul(v, u)
 
 
-class TestDivide(unittest.TestCase):
-    def test_divide_fail_0(self):
-        u = Unit("watts")
-        self.assertRaises(ValueError, truediv, u, "naughty")
+class Test_divide(unittest.TestCase):
 
-    def test_divide_fail_1(self):
+    def test_divide_by_int(self):
+        u = Unit('watts')
+        self.assertEqual((u / 10).format(), '0.1 W')
+
+    def test_divide_by_float(self):
+        u = Unit('watts')
+        self.assertEqual((u / 100.0).format(), '0.01 W')
+
+    def test_divide_electrical_units(self):
+        u = Unit('watts')
+        v = Unit('volts')
+        self.assertEqual((u / v).format(), 'A')
+
+    def test_divide_not_numeric(self):
+        u = Unit('watts')
+        with self.assertRaisesRegexp(ValueError, 'Failed to parse unit'):
+            truediv(u, 'not_a_number')
+
+    def test_divide_with_unknown_unit(self):
         u = Unit('unknown')
         v = Unit('meters')
         self.assertTrue((u / v).is_unknown())
         self.assertTrue((v / u).is_unknown())
 
-    def test_divide_fail_3(self):
-        u = Unit('unknown')
-        v = Unit('no unit')
-        self.assertRaises(ValueError, truediv, u, v)
-        self.assertRaises(ValueError, truediv, v, u)
-
-    def test_divide_fail_5(self):
+    def test_divide_with_no_unit(self):
         u = Unit('meters')
         v = Unit('no unit')
-        self.assertRaises(ValueError, truediv, u, v)
-        self.assertRaises(ValueError, truediv, v, u)
+        with self.assertRaisesRegexp(ValueError, 'Cannot divide'):
+            truediv(u, v)
+            truediv(v, u)
 
-    def test_divide_pass_0(self):
-        u = Unit("watts")
-        self.assertEqual((u / 10).format(), "0.1 W")
-
-    def test_divide_pass_1(self):
-        u = Unit("watts")
-        self.assertEqual((u / 100.0).format(), "0.01 W")
-
-    def test_divide_pass_2(self):
-        u = Unit("watts")
-        self.assertEqual((u / 1000).format(), "0.001 W")
-
-    def test_divide_pass_3(self):
-        u = Unit("watts")
-        v = Unit("volts")
-        self.assertEqual((u / v).format(), "A")
+    def test_divide_unknown_and_no_unit(self):
+        u = Unit('unknown')
+        v = Unit('no unit')
+        with self.assertRaisesRegexp(ValueError, 'Cannot divide'):
+            truediv(u, v)
+            truediv(v, u)
 
 
-class TestPower(unittest.TestCase):
+class Test_power(unittest.TestCase):
+
+    def test_basic(self):
+        u = Unit('m^2')
+        self.assertEqual(u ** 0.5, Unit('m'))
+
+    def test_integer_power(self):
+        u = Unit('amp')
+        self.assertEqual(u ** 2, Unit('A^2'))
+
+    def test_float_power(self):
+        u = Unit('amp')
+        self.assertEqual(u ** 3.0, Unit('A^3'))
+
+    def test_dimensionless(self):
+        u = Unit('1')
+        self.assertEqual(u ** 2, u)
+
     def test_power(self):
-        u = Unit("amp")
-        self.assertRaises(TypeError, operator.pow, u, "naughty")
+        u = Unit('amp')
         self.assertRaises(TypeError, operator.pow, u, Unit('m'))
         self.assertRaises(TypeError, operator.pow, u, Unit('unknown'))
         self.assertRaises(TypeError, operator.pow, u, Unit('no unit'))
-        self.assertEqual(u ** 2, Unit('A^2'))
-        self.assertEqual(u ** 3.0, Unit('A^3'))
-        self.assertEqual(u ** 4, Unit('A^4'))
-        self.assertRaises(ValueError, operator.pow, u, 2.4)
 
-        u = Unit("m^2")
-        self.assertEqual(u ** 0.5, Unit('m'))
-        self.assertRaises(ValueError, operator.pow, u, 0.4)
+    def test_not_numeric(self):
+        u = Unit('m^2')
+        with self.assertRaisesRegexp(TypeError, 'numeric value is required'):
+            operator.pow(u, 'not_a_number')
 
-    def test_power_unknown(self):
-        u = Unit('unknown')
-        self.assertRaises(TypeError, operator.pow, u, "naughty")
-        self.assertRaises(TypeError, operator.pow, u, Unit('m'))
-        self.assertEqual(u ** 2, Unit('unknown'))
-        self.assertEqual(u ** 3.0, Unit('unknown'))
-        self.assertEqual(u ** 4, Unit('unknown'))
+    def test_bad_power(self):
+        u = Unit('m^2')
+        msg = 'Cannot raise .* by a decimal'
+        with self.assertRaisesRegexp(ValueError, msg):
+            operator.pow(u, 0.4)
 
-    def test_power_nounit(self):
-        u = Unit('no unit')
-        self.assertRaises(TypeError, operator.pow, u, "naughty")
-        self.assertRaises(TypeError, operator.pow, u, Unit('m'))
-        self.assertRaises(ValueError, operator.pow, u, 2)
+    def test_unit_power(self):
+        u = Unit('amp')
+        v = Unit('m')
+        msg = 'argument must be a string or a number'
+        with self.assertRaisesRegexp(TypeError, msg):
+            operator.pow(u, v)
+
+
+class Test_power__unknown(unittest.TestCase):
+
+    def setUp(self):
+        self.u = Unit('unknown')
+
+    def test_integer_power(self):
+        self.assertEqual(self.u ** 2, Unit('unknown'))
+
+    def test_float_power(self):
+        self.assertEqual(self.u ** 3.0, Unit('unknown'))
+
+    def test_not_numeric(self):
+        with self.assertRaisesRegexp(TypeError, 'numeric value is required'):
+            operator.pow(self.u, 'not_a_number')
+
+    def test_bad_power(self):
+        self.assertEqual(self.u ** 0.4, self.u)
+
+    def test_unit_power(self):
+        v = Unit('m')
+        msg = 'argument must be a string or a number'
+        with self.assertRaisesRegexp(TypeError, msg):
+            operator.pow(self.u, v)
+
+
+class Test_power__no_unit(unittest.TestCase):
+
+    def setUp(self):
+        self.u = Unit('no unit')
+
+    def test_integer_power(self):
+        msg = "Cannot raise .* a 'no-unit'"
+        with self.assertRaisesRegexp(ValueError, msg):
+            operator.pow(self.u, 2)
+
+    def test_float_power(self):
+        msg = "Cannot raise .* a 'no-unit'"
+        with self.assertRaisesRegexp(ValueError, msg):
+            operator.pow(self.u, 3.0)
+
+    def test_not_numeric(self):
+        with self.assertRaisesRegexp(TypeError, 'numeric value is required'):
+            operator.pow(self.u, 'not_a_number')
+
+    def test_bad_power(self):
+        msg = "Cannot raise .* a 'no-unit'"
+        with self.assertRaisesRegexp(ValueError, msg):
+            operator.pow(self.u, 0.4)
+
+    def test_unit_power(self):
+        v = Unit('m')
+        msg = 'argument must be a string or a number'
+        with self.assertRaisesRegexp(TypeError, msg):
+            operator.pow(self.u, v)
 
 
 class TestCopy(unittest.TestCase):
@@ -466,7 +526,7 @@ class TestCopy(unittest.TestCase):
     # test: copy method
     #
     def test_copy_pass_0(self):
-        u = Unit("joule")
+        u = Unit('joule')
         self.assertEqual(copy.copy(u) == u, True)
 
     def test_copy_pass_1(self):
@@ -483,14 +543,14 @@ class TestStringify(unittest.TestCase):
     # test: __str__ method
     #
     def test_str_pass_0(self):
-        u = Unit("meter")
-        self.assertEqual(str(u), "meter")
+        u = Unit('meter')
+        self.assertEqual(str(u), 'meter')
 
     #
     # test: __repr__ method
     #
     def test_repr_pass_0(self):
-        u = Unit("meter")
+        u = Unit('meter')
         self.assertEqual(repr(u), "Unit('meter')")
 
     def test_repr_pass_1(self):
@@ -505,22 +565,22 @@ class TestRichComparison(unittest.TestCase):
     # test: __eq__ method
     #
     def test_eq_pass_0(self):
-        u = Unit("meter")
-        v = Unit("amp")
+        u = Unit('meter')
+        v = Unit('amp')
         self.assertEqual(u == v, False)
 
     def test_eq_pass_1(self):
-        u = Unit("meter")
-        v = Unit("m.s-1")
-        w = Unit("hertz")
+        u = Unit('meter')
+        v = Unit('m.s-1')
+        w = Unit('hertz')
         self.assertEqual(u == (v / w), True)
 
     def test_eq_pass_2(self):
-        u = Unit("meter")
-        self.assertEqual(u == "meter", True)
+        u = Unit('meter')
+        self.assertEqual(u == 'meter', True)
 
     def test_eq_cross_category(self):
-        m = Unit("meter")
+        m = Unit('meter')
         u = Unit('unknown')
         n = Unit('no_unit')
         self.assertFalse(m == u)
@@ -531,16 +591,16 @@ class TestRichComparison(unittest.TestCase):
     # test: __ne__ method
     #
     def test_neq_pass_0(self):
-        u = Unit("meter")
-        v = Unit("amp")
+        u = Unit('meter')
+        v = Unit('amp')
         self.assertEqual(u != v, True)
 
     def test_neq_pass_1(self):
-        u = Unit("meter")
+        u = Unit('meter')
         self.assertEqual(u != 'meter', False)
 
     def test_ne_cross_category(self):
-        m = Unit("meter")
+        m = Unit('meter')
         u = Unit('unknown')
         n = Unit('no_unit')
         self.assertTrue(m != u)
@@ -550,7 +610,7 @@ class TestRichComparison(unittest.TestCase):
 
 class TestOrdering(unittest.TestCase):
     def test_order(self):
-        m = Unit("meter")
+        m = Unit('meter')
         u = Unit('unknown')
         n = Unit('no_unit')
         start = [m, u, n]
@@ -594,13 +654,13 @@ class TestConvert(unittest.TestCase):
     # test: convert method
     #
     def test_convert_float_pass_0(self):
-        u = Unit("meter")
-        v = Unit("mile")
+        u = Unit('meter')
+        v = Unit('mile')
         self.assertEqual(u.convert(1609.344, v), 1.0)
 
     def test_convert_float_pass_1(self):
-        u = Unit("meter")
-        v = Unit("mile")
+        u = Unit('meter')
+        v = Unit('mile')
         a = (np.arange(2, dtype=np.float32) + 1) * 1609.344
         res = u.convert(a, v)
         e = np.arange(2, dtype=np.float32) + 1
@@ -608,21 +668,21 @@ class TestConvert(unittest.TestCase):
         self.assertEqual(res[1], e[1])
 
     def test_convert_np_float(self):
-        u = Unit("mile")
-        v = Unit("meter")
+        u = Unit('mile')
+        v = Unit('meter')
         self.assertEqual(u.convert(np.float(1.0), v), 1609.344)
         self.assertEqual(u.convert(np.float16(1.0), v), 1609.344)
         self.assertEqual(u.convert(np.float32(1.0), v), 1609.344)
         self.assertEqual(u.convert(np.float64(1.0), v), 1609.344)
 
     def test_convert_double_pass_0(self):
-        u = Unit("meter")
-        v = Unit("mile")
+        u = Unit('meter')
+        v = Unit('mile')
         self.assertEqual(u.convert(1609.344, v, unit.FLOAT64), 1.0)
 
     def test_convert_double_pass_1(self):
-        u = Unit("meter")
-        v = Unit("mile")
+        u = Unit('meter')
+        v = Unit('mile')
         a = (np.arange(2, dtype=np.float64) + 1) * 1609.344
         res = u.convert(a, v, unit.FLOAT64)
         e = np.arange(2, dtype=np.float64) + 1
@@ -630,21 +690,21 @@ class TestConvert(unittest.TestCase):
         self.assertEqual(res[1], e[1])
 
     def test_convert_int(self):
-        u = Unit("mile")
-        v = Unit("meter")
+        u = Unit('mile')
+        v = Unit('meter')
         self.assertEqual(u.convert(1, v), 1609.344)
 
     def test_convert_int_array(self):
-        u = Unit("mile")
-        v = Unit("meter")
+        u = Unit('mile')
+        v = Unit('meter')
         a = np.arange(2, dtype=np.int) + 1
         res = u.convert(a, v)
         e = (np.arange(2, dtype=np.float64) + 1) * 1609.344
         np.testing.assert_array_almost_equal(res, e, decimal=6)
 
     def test_convert_int_array_ctypearg(self):
-        u = Unit("mile")
-        v = Unit("meter")
+        u = Unit('mile')
+        v = Unit('meter')
         a = np.arange(2, dtype=np.int) + 1
 
         res = u.convert(a, v, unit.FLOAT32)
@@ -658,8 +718,8 @@ class TestConvert(unittest.TestCase):
         np.testing.assert_array_almost_equal(res, e, decimal=6)
 
     def test_convert_np_int(self):
-        u = Unit("mile")
-        v = Unit("meter")
+        u = Unit('mile')
+        v = Unit('meter')
         self.assertEqual(u.convert(np.int(1), v), 1609.344)
         self.assertEqual(u.convert(np.int8(1), v), 1609.344)
         self.assertEqual(u.convert(np.int16(1), v), 1609.344)
@@ -736,7 +796,7 @@ class TestUnknown(unittest.TestCase):
         self.assertTrue(u.is_unknown())
 
     def test_unknown_unit_pass_2(self):
-        u = Unit("unknown")
+        u = Unit('unknown')
         self.assertTrue(u.is_unknown())
 
     def test_unknown_unit_fail_0(self):
