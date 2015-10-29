@@ -20,6 +20,7 @@ Test Unit the wrapper class for Unidata udunits2.
 """
 
 from __future__ import (absolute_import, division, print_function)
+from six.moves import (filter, input, map, range, zip)  # noqa
 
 import unittest
 import copy
@@ -33,10 +34,8 @@ except ImportError:
 
 import numpy as np
 
-from cf_units import cf_units as unit
-
-
-Unit = unit.Unit
+import cf_units as unit
+from cf_units import Unit
 
 
 class Test_unit__creation(unittest.TestCase):
