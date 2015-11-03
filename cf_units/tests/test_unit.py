@@ -33,7 +33,7 @@ except ImportError:
 
 import numpy as np
 
-from cf_units import cf_units as unit
+import cf_units as unit
 
 
 Unit = unit.Unit
