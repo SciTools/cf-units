@@ -20,6 +20,7 @@ Miscellaneous utility functions.
 """
 
 from __future__ import (absolute_import, division, print_function)
+from six.moves import (filter, input, map, range, zip)  # noqa
 
 from six import with_metaclass
 import abc
