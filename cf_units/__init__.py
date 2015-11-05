@@ -58,6 +58,7 @@ __all__ = ['CALENDAR_STANDARD',
            'CALENDARS',
            'UT_NAMES',
            'UT_DEFINITION',
+           'UT_ASCII',
            'FLOAT32',
            'FLOAT64',
            'julian_day2date',
@@ -1866,7 +1867,7 @@ class Unit(_OrderedHashable):
             Target unit to convert to.
         * ctype (ctypes.c_float/ctypes.c_double):
             Floating point 32-bit single-precision (cf_units.FLOAT32) or
-            64-bit double-precision (iris.unit.FLOAT64) used for conversion
+            64-bit double-precision (cf_units.FLOAT64) used for conversion
             when `value` is not a NumPy array or is a NumPy array composed of
             NumPy integers. The default is 64-bit double-precision conversion.
 
