@@ -3,6 +3,6 @@ six
 netcdf4
 udunits=2.*
 
-# Testing/documentation dependencies.
+# Testing.
 pytest
-pep8=1.5.7
+pep8

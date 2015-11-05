@@ -42,7 +42,7 @@ import netcdftime
 import numpy as np
 
 from . import config
-from .util import approx_equal
+from .util import _OrderedHashable, approx_equal
 
 __version__ = '0.1.1'
 
@@ -828,9 +828,6 @@ def is_vertical(unit):
 
     """
     return as_unit(unit).is_vertical()
-
-
-from .util import _OrderedHashable
 
 
 class Unit(_OrderedHashable):
