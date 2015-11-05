@@ -44,7 +44,7 @@ import numpy as np
 from . import config
 from .util import _OrderedHashable, approx_equal
 
-__version__ = '0.2.0'
+__version__ = '1.0.0'
 
 __all__ = ['CALENDAR_STANDARD',
            'CALENDAR_GREGORIAN',
