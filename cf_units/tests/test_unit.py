@@ -522,63 +522,56 @@ class Test_power__no_unit(unittest.TestCase):
             operator.pow(self.u, v)
 
 
-class TestCopy(unittest.TestCase):
-    #
-    # test: copy method
-    #
-    def test_copy_pass_0(self):
-        u = Unit('joule')
-        self.assertEqual(copy.copy(u) == u, True)
+class Test_copy(unittest.TestCase):
 
-    def test_copy_pass_1(self):
+    def test_basic(self):
+        u = Unit('joule')
+        self.assertTrue(copy.copy(u) == u)
+
+    def test_unit_unknown(self):
         u = Unit('unknown')
+        self.assertEqual(copy.copy(u), u)
         self.assertTrue(copy.copy(u).is_unknown())
 
-    def test_copy_pass_2(self):
+    def test_no_unit(self):
         u = Unit('no unit')
+        self.assertEqual(copy.copy(u), u)
         self.assertTrue(copy.copy(u).is_no_unit())
 
 
-class TestStringify(unittest.TestCase):
-    #
-    # test: __str__ method
-    #
-    def test_str_pass_0(self):
+class Test_stringify(unittest.TestCase):
+
+    def test___str__(self):
         u = Unit('meter')
         self.assertEqual(str(u), 'meter')
 
-    #
-    # test: __repr__ method
-    #
-    def test_repr_pass_0(self):
+    def test___repr___basic(self):
         u = Unit('meter')
         self.assertEqual(repr(u), "Unit('meter')")
 
-    def test_repr_pass_1(self):
+    def test___repr___time_unit(self):
         u = Unit("hours since 2007-01-15 12:06:00",
                  calendar=unit.CALENDAR_STANDARD)
-        comp = "Unit('hours since 2007-01-15 12:06:00', calendar='standard')"
-        self.assertEqual(repr(u), comp)
+        exp = "Unit('hours since 2007-01-15 12:06:00', calendar='standard')"
+        self.assertEqual(repr(u), exp)
 
 
-class TestRichComparison(unittest.TestCase):
-    #
-    # test: __eq__ method
-    #
-    def test_eq_pass_0(self):
+class Test_equality(unittest.TestCase):
+
+    def test_basic(self):
         u = Unit('meter')
-        v = Unit('amp')
-        self.assertEqual(u == v, False)
+        self.assertTrue(u == 'meter')
 
-    def test_eq_pass_1(self):
+    def test_equivalent_units(self):
         u = Unit('meter')
         v = Unit('m.s-1')
         w = Unit('hertz')
-        self.assertEqual(u == (v / w), True)
+        self.assertTrue(u == (v / w))
 
-    def test_eq_pass_2(self):
+    def test_non_equivalent_units(self):
         u = Unit('meter')
-        self.assertEqual(u == 'meter', True)
+        v = Unit('amp')
+        self.assertFalse(u == v)
 
     def test_eq_cross_category(self):
         m = Unit('meter')
@@ -586,19 +579,31 @@ class TestRichComparison(unittest.TestCase):
         n = Unit('no_unit')
         self.assertFalse(m == u)
         self.assertFalse(m == n)
-        self.assertFalse(u == n)
 
-    #
-    # test: __ne__ method
-    #
-    def test_neq_pass_0(self):
+    def test_unknown(self):
+        u = Unit('unknown')
+        self.assertTrue(u == 'unknown')
+
+    def test_no_unit(self):
+        u = Unit('no_unit')
+        self.assertTrue(u == 'no_unit')
+
+    def test_unknown_no_unit(self):
+        u = Unit('unknown')
+        v = Unit('no_unit')
+        self.assertFalse(u == v)
+
+
+class Test_non_equality(unittest.TestCase):
+
+    def test_basic(self):
+        u = Unit('meter')
+        self.assertFalse(u != 'meter')
+
+    def test_non_equivalent_units(self):
         u = Unit('meter')
         v = Unit('amp')
-        self.assertEqual(u != v, True)
-
-    def test_neq_pass_1(self):
-        u = Unit('meter')
-        self.assertEqual(u != 'meter', False)
+        self.assertTrue(u != v)
 
     def test_ne_cross_category(self):
         m = Unit('meter')
@@ -608,9 +613,91 @@ class TestRichComparison(unittest.TestCase):
         self.assertTrue(m != n)
         self.assertTrue(u != n)
 
+    def test_unknown(self):
+        u = Unit('unknown')
+        self.assertFalse(u != 'unknown')
 
-class TestOrdering(unittest.TestCase):
-    def test_order(self):
+    def test_no_unit(self):
+        u = Unit('no_unit')
+        self.assertFalse(u != 'no_unit')
+
+
+class Test_convert(unittest.TestCase):
+
+    def test_convert_float(self):
+        u = Unit('meter')
+        v = Unit('mile')
+        result = u.convert(1609.344, v)
+        expected = 1.0
+        self.assertEqual(result, expected)
+
+    def test_convert_int(self):
+        u = Unit('mile')
+        v = Unit('meter')
+        result = u.convert(1, v)
+        expected = 1609.344
+        self.assertEqual(result, expected)
+
+    def test_convert_array(self):
+        u = Unit('meter')
+        v = Unit('mile')
+        expected = np.arange(2, dtype=np.float32) + 1
+        result = u.convert(expected * 1609.344, v)
+        np.testing.assert_array_equal(result, expected)
+
+    def test_incompatible_units(self):
+        u = Unit('m')
+        v = Unit('V')
+        msg = 'Unable to convert'
+        with self.assertRaisesRegexp(ValueError, msg):
+            u.convert(1.0, v)
+
+    def test_unknown_units(self):
+        u = Unit('unknown')
+        v = Unit('no unit')
+        m = Unit('m')
+        val = 1.0
+        msg = 'Unable to convert'
+        with self.assertRaisesRegexp(ValueError, msg):
+            u.convert(val, m)
+        with self.assertRaisesRegexp(ValueError, msg):
+            m.convert(val, u)
+        with self.assertRaisesRegexp(ValueError, msg):
+            u.convert(val, v)
+
+    def test_no_units(self):
+        u = Unit('no unit')
+        v = Unit('unknown')
+        m = Unit('m')
+        val = 1.0
+        msg = 'Unable to convert'
+        with self.assertRaisesRegexp(ValueError, msg):
+            u.convert(val, m)
+        with self.assertRaisesRegexp(ValueError, msg):
+            m.convert(val, u)
+        with self.assertRaisesRegexp(ValueError, msg):
+            u.convert(val, v)
+
+    def test_convert_time_units(self):
+        u = Unit('seconds since 1978-09-01 00:00:00', calendar='360_day')
+        v = Unit('seconds since 1979-04-01 00:00:00', calendar='360_day')
+        u1point = np.array([54432000.], dtype=np.float32)
+        u2point = np.array([36288000.], dtype=np.float32)
+        res = u.convert(u1point, v)
+        np.testing.assert_array_almost_equal(res, u2point, decimal=6)
+
+    def test_incompatible_time_units(self):
+        u = Unit('seconds since 1978-09-01 00:00:00', calendar='360_day')
+        v = Unit('seconds since 1979-04-01 00:00:00', calendar='gregorian')
+        u1point = np.array([54432000.], dtype=np.float32)
+        msg = 'Unable to convert'
+        with self.assertRaisesRegexp(ValueError, msg):
+            u.convert(u1point, v)
+
+
+class Test_order(unittest.TestCase):
+
+    def test(self):
         m = Unit('meter')
         u = Unit('unknown')
         n = Unit('no_unit')
@@ -618,255 +705,105 @@ class TestOrdering(unittest.TestCase):
         self.assertEqual(sorted(start), [m, n, u])
 
 
-class TestTimeEncoding(unittest.TestCase):
-    #
-    # test: encode_time module function
-    #
-    def test_encode_time_pass_0(self):
-        result = unit.encode_time(2006, 1, 15, 12, 6, 0)
-        self.assertEqual(result, 159019560.0)
+class Test_is_unknown(unittest.TestCase):
 
-    #
-    # test: encode_date module function
-    #
-    def test_encode_date_pass_0(self):
-        result = unit.encode_date(2006, 1, 15)
-        self.assertEqual(result, 158976000.0)
-
-    #
-    # test: encode_clock module function
-    #
-    def test_encode_clock_pass_0(self):
-        result = unit.encode_clock(12, 6, 0)
-        self.assertEqual(result, 43560.0)
-
-    #
-    # test: decode_time module function
-    #
-    def test_decode_time_pass_0(self):
-        result = unit.decode_time(158976000.0+43560.0)
-        year, month, day, hour, min, sec, res = result
-        self.assertEqual((year, month, day, hour, min, sec),
-                         (2006, 1, 15, 12, 6, 0))
-
-
-class TestConvert(unittest.TestCase):
-    #
-    # test: convert method
-    #
-    def test_convert_float_pass_0(self):
-        u = Unit('meter')
-        v = Unit('mile')
-        self.assertEqual(u.convert(1609.344, v), 1.0)
-
-    def test_convert_float_pass_1(self):
-        u = Unit('meter')
-        v = Unit('mile')
-        a = (np.arange(2, dtype=np.float32) + 1) * 1609.344
-        res = u.convert(a, v)
-        e = np.arange(2, dtype=np.float32) + 1
-        self.assertEqual(res[0], e[0])
-        self.assertEqual(res[1], e[1])
-
-    def test_convert_np_float(self):
-        u = Unit('mile')
-        v = Unit('meter')
-        self.assertEqual(u.convert(np.float(1.0), v), 1609.344)
-        self.assertEqual(u.convert(np.float16(1.0), v), 1609.344)
-        self.assertEqual(u.convert(np.float32(1.0), v), 1609.344)
-        self.assertEqual(u.convert(np.float64(1.0), v), 1609.344)
-
-    def test_convert_double_pass_0(self):
-        u = Unit('meter')
-        v = Unit('mile')
-        self.assertEqual(u.convert(1609.344, v, unit.FLOAT64), 1.0)
-
-    def test_convert_double_pass_1(self):
-        u = Unit('meter')
-        v = Unit('mile')
-        a = (np.arange(2, dtype=np.float64) + 1) * 1609.344
-        res = u.convert(a, v, unit.FLOAT64)
-        e = np.arange(2, dtype=np.float64) + 1
-        self.assertEqual(res[0], e[0])
-        self.assertEqual(res[1], e[1])
-
-    def test_convert_int(self):
-        u = Unit('mile')
-        v = Unit('meter')
-        self.assertEqual(u.convert(1, v), 1609.344)
-
-    def test_convert_int_array(self):
-        u = Unit('mile')
-        v = Unit('meter')
-        a = np.arange(2, dtype=np.int) + 1
-        res = u.convert(a, v)
-        e = (np.arange(2, dtype=np.float64) + 1) * 1609.344
-        np.testing.assert_array_almost_equal(res, e, decimal=6)
-
-    def test_convert_int_array_ctypearg(self):
-        u = Unit('mile')
-        v = Unit('meter')
-        a = np.arange(2, dtype=np.int) + 1
-
-        res = u.convert(a, v, unit.FLOAT32)
-        e = (np.arange(2, dtype=np.float32) + 1) * 1609.344
-        self.assertEqual(res.dtype, e.dtype)
-        np.testing.assert_array_almost_equal(res, e, decimal=6)
-
-        res = u.convert(a, v, unit.FLOAT64)
-        e = (np.arange(2, dtype=np.float64) + 1) * 1609.344
-        self.assertEqual(res.dtype, e.dtype)
-        np.testing.assert_array_almost_equal(res, e, decimal=6)
-
-    def test_convert_np_int(self):
-        u = Unit('mile')
-        v = Unit('meter')
-        self.assertEqual(u.convert(np.int(1), v), 1609.344)
-        self.assertEqual(u.convert(np.int8(1), v), 1609.344)
-        self.assertEqual(u.convert(np.int16(1), v), 1609.344)
-        self.assertEqual(u.convert(np.int32(1), v), 1609.344)
-        self.assertEqual(u.convert(np.int64(1), v), 1609.344)
-
-    def test_convert_fail_0(self):
-        u = Unit('unknown')
-        v = Unit('no unit')
-        w = Unit('meters')
-        x = Unit('kg')
-        a = np.arange(10)
-
-        # unknown and/or no-unit
-        self.assertRaises(ValueError, u.convert, a, v)
-        self.assertRaises(ValueError, v.convert, a, u)
-        self.assertRaises(ValueError, w.convert, a, u)
-        self.assertRaises(ValueError, w.convert, a, v)
-        self.assertRaises(ValueError, u.convert, a, w)
-        self.assertRaises(ValueError, v.convert, a, w)
-
-        # Incompatible units
-        self.assertRaises(ValueError, w.convert, a, x)
-
-    def test_convert_time_ref_0(self):
-        # Test converting from one reference time to another on non-standard
-        # calendar.
-        u1 = Unit('seconds since 1978-09-01 00:00:00', calendar='360_day')
-        u2 = Unit('seconds since 1979-04-01 00:00:00', calendar='360_day')
-        u1point = np.array([54432000.], dtype=np.float32)
-        u2point = np.array([36288000.], dtype=np.float32)
-        res = u1.convert(u1point, u2)
-        np.testing.assert_array_almost_equal(res, u2point, decimal=6)
-
-    def test_convert_time_fail_0(self):
-        # Test converting from one reference time to another between different
-        # calendars raises an error.
-        u1 = Unit('seconds since 1978-09-01 00:00:00', calendar='360_day')
-        u2 = Unit('seconds since 1979-04-01 00:00:00', calendar='gregorian')
-        u1point = np.array([54432000.], dtype=np.float32)
-        with self.assertRaises(ValueError):
-            u1.convert(u1point, u2)
-
-
-class TestNumsAndDates(unittest.TestCase):
-    #
-    # test: num2date method
-    #
-    def test_num2date_pass_0(self):
-        u = Unit("hours since 2010-11-02 12:00:00",
-                 calendar=unit.CALENDAR_STANDARD)
-        self.assertEqual(str(u.num2date(1)), "2010-11-02 13:00:00")
-
-    #
-    # test: date2num method
-    #
-    def test_date2num_pass_0(self):
-        u = Unit("hours since 2010-11-02 12:00:00",
-                 calendar=unit.CALENDAR_STANDARD)
-        d = datetime.datetime(2010, 11, 2, 13, 0, 0)
-        self.assertEqual(str(u.num2date(u.date2num(d))), "2010-11-02 13:00:00")
-
-
-class TestUnknown(unittest.TestCase):
-    #
-    # test: unknown units
-    #
-    def test_unknown_unit_pass_0(self):
-        u = Unit("?")
+    def _check(self, unknown_str):
+        u = Unit(unknown_str)
         self.assertTrue(u.is_unknown())
 
-    def test_unknown_unit_pass_1(self):
-        u = Unit("???")
-        self.assertTrue(u.is_unknown())
+    def test_unknown_representations(self):
+        representations = ['unknown', '?', '???']
+        for representation in representations:
+            self._check(representation)
 
-    def test_unknown_unit_pass_2(self):
-        u = Unit('unknown')
-        self.assertTrue(u.is_unknown())
-
-    def test_unknown_unit_fail_0(self):
+    def test_no_unit(self):
         u = Unit('no unit')
         self.assertFalse(u.is_unknown())
 
-    def test_unknown_unit_fail_2(self):
+    def test_known_unit(self):
         u = Unit('meters')
         self.assertFalse(u.is_unknown())
 
 
-class TestNoUnit(unittest.TestCase):
-    #
-    # test: no unit
-    #
-    def test_no_unit_pass_0(self):
+class Test_is_no_unit(unittest.TestCase):
+
+    def _check(self, no_unit_str):
+        u = Unit(no_unit_str)
+        self.assertTrue(u.is_no_unit())
+
+    def test_no_unit_representations(self):
+        representations = ['no_unit', 'no unit', 'no-unit', 'nounit']
+        for representation in representations:
+            self._check(representation)
+
+    def test_unknown(self):
+        u = Unit('unknown')
+        self.assertFalse(u.is_no_unit())
+
+    def test_known_unit(self):
+        u = Unit('meters')
+        self.assertFalse(u.is_no_unit())
+
+
+class Test_is_udunits(unittest.TestCase):
+
+    def test_basic(self):
+        u = Unit('meters')
+        self.assertTrue(u.is_udunits())
+
+    def test_unknown(self):
+        u = Unit('unknown')
+        self.assertFalse(u.is_udunits())
+
+    def test_no_unit(self):
         u = Unit('no_unit')
-        self.assertTrue(u.is_no_unit())
-
-    def test_no_unit_pass_1(self):
-        u = Unit('no unit')
-        self.assertTrue(u.is_no_unit())
-
-    def test_no_unit_pass_2(self):
-        u = Unit('no-unit')
-        self.assertTrue(u.is_no_unit())
-
-    def test_no_unit_pass_3(self):
-        u = Unit('nounit')
-        self.assertTrue(u.is_no_unit())
+        self.assertFalse(u.is_udunits())
 
 
-class TestTimeReference(unittest.TestCase):
-    #
-    # test: time reference
-    #
-    def test_time_reference_pass_0(self):
+class Test_is_time_reference(unittest.TestCase):
+
+    def test_basic(self):
         u = Unit('hours since epoch')
         self.assertTrue(u.is_time_reference())
 
-    def test_time_reference_fail_0(self):
+    def test_not_time_reference(self):
         u = Unit('hours')
         self.assertFalse(u.is_time_reference())
 
+    def test_unknown(self):
+        u = Unit('unknown')
+        self.assertFalse(u.is_time_reference())
 
-class TestTitle(unittest.TestCase):
-    #
-    # test: title
-    #
-    def test_title_pass_0(self):
+    def test_no_unit(self):
+        u = Unit('no_unit')
+        self.assertFalse(u.is_time_reference())
+
+
+class Test_title(unittest.TestCase):
+
+    def test_basic(self):
         u = Unit('meter')
         self.assertEqual(u.title(10), '10 meter')
 
-    def test_title_pass_1(self):
+    def test_time_unit(self):
         u = Unit('hours since epoch', calendar=unit.CALENDAR_STANDARD)
         self.assertEqual(u.title(10), '1970-01-01 10:00:00')
 
 
-class TestImmutable(unittest.TestCase):
+class Test__immutable(unittest.TestCase):
     def _set_attr(self, unit, name):
         setattr(unit, name, -999)
-        raise ValueError("'Unit' attribute '%s' is mutable!" % name)
+        raise ValueError("'Unit' attribute {!r} is mutable!".format(name))
 
     def test_immutable(self):
         u = Unit('m')
         for name in dir(u):
-            self.assertRaises(AttributeError, self._set_attr, u, name)
+            msg = 'Instances .* are immutable'
+            with self.assertRaisesRegexp(AttributeError, msg):
+                self._set_attr(u, name)
 
-    def test_hash(self):
+    def test_common_hash(self):
+        # Test different instances of length units (m) have a common hash.
         u1 = Unit('m')
         u2 = Unit('meter')
         u3 = copy.deepcopy(u1)
@@ -875,6 +812,7 @@ class TestImmutable(unittest.TestCase):
             h.add(hash(u))
         self.assertEqual(len(h), 1)
 
+        # Test different instances of electrical units (V) have a common hash.
         v1 = Unit('V')
         v2 = Unit('volt')
         for u in (v1, v2):
@@ -882,19 +820,21 @@ class TestImmutable(unittest.TestCase):
         self.assertEqual(len(h), 2)
 
 
-class TestInPlace(unittest.TestCase):
+class Test__inplace(unittest.TestCase):
+    # Test shared memory for conversion operations. 
 
-    def test1(self):
-        """Test shared memory for conversion operations."""
-
-        c = unit.Unit('deg_c')
-        f = unit.Unit('deg_f')
+    def test(self):
+        # Check conversions do not change original object.
+        c = Unit('deg_c')
+        f = Unit('deg_f')
 
         orig = np.arange(3, dtype=np.float32)
 
         # Test arrays are not equal without inplace conversions.
         converted = c.convert(orig, f)
-        with self.assertRaises(AssertionError):
+
+        msg = 'Arrays are not equal'
+        with self.assertRaisesRegexp(AssertionError, msg):
             np.testing.assert_array_equal(orig, converted)
         self.assertFalse(np.may_share_memory(orig, converted))
 
@@ -902,6 +842,115 @@ class TestInPlace(unittest.TestCase):
         converted = c.convert(orig, f, inplace=True)
         np.testing.assert_array_equal(orig, converted)
         self.assertTrue(np.may_share_memory(orig, converted))
+
+
+class TestTimeEncoding(unittest.TestCase):
+
+    def test_encode_time(self):
+        result = unit.encode_time(2006, 1, 15, 12, 6, 0)
+        self.assertEqual(result, 159019560.0)
+
+    def test_encode_date(self):
+        result = unit.encode_date(2006, 1, 15)
+        self.assertEqual(result, 158976000.0)
+
+    def test_encode_clock(self):
+        result = unit.encode_clock(12, 6, 0)
+        self.assertEqual(result, 43560.0)
+
+    def test_decode_time(self):
+        result = unit.decode_time(158976000.0+43560.0)
+        year, month, day, hour, min, sec, res = result
+        self.assertEqual((year, month, day, hour, min, sec),
+                         (2006, 1, 15, 12, 6, 0))
+
+
+class TestNumsAndDates(unittest.TestCase):
+
+    def test_num2date(self):
+        u = Unit('hours since 2010-11-02 12:00:00',
+                 calendar=unit.CALENDAR_STANDARD)
+        self.assertEqual(str(u.num2date(1)), '2010-11-02 13:00:00')
+
+    def test_date2num(self):
+        u = Unit('hours since 2010-11-02 12:00:00',
+                 calendar=unit.CALENDAR_STANDARD)
+        d = datetime.datetime(2010, 11, 2, 13, 0, 0)
+        self.assertEqual(str(u.num2date(u.date2num(d))), '2010-11-02 13:00:00')
+
+
+class Test_as_unit(unittest.TestCase):
+
+    def test_already_unit(self):
+        u = Unit('m')
+        result = unit.as_unit(u)
+        self.assertIs(result, u)
+
+    def test_known_unit_str(self):
+        u_str = 'm'
+        expected = Unit('m')
+        result = unit.as_unit(u_str)
+        self.assertEqual(expected, result)
+
+    def test_not_unit_str(self):
+        u_str = 'wibble'
+        msg = 'Failed to parse unit'
+        with self.assertRaisesRegexp(ValueError, msg):
+            unit.as_unit(u_str)
+
+    def test_unknown_str(self):
+        u_str = 'unknown'
+        expected = Unit('unknown')
+        result = unit.as_unit(u_str)
+        self.assertEqual(expected, result)
+
+    def test_no_unit_str(self):
+        u_str = 'no_unit'
+        expected = Unit('no_unit')
+        result = unit.as_unit(u_str)
+        self.assertEqual(expected, result)
+
+
+class Test_is_time(unittest.TestCase):
+
+    def test_basic(self):
+        u = Unit('hours')
+        self.assertTrue(u.is_time())
+
+    def test_not_time_unit(self):
+        u = Unit('meters')
+        self.assertFalse(u.is_time())
+
+    def test_unknown(self):
+        u = Unit('unknown')
+        self.assertFalse(u.is_time())
+
+    def test_no_unit(self):
+        u = Unit('no_unit')
+        self.assertFalse(u.is_time())
+
+
+class Test_is_vertical(unittest.TestCase):
+
+    def test_pressure_unit(self):
+        u = Unit('millibar')
+        self.assertTrue(u.is_vertical())
+
+    def test_length_unit(self):
+        u = Unit('meters')
+        self.assertTrue(u.is_vertical())
+
+    def test_not_vertical_unit(self):
+        u = Unit('hours')
+        self.assertFalse(u.is_vertical())
+
+    def test_unknown(self):
+        u = Unit('unknown')
+        self.assertFalse(u.is_vertical())
+
+    def test_no_unit(self):
+        u = Unit('no_unit')
+        self.assertFalse(u.is_vertical())
 
 
 if __name__ == '__main__':
