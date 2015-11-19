@@ -1,7 +1,7 @@
 # Mandatory dependencies.
 six
 netcdf4
-udunits=2.*
+udunits2
 
 # Testing.
 pytest
