@@ -62,5 +62,5 @@ setup(
     package_data={'cf_units': list(file_walk_relative('cf_units/etc',
                                                       remove='cf_units/'))},
     data_files=[('cf_units', ['COPYING', 'COPYING.LESSER'])],
-    tests_require=['pytest'],
+    tests_require=['pytest', 'pep8'],
     cmdclass={'test': PyTest},)
