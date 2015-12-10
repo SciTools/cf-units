@@ -892,16 +892,16 @@ class TestInPlace(unittest.TestCase):
 
         orig = np.arange(3, dtype=np.float32)
 
-        # Test inplace conversion alters the original array.
-        converted = c.convert(orig, f)
-        np.testing.assert_array_equal(orig, converted)
-        self.assertTrue(np.may_share_memory(orig, converted))
-
         # Test arrays are not equal without inplace conversions.
-        converted = c.convert(orig, f, inplace=False)
+        converted = c.convert(orig, f)
         with self.assertRaises(AssertionError):
             np.testing.assert_array_equal(orig, converted)
         self.assertFalse(np.may_share_memory(orig, converted))
+
+        # Test inplace conversion alters the original array.
+        converted = c.convert(orig, f, inplace=True)
+        np.testing.assert_array_equal(orig, converted)
+        self.assertTrue(np.may_share_memory(orig, converted))
 
 
 if __name__ == '__main__':

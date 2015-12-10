@@ -1849,7 +1849,7 @@ class Unit(_OrderedHashable):
         """
         return not self == other
 
-    def convert(self, value, other, ctype=FLOAT64, inplace=True):
+    def convert(self, value, other, ctype=FLOAT64, inplace=False):
         """
         Converts a single ``value`` or NumPy array of ``value``s from the
         current unit to the other target unit.
@@ -1868,8 +1868,9 @@ class Unit(_OrderedHashable):
             when `value` is not a NumPy array or is a NumPy array composed of
             NumPy integers. The default is 64-bit double-precision conversion.
         * inplace (bool):
-            If ``True``, convert the values in-place. A new array will be
-            created if ``value`` is an integer NumPy array.
+            If ``False``, return a deep copy of the value array. If ``True``,
+            convert the values in-place. A new array will be created if
+            ``value`` is an integer NumPy array.
 
         Returns:
             float or numpy.ndarray of appropriate float type
@@ -1901,10 +1902,10 @@ class Unit(_OrderedHashable):
         if self == other:
             return value
 
-        if not inplace:
-            result = copy.deepcopy(value)
-        else:
+        if inplace:
             result = value
+        else:
+            result = copy.deepcopy(value)
 
         if self.is_convertible(other):
             # Use utime for converting reference times that are not using a
