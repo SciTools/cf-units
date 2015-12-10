@@ -1849,10 +1849,10 @@ class Unit(_OrderedHashable):
         """
         return not self == other
 
-    def convert(self, value, other, ctype=FLOAT64):
+    def convert(self, value, other, ctype=FLOAT64, inplace=True):
         """
-        Converts a single value or numpy array of values from the current unit
-        to the other target unit.
+        Converts a single ``value`` or NumPy array of ``value``s from the
+        current unit to the other target unit.
 
         If the units are not convertible, then no conversion will take place.
 
@@ -1867,9 +1867,12 @@ class Unit(_OrderedHashable):
             64-bit double-precision (cf_units.FLOAT64) used for conversion
             when `value` is not a NumPy array or is a NumPy array composed of
             NumPy integers. The default is 64-bit double-precision conversion.
+        * inplace (bool):
+            If ``True``, convert the values in-place. A new array will be
+            created if ``value`` is an integer NumPy array.
 
         Returns:
-            float or numpy.ndarray of appropriate float type.
+            float or numpy.ndarray of appropriate float type
 
         For example:
 
@@ -1883,26 +1886,25 @@ class Unit(_OrderedHashable):
             32.0
             >>> a64 = np.arange(10, dtype=np.float64)
             >>> c.convert(a64, f)
-            array([ 32. ,  33.8,  35.6,  37.4,  39.2,  41. ,  42.8,  44.6, \
- 46.4,  48.2])
+            array([ 32. ,  33.8,  35.6,  37.4,  39.2,  41. ,  42.8,  44.6,
+                    46.4,  48.2])
             >>> a32 = np.arange(10, dtype=np.float32)
             >>> c.convert(a32, f)
             array([ 32.        ,  33.79999924,  35.59999847,  37.40000153,
                     39.20000076,  41.        ,  42.79999924,  44.59999847,
                     46.40000153,  48.20000076], dtype=float32)
 
-        .. note::
-
-            Conversion is done *in-place* for numpy arrays. Also note that,
-            conversion between unit calendars is not permitted.
-
+        .. note:: Conversion between unit calendars is not permitted.
         """
-        result = None
         other = as_unit(other)
-        value_copy = copy.deepcopy(value)
 
         if self == other:
             return value
+
+        if not inplace:
+            result = copy.deepcopy(value)
+        else:
+            result = value
 
         if self.is_convertible(other):
             # Use utime for converting reference times that are not using a
@@ -1911,7 +1913,7 @@ class Unit(_OrderedHashable):
                     and self.calendar != CALENDAR_GREGORIAN:
                 ut1 = self.utime()
                 ut2 = other.utime()
-                result = ut2.date2num(ut1.num2date(value_copy))
+                result = ut2.date2num(ut1.num2date(result))
                 # Preserve the datatype of the input array if it was float32.
                 if (isinstance(value, np.ndarray) and
                    value.dtype == np.float32):
@@ -1919,32 +1921,31 @@ class Unit(_OrderedHashable):
             else:
                 ut_converter = _ut_get_converter(self.ut_unit, other.ut_unit)
                 if ut_converter:
-                    if isinstance(value_copy, np.ndarray):
+                    if isinstance(result, np.ndarray):
                         # Can only handle array of np.float32 or np.float64 so
                         # cast array of ints to array of floats of requested
                         # precision.
-                        if issubclass(value_copy.dtype.type, np.integer):
-                            value_copy = value_copy.astype(
+                        if issubclass(result.dtype.type, np.integer):
+                            result = result.astype(
                                 _ctypes2numpy[ctype])
                         # Convert arrays with explicit endianness to native
                         # endianness: udunits seems to be tripped up by arrays
                         # with endianness other than native.
-                        if value_copy.dtype.byteorder != '=':
-                            value_copy = value_copy.astype(
-                                value_copy.dtype.type)
+                        if result.dtype.byteorder != '=':
+                            result = result.astype(
+                                result.dtype.type)
                         # Strict type check of numpy array.
-                        if value_copy.dtype.type not in _numpy2ctypes:
+                        if result.dtype.type not in _numpy2ctypes:
                             raise TypeError(
                                 "Expect a numpy array of '%s' or '%s'" %
                                 tuple(sorted(_numpy2ctypes.keys())))
-                        ctype = _numpy2ctypes[value_copy.dtype.type]
-                        pointer = value_copy.ctypes.data_as(
+                        ctype = _numpy2ctypes[result.dtype.type]
+                        pointer = result.ctypes.data_as(
                             ctypes.POINTER(ctype))
                         # Utilise global convenience dictionary
                         # _cv_convert_array
                         _cv_convert_array[ctype](ut_converter, pointer,
-                                                 value_copy.size, pointer)
-                        result = value_copy
+                                                 result.size, pointer)
                     else:
                         if ctype not in _cv_convert_scalar:
                             raise ValueError('Invalid target type. Can only '
@@ -1952,7 +1953,7 @@ class Unit(_OrderedHashable):
                         # Utilise global convenience dictionary
                         # _cv_convert_scalar
                         result = _cv_convert_scalar[ctype](ut_converter,
-                                                           ctype(value_copy))
+                                                           ctype(result))
                     _cv_free(ut_converter)
                 else:
                     self._raise_error('Failed to convert %r to %r' %
