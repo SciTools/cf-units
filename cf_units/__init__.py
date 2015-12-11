@@ -1851,8 +1851,8 @@ class Unit(_OrderedHashable):
 
     def convert(self, value, other, ctype=FLOAT64, inplace=False):
         """
-        Converts a single ``value`` or NumPy array of ``value``s from the
-        current unit to the other target unit.
+        Converts a single value or NumPy array of values from the current unit
+        to the other target unit.
 
         If the units are not convertible, then no conversion will take place.
 
@@ -1873,7 +1873,7 @@ class Unit(_OrderedHashable):
             ``value`` is an integer NumPy array.
 
         Returns:
-            float or numpy.ndarray of appropriate float type
+            float or numpy.ndarray of appropriate float type.
 
         For example:
 
@@ -1885,17 +1885,17 @@ class Unit(_OrderedHashable):
             31.999999999999886
             >>> c.convert(0, f, cf_units.FLOAT32)
             32.0
-            >>> a64 = np.arange(10, dtype=np.float64)
+            >>> a64 = np.arange(3, dtype=np.float64)
             >>> c.convert(a64, f)
-            array([ 32. ,  33.8,  35.6,  37.4,  39.2,  41. ,  42.8,  44.6,
-                    46.4,  48.2])
-            >>> a32 = np.arange(10, dtype=np.float32)
+            array([ 32. ,  33.8,  35.6])
+            >>> a32 = np.arange(3, dtype=np.float32)
             >>> c.convert(a32, f)
-            array([ 32.        ,  33.79999924,  35.59999847,  37.40000153,
-                    39.20000076,  41.        ,  42.79999924,  44.59999847,
-                    46.40000153,  48.20000076], dtype=float32)
+            array([ 32.        ,  33.79999924,  35.59999847], dtype=float32)
 
-        .. note:: Conversion between unit calendars is not permitted.
+        .. note::
+
+           Conversion between unit calendars is not permitted.
+
         """
         other = as_unit(other)
 
