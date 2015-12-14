@@ -885,15 +885,23 @@ class TestImmutable(unittest.TestCase):
 class TestInPlace(unittest.TestCase):
 
     def test1(self):
-        # Check conversions do not change original object
+        """Test shared memory for conversion operations."""
+
         c = unit.Unit('deg_c')
         f = unit.Unit('deg_f')
 
         orig = np.arange(3, dtype=np.float32)
-        converted = c.convert(orig, f)
 
+        # Test arrays are not equal without inplace conversions.
+        converted = c.convert(orig, f)
         with self.assertRaises(AssertionError):
             np.testing.assert_array_equal(orig, converted)
+        self.assertFalse(np.may_share_memory(orig, converted))
+
+        # Test inplace conversion alters the original array.
+        converted = c.convert(orig, f, inplace=True)
+        np.testing.assert_array_equal(orig, converted)
+        self.assertTrue(np.may_share_memory(orig, converted))
 
 
 if __name__ == '__main__':
