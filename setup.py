@@ -1,10 +1,8 @@
 import os
 import sys
-try:
-    from setuptools import setup
-    from setuptools.command.test import test as TestCommand
-except ImportError:
-    from distutils.core import setup
+
+from setuptools import setup
+from setuptools.command.test import test as TestCommand
 
 
 class PyTest(TestCommand):
