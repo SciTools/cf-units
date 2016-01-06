@@ -44,7 +44,10 @@ import numpy as np
 from . import config
 from .util import _OrderedHashable, approx_equal
 
-__version__ = '1.0.0'
+# Define __version__ based on versioneer's interpretation.
+from ._version import get_versions
+__version__ = get_versions()['version']
+del get_versions
 
 __all__ = ['CALENDAR_STANDARD',
            'CALENDAR_GREGORIAN',

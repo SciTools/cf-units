@@ -266,7 +266,7 @@ class TestLicenseHeaders(unittest.TestCase):
 
 
 class TestFutureImports(unittest.TestCase):
-    excluded = ()
+    excluded = ('*/_version.py')
 
     future_imports_pattern = re.compile(
         r"^from __future__ import \(absolute_import,\s*division,\s*"

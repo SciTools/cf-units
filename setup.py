@@ -3,6 +3,7 @@ import sys
 
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
+import versioneer
 
 
 class PyTest(TestCommand):
@@ -14,20 +15,6 @@ class PyTest(TestCommand):
         import pytest
         errno = pytest.main(self.test_args)
         sys.exit(errno)
-
-
-def extract_version():
-    version = None
-    fdir = os.path.dirname(__file__)
-    fnme = os.path.join(fdir, 'cf_units', '__init__.py')
-    with open(fnme) as fd:
-        for line in fd:
-            if (line.startswith('__version__')):
-                _, version = line.split('=')
-                # Remove quotation characters.
-                version = version.strip()[1:-1]
-                break
-    return version
 
 
 def file_walk_relative(top, remove=''):
@@ -51,9 +38,13 @@ def read(*parts):
 
 long_description = '{}'.format(read('README.rst'))
 
+cmdclass = {'test': PyTest}
+cmdclass.update(versioneer.get_cmdclass())
+
+
 setup(
     name='cf_units',
-    version=extract_version(),
+    version=versioneer.get_version(),
     url='https://github.com/SciTools/cf_units',
     author='UK Met Office',
     packages=['cf_units', 'cf_units/tests'],
@@ -61,4 +52,5 @@ setup(
                                                       remove='cf_units/'))},
     data_files=[('cf_units', ['COPYING', 'COPYING.LESSER'])],
     tests_require=['pytest', 'pep8'],
-    cmdclass={'test': PyTest},)
+    cmdclass=cmdclass
+    )
