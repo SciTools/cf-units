@@ -48,7 +48,7 @@ class Test_unit__creation(unittest.TestCase):
                      '    meter   ']
         for unit_str in unit_strs:
             u = Unit(unit_str)
-            self.assertTrue(u.name, 'meter')
+            self.assertEqual(u.name, 'meter')
 
     def test_not_valid_unit_str(self):
         with self.assertRaisesRegexp(ValueError, 'Failed to parse unit'):
@@ -526,7 +526,7 @@ class Test_copy(unittest.TestCase):
 
     def test_basic(self):
         u = Unit('joule')
-        self.assertTrue(copy.copy(u) == u)
+        self.assertEqual(copy.copy(u), u)
 
     def test_unit_unknown(self):
         u = Unit('unknown')
@@ -560,38 +560,38 @@ class Test_equality(unittest.TestCase):
 
     def test_basic(self):
         u = Unit('meter')
-        self.assertTrue(u == 'meter')
+        self.assertEqual(u, 'meter')
 
     def test_equivalent_units(self):
         u = Unit('meter')
         v = Unit('m.s-1')
         w = Unit('hertz')
-        self.assertTrue(u == (v / w))
+        self.assertEqual(u, v/w)
 
     def test_non_equivalent_units(self):
         u = Unit('meter')
         v = Unit('amp')
-        self.assertFalse(u == v)
+        self.assertNotEqual(u, v)
 
     def test_eq_cross_category(self):
         m = Unit('meter')
         u = Unit('unknown')
         n = Unit('no_unit')
-        self.assertFalse(m == u)
-        self.assertFalse(m == n)
+        self.assertNotEqual(m, u)
+        self.assertNotEqual(m, n)
 
     def test_unknown(self):
         u = Unit('unknown')
-        self.assertTrue(u == 'unknown')
+        self.assertEqual(u, 'unknown')
 
     def test_no_unit(self):
         u = Unit('no_unit')
-        self.assertTrue(u == 'no_unit')
+        self.assertEqual(u, 'no_unit')
 
     def test_unknown_no_unit(self):
         u = Unit('unknown')
         v = Unit('no_unit')
-        self.assertFalse(u == v)
+        self.assertNotEqual(u, v)
 
 
 class Test_non_equality(unittest.TestCase):
@@ -603,15 +603,15 @@ class Test_non_equality(unittest.TestCase):
     def test_non_equivalent_units(self):
         u = Unit('meter')
         v = Unit('amp')
-        self.assertTrue(u != v)
+        self.assertNotEqual(u, v)
 
     def test_ne_cross_category(self):
         m = Unit('meter')
         u = Unit('unknown')
         n = Unit('no_unit')
-        self.assertTrue(m != u)
-        self.assertTrue(m != n)
-        self.assertTrue(u != n)
+        self.assertNotEqual(m, u)
+        self.assertNotEqual(m, n)
+        self.assertNotEqual(u, n)
 
     def test_unknown(self):
         u = Unit('unknown')
@@ -821,7 +821,7 @@ class Test__immutable(unittest.TestCase):
 
 
 class Test__inplace(unittest.TestCase):
-    # Test shared memory for conversion operations. 
+    # Test shared memory for conversion operations.
 
     def test(self):
         # Check conversions do not change original object.
