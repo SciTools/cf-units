@@ -30,7 +30,7 @@ from cf_units import as_unit, Unit
 
 class StubUnit(object):
     def __init__(self, calendar=None):
-        self._calendar = str(calendar)
+        self._calendar = str(calendar) if calendar is not None else None
 
     def __str__(self):
         return self.origin

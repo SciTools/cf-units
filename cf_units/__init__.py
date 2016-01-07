@@ -781,7 +781,7 @@ def as_unit(unit):
         if use_cache:
             result = _CACHE.get(unit)
         if result is None:
-            result = Unit(unit)
+            result = Unit(unit, calendar=getattr(unit, 'calendar', None))
             if use_cache:
                 _CACHE[unit] = result
     return result
