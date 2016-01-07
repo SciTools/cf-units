@@ -218,4 +218,4 @@ class Test_convert__masked_array(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    tests.main()
+    unittest.main()

@@ -863,14 +863,6 @@ class Unit(_OrderedHashable):
     def __hash__(self):
         return hash(self._identity())
 
-    def __eq__(self, other):
-        return (isinstance(other, type(self)) and
-                self._identity() == other._identity())
-
-    def __ne__(self, other):
-        # Since we've defined __eq__ we should also define __ne__.
-        return not self == other
-
     # Provide default ordering semantics
 
     def __lt__(self, other):
