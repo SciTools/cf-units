@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2014, Met Office
+# (C) British Crown Copyright 2016, Met Office
 #
 # This file is part of cf_units.
 #
@@ -28,26 +28,15 @@ from cf_units import as_unit, Unit
 
 class StubUnit(object):
     def __init__(self, calendar=None):
-        self._calendar = str(calendar) if calendar is not None else None
+        self.calendar = str(calendar) if calendar is not None else None
+        # udunit category
+        self.category = 2
+        # ut_unit should be an integer but not under test
+        self.ut_unit = 0
+        self.origin = 'hours since 1970-01-01 00:00:00'
 
     def __str__(self):
         return self.origin
-
-    @property
-    def origin(self):
-        return 'hours since 1970-01-01 00:00:00'
-
-    @property
-    def ut_unit(self):
-        return 22943184
-
-    @property
-    def calendar(self):
-        return self._calendar
-
-    @property
-    def category(self):
-        return 2
 
 
 class TestAll(unittest.TestCase):
