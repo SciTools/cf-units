@@ -22,8 +22,6 @@ from six.moves import (filter, input, map, range, zip)  # noqa
 import copy
 import unittest
 
-import mock
-
 import cf_units
 from cf_units import as_unit, Unit
 
