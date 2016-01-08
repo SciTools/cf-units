@@ -781,6 +781,8 @@ def as_unit(unit):
         if use_cache:
             result = _CACHE.get(unit)
         if result is None:
+            # Typically unit is a string, however we cater for other types of
+            # 'unit' (e.g. iris.unit.Unit).
             result = Unit(unit, calendar=getattr(unit, 'calendar', None))
             if use_cache:
                 _CACHE[unit] = result

@@ -59,6 +59,8 @@ class TestAll(unittest.TestCase):
                              getattr(unit2, attribute))
 
     def test_cf_unit(self):
+        # Ensure that as_unit returns the same cf_unit.Unit object and
+        # remains unchanged.
         unit = Unit('hours since 1970-01-01 00:00:00', calendar='360_day')
         target = copy.copy(unit)
         result = as_unit(unit)
@@ -67,14 +69,20 @@ class TestAll(unittest.TestCase):
         self.assertIs(result, unit)
 
     def test_non_cf_unit_no_calendar(self):
-        # Check that as_unit returns a default calendar (Gregorian)
+        # On passing as_unit a cf_unit.Unit-like object (not a cf_unit.Unit
+        # object) with no calendar, ensure that a cf_unit.Unit is returned
+        # with default calendar (Gregorian).
         unit = StubUnit()
         target = copy.copy(unit)
         result = as_unit(unit)
 
         self.assertEqual(result.calendar, 'gregorian')
+        self.assertIsInstance(result, Unit)
 
     def test_non_cf_unit_with_calendar(self):
+        # On passing as_unit a cf_unit.Unit-like object (not a cf_unit.Unit
+        # object) with calendar, ensure that a cf_unit.Unit is returned
+        # with the same calendar specified in the original unit-like object.
         unit = StubUnit('360_day')
         target = copy.copy(unit)
         result = as_unit(unit)
