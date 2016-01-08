@@ -4,7 +4,7 @@ cf\_units
 .. image:: https://api.travis-ci.org/SciTools/cf_units.png
    :target: http://travis-ci.org/SciTools/cf_units
 
-\(C) British Crown Copyright 2010 - 2015, Met Office
+\(C) British Crown Copyright 2015 - 2016, Met Office
 
 Units of measure as required by the Climate and Forecast (CF) metadata
 conventions.

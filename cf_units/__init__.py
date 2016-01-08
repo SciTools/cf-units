@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2010 - 2015, Met Office
+# (C) British Crown Copyright 2015 - 2016, Met Office
 #
 # This file is part of cf_units.
 #
@@ -781,7 +781,9 @@ def as_unit(unit):
         if use_cache:
             result = _CACHE.get(unit)
         if result is None:
-            result = Unit(unit)
+            # Typically unit is a string, however we cater for other types of
+            # 'unit' (e.g. iris.unit.Unit).
+            result = Unit(unit, calendar=getattr(unit, 'calendar', None))
             if use_cache:
                 _CACHE[unit] = result
     return result
@@ -862,14 +864,6 @@ class Unit(_OrderedHashable):
 
     def __hash__(self):
         return hash(self._identity())
-
-    def __eq__(self, other):
-        return (isinstance(other, type(self)) and
-                self._identity() == other._identity())
-
-    def __ne__(self, other):
-        # Since we've defined __eq__ we should also define __ne__.
-        return not self == other
 
     # Provide default ordering semantics
 

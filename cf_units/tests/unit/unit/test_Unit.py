@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2014, Met Office
+# (C) British Crown Copyright 2015 - 2016, Met Office
 #
 # This file is part of cf_units.
 #
@@ -218,4 +218,4 @@ class Test_convert__masked_array(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    tests.main()
+    unittest.main()
