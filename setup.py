@@ -41,6 +41,9 @@ long_description = '{}'.format(read('README.rst'))
 cmdclass = {'test': PyTest}
 cmdclass.update(versioneer.get_cmdclass())
 
+with open('requirements.txt') as f:
+    require = f.readlines()
+install_requires = [r.strip() for r in require]
 
 setup(
     name='cf_units',
@@ -51,6 +54,7 @@ setup(
     package_data={'cf_units': list(file_walk_relative('cf_units/etc',
                                                       remove='cf_units/'))},
     data_files=[('cf_units', ['COPYING', 'COPYING.LESSER'])],
+    install_requires=install_requires,
     tests_require=['pytest', 'pep8'],
     cmdclass=cmdclass
     )
