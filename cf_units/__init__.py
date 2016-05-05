@@ -220,10 +220,15 @@ if _lib_c is None:
 # load the libudunits2 shared library
 #
 if _lib_ud is None:
-    _lib_ud = config.get_option(
+    _udunits2_c = config.get_option(
         'System', 'udunits2_path',
         default=ctypes.util.find_library('udunits2'))
-    _lib_ud = ctypes.CDLL(_lib_ud, use_errno=True)
+    if _udunits2_c:
+        _lib_ud = ctypes.CDLL(_udunits2_c, use_errno=True)
+    else:
+        msg = ('Could not find the udunits2 library "{}."'
+               ' You may need to install udunits2.').format
+        raise OSError(msg(_udunits2_c))
 
     #
     # cache common shared library functions
