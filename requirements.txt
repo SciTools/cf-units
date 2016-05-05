@@ -1,0 +1,3 @@
+six
+netcdf4
+# udunits2 cannot be installed with pip, and it is expected to be installed separately.

@@ -29,7 +29,7 @@ install:
   # Customise the testing environment.
   # ----------------------------------
   - conda config --add channels scitools
-  - conda install --quiet --file conda-requirements.txt
+  - conda install --quiet udunits2 --file requirements.txt --file requirements-dev.txt
 
   # Output debug info.
   - conda list

@@ -1,8 +1,0 @@
-# Mandatory dependencies.
-six
-netcdf4
-udunits2
-
-# Testing.
-pytest
-pep8
