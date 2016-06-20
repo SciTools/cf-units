@@ -380,8 +380,10 @@ if not _ud_system:
         # relative to sys.prefix to support environments such as conda.
         _ud_system = _ut_read_xml(None)
         if _ud_system is None:
-            _alt_xml_path = os.path.join(sys.prefix, 'share',
-                                         'udunits', 'udunits2.xml')
+            _alt_xml_path = config.get_option(
+                'System', 'udunits2_xml_path',
+                default=os.path.join(sys.prefix, 'share', 'udunits',
+                                     'udunits2.xml'))
             _ud_system = _ut_read_xml(_alt_xml_path.encode())
     if not _ud_system:
         _status_msg = 'UNKNOWN'
