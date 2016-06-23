@@ -1,8 +1,7 @@
 cf\_units
 =========
 
-.. image:: https://api.travis-ci.org/SciTools/cf_units.png
-   :target: http://travis-ci.org/SciTools/cf_units
+[![Build Status](https://travis-ci.org/SciTools/cf_units.svg?branch=master)](https://travis-ci.org/SciTools/cf_units) [![Coverage Status](https://coveralls.io/repos/github/SciTools/cf_units/badge.svg?branch=master)](https://coveralls.io/github/SciTools/cf_units?branch=master)
 
 \(C) British Crown Copyright 2015 - 2016, Met Office
 
