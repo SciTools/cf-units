@@ -30,6 +30,7 @@ install:
   # ----------------------------------
   - conda config --add channels scitools
   - conda install --quiet udunits2 --file requirements.txt --file requirements-dev.txt
+  - pip install coveralls
 
   # Output debug info.
   - conda list
@@ -42,4 +43,6 @@ install:
   - echo "udunits2_path = $PREFIX/lib/libudunits2.so" >> $SITE_CFG
 
 script:
-  - python setup.py test
+  - coverage run setup.py test
+
+after_success: coveralls

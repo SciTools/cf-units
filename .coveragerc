@@ -1,0 +1,19 @@
+#
+# .coveragerc to control coverage.py
+#
+
+[run]
+branch = True
+omit = 
+    setup.py
+    versioneer.py
+    cf_units/_version.py
+    cf_units/etc/*
+    cf_units/tests/*
+
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    if __name__ == .__main__.:
