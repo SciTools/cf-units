@@ -18,7 +18,8 @@ cf_units is licenced under the GNU Lesser General Public License (LGPLv3).
 The full text of the licence can be found in the COPYING and COPYING.LESSER
 files.
 
-Development occurs at https://github.com/SciTools/cf_units.
+Development occurs at https://github.com/SciTools/cf_units. Documentation for
+cf_units can be found at http://scitools.org.uk/cf_units/index.html.
 
 
 See also:
