@@ -36,7 +36,7 @@ def read(*parts):
     return open(os.path.join(rootpath, *parts), 'r').read()
 
 
-long_description = '{}'.format(read('README.rst'))
+long_description = '{}'.format(read('README.md'))
 
 cmdclass = {'test': PyTest}
 cmdclass.update(versioneer.get_cmdclass())
