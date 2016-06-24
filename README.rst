@@ -1,7 +1,7 @@
 cf\_units
 =========
 
-[![Build Status](https://travis-ci.org/SciTools/cf_units.svg?branch=master)](https://travis-ci.org/SciTools/cf_units) [![Coverage Status](https://coveralls.io/repos/github/SciTools/cf_units/badge.svg?branch=master)](https://coveralls.io/github/SciTools/cf_units?branch=master)
+|Travis|_ |Coveralls|_
 
 \(C) British Crown Copyright 2015 - 2016, Met Office
 
@@ -26,3 +26,9 @@ See also
 * Development occurs at https://github.com/SciTools/cf_units.
 * Documentation for cf_units can be found at http://scitools.org.uk/cf_units/index.html.
 * The library wrapped by cf_units: [UDUNITS-2](http://www.unidata.ucar.edu/software/udunits/udunits-2/udunits2.html).
+
+.. |Travis| image:: https://travis-ci.org/SciTools/cf_units.svg?branch=master
+.. _Travis: https://travis-ci.org/SciTools/cf_units
+
+.. |Coveralls| image:: https://coveralls.io/repos/github/SciTools/cf_units/badge.svg?branch=master
+.. _Coveralls: https://coveralls.io/github/SciTools/cf_units?branch=master
