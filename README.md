@@ -5,6 +5,8 @@ cf\_units
 
 \(C) British Crown Copyright 2015 - 2016, Met Office
 
+Introduction
+------------
 Units of measure as required by the Climate and Forecast (CF) metadata
 conventions.
 
@@ -18,8 +20,9 @@ cf_units is licenced under the GNU Lesser General Public License (LGPLv3).
 The full text of the licence can be found in the COPYING and COPYING.LESSER
 files.
 
-Development occurs at https://github.com/SciTools/cf_units.
+See also
+--------
 
-
-See also:
-`UDUNITS-2 <http://www.unidata.ucar.edu/software/udunits/udunits-2/udunits2.html>`__
+* Development occurs at https://github.com/SciTools/cf_units.
+* Documentation for cf_units can be found at http://scitools.org.uk/cf_units/index.html.
+* The library wrapped by cf_units: [UDUNITS-2](http://www.unidata.ucar.edu/software/udunits/udunits-2/udunits2.html).
