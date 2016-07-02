@@ -33,7 +33,8 @@ rootpath = os.path.abspath(os.path.dirname(__file__))
 
 
 def read(*parts):
-    return open(os.path.join(rootpath, *parts), 'r').read()
+    with open(os.path.join(rootpath, *parts), 'rb') as f:
+        return f.read().decode('utf-8')
 
 
 long_description = '{}'.format(read('README.rst'))
@@ -41,9 +42,8 @@ long_description = '{}'.format(read('README.rst'))
 cmdclass = {'test': PyTest}
 cmdclass.update(versioneer.get_cmdclass())
 
-with open('requirements.txt') as f:
-    require = f.readlines()
-install_requires = [r.strip() for r in require]
+require = read('requirements.txt')
+install_requires = [r.strip() for r in require.splitlines()]
 
 setup(
     name='cf_units',
@@ -53,7 +53,8 @@ setup(
     packages=['cf_units', 'cf_units/tests'],
     package_data={'cf_units': list(file_walk_relative('cf_units/etc',
                                                       remove='cf_units/'))},
-    data_files=[('cf_units', ['COPYING', 'COPYING.LESSER'])],
+    data_files=[('share/doc/cf_units',
+                 ['COPYING', 'COPYING.LESSER', 'README.rst'])],
     install_requires=install_requires,
     tests_require=['pytest', 'pep8'],
     cmdclass=cmdclass
