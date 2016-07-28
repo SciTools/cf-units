@@ -385,13 +385,15 @@ if not _ud_system:
                 default=os.path.join(sys.prefix, 'share', 'udunits',
                                      'udunits2.xml'))
             if os.name == 'nt':
-                # On Windows systems we need to read the xml while on the system drive
-                # but we don't want to change the working directory every time someone loads this package
+                # On Windows systems we need to read the xml while on the
+                # system drive but we don't want to change the
+                # working directory every time someone loads this package,
                 # so we will restore the original working directory
                 cur_wd = os.getcwd()
                 system_drive = os.getenv("SystemDrive")
                 if not system_drive:
-                    # if for some reason this system doesn't have a SystemDrive env variable C: is a safe assumption
+                    # if for some reason this system doesn't have a
+                    # SystemDrive env variable C: is a safe assumption
                     system_drive = "C:"
                 os.chdir(system_drive)
                 _ud_system = _ut_read_xml(_alt_xml_path.encode())
