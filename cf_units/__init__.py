@@ -753,7 +753,41 @@ def num2date(time_value, unit, calendar):
     if unit_string.endswith(" since epoch"):
         unit_string = unit_string.replace("epoch", EPOCH)
     cdftime = netcdftime.utime(unit_string, calendar=calendar)
-    return cdftime.num2date(time_value)
+    return _num2date_to_nearest_second(time_value, cdftime)
+
+
+def _num2date_to_nearest_second(time_value, utime):
+    # Return datetime encoding of numeric time value with respect to the given
+    # time reference units, with a resolution of 1 second.
+
+    # We account for the edge case where the time is in seconds and has a
+    # half second: utime.num2date() may produce a date that would round
+    # down.
+    #
+    # Note that this behaviour is different to the num2date function in older
+    # versions of netcdftime that didn't have microsecond precision. In those
+    # versions, a half-second value would be rounded up or down arbitrarily. It
+    # is probably not possible to replicate that behaviour with the current
+    # version (1.4.1), if one wished to do so for the sake of consistency.
+    has_half_second = utime.units == 'seconds' and \
+        time_value % 1. == 0.5
+    date = utime.num2date(time_value)
+    try:
+        microsecond = date.microsecond
+    except AttributeError:
+        microsecond = 0
+    if has_half_second or microsecond > 0:
+        if has_half_second or microsecond >= 500000:
+            seconds = Unit('second')
+            second_frac = seconds.convert(0.75, utime.units)
+            time_value += second_frac
+            date = utime.num2date(time_value)
+        # Create a date object of the same type returned by utime.num2date()
+        # (either datetime.datetime or netcdftime.datetime), discarding the
+        # microseconds
+        date = date.__class__(date.year, date.month, date.day,
+                              date.hour, date.minute, date.second)
+    return date
 
 
 ########################################################################
@@ -2078,4 +2112,4 @@ class Unit(_OrderedHashable):
 
         """
         cdf_utime = self.utime()
-        return cdf_utime.num2date(time_value)
+        return _num2date_to_nearest_second(time_value, cdf_utime)
