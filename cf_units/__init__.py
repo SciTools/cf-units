@@ -686,8 +686,25 @@ def date2num(date, unit, calendar):
     if unit_string.endswith(" since epoch"):
         unit_string = unit_string.replace("epoch", EPOCH)
     cdftime = netcdftime.utime(unit_string, calendar=calendar)
+    date = _discard_microsecond(date)
     return cdftime.date2num(date)
 
+
+def _discard_microsecond(date):
+    # Return a date with the microsecond componenet discarded. `date` should be
+    # a datetime.datetime or netcdftime.datetime object, or a list of such
+    # objects
+    try:
+        l = list(date)
+    except TypeError:
+        dates = np.array([date])
+        is_scalar = True
+    else:
+        dates = np.array(l)
+        is_scalar = False
+    dates = [d.__class__(d.year, d.month, d.day, d.hour, d.minute, d.second)
+             for d in dates]
+    return dates[0] if is_scalar else dates
 
 def num2date(time_value, unit, calendar):
     """
@@ -713,6 +730,9 @@ def num2date(time_value, unit, calendar):
     occured from the Julian calendar in 1582. The datetime instances
     do not contain a time-zone offset, even if the specified unit
     contains one.
+
+    Works for scalars, sequences and numpy arrays. Returns a scalar
+    if input is a scalar, else returns a numpy array.
 
     Args:
 
@@ -759,6 +779,14 @@ def num2date(time_value, unit, calendar):
 def _num2date_to_nearest_second(time_value, utime):
     # Return datetime encoding of numeric time value with respect to the given
     # time reference units, with a resolution of 1 second.
+    try:
+        l = list(time_value)
+    except TypeError:
+        time_values = np.array([time_value])
+        is_scalar = True
+    else:
+        time_values = np.array(l)
+        is_scalar = False
 
     # We account for the edge case where the time is in seconds and has a
     # half second: utime.num2date() may produce a date that would round
@@ -769,25 +797,26 @@ def _num2date_to_nearest_second(time_value, utime):
     # versions, a half-second value would be rounded up or down arbitrarily. It
     # is probably not possible to replicate that behaviour with the current
     # version (1.4.1), if one wished to do so for the sake of consistency.
-    has_half_second = utime.units == 'seconds' and \
-        time_value % 1. == 0.5
-    date = utime.num2date(time_value)
+    has_half_seconds = np.logical_and(utime.units == 'seconds',
+                                      time_values % 1. == 0.5)
+    dates = utime.num2date(time_values)
     try:
-        microsecond = date.microsecond
+        # We can assume all or none of the dates have a microsecond attribute
+        microseconds = np.array([d.microsecond for d in dates])
     except AttributeError:
-        microsecond = 0
-    if has_half_second or microsecond > 0:
-        if has_half_second or microsecond >= 500000:
-            seconds = Unit('second')
-            second_frac = seconds.convert(0.75, utime.units)
-            time_value += second_frac
-            date = utime.num2date(time_value)
-        # Create a date object of the same type returned by utime.num2date()
-        # (either datetime.datetime or netcdftime.datetime), discarding the
-        # microseconds
-        date = date.__class__(date.year, date.month, date.day,
-                              date.hour, date.minute, date.second)
-    return date
+        microseconds = 0
+    round_mask = np.logical_or(has_half_seconds, microseconds != 0)
+    ceil_mask = np.logical_or(has_half_seconds, microseconds >= 500000)
+    if time_values[ceil_mask].size > 0:
+        useconds = Unit('second')
+        second_frac = useconds.convert(0.75, utime.units)
+        dates[ceil_mask] = utime.num2date(time_values[ceil_mask] + second_frac)
+    # Create date objects of the same type returned by utime.num2date()
+    # (either datetime.datetime or netcdftime.datetime), discarding the
+    # microseconds
+    dates[round_mask] = _discard_microsecond(dates[round_mask])
+
+    return dates[0] if is_scalar else dates
 
 
 ########################################################################
@@ -2070,6 +2099,7 @@ class Unit(_OrderedHashable):
         """
 
         cdf_utime = self.utime()
+        date = _discard_microsecond(date)
         return cdf_utime.date2num(date)
 
     def num2date(self, time_value):

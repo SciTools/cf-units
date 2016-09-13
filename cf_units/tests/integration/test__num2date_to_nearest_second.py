@@ -23,6 +23,7 @@ import unittest
 import datetime
 
 import numpy as np
+import numpy.testing
 import netcdftime
 
 from cf_units import _num2date_to_nearest_second, Unit
@@ -39,6 +40,32 @@ class Test(unittest.TestCase):
         for num, utime, exp in zip(nums, utimes, expected):
             res = _num2date_to_nearest_second(num, utime)
             self.assertEqual(exp, res)
+
+    def test_scalar(self):
+        utime = netcdftime.utime('seconds since 1970-01-01',  'gregorian')
+        num = 5.
+        exp = datetime.datetime(1970, 1, 1, 0, 0, 5)
+        res = _num2date_to_nearest_second(num, utime)
+        self.assertEqual(exp, res)
+
+    def test_sequence(self):
+        utime = netcdftime.utime('seconds since 1970-01-01',  'gregorian')
+        nums = [20., 40., 60., 80, 100.]
+        exp = [datetime.datetime(1970, 1, 1, 0, 0, 20),
+               datetime.datetime(1970, 1, 1, 0, 0, 40),
+               datetime.datetime(1970, 1, 1, 0, 1),
+               datetime.datetime(1970, 1, 1, 0, 1, 20),
+               datetime.datetime(1970, 1, 1, 0, 1, 40)]
+        res = _num2date_to_nearest_second(nums, utime)
+        np.testing.assert_array_equal(exp, res)
+
+    def test_iter(self):
+        utime = netcdftime.utime('seconds since 1970-01-01',  'gregorian')
+        nums = iter([5., 10.])
+        exp = [datetime.datetime(1970, 1, 1, 0, 0, 5),
+               datetime.datetime(1970, 1, 1, 0, 0, 10)]
+        res = _num2date_to_nearest_second(nums, utime)
+        np.testing.assert_array_equal(exp, res)
 
     # Gregorian Calendar tests
 
