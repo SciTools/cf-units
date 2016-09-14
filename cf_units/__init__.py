@@ -694,16 +694,12 @@ def _discard_microsecond(date):
     # Return a date with the microsecond componenet discarded. `date` should be
     # a datetime.datetime or netcdftime.datetime object, or a list of such
     # objects
-    try:
-        l = list(date)
-    except TypeError:
-        dates = np.array([date])
+    is_scalar = False
+    if not hasattr(date, '__iter__'):
+        date = [date]
         is_scalar = True
-    else:
-        dates = np.array(l)
-        is_scalar = False
     dates = [d.__class__(d.year, d.month, d.day, d.hour, d.minute, d.second)
-             for d in dates]
+             for d in date]
     return dates[0] if is_scalar else dates
 
 
