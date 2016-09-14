@@ -691,9 +691,21 @@ def date2num(date, unit, calendar):
 
 
 def _discard_microsecond(date):
-    # Return a date with the microsecond componenet discarded. `date` should be
-    # a datetime.datetime or netcdftime.datetime object, or a list of such
-    # objects
+    """
+    Return a date with the microsecond componenet discarded.
+
+    Works for scalars, sequences and numpy arrays. Returns a scalar
+    if input is a scalar, else returns a numpy array.
+
+    Args:
+
+    * date (datetime.datetime or netcdftime.datetime):
+        Date value/s
+
+    Returns:
+        datetime, or list of datetime object.
+
+    """
     is_scalar = False
     if not hasattr(date, '__iter__'):
         date = [date]
@@ -774,16 +786,23 @@ def num2date(time_value, unit, calendar):
 
 
 def _num2date_to_nearest_second(time_value, utime):
-    # Return datetime encoding of numeric time value with respect to the given
-    # time reference units, with a resolution of 1 second.
-    try:
-        l = list(time_value)
-    except TypeError:
-        time_values = np.array([time_value])
+    """
+    Return datetime encoding of numeric time value with respect to the given
+    time reference units, with a resolution of 1 second.
+
+    * time_value (float):
+        Numeric time value/s.
+    * utime (netcdftime.utime):
+        netcdf.utime object with which to perform the conversion/s.
+
+    Returns:
+        datetime, or numpy.ndarray of datetime object.
+    """
+    is_scalar = False
+    if not hasattr(time_value, '__iter__'):
+        time_value = [time_value]
         is_scalar = True
-    else:
-        time_values = np.array(l)
-        is_scalar = False
+    time_values = np.array(list(time_value))
 
     # We account for the edge case where the time is in seconds and has a
     # half second: utime.num2date() may produce a date that would round
