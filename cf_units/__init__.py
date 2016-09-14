@@ -706,6 +706,7 @@ def _discard_microsecond(date):
              for d in dates]
     return dates[0] if is_scalar else dates
 
+
 def num2date(time_value, unit, calendar):
     """
     Return datetime encoding of numeric time value (resolution of 1 second).

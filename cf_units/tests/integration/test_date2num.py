@@ -55,8 +55,8 @@ class Test(unittest.TestCase):
     def test_discard_mircosecond(self):
         date = datetime.datetime(1970, 1, 1, 0, 0, 5, 750000)
         exp = 5.
-        res= date2num(date, self.unit, self.calendar)
-  
+        res = date2num(date, self.unit, self.calendar)
+
         self.assertAlmostEqual(exp, res, places=4)
 
 
