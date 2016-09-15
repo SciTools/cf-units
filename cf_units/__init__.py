@@ -712,8 +712,8 @@ def _discard_microsecond(date):
     # Create date objects of the same type returned by utime.num2date()
     # (either datetime.datetime or netcdftime.datetime), discarding the
     # microseconds
-    dates = np.array([d.__class__(d.year, d.month, d.day,
-                                  d.hour, d.minute, d.second)
+    dates = np.array([d and d.__class__(d.year, d.month, d.day,
+                                        d.hour, d.minute, d.second)
                       for d in dates])
     result = dates[0] if shape is () else dates.reshape(shape)
     return result
@@ -802,7 +802,7 @@ def _num2date_to_nearest_second(time_value, utime):
     Returns:
         datetime, or numpy.ndarray of datetime object.
     """
-    time_values = np.asarray(time_value)
+    time_values = np.asanyarray(time_value)
     shape = time_values.shape
     time_values = time_values.ravel()
 
@@ -820,7 +820,7 @@ def _num2date_to_nearest_second(time_value, utime):
     dates = utime.num2date(time_values)
     try:
         # We can assume all or none of the dates have a microsecond attribute
-        microseconds = np.array([d.microsecond for d in dates])
+        microseconds = np.array([d and d.microsecond for d in dates])
     except AttributeError:
         microseconds = 0
     round_mask = np.logical_or(has_half_seconds, microseconds != 0)

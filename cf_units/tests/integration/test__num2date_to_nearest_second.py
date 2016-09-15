@@ -67,6 +67,15 @@ class Test(unittest.TestCase):
         res = _num2date_to_nearest_second(nums, utime)
         self.assertEqual(exp_shape, res.shape)
 
+    def test_masked_ndarray(self):
+        utime = netcdftime.utime('seconds since 1970-01-01',  'gregorian')
+        nums = np.ma.masked_array([20., 40., 60.], [False, True, False])
+        exp = [datetime.datetime(1970, 1, 1, 0, 0, 20),
+               None,
+               datetime.datetime(1970, 1, 1, 0, 1)]
+        res = _num2date_to_nearest_second(nums, utime)
+        np.testing.assert_array_equal(exp, res)
+
     # Gregorian Calendar tests
 
     def test_simple_gregorian(self):
