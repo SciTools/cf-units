@@ -703,16 +703,20 @@ def _discard_microsecond(date):
         Date value/s
 
     Returns:
-        datetime, or list of datetime object.
+        datetime, or numpy.ndarray of datetime object.
 
     """
-    is_scalar = False
-    if not hasattr(date, '__iter__'):
-        date = [date]
-        is_scalar = True
-    dates = [d.__class__(d.year, d.month, d.day, d.hour, d.minute, d.second)
-             for d in date]
-    return dates[0] if is_scalar else dates
+    dates = np.asarray(date)
+    shape = dates.shape
+    dates = dates.ravel()
+    # Create date objects of the same type returned by utime.num2date()
+    # (either datetime.datetime or netcdftime.datetime), discarding the
+    # microseconds
+    dates = np.array([d.__class__(d.year, d.month, d.day,
+                                  d.hour, d.minute, d.second)
+                      for d in dates])
+    result = dates[0] if shape is () else dates.reshape(shape)
+    return result
 
 
 def num2date(time_value, unit, calendar):
@@ -798,21 +802,19 @@ def _num2date_to_nearest_second(time_value, utime):
     Returns:
         datetime, or numpy.ndarray of datetime object.
     """
-    is_scalar = False
-    if not hasattr(time_value, '__iter__'):
-        time_value = [time_value]
-        is_scalar = True
-    time_values = np.array(list(time_value))
+    time_values = np.asarray(time_value)
+    shape = time_values.shape
+    time_values = time_values.ravel()
 
     # We account for the edge case where the time is in seconds and has a
     # half second: utime.num2date() may produce a date that would round
     # down.
     #
-    # Note that this behaviour is different to the num2date function in older
-    # versions of netcdftime that didn't have microsecond precision. In those
-    # versions, a half-second value would be rounded up or down arbitrarily. It
-    # is probably not possible to replicate that behaviour with the current
-    # version (1.4.1), if one wished to do so for the sake of consistency.
+    # Note that this behaviour is different to the num2date function in version
+    # 1.1 and earlier of netcdftime that didn't have microsecond precision. In
+    # those versions, a half-second value would be rounded up or down
+    # arbitrarily. It is probably not possible to replicate that behaviour with
+    # later versions, if one wished to do so for the sake of consistency.
     has_half_seconds = np.logical_and(utime.units == 'seconds',
                                       time_values % 1. == 0.5)
     dates = utime.num2date(time_values)
@@ -827,12 +829,9 @@ def _num2date_to_nearest_second(time_value, utime):
         useconds = Unit('second')
         second_frac = useconds.convert(0.75, utime.units)
         dates[ceil_mask] = utime.num2date(time_values[ceil_mask] + second_frac)
-    # Create date objects of the same type returned by utime.num2date()
-    # (either datetime.datetime or netcdftime.datetime), discarding the
-    # microseconds
     dates[round_mask] = _discard_microsecond(dates[round_mask])
-
-    return dates[0] if is_scalar else dates
+    result = dates[0] if shape is () else dates.reshape(shape)
+    return result
 
 
 ########################################################################

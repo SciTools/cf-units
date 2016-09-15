@@ -52,6 +52,17 @@ class Test(unittest.TestCase):
         res = date2num(dates, self.unit, self.calendar)
         np.testing.assert_array_almost_equal(exp, res, decimal=4)
 
+    def test_multidim_sequence(self):
+        dates = [[datetime.datetime(1970, 1, 1, 0, 0, 20),
+                  datetime.datetime(1970, 1, 1, 0, 0, 40),
+                  datetime.datetime(1970, 1, 1, 0, 1)],
+                 [datetime.datetime(1970, 1, 1, 0, 1, 20),
+                  datetime.datetime(1970, 1, 1, 0, 1, 40),
+                  datetime.datetime(1970, 1, 1, 0, 2)]]
+        exp_shape = (2, 3)
+        res = date2num(dates, self.unit, self.calendar)
+        self.assertEqual(exp_shape, res.shape)
+
     def test_discard_mircosecond(self):
         date = datetime.datetime(1970, 1, 1, 0, 0, 5, 750000)
         exp = 5.
