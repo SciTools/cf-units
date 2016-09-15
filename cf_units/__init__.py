@@ -820,7 +820,7 @@ def _num2date_to_nearest_second(time_value, utime):
     dates = utime.num2date(time_values)
     try:
         # We can assume all or none of the dates have a microsecond attribute
-        microseconds = np.array([d and d.microsecond for d in dates])
+        microseconds = np.array([d.microsecond if d else 0 for d in dates])
     except AttributeError:
         microseconds = 0
     round_mask = np.logical_or(has_half_seconds, microseconds != 0)
