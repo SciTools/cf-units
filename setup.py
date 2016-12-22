@@ -1,10 +1,11 @@
 import os
 import sys
 
-from setuptools import setup
+from setuptools import setup, Extension
 from setuptools.command.test import test as TestCommand
 import versioneer
-
+from Cython.Distutils import build_ext
+from distutils.sysconfig import get_config_var
 
 class PyTest(TestCommand):
     def finalize_options(self):
@@ -36,12 +37,18 @@ def read(*parts):
     with open(os.path.join(rootpath, *parts), 'rb') as f:
         return f.read().decode('utf-8')
 
+include_dir = get_config_var('INCLUDEDIR')
+library_dir = get_config_var('LIBDIR')
+udunits_ext = Extension('cf_units._udunits2',
+                        ['cf_units/_udunits2.pyx'],
+                        include_dirs=[include_dir],
+                        library_dirs=[library_dir],
+                        libraries=['udunits2'])
 
 long_description = '{}'.format(read('README.rst'))
 
-cmdclass = {'test': PyTest}
+cmdclass = {'test': PyTest, 'build_ext': build_ext}
 cmdclass.update(versioneer.get_cmdclass())
-
 require = read('requirements.txt')
 install_requires = [r.strip() for r in require.splitlines()]
 
@@ -57,5 +64,6 @@ setup(
                  ['COPYING', 'COPYING.LESSER', 'README.rst'])],
     install_requires=install_requires,
     tests_require=['pytest', 'pep8'],
-    cmdclass=cmdclass
+    cmdclass=cmdclass,
+    ext_modules=[udunits_ext]
     )

@@ -34,6 +34,7 @@ from contextlib import contextmanager
 import copy
 import ctypes
 import ctypes.util
+import os
 import os.path
 import sys
 import warnings
@@ -43,6 +44,8 @@ import numpy as np
 
 from . import config
 from .util import _OrderedHashable, approx_equal
+
+from cf_units import _udunits2
 
 # Define __version__ based on versioneer's interpretation.
 from ._version import get_versions
@@ -155,7 +158,6 @@ FLOAT64 = ctypes.c_double
 ########################################################################
 
 # cache for ctypes foreign shared library handles
-_lib_c = None
 _lib_ud = None
 _ud_system = None
 
@@ -174,7 +176,6 @@ _ut_compare = None
 _ut_decode_time = None
 _ut_divide = None
 _ut_encode_clock = None
-_ut_encode_date = None
 _ut_encode_time = None
 _ut_format = None
 _ut_free = None
@@ -200,21 +201,6 @@ _ut_set_error_message_handler = None
 # module level statements
 #
 ########################################################################
-
-#
-# load the libc shared library
-#
-if _lib_c is None:
-    if sys.platform == 'win32':
-        _lib_c = ctypes.cdll.msvcrt
-    else:
-        _lib_c = ctypes.CDLL(ctypes.util.find_library('libc'))
-
-    #
-    # cache common shared library functions
-    #
-    _strerror = _lib_c.strerror
-    _strerror.restype = ctypes.c_char_p
 
 #
 # load the libudunits2 shared library
@@ -274,9 +260,6 @@ if _lib_ud is None:
 
     _ut_encode_clock = _lib_ud.ut_encode_clock
     _ut_encode_clock.restype = ctypes.c_double
-
-    _ut_encode_date = _lib_ud.ut_encode_date
-    _ut_encode_date.restype = ctypes.c_double
 
     _ut_encode_time = _lib_ud.ut_encode_time
     _ut_encode_time.restype = ctypes.c_double
@@ -476,8 +459,7 @@ def encode_date(year, month, day):
 
     """
 
-    return _ut_encode_date(ctypes.c_int(year), ctypes.c_int(month),
-                           ctypes.c_int(day))
+    return _udunits2.ut_encode_date(year, month, day)
 
 
 def encode_clock(hour, minute, second):
@@ -1093,9 +1075,9 @@ class Unit(_OrderedHashable):
                 status_msg = _UT_STATUS[status]
             except IndexError:
                 pass
-            errno = ctypes.get_errno()
+            errno = cf_units._udunits2.get_errno()
             if errno != 0:
-                error_msg = ': "%s"' % _strerror(errno)
+                error_msg = ': "%s"' % os.strerror(errno)
                 ctypes.set_errno(0)
 
         raise ValueError('[%s] %s %s' % (status_msg, msg, error_msg))
