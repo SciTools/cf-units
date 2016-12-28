@@ -32,8 +32,6 @@ import six
 
 from contextlib import contextmanager
 import copy
-import ctypes
-import ctypes.util
 import os
 import os.path
 import sys
@@ -45,7 +43,7 @@ import numpy as np
 from . import config
 from .util import _OrderedHashable, approx_equal
 
-from cf_units import _udunits2
+from cf_units import _udunits2 as _ud
 
 # Define __version__ based on versioneer's interpretation.
 from ._version import get_versions
@@ -146,55 +144,10 @@ CALENDARS = [CALENDAR_STANDARD, CALENDAR_GREGORIAN,
              CALENDAR_360_DAY]
 
 #
-# ctypes types
+# floating point types
 #
-FLOAT32 = ctypes.c_float
-FLOAT64 = ctypes.c_double
-
-########################################################################
-#
-# module level variables
-#
-########################################################################
-
-# cache for ctypes foreign shared library handles
-_lib_ud = None
-_ud_system = None
-
-# cache for libc shared library functions
-_strerror = None
-
-# class cache for libudunits2 shared library functions
-_cv_convert_float = None
-_cv_convert_floats = None
-_cv_convert_double = None
-_cv_convert_doubles = None
-_cv_free = None
-_ut_are_convertible = None
-_ut_clone = None
-_ut_compare = None
-_ut_decode_time = None
-_ut_divide = None
-_ut_encode_clock = None
-_ut_encode_time = None
-_ut_format = None
-_ut_free = None
-_ut_get_converter = None
-_ut_get_status = None
-_ut_get_unit_by_name = None
-_ut_ignore = None
-_ut_invert = None
-_ut_is_dimensionless = None
-_ut_log = None
-_ut_multiply = None
-_ut_offset = None
-_ut_offset_by_time = None
-_ut_parse = None
-_ut_raise = None
-_ut_read_xml = None
-_ut_root = None
-_ut_scale = None
-_ut_set_error_message_handler = None
+FLOAT32 = np.float32
+FLOAT64 = np.float64
 
 ########################################################################
 #
@@ -202,136 +155,13 @@ _ut_set_error_message_handler = None
 #
 ########################################################################
 
-#
-# load the libudunits2 shared library
-#
-if _lib_ud is None:
-    _udunits2_c = config.get_option(
-        'System', 'udunits2_path',
-        default=ctypes.util.find_library('udunits2'))
-    if _udunits2_c:
-        _lib_ud = ctypes.CDLL(_udunits2_c, use_errno=True)
-    else:
-        msg = ('Could not find the udunits2 library "{}."'
-               ' You may need to install udunits2.').format
-        raise OSError(msg(_udunits2_c))
-
-    #
-    # cache common shared library functions
-    #
-    _cv_convert_float = _lib_ud.cv_convert_float
-    _cv_convert_float.argtypes = [ctypes.c_void_p, ctypes.c_float]
-    _cv_convert_float.restype = ctypes.c_float
-
-    _cv_convert_floats = _lib_ud.cv_convert_floats
-    _cv_convert_floats.argtypes = [ctypes.c_void_p, ctypes.c_void_p,
-                                   ctypes.c_ulong, ctypes.c_void_p]
-    _cv_convert_floats.restype = ctypes.c_void_p
-
-    _cv_convert_double = _lib_ud.cv_convert_double
-    _cv_convert_double.argtypes = [ctypes.c_void_p, ctypes.c_double]
-    _cv_convert_double.restype = ctypes.c_double
-
-    _cv_convert_doubles = _lib_ud.cv_convert_doubles
-    _cv_convert_doubles.argtypes = [ctypes.c_void_p, ctypes.c_void_p,
-                                    ctypes.c_ulong, ctypes.c_void_p]
-    _cv_convert_doubles.restype = ctypes.c_void_p
-
-    _cv_free = _lib_ud.cv_free
-    _cv_free.argtypes = [ctypes.c_void_p]
-
-    _ut_are_convertible = _lib_ud.ut_are_convertible
-    _ut_are_convertible.argtypes = [ctypes.c_void_p, ctypes.c_void_p]
-
-    _ut_clone = _lib_ud.ut_clone
-    _ut_clone.argtypes = [ctypes.c_void_p]
-    _ut_clone.restype = ctypes.c_void_p
-
-    _ut_compare = _lib_ud.ut_compare
-    _ut_compare.argtypes = [ctypes.c_void_p, ctypes.c_void_p]
-    _ut_compare.restype = ctypes.c_int
-
-    _ut_decode_time = _lib_ud.ut_decode_time
-    _ut_decode_time.restype = None
-
-    _ut_divide = _lib_ud.ut_divide
-    _ut_divide.argtypes = [ctypes.c_void_p, ctypes.c_void_p]
-    _ut_divide.restype = ctypes.c_void_p
-
-    _ut_encode_clock = _lib_ud.ut_encode_clock
-    _ut_encode_clock.restype = ctypes.c_double
-
-    _ut_encode_time = _lib_ud.ut_encode_time
-    _ut_encode_time.restype = ctypes.c_double
-
-    _ut_format = _lib_ud.ut_format
-    _ut_format.argtypes = [ctypes.c_void_p, ctypes.c_char_p,
-                           ctypes.c_ulong, ctypes.c_uint]
-
-    _ut_free = _lib_ud.ut_free
-    _ut_free.argtypes = [ctypes.c_void_p]
-    _ut_free.restype = None
-
-    _ut_get_converter = _lib_ud.ut_get_converter
-    _ut_get_converter.argtypes = [ctypes.c_void_p, ctypes.c_void_p]
-    _ut_get_converter.restype = ctypes.c_void_p
-
-    _ut_get_status = _lib_ud.ut_get_status
-
-    _ut_get_unit_by_name = _lib_ud.ut_get_unit_by_name
-    _ut_get_unit_by_name.argtypes = [ctypes.c_void_p, ctypes.c_char_p]
-    _ut_get_unit_by_name.restype = ctypes.c_void_p
-
-    _ut_invert = _lib_ud.ut_invert
-    _ut_invert.argtypes = [ctypes.c_void_p]
-    _ut_invert.restype = ctypes.c_void_p
-
-    _ut_is_dimensionless = _lib_ud.ut_is_dimensionless
-    _ut_is_dimensionless.argtypes = [ctypes.c_void_p]
-
-    _ut_log = _lib_ud.ut_log
-    _ut_log.argtypes = [ctypes.c_double, ctypes.c_void_p]
-    _ut_log.restype = ctypes.c_void_p
-
-    _ut_multiply = _lib_ud.ut_multiply
-    _ut_multiply.argtypes = [ctypes.c_void_p, ctypes.c_void_p]
-    _ut_multiply.restype = ctypes.c_void_p
-
-    _ut_offset = _lib_ud.ut_offset
-    _ut_offset.argtypes = [ctypes.c_void_p, ctypes.c_double]
-    _ut_offset.restype = ctypes.c_void_p
-
-    _ut_offset_by_time = _lib_ud.ut_offset_by_time
-    _ut_offset_by_time.argtypes = [ctypes.c_void_p, ctypes.c_double]
-    _ut_offset_by_time.restype = ctypes.c_void_p
-
-    _ut_parse = _lib_ud.ut_parse
-    _ut_parse.argtypes = [ctypes.c_void_p, ctypes.c_char_p, ctypes.c_int]
-    _ut_parse.restype = ctypes.c_void_p
-
-    _ut_raise = _lib_ud.ut_raise
-    _ut_raise.argtypes = [ctypes.c_void_p, ctypes.c_int]
-    _ut_raise.restype = ctypes.c_void_p
-
-    _ut_read_xml = _lib_ud.ut_read_xml
-    _ut_read_xml.argtypes = [ctypes.c_char_p]
-    _ut_read_xml.restype = ctypes.c_void_p
-
-    _ut_root = _lib_ud.ut_root
-    _ut_root.argtypes = [ctypes.c_void_p, ctypes.c_int]
-    _ut_root.restype = ctypes.c_void_p
-
-    _ut_scale = _lib_ud.ut_scale
-    _ut_scale.argtypes = [ctypes.c_double, ctypes.c_void_p]
-    _ut_scale.restype = ctypes.c_void_p
-
-    # Convenience dictionary for the Unit convert method.
-    _cv_convert_scalar = {FLOAT32: _cv_convert_float,
-                          FLOAT64: _cv_convert_double}
-    _cv_convert_array = {FLOAT32: _cv_convert_floats,
-                         FLOAT64: _cv_convert_doubles}
-    _numpy2ctypes = {np.float32: FLOAT32, np.float64: FLOAT64}
-    _ctypes2numpy = {v: k for k, v in _numpy2ctypes.items()}
+# Convenience dictionary for the Unit convert method.
+_cv_convert_scalar = {FLOAT32: _ud.convert_float,
+                        FLOAT64: _ud.convert_double}
+_cv_convert_array = {FLOAT32: _ud.convert_floats,
+                        FLOAT64: _ud.convert_doubles}
+_numpy2ctypes = {np.float32: FLOAT32, np.float64: FLOAT64}
+_ctypes2numpy = {v: k for k, v in _numpy2ctypes.items()}
 
 
 @contextmanager
@@ -340,48 +170,43 @@ def suppress_errors():
     Suppresses all error messages from UDUNITS-2.
 
     """
-    _func_type = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_char_p,
-                                  use_errno=True)
-    _set_handler_type = ctypes.CFUNCTYPE(_func_type, _func_type)
-    _ut_set_error_message_handler = _set_handler_type((_UT_HANDLER, _lib_ud))
-    _ut_ignore = _func_type((_UT_IGNORE, _lib_ud))
-    _default_handler = _ut_set_error_message_handler(_ut_ignore)
+    _default_handler = _ud.set_error_message_handler(_ud.ignore)
     try:
         yield
     finally:
-        _ut_set_error_message_handler(_default_handler)
+        _ud.set_error_message_handler(_default_handler)
 
 
 #
 # load the UDUNITS-2 xml-formatted unit-database
 #
-if not _ud_system:
-    # Ignore standard noisy UDUNITS-2 start-up.
-    with suppress_errors():
-        # Load the unit-database from the default location (modified via
-        # the UDUNITS2_XML_PATH environment variable) and if that fails look
-        # relative to sys.prefix to support environments such as conda.
-        _ud_system = _ut_read_xml(None)
-        if _ud_system is None:
-            _alt_xml_path = config.get_option(
-                'System', 'udunits2_xml_path',
-                default=os.path.join(sys.prefix, 'share', 'udunits',
-                                     'udunits2.xml'))
-            _ud_system = _ut_read_xml(_alt_xml_path.encode())
-    if not _ud_system:
-        _status_msg = 'UNKNOWN'
-        _error_msg = ''
-        _status = _ut_get_status()
-        try:
-            _status_msg = _UT_STATUS[_status]
-        except IndexError:
-            pass
-        _errno = ctypes.get_errno()
-        if _errno != 0:
-            _error_msg = ': "%s"' % _strerror(_errno)
-            ctypes.set_errno(0)
-        raise OSError('[%s] Failed to open UDUNITS-2 XML unit database %s' % (
-            _status_msg, _error_msg))
+# Ignore standard noisy UDUNITS-2 start-up.
+with suppress_errors():
+    # Load the unit-database from the default location (modified via
+    # the UDUNITS2_XML_PATH environment variable) and if that fails look
+    # relative to sys.prefix to support environments such as conda.
+    _ud_system = _ud.read_xml()
+    if _ud_system.is_null():
+        _alt_xml_path = config.get_option(
+            'System', 'udunits2_xml_path',
+            default=os.path.join(sys.prefix, 'share', 'udunits',
+                                    'udunits2.xml'))
+        _ud_system = _ud.read_xml(_alt_xml_path.encode())
+
+if _ud_system.is_null():
+    _status_msg = 'UNKNOWN'
+    _error_msg = ''
+    _status = _ud.get_status()
+    try:
+        _status_msg = _UT_STATUS[_status]
+    except IndexError:
+        pass
+    _errno = _ud.get_errno()
+    if _errno != 0:
+        _error_msg = ': "%s"' % _ud.strerror(_errno)
+        _ud.set_errno(0)
+    raise OSError('[%s] Failed to open UDUNITS-2 XML unit database %s' % (
+        _status_msg, _error_msg))
 
 
 ########################################################################
@@ -425,9 +250,7 @@ def encode_time(year, month, day, hour, minute, second):
 
     """
 
-    return _ut_encode_time(ctypes.c_int(year), ctypes.c_int(month),
-                           ctypes.c_int(day), ctypes.c_int(hour),
-                           ctypes.c_int(minute), ctypes.c_double(second))
+    return _ud.encode_time(year, month, day, hour, minute, second)
 
 
 def encode_date(year, month, day):
@@ -459,7 +282,7 @@ def encode_date(year, month, day):
 
     """
 
-    return _udunits2.ut_encode_date(year, month, day)
+    return _ud.encode_date(year, month, day)
 
 
 def encode_clock(hour, minute, second):
@@ -486,8 +309,7 @@ def encode_clock(hour, minute, second):
 
     """
 
-    return _ut_encode_clock(ctypes.c_int(hour), ctypes.c_int(minute),
-                            ctypes.c_double(second))
+    return _ud.encode_clock(hour, minute, second)
 
 
 def decode_time(time):
@@ -513,20 +335,7 @@ def decode_time(time):
         (1970, 1, 1, 0, 0, 0.0, 1.086139178596568e-07)
 
     """
-
-    year = ctypes.c_int()
-    month = ctypes.c_int()
-    day = ctypes.c_int()
-    hour = ctypes.c_int()
-    minute = ctypes.c_int()
-    second = ctypes.c_double()
-    resolution = ctypes.c_double()
-    _ut_decode_time(ctypes.c_double(time), ctypes.pointer(year),
-                    ctypes.pointer(month), ctypes.pointer(day),
-                    ctypes.pointer(hour), ctypes.pointer(minute),
-                    ctypes.pointer(second), ctypes.pointer(resolution))
-    return (year.value, month.value, day.value, hour.value, minute.value,
-            second.value, resolution.value)
+    return _ud.decode_time(time)
 
 
 def julian_day2date(julian_day, calendar):
@@ -1042,9 +851,9 @@ class Unit(_OrderedHashable):
             unit = _NO_UNIT_STRING
         else:
             category = _CATEGORY_UDUNIT
-            ut_unit = _ut_parse(_ud_system, unit.encode('ascii'), UT_ASCII)
+            ut_unit = _ud.parse(_ud_system, unit.encode('ascii'), UT_ASCII)
             # _ut_parse returns 0 on failure
-            if ut_unit is None:
+            if ut_unit.is_null():
                 self._raise_error('Failed to parse unit "%s"' % unit)
             if _OP_SINCE in unit.lower():
                 if calendar is None:
@@ -1069,16 +878,15 @@ class Unit(_OrderedHashable):
         """
         status_msg = 'UNKNOWN'
         error_msg = ''
-        if _lib_ud:
-            status = _ut_get_status()
-            try:
-                status_msg = _UT_STATUS[status]
-            except IndexError:
-                pass
-            errno = cf_units._udunits2.get_errno()
-            if errno != 0:
-                error_msg = ': "%s"' % os.strerror(errno)
-                ctypes.set_errno(0)
+        status = _ud.get_status()
+        try:
+            status_msg = _UT_STATUS[status]
+        except IndexError:
+            pass
+        errno = _ud.get_errno()
+        if errno != 0:
+            error_msg = ': "%s"' % os.strerror(errno)
+            _ud.set_errno(0)
 
         raise ValueError('[%s] %s %s' % (status_msg, msg, error_msg))
 
@@ -1102,12 +910,6 @@ class Unit(_OrderedHashable):
         #  - this is to ensure a valid ut_unit attribute (as these
         #    handles aren't persistent)
         self.__init__(state['unit_text'], calendar=state['calendar'])
-
-    def __del__(self):
-        # NB. If Python is terminating then the module global "_ut_free"
-        # may have already been deleted ... so we check before using it.
-        if _ut_free:
-            _ut_free(self.ut_unit)
 
     def __copy__(self):
         return self
@@ -1136,8 +938,8 @@ class Unit(_OrderedHashable):
         if self.is_unknown() or self.is_no_unit():
             result = False
         else:
-            day = _ut_get_unit_by_name(_ud_system, b'day')
-            result = _ut_are_convertible(self.ut_unit, day) != 0
+            day = _ud.get_unit_by_name(_ud_system, b'day')
+            result = _ud.are_convertible(self.ut_unit, day) != 0
         return result
 
     def is_vertical(self):
@@ -1162,16 +964,16 @@ class Unit(_OrderedHashable):
         if self.is_unknown() or self.is_no_unit():
             result = False
         else:
-            bar = _ut_get_unit_by_name(_ud_system, b'bar')
-            result = _ut_are_convertible(self.ut_unit, bar) != 0
+            bar = _ud.get_unit_by_name(_ud_system, b'bar')
+            result = _ud.are_convertible(self.ut_unit, bar) != 0
             if not result:
-                meter = _ut_get_unit_by_name(_ud_system, b'meter')
-                result = _ut_are_convertible(self.ut_unit, meter) != 0
+                meter = _ud.get_unit_by_name(_ud_system, b'meter')
+                result = _ud.are_convertible(self.ut_unit, meter) != 0
         return result
 
     def is_udunits(self):
         """Return whether the unit is a vaild unit of UDUNITS."""
-        return self.ut_unit is not None
+        return not self.ut_unit.is_null()
 
     def is_time_reference(self):
         """
@@ -1275,7 +1077,7 @@ class Unit(_OrderedHashable):
             result = False
         else:
             result = (self.calendar == other.calendar and
-                      _ut_are_convertible(self.ut_unit, other.ut_unit) != 0)
+                      _ud.are_convertible(self.ut_unit, other.ut_unit))
         return result
 
     def is_dimensionless(self):
@@ -1297,7 +1099,7 @@ class Unit(_OrderedHashable):
 
         """
         return (self.category == _CATEGORY_UDUNIT and
-                bool(_ut_is_dimensionless(self.ut_unit)))
+                bool(_ud.is_dimensionless(self.ut_unit)))
 
     def is_unknown(self):
         """
@@ -1389,12 +1191,11 @@ class Unit(_OrderedHashable):
                     option = [option]
                 for i in option:
                     bitmask |= i
-            string_buffer = ctypes.create_string_buffer(_STRING_BUFFER_DEPTH)
-            depth = _ut_format(self.ut_unit, string_buffer,
-                               ctypes.sizeof(string_buffer), bitmask)
+            string_buffer = bytearray(_STRING_BUFFER_DEPTH)
+            depth = _ud.format(self.ut_unit, string_buffer, bitmask)
             if depth < 0:
                 self._raise_error('Failed to format %r' % self)
-        return str(string_buffer.value.decode('ascii'))
+        return str(string_buffer.decode('ascii'))
 
     @property
     def name(self):
@@ -1497,8 +1298,8 @@ class Unit(_OrderedHashable):
         if not isinstance(origin, (float, six.integer_types)):
             raise TypeError('a numeric type for the origin argument is'
                             ' required')
-        ut_unit = _ut_offset_by_time(self.ut_unit, ctypes.c_double(origin))
-        if not ut_unit:
+        ut_unit = _ud.offset_by_time(self.ut_unit, origin)
+        if ut_unit.is_null():
             self._raise_error('Failed to offset %r' % self)
         calendar = None
         return _Unit(_CATEGORY_UDUNIT, ut_unit, calendar)
@@ -1524,8 +1325,8 @@ class Unit(_OrderedHashable):
         elif self.is_no_unit():
             raise ValueError("Cannot invert a 'no-unit'.")
         else:
-            ut_unit = _ut_invert(self.ut_unit)
-            if not ut_unit:
+            ut_unit = _ud.invert(self.ut_unit)
+            if ut_unit.is_null():
                 self._raise_error('Failed to invert %r' % self)
             calendar = None
             result = _Unit(_CATEGORY_UDUNIT, ut_unit, calendar)
@@ -1554,23 +1355,21 @@ class Unit(_OrderedHashable):
             Taking a fractional root of a unit is not supported.
 
         """
-        try:
-            root = ctypes.c_int(root)
-        except TypeError:
-            raise TypeError('An int type for the root argument'
-                            ' is required')
-
         if self.is_unknown():
             result = self
         elif self.is_no_unit():
-            raise ValueError("Cannot take the logarithm of a 'no-unit'.")
+            raise ValueError("Cannot take the root of a 'no-unit'.")
         else:
             # only update the unit if it is not scalar
             if self == Unit('1'):
                 result = self
             else:
-                ut_unit = _ut_root(self.ut_unit, root)
-                if not ut_unit:
+                try:
+                    ut_unit = _ud.root(self.ut_unit, root)
+                except TypeError:
+                    raise TypeError('An int type for the root argument is'
+                                    ' required')
+                if ut_unit.is_null():
                     self._raise_error('Failed to take the root of %r' % self)
                 calendar = None
                 result = _Unit(_CATEGORY_UDUNIT, ut_unit, calendar)
@@ -1596,18 +1395,17 @@ class Unit(_OrderedHashable):
             Unit('lb(re 1 meter)')
 
         """
-        try:
-            base = ctypes.c_double(base)
-        except TypeError:
-            raise TypeError('A numeric type for the base argument is required')
-
         if self.is_unknown():
             result = self
         elif self.is_no_unit():
             raise ValueError("Cannot take the logarithm of a 'no-unit'.")
         else:
-            ut_unit = _ut_log(base, self.ut_unit)
-            if not ut_unit:
+            try:
+                ut_unit = _ud.log(base, self.ut_unit)
+            except TypeError:
+                raise TypeError('A numeric type for the base argument is '
+                                ' required')
+            if ut_unit.is_null():
                 msg = 'Failed to calculate logorithmic base of %r' % self
                 self._raise_error(msg)
             calendar = None
@@ -1655,18 +1453,17 @@ class Unit(_OrderedHashable):
         return result
 
     def _offset_common(self, offset):
-        try:
-            offset = ctypes.c_double(offset)
-        except TypeError:
-            result = NotImplemented
+        if self.is_unknown():
+            result = self
+        elif self.is_no_unit():
+            raise ValueError("Cannot offset a 'no-unit'.")
         else:
-            if self.is_unknown():
-                result = self
-            elif self.is_no_unit():
-                raise ValueError("Cannot offset a 'no-unit'.")
+            try:
+                ut_unit = _ud.offset(self.ut_unit, offset)
+            except TypeError:
+                result = NotImplemented
             else:
-                ut_unit = _ut_offset(self.ut_unit, offset)
-                if not ut_unit:
+                if ut_unit.is_null():
                     self._raise_error('Failed to offset %r' % self)
                 calendar = None
                 result = _Unit(_CATEGORY_UDUNIT, ut_unit, calendar)
@@ -1737,7 +1534,7 @@ class Unit(_OrderedHashable):
             Unit('meter-second^-1')
 
         """
-        return self._op_common(other, _ut_multiply)
+        return self._op_common(other, _ud.multiply)
 
     def __div__(self, other):
         """
@@ -1763,7 +1560,7 @@ class Unit(_OrderedHashable):
             Unit('meter')
 
         """
-        return self._op_common(other, _ut_divide)
+        return self._op_common(other, _ud.divide)
 
     def __truediv__(self, other):
         """
@@ -1846,8 +1643,8 @@ class Unit(_OrderedHashable):
                     raise ValueError(msg)
                 power = int(round(power))
 
-                ut_unit = _ut_raise(self.ut_unit, ctypes.c_int(power))
-                if not ut_unit:
+                ut_unit = _ud.raise_(self.ut_unit, power)
+                if ut_unit.is_null():
                     self._raise_error('Failed to raise the power of %r' % self)
                 result = _Unit(_CATEGORY_UDUNIT, ut_unit)
         return result
@@ -1888,7 +1685,7 @@ class Unit(_OrderedHashable):
             return False
 
         # Compare UDUNITS.
-        res = _ut_compare(self.ut_unit, other.ut_unit)
+        res = _ud.compare(self.ut_unit, other.ut_unit)
         return res == 0
 
     def __ne__(self, other):
@@ -1926,7 +1723,7 @@ class Unit(_OrderedHashable):
             Value/s to be converted.
         * other (string/Unit):
             Target unit to convert to.
-        * ctype (ctypes.c_float/ctypes.c_double):
+        * ctype (cf_units.FLOAT32/cf_units.FLOAT64):
             Floating point 32-bit single-precision (cf_units.FLOAT32) or
             64-bit double-precision (cf_units.FLOAT64) used for conversion
             when `value` is not a NumPy array or is a NumPy array composed of
@@ -1966,12 +1763,11 @@ class Unit(_OrderedHashable):
         if self == other:
             return value
 
-        if inplace:
-            result = value
-        else:
-            result = copy.deepcopy(value)
-
         if self.is_convertible(other):
+            if inplace:
+                result = value
+            else:
+                result = copy.deepcopy(value)
             # Use utime for converting reference times that are not using a
             # gregorian calendar as it handles these and udunits does not.
             if self.is_time_reference() \
@@ -1984,8 +1780,8 @@ class Unit(_OrderedHashable):
                    value.dtype == np.float32):
                     result = result.astype(np.float32)
             else:
-                ut_converter = _ut_get_converter(self.ut_unit, other.ut_unit)
-                if ut_converter:
+                ut_converter = _ud.get_converter(self.ut_unit, other.ut_unit)
+                if not ut_converter.is_null():
                     if isinstance(result, np.ndarray):
                         # Can only handle array of np.float32 or np.float64 so
                         # cast array of ints to array of floats of requested
@@ -2009,8 +1805,7 @@ class Unit(_OrderedHashable):
                             ctypes.POINTER(ctype))
                         # Utilise global convenience dictionary
                         # _cv_convert_array
-                        _cv_convert_array[ctype](ut_converter, pointer,
-                                                 result.size, pointer)
+                        _cv_convert_array[ctype](ut_converter, result, result)
                     else:
                         if ctype not in _cv_convert_scalar:
                             raise ValueError('Invalid target type. Can only '
@@ -2018,15 +1813,14 @@ class Unit(_OrderedHashable):
                         # Utilise global convenience dictionary
                         # _cv_convert_scalar
                         result = _cv_convert_scalar[ctype](ut_converter,
-                                                           ctype(result))
-                    _cv_free(ut_converter)
+                                                           result)
                 else:
                     self._raise_error('Failed to convert %r to %r' %
                                       (self, other))
+            return result
         else:
             raise ValueError("Unable to convert from '%r' to '%r'." %
                              (self, other))
-        return result
 
     def utime(self):
         """
