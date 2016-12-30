@@ -1,3 +1,29 @@
+# (C) British Crown Copyright 2016, Met Office
+#
+# This file is part of cf_units.
+#
+# cf_units is free software: you can redistribute it and/or modify it under
+# the terms of the GNU Lesser General Public License as published by the
+# Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# cf_units is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with cf_units.  If not, see <http://www.gnu.org/licenses/>.
+"""
+Units of measure.
+
+Wrapper for Unidata/UCAR UDUNITS-2.
+
+See also: `UDUNITS-2
+<http://www.unidata.ucar.edu/software/udunits/udunits-2/udunits2.html>`_.
+
+"""
+
 # cython: nonecheck=True
 
 import numpy as np
@@ -17,6 +43,11 @@ cdef list _UT_STATUS = ['UT_SUCCESS', 'UT_BAD_ARG', 'UT_EXISTS', 'UT_NO_UNIT',
 ##### Wrapper classes #####
 
 cdef class System:
+    """
+    Wrapper class for UDUNITS-2 ut_system. Calls ut_free_system() on
+    deallocation.
+
+    """
     cdef ut_system *csystem
 
     def __cinit__(self):
@@ -27,6 +58,11 @@ cdef class System:
 
 
 cdef class Unit:
+    """
+    Wrapper class for UDUNITS-2 ut_unit. Calls ut_free() on
+    deallocation.
+
+    """
     cdef ut_unit *cunit
 
     def __cinit__(self):
@@ -37,6 +73,11 @@ cdef class Unit:
 
 
 cdef class Converter:
+    """
+    Wrapper class for UDUNITS-2 cv_converter. Calls cv_free() on
+    deallocation.
+
+    """
     cdef cv_converter *cconverter
 
     def __cinit__(self):
@@ -47,11 +88,18 @@ cdef class Converter:
 
 
 cdef class ErrorMessageHandler:
+    """
+    Wrapper class for UDUNITS-2 ut_error_message_handler typedef.
+
+    """
     cdef ut_error_message_handler chandler
 
     def __cinit__(self):
         self.chandler = NULL
 
+# The following wrap_* functions should be called directly after the api call
+# with returned their arguments, in order that in the even of an error the
+# correct ut_status and errno values are retreived by _raise_error()
 
 cdef System wrap_system(ut_system* csystem):
     if csystem is NULL:
@@ -80,27 +128,52 @@ ignore = _ignore
 
 # Convenience object to avoid having to do None handling either here or in
 # user code
-NULL_UNIT=Unit()
+NULL_UNIT = Unit()
 
 
 ##### Exception class #####
 
 class UdunitsError(Exception):
+    """
+    UDUNITS-2 call resulted in an error.
+
+    Attrubutes:
+
+    * status:
+        The UDUNITS-2 ut_status value which resulted from the error.
+    * errnum:
+        The errno value which resulted from the error.
+
+    """
     def __init__(self, ut_status status, int errnum):
         self.status = status
         self.errnum = errnum
 
     def status_msg(self):
+        """
+        String representation of the UDUNITS-2 ut_status value which resulted
+        from the error.
+
+        """
         if 0 <= self.status < len(_UT_STATUS):
             return _UT_STATUS[self.status]
         else:
             return 'UNKNOWN'
 
     def error_msg(self):
+        """
+        The message string associated with the errno value which resulted from
+        the error.
+
+        """
         return string.strerror(self.errnum) if self.errnum else ''
         
 
 def _raise_error():
+    """
+    Raise a UdunitsError with the current value of errno and ut_status
+
+    """
     errnum = errno.errno
     errno.errno = 0
     status = ut_get_status()
@@ -108,6 +181,9 @@ def _raise_error():
 
 
 ##### Wrapper methods #####
+
+# The following functions wrap the corresponding ut_* or cv_* api calls.
+# See the UDUNITS-2 documentation for details.
 
 def read_xml(char* path=NULL):
     cdef ut_system* csystem = ut_read_xml(path)
