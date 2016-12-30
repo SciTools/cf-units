@@ -253,8 +253,8 @@ def parse(System system, char* string, ut_encoding encoding):
 def format(Unit unit, unsigned opts=0):
     cdef bytearray buf = bytearray(_STRING_BUFFER_DEPTH)
     n = ut_format(unit.cunit, buf, len(buf), opts)
-    if n > _STRING_BUFFER_DEPTH:
-        buf = bytearray(n)
+    if n >= _STRING_BUFFER_DEPTH:
+        buf = bytearray(n + 1)
         n = ut_format(unit.cunit, buf, len(buf), opts)
     elif n == -1:
         _raise_error()
