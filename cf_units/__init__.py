@@ -32,7 +32,6 @@ import six
 
 from contextlib import contextmanager
 import copy
-import os
 import os.path
 import sys
 import warnings
@@ -149,8 +148,6 @@ _cv_convert_scalar = {FLOAT32: _ud.convert_float,
                       FLOAT64: _ud.convert_double}
 _cv_convert_array = {FLOAT32: _ud.convert_floats,
                      FLOAT64: _ud.convert_doubles}
-_numpy2ctypes = {np.float32: FLOAT32, np.float64: FLOAT64}
-_ctypes2numpy = {v: k for k, v in _numpy2ctypes.items()}
 
 
 @contextmanager
@@ -1767,8 +1764,7 @@ class Unit(_OrderedHashable):
                     # cast array of ints to array of floats of requested
                     # precision.
                     if issubclass(result.dtype.type, np.integer):
-                        result = result.astype(
-                            _ctypes2numpy[ctype])
+                        result = result.astype(ctype)
                     # Convert arrays with explicit endianness to native
                     # endianness: udunits seems to be tripped up by arrays
                     # with endianness other than native.
@@ -1776,11 +1772,11 @@ class Unit(_OrderedHashable):
                         result = result.astype(
                             result.dtype.type)
                     # Strict type check of numpy array.
-                    if result.dtype.type not in _numpy2ctypes:
+                    if result.dtype.type not in (np.float32, np.float64):
                         raise TypeError(
                             "Expect a numpy array of '%s' or '%s'" %
-                            tuple(sorted(_numpy2ctypes.keys())))
-                    ctype = _numpy2ctypes[result.dtype.type]
+                            np.float32, np.float64)
+                    ctype = result.dtype.type
                     # Utilise global convenience dictionary
                     # _cv_convert_array
                     _cv_convert_array[ctype](ut_converter, result, result)
