@@ -89,7 +89,6 @@ __all__ = ['CALENDAR_STANDARD',
 # default constants
 #
 EPOCH = '1970-01-01 00:00:00'
-_STRING_BUFFER_DEPTH = 128
 _UNKNOWN_UNIT_STRING = 'unknown'
 _UNKNOWN_UNIT_SYMBOL = '?'
 _UNKNOWN_UNIT = [_UNKNOWN_UNIT_STRING, _UNKNOWN_UNIT_SYMBOL, '???', '']
@@ -104,16 +103,6 @@ _CATEGORY_UNKNOWN, _CATEGORY_NO_UNIT, _CATEGORY_UDUNIT = range(3)
 #
 # libudunits2 constants
 #
-# ut_status enumerations
-_UT_STATUS = ['UT_SUCCESS', 'UT_BAD_ARG', 'UT_EXISTS', 'UT_NO_UNIT',
-              'UT_OS', 'UT_NOT_SAME_NAME', 'UT_MEANINGLESS', 'UT_NO_SECOND',
-              'UT_VISIT_ERROR', 'UT_CANT_FORMAT', 'UT_SYNTAX', 'UT_UNKNOWN',
-              'UT_OPEN_ARG', 'UT_OPEN_ENV', 'UT_OPEN_DEFAULT', 'UT_PARSE']
-
-# explicit function names
-_UT_HANDLER = 'ut_set_error_message_handler'
-_UT_IGNORE = 'ut_ignore'
-
 # ut_encoding enumerations
 UT_ASCII = 0
 UT_ISO_8859_1 = 1
@@ -157,9 +146,9 @@ FLOAT64 = np.float64
 
 # Convenience dictionary for the Unit convert method.
 _cv_convert_scalar = {FLOAT32: _ud.convert_float,
-                        FLOAT64: _ud.convert_double}
+                      FLOAT64: _ud.convert_double}
 _cv_convert_array = {FLOAT32: _ud.convert_floats,
-                        FLOAT64: _ud.convert_doubles}
+                     FLOAT64: _ud.convert_doubles}
 _numpy2ctypes = {np.float32: FLOAT32, np.float64: FLOAT64}
 _ctypes2numpy = {v: k for k, v in _numpy2ctypes.items()}
 
@@ -179,34 +168,26 @@ def suppress_errors():
 
 #
 # load the UDUNITS-2 xml-formatted unit-database
-#
+#:
 # Ignore standard noisy UDUNITS-2 start-up.
 with suppress_errors():
     # Load the unit-database from the default location (modified via
     # the UDUNITS2_XML_PATH environment variable) and if that fails look
     # relative to sys.prefix to support environments such as conda.
-    _ud_system = _ud.read_xml()
-    if _ud_system.is_null():
+    try:
+        _ud_system = _ud.read_xml()
+    except _ud.UdunitsError:
         _alt_xml_path = config.get_option(
             'System', 'udunits2_xml_path',
             default=os.path.join(sys.prefix, 'share', 'udunits',
-                                    'udunits2.xml'))
-        _ud_system = _ud.read_xml(_alt_xml_path.encode())
-
-if _ud_system.is_null():
-    _status_msg = 'UNKNOWN'
-    _error_msg = ''
-    _status = _ud.get_status()
-    try:
-        _status_msg = _UT_STATUS[_status]
-    except IndexError:
-        pass
-    _errno = _ud.get_errno()
-    if _errno != 0:
-        _error_msg = ': "%s"' % _ud.strerror(_errno)
-        _ud.set_errno(0)
-    raise OSError('[%s] Failed to open UDUNITS-2 XML unit database %s' % (
-        _status_msg, _error_msg))
+                                 'udunits2.xml'))
+        try:
+            _ud_system = _ud.read_xml(_alt_xml_path.encode())
+        except _ud.UdunitsError as e:
+            error_msg = ': "%s"' % e.error_msg() if e.errnum else ''
+            raise OSError(
+                '[%s] Failed to open UDUNITS-2 XML unit database%s'
+                % e.status_msg(), error_msg)
 
 
 ########################################################################
@@ -764,7 +745,7 @@ class Unit(_OrderedHashable):
     'Is this an unknown unit, a no-unit, or a UDUNITS-2 unit.'
 
     ut_unit = None
-    'Reference to the ctypes quantity defining the UDUNITS-2 unit.'
+    'Reference to the quantity defining the UDUNITS-2 unit.'
 
     calendar = None
     'Represents the unit calendar name, see cf_units.CALENDARS'
@@ -825,7 +806,7 @@ class Unit(_OrderedHashable):
             >>> unknown = Unit(None)
 
         """
-        ut_unit = None
+        ut_unit = _ud.NULL_UNIT
         calendar_ = None
 
         if unit is None:
@@ -851,10 +832,10 @@ class Unit(_OrderedHashable):
             unit = _NO_UNIT_STRING
         else:
             category = _CATEGORY_UDUNIT
-            ut_unit = _ud.parse(_ud_system, unit.encode('ascii'), UT_ASCII)
-            # _ut_parse returns 0 on failure
-            if ut_unit.is_null():
-                self._raise_error('Failed to parse unit "%s"' % unit)
+            try:
+                ut_unit = _ud.parse(_ud_system, unit.encode('ascii'), UT_ASCII)
+            except _ud.UdunitsError as e:
+                self._propogate_error('Failed to parse unit "%s"' % unit, e)
             if _OP_SINCE in unit.lower():
                 if calendar is None:
                     calendar_ = CALENDAR_GREGORIAN
@@ -870,25 +851,15 @@ class Unit(_OrderedHashable):
 
         self._init_from_tuple((category, ut_unit, calendar_, unit,))
 
-    def _raise_error(self, msg):
+    def _propogate_error(self, msg, ud_err):
         """
         Retrieve the UDUNITS-2 ut_status, the implementation-defined string
-        corresponding to UDUNITS-2 errno and raise generic exception.
+        corresponding to UDUNITS-2 errno from the UdunitsError and raise
+        generic exception.
 
         """
-        status_msg = 'UNKNOWN'
-        error_msg = ''
-        status = _ud.get_status()
-        try:
-            status_msg = _UT_STATUS[status]
-        except IndexError:
-            pass
-        errno = _ud.get_errno()
-        if errno != 0:
-            error_msg = ': "%s"' % os.strerror(errno)
-            _ud.set_errno(0)
-
-        raise ValueError('[%s] %s %s' % (status_msg, msg, error_msg))
+        error_msg = ': "%s"' % ud_err.error_msg() if ud_err.errnum != 0 else ''
+        raise ValueError('[%s] %s%s' % (ud_err.status_msg(), msg, error_msg))
 
     # NOTE:
     # "__getstate__" and "__setstate__" functions are defined here to
@@ -939,7 +910,7 @@ class Unit(_OrderedHashable):
             result = False
         else:
             day = _ud.get_unit_by_name(_ud_system, b'day')
-            result = _ud.are_convertible(self.ut_unit, day) != 0
+            result = _ud.are_convertible(self.ut_unit, day)
         return result
 
     def is_vertical(self):
@@ -973,7 +944,7 @@ class Unit(_OrderedHashable):
 
     def is_udunits(self):
         """Return whether the unit is a vaild unit of UDUNITS."""
-        return not self.ut_unit.is_null()
+        return self.ut_unit is not _ud.NULL_UNIT
 
     def is_time_reference(self):
         """
@@ -1191,11 +1162,11 @@ class Unit(_OrderedHashable):
                     option = [option]
                 for i in option:
                     bitmask |= i
-            string_buffer = bytearray(_STRING_BUFFER_DEPTH)
-            depth = _ud.format(self.ut_unit, string_buffer, bitmask)
-            if depth < 0:
-                self._raise_error('Failed to format %r' % self)
-        return str(string_buffer.decode('ascii'))
+            try:
+                result = _ud.format(self.ut_unit, bitmask)
+            except _ud.UdunitsError as e:
+                    self._propogate_error('Failed to format %r' % self, e)
+        return str(result.decode('ascii'))
 
     @property
     def name(self):
@@ -1298,9 +1269,10 @@ class Unit(_OrderedHashable):
         if not isinstance(origin, (float, six.integer_types)):
             raise TypeError('a numeric type for the origin argument is'
                             ' required')
-        ut_unit = _ud.offset_by_time(self.ut_unit, origin)
-        if ut_unit.is_null():
-            self._raise_error('Failed to offset %r' % self)
+        try:
+            ut_unit = _ud.offset_by_time(self.ut_unit, origin)
+        except _ud.UdunitsError as e:
+            self._propogate_error('Failed to offset %r' % self, e)
         calendar = None
         return _Unit(_CATEGORY_UDUNIT, ut_unit, calendar)
 
@@ -1325,9 +1297,10 @@ class Unit(_OrderedHashable):
         elif self.is_no_unit():
             raise ValueError("Cannot invert a 'no-unit'.")
         else:
-            ut_unit = _ud.invert(self.ut_unit)
-            if ut_unit.is_null():
-                self._raise_error('Failed to invert %r' % self)
+            try:
+                ut_unit = _ud.invert(self.ut_unit)
+            except _ud.UdunitsError as e:
+                self._propogate_error('Failed to invert %r' % self, e)
             calendar = None
             result = _Unit(_CATEGORY_UDUNIT, ut_unit, calendar)
         return result
@@ -1355,6 +1328,8 @@ class Unit(_OrderedHashable):
             Taking a fractional root of a unit is not supported.
 
         """
+        if round(root) != root:
+            raise TypeError('An integer for the root argument is required')
         if self.is_unknown():
             result = self
         elif self.is_no_unit():
@@ -1366,11 +1341,9 @@ class Unit(_OrderedHashable):
             else:
                 try:
                     ut_unit = _ud.root(self.ut_unit, root)
-                except TypeError:
-                    raise TypeError('An int type for the root argument is'
-                                    ' required')
-                if ut_unit.is_null():
-                    self._raise_error('Failed to take the root of %r' % self)
+                except _ud.UdunitsError as e:
+                    self._propogate_error('Failed to take the root of %r' %
+                                          self, e)
                 calendar = None
                 result = _Unit(_CATEGORY_UDUNIT, ut_unit, calendar)
         return result
@@ -1405,9 +1378,9 @@ class Unit(_OrderedHashable):
             except TypeError:
                 raise TypeError('A numeric type for the base argument is '
                                 ' required')
-            if ut_unit.is_null():
+            except _ud.UdUnitsError as e:
                 msg = 'Failed to calculate logorithmic base of %r' % self
-                self._raise_error(msg)
+                self._propogate_error(msg, e)
             calendar = None
             result = _Unit(_CATEGORY_UDUNIT, ut_unit, calendar)
         return result
@@ -1462,9 +1435,9 @@ class Unit(_OrderedHashable):
                 ut_unit = _ud.offset(self.ut_unit, offset)
             except TypeError:
                 result = NotImplemented
+            except _ud.UdunitsError as e:
+                self._propogate_error('Failed to offset %r' % self, e)
             else:
-                if ut_unit.is_null():
-                    self._raise_error('Failed to offset %r' % self)
                 calendar = None
                 result = _Unit(_CATEGORY_UDUNIT, ut_unit, calendar)
         return result
@@ -1485,7 +1458,7 @@ class Unit(_OrderedHashable):
         # Convienience method to create a new unit from an operation between
         # the units 'self' and 'other'.
 
-        op_label = op_func.__name__.split('_')[1]
+        op_label = op_func.__name__
 
         other = as_unit(other)
 
@@ -1495,10 +1468,11 @@ class Unit(_OrderedHashable):
         if self.is_unknown() or other.is_unknown():
             result = _Unit(_CATEGORY_UNKNOWN, None)
         else:
-            ut_unit = op_func(self.ut_unit, other.ut_unit)
-            if not ut_unit:
+            try:
+                ut_unit = op_func(self.ut_unit, other.ut_unit)
+            except _ud.UdunitsError as e:
                 msg = 'Failed to %s %r by %r' % (op_label, self, other)
-                self._raise_error(msg)
+                self._propogate_error(msg, e)
             calendar = None
             result = _Unit(_CATEGORY_UDUNIT, ut_unit, calendar)
         return result
@@ -1643,9 +1617,11 @@ class Unit(_OrderedHashable):
                     raise ValueError(msg)
                 power = int(round(power))
 
-                ut_unit = _ud.raise_(self.ut_unit, power)
-                if ut_unit.is_null():
-                    self._raise_error('Failed to raise the power of %r' % self)
+                try:
+                    ut_unit = _ud.raise_(self.ut_unit, power)
+                except _ud.UdunitsError as e:
+                    self._propogate_error('Failed to raise the power of %r' %
+                                          self, e)
                 result = _Unit(_CATEGORY_UDUNIT, ut_unit)
         return result
 
@@ -1780,43 +1756,42 @@ class Unit(_OrderedHashable):
                    value.dtype == np.float32):
                     result = result.astype(np.float32)
             else:
-                ut_converter = _ud.get_converter(self.ut_unit, other.ut_unit)
-                if not ut_converter.is_null():
-                    if isinstance(result, np.ndarray):
-                        # Can only handle array of np.float32 or np.float64 so
-                        # cast array of ints to array of floats of requested
-                        # precision.
-                        if issubclass(result.dtype.type, np.integer):
-                            result = result.astype(
-                                _ctypes2numpy[ctype])
-                        # Convert arrays with explicit endianness to native
-                        # endianness: udunits seems to be tripped up by arrays
-                        # with endianness other than native.
-                        if result.dtype.byteorder != '=':
-                            result = result.astype(
-                                result.dtype.type)
-                        # Strict type check of numpy array.
-                        if result.dtype.type not in _numpy2ctypes:
-                            raise TypeError(
-                                "Expect a numpy array of '%s' or '%s'" %
-                                tuple(sorted(_numpy2ctypes.keys())))
-                        ctype = _numpy2ctypes[result.dtype.type]
-                        pointer = result.ctypes.data_as(
-                            ctypes.POINTER(ctype))
-                        # Utilise global convenience dictionary
-                        # _cv_convert_array
-                        _cv_convert_array[ctype](ut_converter, result, result)
-                    else:
-                        if ctype not in _cv_convert_scalar:
-                            raise ValueError('Invalid target type. Can only '
-                                             'convert to float or double.')
-                        # Utilise global convenience dictionary
-                        # _cv_convert_scalar
-                        result = _cv_convert_scalar[ctype](ut_converter,
-                                                           result)
+                try:
+                    ut_converter = _ud.get_converter(self.ut_unit,
+                                                     other.ut_unit)
+                except _ud.UdunitsError as e:
+                    self._propogate_error('Failed to convert %r to %r' %
+                                          (self, other), e)
+                if isinstance(result, np.ndarray):
+                    # Can only handle array of np.float32 or np.float64 so
+                    # cast array of ints to array of floats of requested
+                    # precision.
+                    if issubclass(result.dtype.type, np.integer):
+                        result = result.astype(
+                            _ctypes2numpy[ctype])
+                    # Convert arrays with explicit endianness to native
+                    # endianness: udunits seems to be tripped up by arrays
+                    # with endianness other than native.
+                    if result.dtype.byteorder != '=':
+                        result = result.astype(
+                            result.dtype.type)
+                    # Strict type check of numpy array.
+                    if result.dtype.type not in _numpy2ctypes:
+                        raise TypeError(
+                            "Expect a numpy array of '%s' or '%s'" %
+                            tuple(sorted(_numpy2ctypes.keys())))
+                    ctype = _numpy2ctypes[result.dtype.type]
+                    # Utilise global convenience dictionary
+                    # _cv_convert_array
+                    _cv_convert_array[ctype](ut_converter, result, result)
                 else:
-                    self._raise_error('Failed to convert %r to %r' %
-                                      (self, other))
+                    if ctype not in _cv_convert_scalar:
+                        raise ValueError('Invalid target type. Can only '
+                                         'convert to float or double.')
+                    # Utilise global convenience dictionary
+                    # _cv_convert_scalar
+                    result = _cv_convert_scalar[ctype](ut_converter,
+                                                       result)
             return result
         else:
             raise ValueError("Unable to convert from '%r' to '%r'." %
