@@ -1,3 +1,2 @@
 [System]
-udunits2_path = /path/to/libudunits2.so
 udunits2_xml_path = /path/to/udunits2.xml

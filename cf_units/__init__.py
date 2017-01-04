@@ -184,7 +184,7 @@ with suppress_errors():
             error_msg = ': "%s"' % e.error_msg() if e.errnum else ''
             raise OSError(
                 '[%s] Failed to open UDUNITS-2 XML unit database%s'
-                % e.status_msg(), error_msg)
+                % (e.status_msg(), error_msg))
 
 
 ########################################################################
@@ -933,10 +933,10 @@ class Unit(_OrderedHashable):
             result = False
         else:
             bar = _ud.get_unit_by_name(_ud_system, b'bar')
-            result = _ud.are_convertible(self.ut_unit, bar) != 0
+            result = _ud.are_convertible(self.ut_unit, bar)
             if not result:
                 meter = _ud.get_unit_by_name(_ud_system, b'meter')
-                result = _ud.are_convertible(self.ut_unit, meter) != 0
+                result = _ud.are_convertible(self.ut_unit, meter)
         return result
 
     def is_udunits(self):

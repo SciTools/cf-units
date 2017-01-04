@@ -38,11 +38,13 @@ def read(*parts):
         return f.read().decode('utf-8')
 
 include_dir = get_config_var('INCLUDEDIR')
+include_dirs = [include_dir] if include_dir is not None else []
 library_dir = get_config_var('LIBDIR')
+library_dirs = [library_dir] if library_dir is not None else []
 udunits_ext = Extension('cf_units._udunits2',
                         ['cf_units/_udunits2.pyx'],
-                        include_dirs=[include_dir],
-                        library_dirs=[library_dir],
+                        include_dirs=include_dirs,
+                        library_dirs=library_dirs,
                         libraries=['udunits2'])
 
 long_description = '{}'.format(read('README.rst'))

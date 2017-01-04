@@ -98,7 +98,7 @@ cdef class ErrorMessageHandler:
         self.chandler = NULL
 
 # The following wrap_* functions should be called directly after the api call
-# with returned their arguments, in order that in the even of an error the
+# which returned their arguments, in order that in the event of an error the
 # correct ut_status and errno values are retreived by _raise_error()
 
 cdef System wrap_system(ut_system* csystem):
