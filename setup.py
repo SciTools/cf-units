@@ -1,6 +1,7 @@
 import os
 import sys
 
+import numpy as np
 from setuptools import setup, Extension
 from setuptools.command.test import test as TestCommand
 import versioneer
@@ -43,7 +44,7 @@ library_dir = get_config_var('LIBDIR')
 library_dirs = [library_dir] if library_dir is not None else []
 udunits_ext = Extension('cf_units._udunits2',
                         ['cf_units/_udunits2.pyx'],
-                        include_dirs=include_dirs,
+                        include_dirs=include_dirs + [np.get_include()],
                         library_dirs=library_dirs,
                         libraries=['udunits2'])
 
