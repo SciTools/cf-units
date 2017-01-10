@@ -19,6 +19,11 @@ pip-log.txt
 #shared objects
 *.so
 
+# cf_units build files
+cf_units/_udunits2.so
+cf_units/_udunits2.pyd
+cf_units/_udunits2.c
+
 #config
 cf_units/etc/site.cfg
 
