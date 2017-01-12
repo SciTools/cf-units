@@ -39,6 +39,14 @@ cdef list _UT_STATUS = ['UT_SUCCESS', 'UT_BAD_ARG', 'UT_EXISTS', 'UT_NO_UNIT',
                         'UT_SYNTAX', 'UT_UNKNOWN', 'UT_OPEN_ARG',
                         'UT_OPEN_ENV', 'UT_OPEN_DEFAULT', 'UT_PARSE']
 
+UT_ASCII = 0
+UT_ISO_8859_1 = 1
+UT_LATIN1 = UT_ISO_8859_1
+UT_UTF8 = 2
+
+UT_NAMES = 4
+UT_DEFINITION = 8
+
 
 ##### Wrapper classes #####
 
@@ -167,6 +175,11 @@ class UdunitsError(Exception):
 
         """
         return string.strerror(self.errnum) if self.errnum else ''
+
+    def __str__(self):
+        str_err = ': {}'.format(string.strerror(self.errnum)) \
+                  if self.errnum else ''
+        return '{}{}'.format(self.status_msg(), str_err)
         
 
 def _raise_error():
@@ -198,7 +211,7 @@ def clone(Unit unit):
     return wrap_unit(cunit)
 
 def is_dimensionless(Unit unit):
-    return ut_is_dimensionless(unit.cunit)
+    return <bint>ut_is_dimensionless(unit.cunit)
 
 def compare(Unit unit1, Unit unit2):
     return ut_compare(unit1.cunit, unit2.cunit)
@@ -256,9 +269,9 @@ def format(Unit unit, unsigned opts=0):
     if n >= _STRING_BUFFER_DEPTH:
         buf = bytearray(n + 1)
         n = ut_format(unit.cunit, buf, len(buf), opts)
-    elif n == -1:
+    if n == -1:
         _raise_error()
-    return buf[:n]
+    return str(buf[:n])
 
 def encode_date(int year, int month, int day):
     return ut_encode_date(year, month, day)
@@ -292,6 +305,6 @@ def convert_floats(Converter converter, np.ndarray[np.float32_t] in_, np.ndarray
 def convert_double(Converter converter, double value):
     return cv_convert_double(converter.cconverter, value)
 
-def convert_doubles(Converter converter, np.ndarray[np.float64_t] in_, np.ndarray[np.float32_t] out):
+def convert_doubles(Converter converter, np.ndarray[np.float64_t] in_, np.ndarray[np.float64_t] out):
     cv_convert_doubles(converter.cconverter, <double*> in_.data, in_.size, <double*> out.data)
     return out

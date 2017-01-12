@@ -43,6 +43,9 @@ from . import config
 from .util import _OrderedHashable, approx_equal
 
 from cf_units import _udunits2 as _ud
+from cf_units._udunits2 import (UT_ASCII, UT_ISO_8859_1, UT_LATIN1, UT_UTF8,
+                                UT_NAMES, UT_DEFINITION)
+
 
 # Define __version__ based on versioneer's interpretation.
 from ._version import get_versions
@@ -102,14 +105,6 @@ _CATEGORY_UNKNOWN, _CATEGORY_NO_UNIT, _CATEGORY_UDUNIT = range(3)
 #
 # libudunits2 constants
 #
-# ut_encoding enumerations
-UT_ASCII = 0
-UT_ISO_8859_1 = 1
-UT_LATIN1 = 1
-UT_UTF8 = 2
-UT_NAMES = 4
-UT_DEFINITION = 8
-
 UT_FORMATS = [UT_ASCII, UT_ISO_8859_1, UT_LATIN1, UT_UTF8, UT_NAMES,
               UT_DEFINITION]
 
