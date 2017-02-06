@@ -145,7 +145,7 @@ class UdunitsError(Exception):
     """
     UDUNITS-2 call resulted in an error.
 
-    Attrubutes:
+    Attributes:
 
     * status:
         The UDUNITS-2 ut_status value which resulted from the error.
