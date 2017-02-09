@@ -217,5 +217,31 @@ class Test_convert__masked_array(unittest.TestCase):
         np.testing.assert_array_almost_equal(self.rads_array, result)
 
 
+class Test_is_long_time_interval(unittest.TestCase):
+
+    def test_short_time_interval(self):
+        # A short time interval is a time interval from seconds to days.
+        unit = Unit('seconds since epoch')
+        result = unit.is_long_time_interval()
+        self.assertFalse(result)
+
+    def test_long_time_interval(self):
+        # A long time interval is a time interval of months or years.
+        unit = Unit('months since epoch')
+        result = unit.is_long_time_interval()
+        self.assertTrue(result)
+
+    def test_calendar(self):
+        # Check that a different calendar does not affect the result.
+        unit = Unit('months since epoch', calendar=cf_units.CALENDAR_360_DAY)
+        result = unit.is_long_time_interval()
+        self.assertTrue(result)
+
+    def test_not_time_unit(self):
+        unit = Unit('K')
+        result = unit.is_long_time_interval()
+        self.assertFalse(result)
+
+
 if __name__ == '__main__':
     unittest.main()
