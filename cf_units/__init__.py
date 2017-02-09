@@ -150,6 +150,7 @@ _encoding_lookup = {UT_ASCII: 'ascii',
                     UT_LATIN1: 'latin1',
                     UT_UTF8: 'utf-8'}
 
+
 @contextmanager
 def suppress_errors():
     """
@@ -1162,7 +1163,7 @@ class Unit(_OrderedHashable):
                 for i in option:
                     bitmask |= i
             encoding = bitmask & \
-                       (UT_ASCII | UT_ISO_8859_1 | UT_LATIN1 | UT_UTF8)
+                (UT_ASCII | UT_ISO_8859_1 | UT_LATIN1 | UT_UTF8)
             endocing_str = _encoding_lookup[encoding]
             try:
                 result = _ud.format(self.ut_unit, bitmask)
