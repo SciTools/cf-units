@@ -46,7 +46,7 @@ class Test_get_system(unittest.TestCase):
 
     def test_read_xml_invalid_path(self):
         with self.assertRaises(_ud.UdunitsError) as cm:
-            _ud.read_xml("/not/a/path.xml")
+            _ud.read_xml(b'/not/a/path.xml')
         ex = cm.exception
 
         self.assertEqual(ex.status_msg(), 'UT_OPEN_ARG')
@@ -62,22 +62,38 @@ class Test_system(unittest.TestCase):
         self.system = _ud.read_xml()
 
     def test_get_unit_by_name(self):
-        unit = _ud.get_unit_by_name(self.system, 'metre')
+        unit = _ud.get_unit_by_name(self.system, b'metre')
 
         self.assertIsNotNone(unit)
 
     def test_get_unit_by_name_invalid_unit(self):
         with self.assertRaises(_ud.UdunitsError):
-            _ud.get_unit_by_name(self.system, 'jigawatt')
+            _ud.get_unit_by_name(self.system, b'jigawatt')
 
     def test_parse(self):
-        unit = _ud.parse(self.system, 'gigawatt'.encode('ascii'), _ud.UT_ASCII)
+        unit = _ud.parse(self.system, b'gigawatt', _ud.UT_ASCII)
 
         self.assertIsNotNone(unit)
 
+    def test_parse_latin1(self):
+        angstrom = _ud.parse(self.system, b'\xe5ngstr\xF6m', _ud.UT_LATIN1)
+
+        self.assertIsNotNone(angstrom)
+
+    def test_parse_ISO_8859_1(self):
+        angstrom = _ud.parse(self.system, b'\xe5ngstr\xF6m', _ud.UT_ISO_8859_1)
+
+        self.assertIsNotNone(angstrom)
+
+    def test_parse_UTF8(self):
+        angstrom = _ud.parse(self.system, b'\xc3\xa5ngstr\xc3\xb6m',
+                             _ud.UT_UTF8)
+
+        self.assertIsNotNone(angstrom)
+
     def test_parse_invalid_unit(self):
         with self.assertRaises(_ud.UdunitsError):
-            unit = _ud.parse(self.system, 'jigawatt'.encode('ascii'),
+            unit = _ud.parse(self.system, b'jigawatt',
                              _ud.UT_ASCII)
 
 
@@ -88,9 +104,9 @@ class Test_unit(unittest.TestCase):
     """
     def setUp(self):
         self.system = _ud.read_xml()
-        self.metre = _ud.get_unit_by_name(self.system, 'metre')
-        self.yard = _ud.get_unit_by_name(self.system, 'yard')
-        self.second = _ud.get_unit_by_name(self.system, 'second')
+        self.metre = _ud.get_unit_by_name(self.system, b'metre')
+        self.yard = _ud.get_unit_by_name(self.system, b'yard')
+        self.second = _ud.get_unit_by_name(self.system, b'second')
 
     def test_clone(self):
         metre_clone = _ud.clone(self.metre)
@@ -98,7 +114,7 @@ class Test_unit(unittest.TestCase):
         self.assertIsNot(metre_clone, self.metre)
 
     def test_is_dimensionless_true(self):
-        radian = _ud.get_unit_by_name(self.system, 'radian')
+        radian = _ud.get_unit_by_name(self.system, b'radian')
         self.assertTrue(_ud.is_dimensionless(radian))
 
     def test_is_dimensionless_false(self):
@@ -138,7 +154,7 @@ class Test_unit(unittest.TestCase):
         self.assertIsNotNone(mm)
 
     def test_offset(self):
-        kelvin = _ud.get_unit_by_name(self.system, 'kelvin')
+        kelvin = _ud.get_unit_by_name(self.system, b'kelvin')
         celsius = _ud.offset(kelvin, 273.15)
 
         self.assertIsNotNone(celsius)
@@ -178,7 +194,7 @@ class Test_unit(unittest.TestCase):
         self.assertIsNotNone(sq_metre)
 
     def test_root(self):
-        hectare = _ud.get_unit_by_name(self.system, 'hectare')
+        hectare = _ud.get_unit_by_name(self.system, b'hectare')
         hundred_metre = _ud.root(hectare, 2)
 
         self.assertIsNotNone(hundred_metre)
@@ -189,14 +205,14 @@ class Test_unit(unittest.TestCase):
         self.assertIsNotNone(log_metre)
 
     def test_format(self):
-        pascal = _ud.get_unit_by_name(self.system, 'pascal')
+        pascal = _ud.get_unit_by_name(self.system, b'pascal')
         symb = _ud.format(pascal)
         name = _ud.format(pascal, _ud.UT_NAMES)
         defn = _ud.format(pascal, _ud.UT_DEFINITION)
 
-        self.assertEqual(symb, 'Pa')
-        self.assertEqual(name, 'pascal')
-        self.assertEqual(defn, 'm-1.kg.s-2')
+        self.assertEqual(symb, b'Pa')
+        self.assertEqual(name, b'pascal')
+        self.assertEqual(defn, b'm-1.kg.s-2')
 
 
 class Test_time_encoding(unittest.TestCase):
@@ -245,8 +261,8 @@ class Test_convert(unittest.TestCase):
     """
     def setUp(self):
         system = _ud.read_xml()
-        metre = _ud.get_unit_by_name(system, 'metre')
-        yard = _ud.get_unit_by_name(system, 'yard')
+        metre = _ud.get_unit_by_name(system, b'metre')
+        yard = _ud.get_unit_by_name(system, b'yard')
         self.converter = _ud.get_converter(metre, yard)
         self.factor = 1.0936132669448853
 

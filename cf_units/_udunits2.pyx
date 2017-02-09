@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2016, Met Office
+# (C) British Crown Copyright 2016-2017, Met Office
 #
 # This file is part of cf_units.
 #
@@ -193,7 +193,7 @@ def _raise_error():
     raise UdunitsError(status, errnum)
 
 
-##### Wrapper methods #####
+##### Wrapper functions #####
 
 # The following functions wrap the corresponding ut_* or cv_* api calls.
 # See the UDUNITS-2 documentation for details.
@@ -271,7 +271,7 @@ def format(Unit unit, unsigned opts=0):
         n = ut_format(unit.cunit, buf, len(buf), opts)
     if n == -1:
         _raise_error()
-    return str(buf[:n])
+    return bytes(buf[:n])
 
 def encode_date(int year, int month, int day):
     return ut_encode_date(year, month, day)

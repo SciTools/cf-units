@@ -144,6 +144,11 @@ _cv_convert_scalar = {FLOAT32: _ud.convert_float,
 _cv_convert_array = {FLOAT32: _ud.convert_floats,
                      FLOAT64: _ud.convert_doubles}
 
+# Map of ut_encodings to encoding strings
+_encoding_lookup = {UT_ASCII: 'ascii',
+                    UT_ISO_8859_1: 'iso_8859_1',
+                    UT_LATIN1: 'latin1',
+                    UT_UTF8: 'utf-8'}
 
 @contextmanager
 def suppress_errors():
@@ -1115,13 +1120,15 @@ class Unit(_OrderedHashable):
         Args:
 
         * option (cf_units.UT_FORMATS):
-            Set the encoding option of the formatted string representation.
-            Valid encoding options may be one of the following enumerations:
-
+            Set the option of the formatted string representation.
+            Valid encoding options may be at most one of the following
+            enumerations:
             * Unit.UT_ASCII
             * Unit.UT_ISO_8859_1
             * Unit.UT_LATIN1
             * Unit.UT_UTF8
+
+            Any combination of the following may also be used:
             * Unit.UT_NAMES
             * Unit.UT_DEFINITION
 
@@ -1154,11 +1161,14 @@ class Unit(_OrderedHashable):
                     option = [option]
                 for i in option:
                     bitmask |= i
+            encoding = bitmask & \
+                       (UT_ASCII | UT_ISO_8859_1 | UT_LATIN1 | UT_UTF8)
+            endocing_str = _encoding_lookup[encoding]
             try:
                 result = _ud.format(self.ut_unit, bitmask)
             except _ud.UdunitsError as e:
                     self._propogate_error('Failed to format %r' % self, e)
-        return str(result.decode('ascii'))
+            return str(result.decode(endocing_str))
 
     @property
     def name(self):
