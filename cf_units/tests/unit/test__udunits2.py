@@ -209,10 +209,12 @@ class Test_unit(unittest.TestCase):
         symb = _ud.format(pascal)
         name = _ud.format(pascal, _ud.UT_NAMES)
         defn = _ud.format(pascal, _ud.UT_DEFINITION)
+        name_defn = _ud.format(pascal, _ud.UT_DEFINITION | _ud.UT_NAMES)
 
         self.assertEqual(symb, b'Pa')
         self.assertEqual(name, b'pascal')
         self.assertEqual(defn, b'm-1.kg.s-2')
+        self.assertEqual(name_defn, b'meter^-1-kilogram-second^-2')
 
 
 class Test_time_encoding(unittest.TestCase):
