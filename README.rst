@@ -3,7 +3,7 @@ cf\_units
 
 |Travis|_ |Coveralls|_
 
-\(C) British Crown Copyright 2015 - 2016, Met Office
+\(C) British Crown Copyright 2015 - 2017, Met Office
 
 Introduction
 ------------
