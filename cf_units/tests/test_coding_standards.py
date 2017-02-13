@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2013 - 2015, Met Office
+# (C) British Crown Copyright 2013 - 2017, Met Office
 #
 # This file is part of cf_units.
 #
@@ -60,10 +60,10 @@ LICENSE_RE = re.compile(LICENSE_RE_PATTERN, re.MULTILINE)
 # Guess cf_units repo directory of cf_units - realpath is used to mitigate
 # against Python finding the cf_units package via a symlink.
 DIR = os.path.realpath(os.path.dirname(cf_units.__file__))
-REPO_DIR = os.path.dirname(os.path.dirname(DIR))
-DOCS_DIR = os.path.join(REPO_DIR, 'docs', 'cf_units')
+REPO_DIR = os.path.dirname(DIR)
+DOCS_DIR = os.path.join(REPO_DIR, 'doc')
 DOCS_DIR = cf_units.config.get_option('Resources', 'doc_dir', default=DOCS_DIR)
-exclusion = ['Makefile', 'build']
+exclusion = ['Makefile', 'make.bat', 'build']
 DOCS_DIRS = glob(os.path.join(DOCS_DIR, '*'))
 DOCS_DIRS = [DOC_DIR for DOC_DIR in DOCS_DIRS if os.path.basename(DOC_DIR) not
              in exclusion]
@@ -74,6 +74,9 @@ class StandardReportWithExclusions(pep8.StandardReport):
     optional_bad_files = []
     expected_bad_files += optional_bad_files
     matched_exclusions = set()
+
+    if DOCS_DIRS:
+        expected_bad_files += ['*/source/conf.py']
 
     def get_file_results(self):
         # If the file had no errors, return self.file_errors (which will be 0)
@@ -222,6 +225,7 @@ class TestLicenseHeaders(unittest.TestCase):
         output = subprocess.check_output(['git', 'whatchanged',
                                           "--pretty=TIME:%ct"],
                                          cwd=REPO_DIR)
+        output = str(output.decode('ascii'))
         output = output.split('\n')
         res = {}
         for fname, dt in TestLicenseHeaders.whatchanged_parse(output):
@@ -233,7 +237,9 @@ class TestLicenseHeaders(unittest.TestCase):
     def test_license_headers(self):
         exclude_patterns = ('setup.py',
                             'build/*',
-                            'dist/*')
+                            'dist/*',
+                            'versioneer.py',
+                            'cf_units/_version.py')
 
         try:
             last_change_by_fname = self.last_change_by_fname()
@@ -262,7 +268,8 @@ class TestLicenseHeaders(unittest.TestCase):
                         failed = True
 
         if failed:
-            raise ValueError('There were license header failures. See stdout.')
+            raise AssertionError(
+                'There were license header failures. See stdout.')
 
 
 class TestFutureImports(unittest.TestCase):
@@ -312,8 +319,8 @@ class TestFutureImports(unittest.TestCase):
                         failed = True
 
         if failed:
-            raise ValueError('There were __future__ import check failures. '
-                             'See stdout.')
+            raise AssertionError(
+                'There were __future__ import check failures. See stdout.')
 
 
 if __name__ == '__main__':
