@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2016, Met Office
+# (C) British Crown Copyright 2016 - 2017, Met Office
 #
 # This file is part of cf_units.
 #
@@ -69,6 +69,14 @@ class Test(unittest.TestCase):
         res = date2num(date, self.unit, self.calendar)
 
         self.assertAlmostEqual(exp, res, places=4)
+
+    def test_long_time_interval(self):
+        # This test should fail with an error that we need to catch properly.
+        unit = 'years since 1970-01-01'
+        date = datetime.datetime(1970, 1, 1, 0, 0, 5)
+        exp_emsg = 'interval of "months", "years" .* got \'years\'.'
+        with self.assertRaisesRegexp(ValueError, exp_emsg):
+            date2num(date, unit, self.calendar)
 
 
 if __name__ == '__main__':
