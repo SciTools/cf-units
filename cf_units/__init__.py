@@ -1213,7 +1213,7 @@ class Unit(_OrderedHashable):
         """
         Defines whether this unit describes a time unit with a long time
         interval ("months" or "years"). These long time intervals *are*
-        supported by `UDUNITS2` by are not supported by `netcdftime`. This
+        supported by `UDUNITS2` but are not supported by `netcdftime`. This
         discrepancy means we cannot run self.num2date() on a time unit with
         a long time interval.
 
