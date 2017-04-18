@@ -42,11 +42,17 @@ include_dir = get_config_var('INCLUDEDIR')
 include_dirs = [include_dir] if include_dir is not None else []
 library_dir = get_config_var('LIBDIR')
 library_dirs = [library_dir] if library_dir is not None else []
+if sys.platform.startswith('win'):
+    extra_extension_args = {}
+else:
+    extra_extension_args = dict(
+        runtime_library_dirs=library_dirs)
 udunits_ext = Extension('cf_units._udunits2',
                         ['cf_units/_udunits2.pyx'],
                         include_dirs=include_dirs + [np.get_include()],
                         library_dirs=library_dirs,
-                        libraries=['udunits2'])
+                        libraries=['udunits2'],
+                        **extra_extension_args)
 
 long_description = '{}'.format(read('README.rst'))
 
