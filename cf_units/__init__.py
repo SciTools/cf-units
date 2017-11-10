@@ -1670,12 +1670,12 @@ class Unit(_OrderedHashable):
         For example:
 
             >>> import cf_units
-            >>> u = cf_units.Unit('meters')
+            >>> u = cf_units.Unit('miles/hour')
             >>> str(u)
-            'meters'
+            'miles/hour'
 
         """
-        return self.origin or self.name
+        return self.origin or self.symbol
 
     def __repr__(self):
         """
