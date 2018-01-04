@@ -14,7 +14,7 @@ for example from http://conda.pydata.org/miniconda.html.
 Once conda is installed, you can install cf_units using conda on any platform with
 the following command::
 
-  conda install -c scitools cf_units
+  conda install -c conda-forge cf_units
 
 Further documentation on using conda and the features it provides can be found
 at http://conda.pydata.org/docs/intro.html.
