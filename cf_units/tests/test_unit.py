@@ -290,6 +290,10 @@ class Test_root(unittest.TestCase):
         u = Unit('volt^2')
         self.assertEqual(u.root(2), 'V')
 
+    def test_square_root_integer_float(self):
+        u = Unit('volt^2')
+        self.assertEqual(u.root(2.), 'V')
+
     def test_not_numeric(self):
         u = Unit('volt')
         with self.assertRaisesRegexp(TypeError, 'numeric type'):
@@ -297,7 +301,7 @@ class Test_root(unittest.TestCase):
 
     def test_not_integer(self):
         u = Unit('volt')
-        with self.assertRaisesRegexp(TypeError, 'int type .* required'):
+        with self.assertRaisesRegexp(TypeError, 'integer .* required'):
             u.root(1.2)
 
     def test_meaningless_operation(self):
@@ -312,7 +316,7 @@ class Test_root(unittest.TestCase):
 
     def test_no_unit(self):
         u = Unit('no unit')
-        with self.assertRaisesRegexp(ValueError, 'Cannot take the logarithm'):
+        with self.assertRaisesRegexp(ValueError, 'Cannot take the root'):
             u.root(2)
 
 
