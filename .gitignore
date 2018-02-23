@@ -32,3 +32,6 @@ cf_units/etc/site.cfg
 \#*
 \.\#*
 *.swp
+.coverage
+.eggs
+.pytest_cache
