@@ -27,6 +27,7 @@ install:
 
   # Customise the testing environment.
   # ----------------------------------
+  - conda config --add channels conda-forge
   - conda install --quiet udunits2 --file requirements.txt --file requirements-dev.txt
   - pip install coveralls
 
