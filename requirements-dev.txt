@@ -1,2 +1,3 @@
+coveralls
 pep8
 pip
