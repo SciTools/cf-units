@@ -18,18 +18,12 @@ install:
 
   # Create the basic testing environment
   # ------------------------------------
-  - conda config --set always_yes yes --set changeps1 no
-  - conda config --set show_channel_urls True
+  - conda config --set always_yes yes --set changeps1 no --set show_channel_urls True
   - conda update --quiet conda
-  - ENV_NAME='test-environment'
-  - conda create --quiet -n $ENV_NAME python=$TRAVIS_PYTHON_VERSION
-  - source activate $ENV_NAME
-
-  # Customise the testing environment.
-  # ----------------------------------
   - conda config --add channels conda-forge
-  - conda install --quiet udunits2 --file requirements.txt --file requirements-dev.txt
-  - pip install coveralls
+  - ENV_NAME='test-environment'
+  - conda create --quiet --name $ENV_NAME python=$TRAVIS_PYTHON_VERSION udunits2 --file requirements.txt --file requirements-dev.txt
+  - source activate $ENV_NAME
 
   # Output debug info.
   - conda list
