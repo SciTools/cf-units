@@ -22,7 +22,7 @@ install:
   - conda update --quiet conda
   - conda config --add channels conda-forge
   - ENV_NAME='test-environment'
-  - conda create --quiet --name $ENV_NAME python=$TRAVIS_PYTHON_VERSION udunits2 --file requirements.txt --file requirements-dev.txt
+  - conda create --name $ENV_NAME python=$TRAVIS_PYTHON_VERSION udunits2 --file requirements.txt --file requirements-dev.txt
   - source activate $ENV_NAME
 
   # Output debug info.
