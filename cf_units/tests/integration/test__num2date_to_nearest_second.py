@@ -24,17 +24,17 @@ import datetime
 
 import numpy as np
 import numpy.testing
-import netcdftime
+import cftime
 
 from cf_units import _num2date_to_nearest_second, Unit
 
 
 class Test(unittest.TestCase):
     def setup_units(self, calendar):
-        self.useconds = netcdftime.utime('seconds since 1970-01-01',  calendar)
-        self.uminutes = netcdftime.utime('minutes since 1970-01-01', calendar)
-        self.uhours = netcdftime.utime('hours since 1970-01-01', calendar)
-        self.udays = netcdftime.utime('days since 1970-01-01', calendar)
+        self.useconds = cftime.utime('seconds since 1970-01-01',  calendar)
+        self.uminutes = cftime.utime('minutes since 1970-01-01', calendar)
+        self.uhours = cftime.utime('hours since 1970-01-01', calendar)
+        self.udays = cftime.utime('days since 1970-01-01', calendar)
 
     def check_dates(self, nums, utimes, expected):
         for num, utime, exp in zip(nums, utimes, expected):
@@ -50,14 +50,14 @@ class Test(unittest.TestCase):
             self.assertEqual((delta.days, seconds), exp)
 
     def test_scalar(self):
-        utime = netcdftime.utime('seconds since 1970-01-01',  'gregorian')
+        utime = cftime.utime('seconds since 1970-01-01',  'gregorian')
         num = 5.
         exp = datetime.datetime(1970, 1, 1, 0, 0, 5)
         res = _num2date_to_nearest_second(num, utime)
         self.assertEqual(exp, res)
 
     def test_sequence(self):
-        utime = netcdftime.utime('seconds since 1970-01-01',  'gregorian')
+        utime = cftime.utime('seconds since 1970-01-01',  'gregorian')
         nums = [20., 40., 60., 80, 100.]
         exp = [datetime.datetime(1970, 1, 1, 0, 0, 20),
                datetime.datetime(1970, 1, 1, 0, 0, 40),
@@ -68,7 +68,7 @@ class Test(unittest.TestCase):
         np.testing.assert_array_equal(exp, res)
 
     def test_multidim_sequence(self):
-        utime = netcdftime.utime('seconds since 1970-01-01',  'gregorian')
+        utime = cftime.utime('seconds since 1970-01-01',  'gregorian')
         nums = [[20., 40., 60.],
                 [80, 100., 120.]]
         exp_shape = (2, 3)
@@ -76,7 +76,7 @@ class Test(unittest.TestCase):
         self.assertEqual(exp_shape, res.shape)
 
     def test_masked_ndarray(self):
-        utime = netcdftime.utime('seconds since 1970-01-01',  'gregorian')
+        utime = cftime.utime('seconds since 1970-01-01',  'gregorian')
         nums = np.ma.masked_array([20., 40., 60.], [False, True, False])
         exp = [datetime.datetime(1970, 1, 1, 0, 0, 20),
                None,

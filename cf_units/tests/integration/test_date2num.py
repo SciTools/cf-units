@@ -24,7 +24,7 @@ import datetime
 
 import numpy as np
 import numpy.testing
-import netcdftime
+import cftime
 
 from cf_units import date2num, Unit
 
