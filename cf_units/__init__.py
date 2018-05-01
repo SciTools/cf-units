@@ -1047,6 +1047,9 @@ class Unit(_OrderedHashable):
         if unit.endswith(" since epoch"):
             unit = unit.replace("epoch", EPOCH)
 
+        if "#" in unit:
+            unit = unit.replace("#", "1")
+
         if unit.lower() in _UNKNOWN_UNIT:
             # TODO - removing the option of an unknown unit. Currently
             # the auto generated MOSIG rules are missing units on a
