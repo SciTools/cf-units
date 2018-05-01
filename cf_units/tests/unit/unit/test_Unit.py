@@ -39,6 +39,12 @@ class Test___init__(unittest.TestCase):
         with self.assertRaises(TypeError):
             u = Unit('hours since 1970-01-01 00:00:00', calendar=5)
 
+    def test_hash_replacement(self):
+        hash_unit = 'm # s-1'
+        expected = 'm 1 s-1'
+        u = Unit(hash_unit)
+        self.assertEqual(u, expected)
+
 
 class Test_convert__calendar(unittest.TestCase):
 
