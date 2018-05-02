@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2013 - 2017, Met Office
+# (C) British Crown Copyright 2013 - 2018, Met Office
 #
 # This file is part of cf_units.
 #
@@ -76,7 +76,7 @@ class StandardReportWithExclusions(pep8.StandardReport):
     matched_exclusions = set()
 
     if DOCS_DIRS:
-        expected_bad_files += ['*/source/conf.py']
+        expected_bad_files += []
 
     def get_file_results(self):
         # If the file had no errors, return self.file_errors (which will be 0)
