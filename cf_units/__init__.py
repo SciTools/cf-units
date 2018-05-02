@@ -62,6 +62,7 @@ __all__ = ['CALENDAR_STANDARD',
            'CALENDAR_366_DAY',
            'CALENDAR_360_DAY',
            'CALENDARS',
+           'CALENDAR_ALIASES',
            'UT_NAMES',
            'UT_DEFINITION',
            'UT_ASCII',
@@ -121,10 +122,22 @@ CALENDAR_365_DAY = '365_day'
 CALENDAR_366_DAY = '366_day'
 CALENDAR_360_DAY = '360_day'
 
+#: The calendars recognised by cf_units.
+#: These are accessible as strings, or as constants in the form
+#: ``cf_units.CALENDAR_{ calendar_name.upper() }``. For example,
+#: ``cf_units.CALENDAR_NO_LEAP`` and ``cf_units.CALENDAR_366_DAY``.
 CALENDARS = [CALENDAR_STANDARD, CALENDAR_GREGORIAN,
              CALENDAR_PROLEPTIC_GREGORIAN, CALENDAR_NO_LEAP, CALENDAR_JULIAN,
              CALENDAR_ALL_LEAP, CALENDAR_365_DAY, CALENDAR_366_DAY,
              CALENDAR_360_DAY]
+
+#: Where calendars have multiple names, we map the alias to the
+#: definitive form.
+CALENDAR_ALIASES = {
+    CALENDAR_STANDARD: CALENDAR_GREGORIAN,
+    CALENDAR_NO_LEAP: CALENDAR_365_DAY,
+    CALENDAR_ALL_LEAP: CALENDAR_360_DAY}
+
 
 #
 # floating point types
@@ -840,9 +853,10 @@ class Unit(_OrderedHashable):
                 if calendar is None:
                     calendar_ = CALENDAR_GREGORIAN
                 elif isinstance(calendar, six.string_types):
-                    if calendar.lower() in CALENDARS:
-                        calendar_ = calendar.lower()
-                    else:
+                    calendar_ = calendar.lower()
+                    if calendar_ in CALENDAR_ALIASES:
+                        calendar_ = CALENDAR_ALIASES[calendar_]
+                    if calendar_ not in CALENDARS:
                         msg = '{!r} is an unsupported calendar.'
                         raise ValueError(msg.format(calendar))
                 else:
@@ -1765,7 +1779,14 @@ class Unit(_OrderedHashable):
 
         .. note::
 
-           Conversion between unit calendars is not permitted.
+           Conversion between unit calendars is not permitted unless the
+           calendars are aliases, see :attr:`cf_units.CALENDAR_ALIASES`.
+
+           >>> from cf_units import Unit
+           >>> a = Unit('days since 1850-1-1', calendar='gregorian')
+           >>> b = Unit('days since 1851-1-1', calendar='standard')
+           >>> a.convert(365.75, b)
+           0.75
 
         """
         other = as_unit(other)
