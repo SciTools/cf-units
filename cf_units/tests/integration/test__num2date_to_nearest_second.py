@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2016, Met Office
+# (C) British Crown Copyright 2016 - 2018, Met Office
 #
 # This file is part of cf_units.
 #
@@ -40,6 +40,14 @@ class Test(unittest.TestCase):
         for num, utime, exp in zip(nums, utimes, expected):
             res = _num2date_to_nearest_second(num, utime)
             self.assertEqual(exp, res)
+
+    def check_timedelta(self, nums, utimes, expected):
+        for num, utime, exp in zip(nums, utimes, expected):
+            epoch = utime.num2date(0)
+            res = _num2date_to_nearest_second(num, utime)
+            delta = res - epoch
+            seconds = np.round(delta.seconds + (delta.microseconds / 1000000))
+            self.assertEqual((delta.days, seconds), exp)
 
     def test_scalar(self):
         utime = netcdftime.utime('seconds since 1970-01-01',  'gregorian')
@@ -143,16 +151,17 @@ class Test(unittest.TestCase):
                   self.uminutes, self.uminutes,
                   self.uhours, self.uhours,
                   self.udays, self.udays]
-        expected = [netcdftime.datetime(1970, 1, 1, 0, 0, 20),
-                    netcdftime.datetime(1970, 1, 1, 0, 0, 40),
-                    netcdftime.datetime(1970, 1, 1, 1, 15),
-                    netcdftime.datetime(1970, 1, 1, 2, 30),
-                    netcdftime.datetime(1970, 1, 1, 8),
-                    netcdftime.datetime(1970, 1, 1, 16),
-                    netcdftime.datetime(1970, 11, 1),
-                    netcdftime.datetime(1971, 9, 1)]
+        # Expected results in (days, seconds) delta from utime epoch.
+        expected = [(0, nums[0]),
+                    (0, nums[1]),
+                    (0, nums[2]*60),
+                    (0, nums[3]*60),
+                    (0, nums[4]*60*60),
+                    (0, nums[5]*60*60),
+                    (nums[6], 0),
+                    (nums[7], 0)]
 
-        self.check_dates(nums, utimes, expected)
+        self.check_timedelta(nums, utimes, expected)
 
     def test_fractional_360_day(self):
         self.setup_units('360_day')
@@ -162,29 +171,31 @@ class Test(unittest.TestCase):
         utimes = [self.uminutes, self.uminutes,
                   self.uhours, self.uhours,
                   self.udays, self.udays]
-        expected = [netcdftime.datetime(1970, 1, 1, 0, 0, 5),
-                    netcdftime.datetime(1970, 1, 1, 0, 0, 10),
-                    netcdftime.datetime(1970, 1, 1, 0, 15),
-                    netcdftime.datetime(1970, 1, 1, 0, 30),
-                    netcdftime.datetime(1970, 1, 1, 8),
-                    netcdftime.datetime(1970, 1, 1, 16)]
+        # Expected results in (days, seconds) delta from utime epoch.
+        expected = [(0, nums[0]*60),
+                    (0, nums[1]*60),
+                    (0, nums[2]*60*60),
+                    (0, nums[3]*60*60),
+                    (0, nums[4]*24*60*60),
+                    (0, nums[5]*24*60*60)]
 
-        self.check_dates(nums, utimes, expected)
+        self.check_timedelta(nums, utimes, expected)
 
     def test_fractional_second_360_day(self):
         self.setup_units('360_day')
         nums = [0.25, 0.5, 0.75,
                 1.5, 2.5, 3.5, 4.5]
         utimes = [self.useconds] * 7
-        expected = [netcdftime.datetime(1970, 1, 1, 0, 0, 0),
-                    netcdftime.datetime(1970, 1, 1, 0, 0, 1),
-                    netcdftime.datetime(1970, 1, 1, 0, 0, 1),
-                    netcdftime.datetime(1970, 1, 1, 0, 0, 2),
-                    netcdftime.datetime(1970, 1, 1, 0, 0, 3),
-                    netcdftime.datetime(1970, 1, 1, 0, 0, 4),
-                    netcdftime.datetime(1970, 1, 1, 0, 0, 5)]
+        # Expected results in (days, seconds) delta from utime epoch.
+        expected = [(0, 0.0),  # rounded down to this
+                    (0, 1.0),  # rounded up to this
+                    (0, 1.0),  # rounded up to this
+                    (0, 2.0),  # rounded up to this
+                    (0, 3.0),  # rounded up to this
+                    (0, 4.0),  # rounded up to this
+                    (0, 5.0)]  # rounded up to this
 
-        self.check_dates(nums, utimes, expected)
+        self.check_timedelta(nums, utimes, expected)
 
     # 365 day Calendar tests
 
@@ -198,16 +209,17 @@ class Test(unittest.TestCase):
                   self.uminutes, self.uminutes,
                   self.uhours, self.uhours,
                   self.udays, self.udays]
-        expected = [netcdftime.datetime(1970, 1, 1, 0, 0, 20),
-                    netcdftime.datetime(1970, 1, 1, 0, 0, 40),
-                    netcdftime.datetime(1970, 1, 1, 1, 15),
-                    netcdftime.datetime(1970, 1, 1, 2, 30),
-                    netcdftime.datetime(1970, 1, 1, 8),
-                    netcdftime.datetime(1970, 1, 1, 16),
-                    netcdftime.datetime(1970, 10, 28),
-                    netcdftime.datetime(1971, 8, 24)]
+        # Expected results in (days, seconds) delta from utime epoch.
+        expected = [(0, nums[0]),
+                    (0, nums[1]),
+                    (0, nums[2]*60),
+                    (0, nums[3]*60),
+                    (0, nums[4]*60*60),
+                    (0, nums[5]*60*60),
+                    (nums[6], 0),
+                    (nums[7], 0)]
 
-        self.check_dates(nums, utimes, expected)
+        self.check_timedelta(nums, utimes, expected)
 
     def test_fractional_365_day(self):
         self.setup_units('365_day')
@@ -217,30 +229,32 @@ class Test(unittest.TestCase):
         utimes = [self.uminutes, self.uminutes,
                   self.uhours, self.uhours,
                   self.udays, self.udays]
+        # Expected results in (days, seconds) delta from utime epoch.
+        expected = [(0, nums[0]*60),
+                    (0, nums[1]*60),
+                    (0, nums[2]*60*60),
+                    (0, nums[3]*60*60),
+                    (0, nums[4]*24*60*60),
+                    (0, nums[5]*24*60*60)]
 
-        expected = [netcdftime.datetime(1970, 1, 1, 0, 0, 5),
-                    netcdftime.datetime(1970, 1, 1, 0, 0, 10),
-                    netcdftime.datetime(1970, 1, 1, 0, 15),
-                    netcdftime.datetime(1970, 1, 1, 0, 30),
-                    netcdftime.datetime(1970, 1, 1, 8),
-                    netcdftime.datetime(1970, 1, 1, 16)]
-
-        self.check_dates(nums, utimes, expected)
+        self.check_timedelta(nums, utimes, expected)
 
     def test_fractional_second_365_day(self):
         self.setup_units('365_day')
         nums = [0.25, 0.5, 0.75,
                 1.5, 2.5, 3.5, 4.5]
         utimes = [self.useconds] * 7
-        expected = [netcdftime.datetime(1970, 1, 1, 0, 0, 0),
-                    netcdftime.datetime(1970, 1, 1, 0, 0, 1),
-                    netcdftime.datetime(1970, 1, 1, 0, 0, 1),
-                    netcdftime.datetime(1970, 1, 1, 0, 0, 2),
-                    netcdftime.datetime(1970, 1, 1, 0, 0, 3),
-                    netcdftime.datetime(1970, 1, 1, 0, 0, 4),
-                    netcdftime.datetime(1970, 1, 1, 0, 0, 5)]
+        # Expected results in (days, seconds) delta from utime epoch.
+        expected = [(0, 0.0),  # rounded down to this
+                    (0, 1.0),  # rounded up to this
+                    (0, 1.0),  # rounded up to this
+                    (0, 2.0),  # rounded up to this
+                    (0, 3.0),  # rounded up to this
+                    (0, 4.0),  # rounded up to this
+                    (0, 5.0)]  # rounded up to this
 
-        self.check_dates(nums, utimes, expected)
+        self.check_timedelta(nums, utimes, expected)
+
 
 if __name__ == '__main__':
     unittest.main()
