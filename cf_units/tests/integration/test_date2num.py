@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2016 - 2017, Met Office
+# (C) British Crown Copyright 2016 - 2018, Met Office
 #
 # This file is part of cf_units.
 #
@@ -24,7 +24,7 @@ import datetime
 
 import numpy as np
 import numpy.testing
-import netcdftime
+import cftime
 
 from cf_units import date2num, Unit
 
