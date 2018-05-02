@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2015 - 2017, Met Office
+# (C) British Crown Copyright 2015 - 2018, Met Office
 #
 # This file is part of cf_units.
 #
@@ -1046,6 +1046,9 @@ class Unit(_OrderedHashable):
 
         if unit.endswith(" since epoch"):
             unit = unit.replace("epoch", EPOCH)
+
+        if "#" in unit:
+            unit = unit.replace("#", "1")
 
         if unit.lower() in _UNKNOWN_UNIT:
             # TODO - removing the option of an unknown unit. Currently
