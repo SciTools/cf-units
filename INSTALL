@@ -26,11 +26,17 @@ Installing from source
 The latest cf_units source release is available from
 https://github.com/SciTools/cf_units.
 
-cf_units makes use of Numpy, netCDF4-python, and Unidata udunits2. These
-dependencies must be in place before you can successfully install
+cf_units makes use of Numpy, netCDF4-python, Cython, and Unidata udunits2.
+These dependencies must be in place before you can successfully install
 cf_units. Once you have satisfied the requirements detailed below,
 extract the cf_units source package, cd to the new directory, and enter::
 
+  python setup.py install
+
+For non-standard locations, additional build lib & include paths
+can be provided as per-usual at build_ext phase::
+
+  python setup.py build_ext -I/path/to/include -L/path/to/lib
   python setup.py install
 
 
@@ -85,10 +91,10 @@ Custom site configuration
 =========================
 The default site configuration values can be overridden by creating the file
 ``cf_units/etc/site.cfg``. For example, the following snippet can be used to
-specify a non-standard location for your udunits library::
+specify a non-standard location for your udunits xml database::
 
   [System]
-  udunits2_path = /path/to/libudunits2.so
+  udunits2_xml_path = /path/to/udunits2.xml
 
 An example configuration file is available in ``cf_units/etc/site.cfg.template``.
 See :py:func:`cf_units.config` for further configuration options.
