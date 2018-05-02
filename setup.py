@@ -1,20 +1,14 @@
+from __future__ import absolute_import, division, print_function
+
 import os
 import sys
 
-from setuptools import setup
-from setuptools.command.test import test as TestCommand
+from setuptools import find_packages, setup
 import versioneer
 
 
-class PyTest(TestCommand):
-    def finalize_options(self):
-        TestCommand.finalize_options(self)
-        self.verbose = True
-
-    def run_tests(self):
-        import pytest
-        errno = pytest.main(self.test_args)
-        sys.exit(errno)
+NAME = 'cf_units'
+DIR = os.path.abspath(os.path.dirname(__file__))
 
 
 def file_walk_relative(top, remove=''):
@@ -29,35 +23,30 @@ def file_walk_relative(top, remove=''):
         for file in files:
             yield os.path.join(root, file).replace(remove, '')
 
-rootpath = os.path.abspath(os.path.dirname(__file__))
-
 
 def read(*parts):
-    with open(os.path.join(rootpath, *parts), 'rb') as f:
+    with open(os.path.join(DIR, *parts), 'rb') as f:
         return f.read().decode('utf-8')
 
-
-long_description = '{}'.format(read('README.rst'))
-
-cmdclass = {'test': PyTest}
-cmdclass.update(versioneer.get_cmdclass())
 
 require = read('requirements.txt')
 install_requires = [r.strip() for r in require.splitlines()]
 
+
 setup(
-    name='cf_units',
+    name=NAME,
     version=versioneer.get_version(),
-    url='https://github.com/SciTools/cf_units',
+    url='https://github.com/SciTools/{}'.format(NAME),
     author='Met Office',
     description='Units of measure as required by the Climate and Forecast (CF) metadata conventions',
-    long_description=long_description,
-    packages=['cf_units', 'cf_units/tests'],
+    long_description='{}'.format(read('README.rst')),
+    packages=find_packages(),
     package_data={'cf_units': list(file_walk_relative('cf_units/etc',
                                                       remove='cf_units/'))},
     data_files=[('share/doc/cf_units',
                  ['COPYING', 'COPYING.LESSER', 'README.rst'])],
     install_requires=install_requires,
-    tests_require=['pytest', 'pep8'],
-    cmdclass=cmdclass
+    tests_require=['pep8'],
+    test_suite='{}.tests'.format(NAME),
+    cmdclass=versioneer.get_cmdclass()
     )

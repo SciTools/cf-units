@@ -2,17 +2,16 @@ language: python
 
 python:
   - 2.7
-  - 3.4
-  - 3.5
+  - 3.6
 
 install:
   # Install miniconda
   # -----------------
   - export CONDA_BASE=http://repo.continuum.io/miniconda/Miniconda
   - if [[ "$TRAVIS_PYTHON_VERSION" == 2* ]]; then
-      wget ${CONDA_BASE}-3.7.0-Linux-x86_64.sh -O miniconda.sh;
+      wget ${CONDA_BASE}2-latest-Linux-x86_64.sh -O miniconda.sh;
     else
-      wget ${CONDA_BASE}3-3.7.0-Linux-x86_64.sh -O miniconda.sh;
+      wget ${CONDA_BASE}3-latest-Linux-x86_64.sh -O miniconda.sh;
     fi
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
@@ -28,7 +27,6 @@ install:
 
   # Customise the testing environment.
   # ----------------------------------
-  - conda config --add channels scitools
   - conda install --quiet udunits2 --file requirements.txt --file requirements-dev.txt
   - pip install coveralls
 
