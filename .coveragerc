@@ -10,6 +10,7 @@ omit =
     cf_units/_version.py
     cf_units/etc/*
     cf_units/tests/*
+    .eggs
 
 
 [report]
