@@ -556,7 +556,7 @@ class Test_stringify(unittest.TestCase):
     def test___repr___time_unit(self):
         u = Unit("hours since 2007-01-15 12:06:00",
                  calendar=unit.CALENDAR_STANDARD)
-        exp = "Unit('hours since 2007-01-15 12:06:00', calendar='standard')"
+        exp = "Unit('hours since 2007-01-15 12:06:00', calendar='gregorian')"
         self.assertEqual(repr(u), exp)
 
 
