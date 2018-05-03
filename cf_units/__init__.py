@@ -407,7 +407,7 @@ def date2julian_day(date, calendar):
         >>> import datetime
         >>> cf_units.date2julian_day(datetime.datetime(1970, 1, 1, 0, 0, 0),
         ...                          cf_units.CALENDAR_STANDARD)
-        2440587.5
+        2440587.5...
 
     """
 
@@ -456,7 +456,7 @@ def date2num(date, unit, calendar):
         6.0
         >>> cf_units.date2num([dt1, dt2], 'hours since 1970-01-01 00:00:00',
         ...               cf_units.CALENDAR_STANDARD)
-        array([ 6.,  7.])
+        array([6., 7.])
 
     """
 
@@ -1310,7 +1310,7 @@ class Unit(_OrderedHashable):
             >>> import cf_units
             >>> u = cf_units.Unit('hours')
             >>> u.offset_by_time(cf_units.encode_time(1970, 1, 1, 0, 0, 0))
-            Unit('hour since 1970-01-01 00:00:00.0000000 UTC')
+            Unit('h @ 19700101T000000.0000000 UTC')
 
         """
 
@@ -1337,7 +1337,7 @@ class Unit(_OrderedHashable):
             >>> import cf_units
             >>> u = cf_units.Unit('meters')
             >>> u.invert()
-            Unit('meter^-1')
+            Unit('m-1')
 
         """
         if self.is_unknown():
@@ -1369,7 +1369,7 @@ class Unit(_OrderedHashable):
             >>> import cf_units
             >>> u = cf_units.Unit('meters^2')
             >>> u.root(2)
-            Unit('meter')
+            Unit('m')
 
         .. note::
 
@@ -1413,7 +1413,7 @@ class Unit(_OrderedHashable):
             >>> import cf_units
             >>> u = cf_units.Unit('meters')
             >>> u.log(2)
-            Unit('lb(re 1 meter)')
+            Unit('lb(re 1 m)')
 
         """
         if self.is_unknown():
@@ -1553,7 +1553,7 @@ class Unit(_OrderedHashable):
             >>> u = cf_units.Unit('meters')
             >>> v = cf_units.Unit('hertz')
             >>> u*v
-            Unit('meter-second^-1')
+            Unit('m.s-1')
 
         """
         return self._op_common(other, _ud.multiply)
@@ -1578,8 +1578,8 @@ class Unit(_OrderedHashable):
             >>> import cf_units
             >>> u = cf_units.Unit('m.s-1')
             >>> v = cf_units.Unit('hertz')
-            >>> u/v
-            Unit('meter')
+            >>> u / v
+            Unit('m')
 
         """
         return self._op_common(other, _ud.divide)
@@ -1604,8 +1604,8 @@ class Unit(_OrderedHashable):
             >>> import cf_units
             >>> u = cf_units.Unit('m.s-1')
             >>> v = cf_units.Unit('hertz')
-            >>> u/v
-            Unit('meter')
+            >>> u / v
+            Unit('m')
 
         """
         return self.__div__(other)
@@ -1631,7 +1631,7 @@ class Unit(_OrderedHashable):
             >>> import cf_units
             >>> u = cf_units.Unit('meters')
             >>> u**2
-            Unit('meter^2')
+            Unit('m2')
 
         """
         try:
@@ -1772,10 +1772,10 @@ class Unit(_OrderedHashable):
             32.0
             >>> a64 = np.arange(3, dtype=np.float64)
             >>> c.convert(a64, f)
-            array([ 32. ,  33.8,  35.6])
+            array([32. , 33.8, 35.6])
             >>> a32 = np.arange(3, dtype=np.float32)
             >>> c.convert(a32, f)
-            array([ 32.        ,  33.79999924,  35.59999847], dtype=float32)
+            array([32. , 33.8, 35.6], dtype=float32)
 
         .. note::
 
@@ -1871,7 +1871,7 @@ class Unit(_OrderedHashable):
             ...                   calendar=cf_units.CALENDAR_STANDARD)
             >>> ut = u.utime()
             >>> ut.num2date(2)
-            datetime.datetime(1970, 1, 1, 2, 0)
+            datetime.datetime(1970, 1, 1, 2, 0, 0, 6)
 
         """
         if self.calendar is None:
@@ -1921,7 +1921,7 @@ class Unit(_OrderedHashable):
             5.00000000372529
             >>> u.date2num([datetime.datetime(1970, 1, 1, 5),
             ...             datetime.datetime(1970, 1, 1, 6)])
-            array([ 5.,  6.])
+            array([5., 6.])
 
         """
 

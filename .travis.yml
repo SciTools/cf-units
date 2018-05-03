@@ -31,11 +31,10 @@ install:
 
   # cf_units.
   - PREFIX=$HOME/miniconda/envs/$ENV_NAME
-  - SITE_CFG=cf_units/etc/site.cfg
-  - echo "[System]" >> $SITE_CFG
-  - echo "udunits2_path = $PREFIX/lib/libudunits2.so" >> $SITE_CFG
+
+  - pip install -e .
 
 script:
-  - coverage run setup.py test
+  - coverage run -m pytest cf_units cf_units
 
 after_success: coveralls
