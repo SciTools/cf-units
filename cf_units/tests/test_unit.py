@@ -649,6 +649,13 @@ class Test_convert(unittest.TestCase):
         result = u.convert(expected * 1609.344, v)
         np.testing.assert_array_equal(result, expected)
 
+    def test_convert_array_multidim(self):
+        u = Unit('meter')
+        v = Unit('mile')
+        expected = (np.arange(2, dtype=np.float32) + 1).reshape([1, 1, 2, 1])
+        result = u.convert(expected * 1609.344, v)
+        np.testing.assert_array_equal(result, expected)
+
     def test_incompatible_units(self):
         u = Unit('m')
         v = Unit('V')

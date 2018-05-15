@@ -1837,7 +1837,10 @@ class Unit(_OrderedHashable):
                     ctype = result.dtype.type
                     # Utilise global convenience dictionary
                     # _cv_convert_array
+                    shape = result.shape
+                    result.shape = (np.prod(shape), )
                     _cv_convert_array[ctype](ut_converter, result, result)
+                    result.shape = shape
                 else:
                     if ctype not in _cv_convert_scalar:
                         raise ValueError('Invalid target type. Can only '
