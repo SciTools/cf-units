@@ -649,6 +649,13 @@ class Test_convert(unittest.TestCase):
         result = u.convert(expected * 1609.344, v)
         np.testing.assert_array_equal(result, expected)
 
+    def test_convert_array_multidim(self):
+        u = Unit('meter')
+        v = Unit('mile')
+        expected = (np.arange(2, dtype=np.float32) + 1).reshape([1, 1, 2, 1])
+        result = u.convert(expected * 1609.344, v)
+        np.testing.assert_array_equal(result, expected)
+
     def test_incompatible_units(self):
         u = Unit('m')
         v = Unit('V')
@@ -846,6 +853,42 @@ class Test__inplace(unittest.TestCase):
         converted = c.convert(orig, f, inplace=True)
         np.testing.assert_array_equal(orig, converted)
         self.assertTrue(np.may_share_memory(orig, converted))
+
+    def test_multidim_masked(self):
+        c = Unit('deg_c')
+        f = Unit('deg_f')
+
+        # Manufacture a Fortran-ordered nd array to be converted.
+        orig = np.ma.masked_array(np.arange(4, dtype=np.float32),
+                                  mask=[1, 0, 0, 1]).reshape([2, 2]).T
+
+        # Test arrays are not equal without inplace conversions.
+        converted = c.convert(orig, f)
+
+        msg = "Arrays are not equal"
+        with self.assertRaisesRegexp(AssertionError, msg):
+            np.testing.assert_array_equal(orig.data, converted.data)
+        self.assertFalse(np.may_share_memory(orig, converted))
+
+        # Test inplace conversion alters the original array.
+        converted = c.convert(orig, f, inplace=True)
+        np.testing.assert_array_equal(orig.data, converted.data)
+        self.assertTrue(np.may_share_memory(orig, converted))
+
+    def test_foreign_endian(self):
+        c = Unit('deg_c')
+        f = Unit('deg_f')
+
+        # Manufacture a non-native byte-order array to be converted.
+        orig = np.arange(4, dtype=np.float32).newbyteorder().byteswap()
+
+        msg = ('Unable to convert non-native byte ordered array in-place. '
+               'Consider byte-swapping first.')
+        with self.assertRaisesRegexp(ValueError, msg):
+            converted = c.convert(orig, f, inplace=True)
+
+        # Test we can do this when not-inplace
+        c.convert(orig, f)
 
 
 class TestTimeEncoding(unittest.TestCase):

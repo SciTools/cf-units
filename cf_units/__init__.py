@@ -1827,8 +1827,13 @@ class Unit(_OrderedHashable):
                     # endianness: udunits seems to be tripped up by arrays
                     # with endianness other than native.
                     if result.dtype.byteorder != '=':
-                        result = result.astype(
-                            result.dtype.type)
+                        if inplace:
+                            raise ValueError(
+                                'Unable to convert non-native byte ordered '
+                                'array in-place. Consider byte-swapping '
+                                'first.')
+                        else:
+                            result = result.astype(result.dtype.type)
                     # Strict type check of numpy array.
                     if result.dtype.type not in (np.float32, np.float64):
                         raise TypeError(
@@ -1836,8 +1841,20 @@ class Unit(_OrderedHashable):
                             np.float32, np.float64)
                     ctype = result.dtype.type
                     # Utilise global convenience dictionary
-                    # _cv_convert_array
-                    _cv_convert_array[ctype](ut_converter, result, result)
+                    # _cv_convert_array to convert our array in 1d form
+                    result_tmp = result.ravel(order='A')
+                    # Do the actual conversion.
+                    _cv_convert_array[ctype](
+                            ut_converter, result_tmp, result_tmp)
+                    # If result_tmp was a copy, not a view (i.e. not C
+                    # contiguous), copy the data back to the original.
+                    if not np.shares_memory(result, result_tmp):
+                        result_tmp = result_tmp.reshape(
+                            result.shape, order='A')
+                        if isinstance(result, np.ma.MaskedArray):
+                            result.data[...] = result_tmp
+                        else:
+                            result[...] = result_tmp
                 else:
                     if ctype not in _cv_convert_scalar:
                         raise ValueError('Invalid target type. Can only '
