@@ -47,8 +47,6 @@ udunits_ext = Extension('cf_units._udunits2',
                         libraries=['udunits2'],
                         **extra_extension_args)
 
-long_description = '{}'.format(read('README.rst'))
-
 cmdclass = {'build_ext': build_ext}
 cmdclass.update(versioneer.get_cmdclass())
 
@@ -62,7 +60,8 @@ setup(
     url='https://github.com/SciTools/{}'.format(NAME),
     author='Met Office',
     description='Units of measure as required by the Climate and Forecast (CF) metadata conventions',
-    long_description='{}'.format(read('README.rst')),
+    long_description='{}'.format(read('README.md')),
+    long_description_content_type='text/markdown',
     packages=find_packages(),
     package_data={'cf_units': list(file_walk_relative('cf_units/etc',
                                                       remove='cf_units/'))},
