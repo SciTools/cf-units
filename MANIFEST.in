@@ -1,6 +1,7 @@
 include *.txt
-recursive-include cf_units *.py
-include cf_units/etc/_udunits2.pxd
-include cf_units/etc/_udunits2.pyx
+include *.md
+recursive-include cf_units *.py *.py *.pxd *.pyx
+include cf_units/etc/site.cfg.template
 include CHANGES COPYING COPYING.LESSER INSTALL
 include versioneer.py
+exclude cf_units/etc/site.cfg
