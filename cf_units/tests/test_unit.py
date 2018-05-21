@@ -59,6 +59,11 @@ class Test_unit__creation(unittest.TestCase):
         u = Unit('hours since 1970-01-01 00:00:00', calendar=calendar)
         self.assertEqual(u.calendar, calendar)
 
+    def test_calendar_alias(self):
+        calendar = unit.CALENDAR_NO_LEAP
+        u = Unit('hours since 1970-01-01 00:00:00', calendar=calendar)
+        self.assertEqual(u.calendar, unit.CALENDAR_365_DAY)
+
     def test_no_calendar(self):
         u = Unit('hours since 1970-01-01 00:00:00')
         self.assertEqual(u.calendar, unit.CALENDAR_GREGORIAN)
