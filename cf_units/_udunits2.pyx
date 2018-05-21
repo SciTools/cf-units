@@ -72,9 +72,11 @@ cdef class Unit:
 
     """
     cdef ut_unit *cunit
+    cdef System system
 
     def __cinit__(self):
         self.cunit = NULL
+        self.system = None
 
     def __dealloc__(self):
         ut_free(self.cunit)
@@ -116,11 +118,12 @@ cdef System wrap_system(ut_system* csystem):
     sytem.csystem = csystem
     return sytem
 
-cdef Unit wrap_unit(ut_unit* cunit):
+cdef Unit wrap_unit(System system, ut_unit* cunit):
     if cunit is NULL:
         _raise_error()
     cdef Unit unit = Unit()
     unit.cunit = cunit
+    unit.system = system
     return unit
 
 cdef Converter wrap_converter(cv_converter* cconverter):
@@ -204,11 +207,11 @@ def read_xml(char* path=NULL):
 
 def get_unit_by_name(System system, char* name):
     cdef ut_unit* cunit = ut_get_unit_by_name(system.csystem, name)
-    return wrap_unit(cunit)
+    return wrap_unit(system, cunit)
 
 def clone(Unit unit):
     cdef ut_unit* cunit = ut_clone(unit.cunit)
-    return wrap_unit(cunit)
+    return wrap_unit(unit.system, cunit)
 
 def is_dimensionless(Unit unit):
     return <bint>ut_is_dimensionless(unit.cunit)
@@ -225,43 +228,44 @@ def get_converter(Unit fr, Unit to):
 
 def scale(double factor, Unit unit):
     cdef ut_unit* cunit = ut_scale(factor, unit.cunit)
-    return wrap_unit(cunit)
+    return wrap_unit(unit.system, cunit)
 
 def offset(Unit unit, double offset):
     cdef ut_unit* cunit = ut_offset(unit.cunit, offset)
-    return wrap_unit(cunit)
+    return wrap_unit(unit.system, cunit)
 
 def offset_by_time(Unit unit, double origin):
     cdef ut_unit* cunit = ut_offset_by_time(unit.cunit, origin)
-    return wrap_unit(cunit)
+    return wrap_unit(unit.system, cunit)
 
 def multiply(Unit unit1, Unit unit2):
     cdef ut_unit* cunit = ut_multiply(unit1.cunit, unit2.cunit)
-    return wrap_unit(cunit)
+    return wrap_unit(unit1.system, cunit)
 
 def invert(Unit unit):
     cdef ut_unit* cunit =  ut_invert(unit.cunit)
-    return wrap_unit(cunit)
+    return wrap_unit(unit.system, cunit)
 
 def divide(Unit numer, Unit denom):
     cdef ut_unit* cunit = ut_divide(numer.cunit, denom.cunit)
-    return wrap_unit(cunit)
+    return wrap_unit(numer.system, cunit)
 
 def raise_(Unit unit, int power):
     cdef ut_unit* cunit = ut_raise(unit.cunit, power)
-    return wrap_unit(cunit)
+    return wrap_unit(unit.system, cunit)
 
 def root(Unit unit, int root):
     cdef ut_unit* cunit = ut_root(unit.cunit, root)
-    return wrap_unit(cunit)
+    return wrap_unit(unit.system, cunit)
 
 def log(double base, Unit reference):
     cdef ut_unit* cunit = ut_log(base, reference.cunit)
-    return wrap_unit(cunit)
+    return wrap_unit(reference.system, cunit)
+
 
 def parse(System system, char* string, ut_encoding encoding):
     cdef ut_unit* cunit = ut_parse(system.csystem, string, encoding)
-    return wrap_unit(cunit)
+    return wrap_unit(system, cunit)
 
 def format(Unit unit, unsigned opts=0):
     cdef bytearray buf = bytearray(_STRING_BUFFER_DEPTH)
