@@ -1,8 +1,6 @@
-include *.rst
 include *.txt
 recursive-include cf_units *.py
 include cf_units/etc/_udunits2.pxd
 include cf_units/etc/_udunits2.pyx
 include CHANGES COPYING COPYING.LESSER INSTALL
 include versioneer.py
-exclude cf_units/etc/site.cfg
