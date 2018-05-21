@@ -65,8 +65,6 @@ setup(
     packages=find_packages(),
     package_data={'cf_units': list(file_walk_relative('cf_units/etc',
                                                       remove='cf_units/'))},
-    data_files=[('share/doc/cf_units',
-                 ['COPYING', 'COPYING.LESSER', 'README.rst'])],
     install_requires=install_requires,
     tests_require=['pep8'],
     test_suite='{}.tests'.format(NAME),
