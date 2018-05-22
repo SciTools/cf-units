@@ -3,12 +3,16 @@ from __future__ import absolute_import, division, print_function
 import os
 import sys
 
-from Cython.Distutils import build_ext
 from distutils.sysconfig import get_config_var
 import numpy as np
 from setuptools import setup, Extension, find_packages
 import versioneer
 
+# Default to using cython, but use the .c files if it doesn't exist
+try:
+    from Cython.Build import cythonize
+except ImportError:
+    cythonize = False
 
 NAME = 'cf_units'
 DIR = os.path.abspath(os.path.dirname(__file__))
@@ -40,14 +44,20 @@ if sys.platform.startswith('win'):
 else:
     extra_extension_args = dict(
         runtime_library_dirs=library_dirs)
+
+ext = 'pyx' if cythonize else 'c'
+
 udunits_ext = Extension('cf_units._udunits2',
-                        ['cf_units/_udunits2.pyx'],
+                        ['cf_units/_udunits2.{}'.format(ext)],
                         include_dirs=include_dirs + [np.get_include()],
                         library_dirs=library_dirs,
                         libraries=['udunits2'],
                         **extra_extension_args)
 
-cmdclass = {'build_ext': build_ext}
+if cythonize:
+    [udunits_ext] = cythonize(udunits_ext)
+
+cmdclass = {}
 cmdclass.update(versioneer.get_cmdclass())
 
 require = read('requirements.txt')
