@@ -11,9 +11,8 @@ import versioneer
 # Default to using cython, but use the .c files if it doesn't exist
 try:
     from Cython.Build import cythonize
-    USE_CYTHON = True
 except ImportError:
-    USE_CYTHON = False
+    cythonize = False
 
 NAME = 'cf_units'
 DIR = os.path.abspath(os.path.dirname(__file__))
@@ -46,7 +45,7 @@ else:
     extra_extension_args = dict(
         runtime_library_dirs=library_dirs)
 
-ext = 'pyx' if USE_CYTHON else 'c'
+ext = 'pyx' if cythonize else 'c'
 
 udunits_ext = Extension('cf_units._udunits2',
                         ['cf_units/_udunits2.{}'.format(ext)],
@@ -55,7 +54,7 @@ udunits_ext = Extension('cf_units._udunits2',
                         libraries=['udunits2'],
                         **extra_extension_args)
 
-if USE_CYTHON:
+if cythonize:
     [udunits_ext] = cythonize(udunits_ext)
 
 cmdclass = {}
