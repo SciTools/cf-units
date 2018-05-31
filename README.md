@@ -79,7 +79,7 @@ Documentation can be found at <https://scitools.org.uk/cf_units/docs/latest/>.
 
 ## License and copyright
 
-Cartopy is licensed under GNU Lesser General Public License (LGPLv3).
+cf_units is licensed under GNU Lesser General Public License (LGPLv3).
 
 Development occurs on GitHub at <https://github.com/SciTools/cf_units>, with a
 contributor's license agreement (CLA) that can be found at
