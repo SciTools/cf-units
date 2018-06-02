@@ -14,7 +14,7 @@ try:
 except ImportError:
     cythonize = False
 
-NAME = 'cf_units'
+NAME = 'cf-units'
 DIR = os.path.abspath(os.path.dirname(__file__))
 
 
@@ -77,7 +77,7 @@ setup(
                                                       remove='cf_units/'))},
     install_requires=install_requires,
     tests_require=['pep8'],
-    test_suite='{}.tests'.format(NAME),
+    test_suite='cf_units.tests',
     cmdclass=cmdclass,
     ext_modules=[udunits_ext]
     )
