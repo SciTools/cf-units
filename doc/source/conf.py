@@ -47,7 +47,7 @@ templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'
 
-project = u'cf_units'
+project = u'cf-units'
 copyright = 'British Crown Copyright 2015 - 2018, Met Office'
 
 
