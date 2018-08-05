@@ -1,9 +1,10 @@
 language: python
 
-python:
-  - 2.7
-  - 3.6
-  - 3.7
+matrix:
+  include:
+  - env: PY=2.7
+  - env: PY=3.6
+  - env: PY=3.7
 
 install:
   # Install miniconda
@@ -23,7 +24,7 @@ install:
   - conda update --quiet conda
   - conda config --add channels conda-forge
   - ENV_NAME='test-environment'
-  - conda create --name $ENV_NAME python=$TRAVIS_PYTHON_VERSION udunits2 --file requirements.txt --file requirements-dev.txt
+  - conda create --name $ENV_NAME python=$PY udunits2 --file requirements.txt --file requirements-dev.txt
   - source activate $ENV_NAME
 
   # Output debug info.
