@@ -121,6 +121,7 @@ CALENDAR_ALL_LEAP = 'all_leap'
 CALENDAR_365_DAY = '365_day'
 CALENDAR_366_DAY = '366_day'
 CALENDAR_360_DAY = '360_day'
+CALENDAR_NONE = 'none'
 
 #: The calendars recognised by cf_units.
 #: These are accessible as strings, or as constants in the form
@@ -129,7 +130,7 @@ CALENDAR_360_DAY = '360_day'
 CALENDARS = [CALENDAR_STANDARD, CALENDAR_GREGORIAN,
              CALENDAR_PROLEPTIC_GREGORIAN, CALENDAR_NO_LEAP, CALENDAR_JULIAN,
              CALENDAR_ALL_LEAP, CALENDAR_365_DAY, CALENDAR_366_DAY,
-             CALENDAR_360_DAY]
+             CALENDAR_360_DAY, CALENDAR_NONE]
 
 #: Where calendars have multiple names, we map the alias to the
 #: definitive form.
