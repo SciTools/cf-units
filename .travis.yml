@@ -37,6 +37,6 @@ install:
   - pip install -e .
 
 script:
-    - pytest --pyargs --cov
+  - pytest --pyargs --cov
 
 after_success: coveralls
