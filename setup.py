@@ -45,6 +45,11 @@ else:
     extra_extension_args = dict(
         runtime_library_dirs=library_dirs)
 
+# Enable cython coverage
+cython_coverage_enabled = os.environ.get('CYTHON_COVERAGE', None)
+if cython_coverage_enabled:
+    extra_extension_args.update({'define_macros': [('CYTHON_TRACE_NOGIL', '1')]})
+
 ext = 'pyx' if cythonize else 'c'
 
 udunits_ext = Extension('cf_units._udunits2',
@@ -55,7 +60,7 @@ udunits_ext = Extension('cf_units._udunits2',
                         **extra_extension_args)
 
 if cythonize:
-    [udunits_ext] = cythonize(udunits_ext)
+    [udunits_ext] = cythonize(udunits_ext, compiler_directives={'linetrace': True})
 
 cmdclass = {}
 cmdclass.update(versioneer.get_cmdclass())

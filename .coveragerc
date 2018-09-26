@@ -4,13 +4,13 @@
 
 [run]
 branch = True
+include = 
+    cf_units/*
 omit = 
-    setup.py
-    versioneer.py
     cf_units/_version.py
     cf_units/etc/*
     cf_units/tests/*
-    .eggs
+plugins = Cython.Coverage
 
 
 [report]

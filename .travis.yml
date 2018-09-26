@@ -27,16 +27,18 @@ install:
   - conda create --name $ENV_NAME python=$PY udunits2 --file requirements.txt --file requirements-dev.txt
   - source activate $ENV_NAME
 
+  # Enable coverage of cython.
+  - export CYTHON_COVERAGE=1
+
   # Output debug info.
   - conda list
   - conda info -a
 
-  # cf_units.
+  # Install cf_units.
   - PREFIX=$HOME/miniconda/envs/$ENV_NAME
-
   - pip install -e .
 
 script:
-  - coverage run -m pytest cf_units cf_units
+  - pytest --pyargs --cov
 
 after_success: coveralls
