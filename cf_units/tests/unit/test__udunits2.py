@@ -23,7 +23,7 @@ exception where expected."""
 from __future__ import (absolute_import, division, print_function)
 from six.moves import (filter, input, map, range, zip)  # noqa
 
-import os
+import errno
 import unittest
 
 import numpy as np
@@ -50,7 +50,7 @@ class Test_get_system(unittest.TestCase):
         ex = cm.exception
 
         self.assertEqual(ex.status_msg(), 'UT_OPEN_ARG')
-        self.assertEqual(ex.errnum, os.errno.ENOENT)
+        self.assertEqual(ex.errnum, errno.ENOENT)
 
 
 class Test_system(unittest.TestCase):
