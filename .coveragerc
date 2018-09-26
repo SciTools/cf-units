@@ -11,6 +11,7 @@ omit =
     cf_units/etc/*
     cf_units/tests/*
     .eggs
+plugins = Cython.Coverage
 
 
 [report]
