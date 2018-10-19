@@ -210,6 +210,21 @@ class Test_definition(unittest.TestCase):
         self.assertEqual(u.definition, unit._NO_UNIT_SYMBOL)
 
 
+class Test_latex(unittest.TestCase):
+
+    def test_basic(self):
+        u = Unit('kg kg-1')
+        self.assertEqual(u.latex(), 'kg{\cdot}kg^{-1}')
+
+    def test_separator(self):
+        u = Unit('kg kg-1')
+        self.assertEqual(u.latex(separator=' '), 'kg kg^{-1}')
+
+    def test_micro(self):
+        u = Unit('microW m-2')
+        self.assertEqual(u.latex(), '{\mu}W{\cdot}m{-2}')
+
+
 class Test__apply_offset(unittest.TestCase):
 
     def test_add_integer_offset(self):
