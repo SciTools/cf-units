@@ -1317,7 +1317,7 @@ class Unit(_OrderedHashable):
             >>> import cf_units
             >>> u = cf_units.Unit('kg kg-1')
             >>> u.latex()
-            'kg{\cdot}kg^{-1}'
+            '{kg}{\cdot}{kg}^{-1}'
 
         """
 
