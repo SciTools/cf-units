@@ -33,6 +33,7 @@ import six
 from contextlib import contextmanager
 import copy
 import os.path
+import re
 import sys
 import warnings
 
@@ -1292,6 +1293,59 @@ class Unit(_OrderedHashable):
         else:
             result = self.format(UT_DEFINITION)
         return result
+
+    def latex(self, separator='{\cdot}'):
+        """
+        *(read-only)* A latex consumable string form of the unit.
+
+        Formats the binary unit into a string representation that
+        can be formatted by latex. This requires the str(unit)
+        result as all other forms using method :func:`cf_units.Unit.format`
+        resolve units like 'kg kg-1' as '1'.
+
+        Args:
+
+        * separator (str):
+            The string used to stitch the components of the unit together.
+            Defaults to '\cdot'.
+
+        Returns:
+            string.
+
+        For example:
+
+            >>> import cf_units
+            >>> u = cf_units.Unit('kg kg-1')
+            >>> u.latex()
+            'kg{\cdot}kg^{-1}'
+
+        """
+
+        def conv_latex(unitstr, regexp):
+            match = regexp.match(unitstr)
+            if match:
+                # group(0) is matching string
+                # group(2) is caret if it exists
+                (unit, power) = match.group(1, 3)
+                # Replace micro with \mu, only prefix that requires this
+                if unit.startswith('micro'):
+                    newunitstr = '{\mu}{' + unit.replace('micro', '') + '}'
+                else:
+                    newunitstr = '{' + unit + '}'
+                # Add power to string if it exists
+                if power:
+                    newunitstr += '^{' + power + '}'
+            else:
+                # Return original string if it doesn't match regexp
+                newunitstr = '{' + unitstr + '}'
+            return newunitstr
+
+        # Must use str(unit) here as unit.definition resolves units to
+        # closest form, e.g. kg kg^-1 => 1
+        re_unit = re.compile('(^[^-+\d\^]+)([\^]?)([-+]?[\d]*)$')
+        latex_str = [conv_latex(unit, re_unit) for unit in str(self).split()]
+        # Join using pre-defined separator
+        return separator.join(latex_str)
 
     def offset_by_time(self, origin):
         """
