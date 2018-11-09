@@ -9,7 +9,7 @@ cf-units is available using conda for the following platforms:
  * Windows 32-bit and 64-bit.
 
 To install cf-units using conda, you must first download and install conda,
-for example from http://conda.pydata.org/miniconda.html.
+for example from https://conda.io/miniconda.html.
 
 Once conda is installed, you can install cf-units using conda on any platform with
 the following command::
@@ -17,19 +17,19 @@ the following command::
   conda install -c conda-forge cf-units
 
 Further documentation on using conda and the features it provides can be found
-at http://conda.pydata.org/docs/intro.html.
+at http://conda.io/docs/.
 
 
 Installing from source
 ----------------------
 
 The latest cf-units source release is available from
-https://github.com/SciTools/cf-units.
+https://github.com/SciTools/cf-units/releases.
 
-cf-units makes use of Numpy, netCDF4-python, Cython, and Unidata udunits2.
+cf-units makes use of cftime, cython, numpy, setuptools, six and udunits2.
 These dependencies must be in place before you can successfully install
 cf-units. Once you have satisfied the requirements detailed below,
-extract the cf-units source package, cd to the new directory, and enter::
+extract the cf-units source package, change to the new directory, and enter::
 
   python setup.py install
 
@@ -55,34 +55,40 @@ If you are installing dependencies with a package manager on Linux,
 you may need to install the development packages (look for a "-dev"
 postfix) in addition to the core packages.
 
-python 2.7 or later (http://www.python.org/)
-    cf-units requires Python 2.7 or later, but is not currently compatible with
-    Python 3.
+python 2.7 or later (https://www.python.org/)
+    cf-units requires Python 2.7 or later.
 
-numpy 1.6 or later (http://numpy.scipy.org/)
+cftime 1.0.0 or later (https://unidata.github.io/cftime/)
+    Python package for decoding time units conforming to
+    Climate and Forecasting (CF) netCDF conventions.
+
+cython (https://pypi.org/project/Cython/)
+    Optimising static compiler for Python and the extended Cython
+    programming language.
+
+numpy 1.14 or later (https://pypi.org/project/numpy/)
     Python package for scientific computing including a powerful N-dimensional
     array object.
 
-netcdf4-python 0.9.9 or later (http://netcdf4-python.googlecode.com/)
-    Python interface to the netCDF version 4 C library.
-
-udunits2 2.1.24 or later
-    (http://www.unidata.ucar.edu/downloads/udunits/index.jsp)
+udunits2 2.2.26 or later (https://www.unidata.ucar.edu/downloads/udunits/index.jsp)
     C library for units of physical quantities.
 
-setuptools 0.6c11 or later (http://pypi.python.org/pypi/setuptools/)
+setuptools (https://pypi.org/project/setuptools/)
     Python package for installing/removing python packages.
+
+six (https://pypi.org/project/six/)
+    Python 2 and 3 compatibility library.
 
 
 Optional
 ''''''''
 These packages are required for the full cf-units test suite to run.
 
-pep8 1.4.6* (https://pypi.python.org/pypi/pep8)
+pep8 1.4.6* (https://pypi.org/project/pep8/)
     Python package for software testing.
 
-nose 1.1.2 or later (http://nose.readthedocs.org/en/latest/)
-    Python package for software testing.
+pytest (https://pypi.org/project/pytest/)
+    Python testing framework.
 
 * Those packages have been tested with a specific build.
 
@@ -98,4 +104,3 @@ specify a non-standard location for your udunits xml database::
 
 An example configuration file is available in ``cf_units/etc/site.cfg.template``.
 See :py:func:`cf_units.config` for further configuration options.
-
