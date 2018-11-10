@@ -365,11 +365,10 @@ def julian_day2date(julian_day, calendar):
 
         >>> import cf_units
         >>> import datetime
-        >>> cf_units.julian_day2date(
-        ...    cf_units.date2julian_day(datetime.datetime(1970, 1, 1, 0, 0, 0),
-        ...                             cf_units.CALENDAR_STANDARD),
-        ...     cf_units.CALENDAR_STANDARD)
-        datetime.datetime(1970, 1, 1, 0, 0)
+        >>> dt = datetime.datetime(1970, 1, 1, 0, 0, 0)
+        >>> jd = cf_units.date2julian_day(dt, cf_units.CALENDAR_STANDARD)
+        >>> print(cf_units.julian_day2date(jd, cf_units.CALENDAR_STANDARD))
+        1970-01-01 00:00:00
 
     """
 
@@ -474,7 +473,7 @@ def date2num(date, unit, calendar):
 
 def _discard_microsecond(date):
     """
-    Return a date with the microsecond componenet discarded.
+    Return a date with the microsecond component discarded.
 
     Works for scalars, sequences and numpy arrays. Returns a scalar
     if input is a scalar, else returns a numpy array.
@@ -549,13 +548,13 @@ def num2date(time_value, unit, calendar):
 
         >>> import cf_units
         >>> import datetime
-        >>> cf_units.num2date(6, 'hours since 1970-01-01 00:00:00',
-        ...                   cf_units.CALENDAR_STANDARD)
-        datetime.datetime(1970, 1, 1, 6, 0)
-        >>> cf_units.num2date([6, 7], 'hours since 1970-01-01 00:00:00',
-        ...                   cf_units.CALENDAR_STANDARD)
-        array([datetime.datetime(1970, 1, 1, 6, 0),
-               datetime.datetime(1970, 1, 1, 7, 0)], dtype=object)
+        >>> print(cf_units.num2date(6, 'hours since 1970-01-01 00:00:00',
+        ...                         cf_units.CALENDAR_STANDARD))
+        1970-01-01 06:00:00
+        >>> dts = cf_units.num2date([6, 7], 'hours since 1970-01-01 00:00:00',
+        ...                         cf_units.CALENDAR_STANDARD)
+        >>> [str(dt) for dt in dts]
+        ['1970-01-01 06:00:00', '1970-01-01 07:00:00']
 
     """
 
@@ -579,7 +578,7 @@ def _num2date_to_nearest_second(time_value, utime):
     * time_value (float):
         Numeric time value/s.
     * utime (cftime.utime):
-        netcdf.utime object with which to perform the conversion/s.
+        cftime.utime object with which to perform the conversion/s.
 
     Returns:
         datetime, or numpy.ndarray of datetime object.
@@ -1887,8 +1886,8 @@ class Unit(_OrderedHashable):
             >>> u = cf_units.Unit('hours since 1970-01-01 00:00:00',
             ...                   calendar=cf_units.CALENDAR_STANDARD)
             >>> ut = u.utime()
-            >>> ut.num2date(2)
-            datetime.datetime(1970, 1, 1, 2, 0, 0, 6)
+            >>> print(ut.num2date(2))
+            1970-01-01 02:00:00
 
         """
         if self.calendar is None:
@@ -1935,7 +1934,7 @@ class Unit(_OrderedHashable):
             >>> u = cf_units.Unit('hours since 1970-01-01 00:00:00',
             ...                   calendar=cf_units.CALENDAR_STANDARD)
             >>> u.date2num(datetime.datetime(1970, 1, 1, 5))
-            5.00000000372529
+            4.999999999998181
             >>> u.date2num([datetime.datetime(1970, 1, 1, 5),
             ...             datetime.datetime(1970, 1, 1, 6)])
             array([5., 6.])
@@ -1978,11 +1977,11 @@ class Unit(_OrderedHashable):
             >>> import cf_units
             >>> u = cf_units.Unit('hours since 1970-01-01 00:00:00',
             ...                   calendar=cf_units.CALENDAR_STANDARD)
-            >>> u.num2date(6)
-            datetime.datetime(1970, 1, 1, 6, 0)
-            >>> u.num2date([6, 7])
-            array([datetime.datetime(1970, 1, 1, 6, 0),
-                   datetime.datetime(1970, 1, 1, 7, 0)], dtype=object)
+            >>> print(u.num2date(6))
+            1970-01-01 06:00:00
+            >>> dts = u.num2date([6, 7])
+            >>> [str(dt) for dt in dts]
+            ['1970-01-01 06:00:00', '1970-01-01 07:00:00']
 
         """
         cdf_utime = self.utime()
