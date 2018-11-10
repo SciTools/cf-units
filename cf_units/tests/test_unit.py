@@ -26,6 +26,7 @@ import unittest
 import copy
 import datetime as datetime
 import operator
+import six
 
 try:
     from operator import truediv
@@ -35,6 +36,7 @@ except ImportError:
 import numpy as np
 
 import cf_units as unit
+from cf_units import suppress_errors
 
 
 Unit = unit.Unit
@@ -51,7 +53,7 @@ class Test_unit__creation(unittest.TestCase):
             self.assertEqual(u.name, 'meter')
 
     def test_not_valid_unit_str(self):
-        with self.assertRaisesRegexp(ValueError, 'Failed to parse unit'):
+        with six.assertRaisesRegex(self, ValueError, 'Failed to parse unit'):
             Unit('wibble')
 
     def test_calendar(self):
@@ -69,7 +71,7 @@ class Test_unit__creation(unittest.TestCase):
         self.assertEqual(u.calendar, unit.CALENDAR_GREGORIAN)
 
     def test_unsupported_calendar(self):
-        with self.assertRaisesRegexp(ValueError, 'unsupported calendar'):
+        with six.assertRaisesRegex(self, ValueError, 'unsupported calendar'):
             Unit('hours since 1970-01-01 00:00:00', calendar='wibble')
 
 
@@ -222,7 +224,8 @@ class Test__apply_offset(unittest.TestCase):
 
     def test_not_numerical_offset(self):
         u = Unit('meter')
-        with self.assertRaisesRegexp(TypeError, 'unsupported operand type'):
+        with six.assertRaisesRegex(self, TypeError,
+                                   'unsupported operand type'):
             operator.add(u, 'not_a_number')
 
     def test_unit_unknown(self):
@@ -231,7 +234,7 @@ class Test__apply_offset(unittest.TestCase):
 
     def test_no_unit(self):
         u = Unit('no unit')
-        with self.assertRaisesRegexp(ValueError, 'Cannot offset'):
+        with six.assertRaisesRegex(self, ValueError, 'Cannot offset'):
             operator.add(u, 10)
 
 
@@ -244,24 +247,24 @@ class Test_offset_by_time(unittest.TestCase):
 
     def test_not_numerical_offset(self):
         u = Unit('hour')
-        with self.assertRaisesRegexp(TypeError, 'numeric type'):
+        with six.assertRaisesRegex(self, TypeError, 'numeric type'):
             u.offset_by_time('not_a_number')
 
     def test_not_time_unit(self):
         u = Unit('mile')
-        with self.assertRaisesRegexp(ValueError, 'Failed to offset'):
+        with six.assertRaisesRegex(self, ValueError, 'Failed to offset'):
             u.offset_by_time(10)
 
     def test_unit_unknown(self):
         u = Unit('unknown')
-        msg = 'Failed to offset'
-        with self.assertRaisesRegexp(ValueError, msg), unit.suppress_errors():
+        emsg = 'Failed to offset'
+        with six.assertRaisesRegex(self, ValueError, emsg), suppress_errors():
             u.offset_by_time(unit.encode_time(1970, 1, 1, 0, 0, 0))
 
     def test_no_unit(self):
         u = Unit('no unit')
-        msg = 'Failed to offset'
-        with self.assertRaisesRegexp(ValueError, msg), unit.suppress_errors():
+        emsg = 'Failed to offset'
+        with six.assertRaisesRegex(self, ValueError, emsg), suppress_errors():
             u.offset_by_time(unit.encode_time(1970, 1, 1, 0, 0, 0))
 
 
@@ -282,7 +285,7 @@ class Test_invert(unittest.TestCase):
 
     def test_invert_no_unit(self):
         u = Unit('no unit')
-        with self.assertRaisesRegexp(ValueError, 'Cannot invert'):
+        with six.assertRaisesRegex(self, ValueError, 'Cannot invert'):
             u.invert()
 
 
@@ -301,18 +304,18 @@ class Test_root(unittest.TestCase):
 
     def test_not_numeric(self):
         u = Unit('volt')
-        with self.assertRaisesRegexp(TypeError, 'numeric type'):
+        with six.assertRaisesRegex(self, TypeError, 'numeric type'):
             u.offset_by_time('not_a_number')
 
     def test_not_integer(self):
         u = Unit('volt')
-        with self.assertRaisesRegexp(TypeError, 'integer .* required'):
+        with six.assertRaisesRegex(self, TypeError, 'integer .* required'):
             u.root(1.2)
 
     def test_meaningless_operation(self):
         u = Unit('volt')
-        msg = 'UT_MEANINGLESS'
-        with self.assertRaisesRegexp(ValueError, msg), unit.suppress_errors():
+        emsg = 'UT_MEANINGLESS'
+        with six.assertRaisesRegex(self, ValueError, emsg), suppress_errors():
             u.root(2)
 
     def test_unit_unknown(self):
@@ -321,7 +324,7 @@ class Test_root(unittest.TestCase):
 
     def test_no_unit(self):
         u = Unit('no unit')
-        with self.assertRaisesRegexp(ValueError, 'Cannot take the root'):
+        with six.assertRaisesRegex(self, ValueError, 'Cannot take the root'):
             u.root(2)
 
 
@@ -337,7 +340,7 @@ class Test_log(unittest.TestCase):
 
     def test_not_numeric(self):
         u = Unit('hPa')
-        with self.assertRaisesRegexp(TypeError, 'numeric type'):
+        with six.assertRaisesRegex(self, TypeError, 'numeric type'):
             u.log('not_a_number')
 
     def test_unit_unknown(self):
@@ -346,7 +349,8 @@ class Test_log(unittest.TestCase):
 
     def test_no_unit(self):
         u = Unit('no unit')
-        with self.assertRaisesRegexp(ValueError, 'Cannot take the logarithm'):
+        emsg = 'Cannot take the logarithm'
+        with six.assertRaisesRegex(self, ValueError, emsg):
             u.log(10)
 
 
@@ -367,7 +371,7 @@ class Test_multiply(unittest.TestCase):
 
     def test_multiply_not_numeric(self):
         u = Unit('amp')
-        with self.assertRaisesRegexp(ValueError, 'Failed to parse unit'):
+        with six.assertRaisesRegex(self, ValueError, 'Failed to parse unit'):
             operator.mul(u, 'not_a_number')
 
     def test_multiply_with_unknown_unit(self):
@@ -379,14 +383,14 @@ class Test_multiply(unittest.TestCase):
     def test_multiply_with_no_unit(self):
         u = Unit('meters')
         v = Unit('no unit')
-        with self.assertRaisesRegexp(ValueError, 'Cannot multiply'):
+        with six.assertRaisesRegex(self, ValueError, 'Cannot multiply'):
             operator.mul(u, v)
             operator.mul(v, u)
 
     def test_multiply_unknown_and_no_unit(self):
         u = Unit('unknown')
         v = Unit('no unit')
-        with self.assertRaisesRegexp(ValueError, 'Cannot multiply'):
+        with six.assertRaisesRegex(self, ValueError, 'Cannot multiply'):
             operator.mul(u, v)
             operator.mul(v, u)
 
@@ -408,7 +412,7 @@ class Test_divide(unittest.TestCase):
 
     def test_divide_not_numeric(self):
         u = Unit('watts')
-        with self.assertRaisesRegexp(ValueError, 'Failed to parse unit'):
+        with six.assertRaisesRegex(self, ValueError, 'Failed to parse unit'):
             truediv(u, 'not_a_number')
 
     def test_divide_with_unknown_unit(self):
@@ -420,14 +424,14 @@ class Test_divide(unittest.TestCase):
     def test_divide_with_no_unit(self):
         u = Unit('meters')
         v = Unit('no unit')
-        with self.assertRaisesRegexp(ValueError, 'Cannot divide'):
+        with six.assertRaisesRegex(self, ValueError, 'Cannot divide'):
             truediv(u, v)
             truediv(v, u)
 
     def test_divide_unknown_and_no_unit(self):
         u = Unit('unknown')
         v = Unit('no unit')
-        with self.assertRaisesRegexp(ValueError, 'Cannot divide'):
+        with six.assertRaisesRegex(self, ValueError, 'Cannot divide'):
             truediv(u, v)
             truediv(v, u)
 
@@ -458,20 +462,21 @@ class Test_power(unittest.TestCase):
 
     def test_not_numeric(self):
         u = Unit('m^2')
-        with self.assertRaisesRegexp(TypeError, 'numeric value is required'):
+        emsg = 'numeric value is required'
+        with six.assertRaisesRegex(self, TypeError, emsg):
             operator.pow(u, 'not_a_number')
 
     def test_bad_power(self):
         u = Unit('m^2')
-        msg = 'Cannot raise .* by a decimal'
-        with self.assertRaisesRegexp(ValueError, msg):
+        emsg = 'Cannot raise .* by a decimal'
+        with six.assertRaisesRegex(self, ValueError, emsg):
             operator.pow(u, 0.4)
 
     def test_unit_power(self):
         u = Unit('amp')
         v = Unit('m')
-        msg = 'argument must be a string or a number'
-        with self.assertRaisesRegexp(TypeError, msg):
+        emsg = 'argument must be a string or a number'
+        with six.assertRaisesRegex(self, TypeError, emsg):
             operator.pow(u, v)
 
 
@@ -487,7 +492,8 @@ class Test_power__unknown(unittest.TestCase):
         self.assertEqual(self.u ** 3.0, Unit('unknown'))
 
     def test_not_numeric(self):
-        with self.assertRaisesRegexp(TypeError, 'numeric value is required'):
+        emsg = 'numeric value is required'
+        with six.assertRaisesRegex(self, TypeError, emsg):
             operator.pow(self.u, 'not_a_number')
 
     def test_bad_power(self):
@@ -495,8 +501,8 @@ class Test_power__unknown(unittest.TestCase):
 
     def test_unit_power(self):
         v = Unit('m')
-        msg = 'argument must be a string or a number'
-        with self.assertRaisesRegexp(TypeError, msg):
+        emsg = 'argument must be a string or a number'
+        with six.assertRaisesRegex(self, TypeError, emsg):
             operator.pow(self.u, v)
 
 
@@ -506,28 +512,29 @@ class Test_power__no_unit(unittest.TestCase):
         self.u = Unit('no unit')
 
     def test_integer_power(self):
-        msg = "Cannot raise .* a 'no-unit'"
-        with self.assertRaisesRegexp(ValueError, msg):
+        emsg = "Cannot raise .* a 'no-unit'"
+        with six.assertRaisesRegex(self, ValueError, emsg):
             operator.pow(self.u, 2)
 
     def test_float_power(self):
-        msg = "Cannot raise .* a 'no-unit'"
-        with self.assertRaisesRegexp(ValueError, msg):
+        emsg = "Cannot raise .* a 'no-unit'"
+        with six.assertRaisesRegex(self, ValueError, emsg):
             operator.pow(self.u, 3.0)
 
     def test_not_numeric(self):
-        with self.assertRaisesRegexp(TypeError, 'numeric value is required'):
+        emsg = 'numeric value is required'
+        with six.assertRaisesRegex(self, TypeError, emsg):
             operator.pow(self.u, 'not_a_number')
 
     def test_bad_power(self):
-        msg = "Cannot raise .* a 'no-unit'"
-        with self.assertRaisesRegexp(ValueError, msg):
+        emsg = "Cannot raise .* a 'no-unit'"
+        with six.assertRaisesRegex(self, ValueError, emsg):
             operator.pow(self.u, 0.4)
 
     def test_unit_power(self):
         v = Unit('m')
-        msg = 'argument must be a string or a number'
-        with self.assertRaisesRegexp(TypeError, msg):
+        emsg = 'argument must be a string or a number'
+        with six.assertRaisesRegex(self, TypeError, emsg):
             operator.pow(self.u, v)
 
 
@@ -664,8 +671,8 @@ class Test_convert(unittest.TestCase):
     def test_incompatible_units(self):
         u = Unit('m')
         v = Unit('V')
-        msg = 'Unable to convert'
-        with self.assertRaisesRegexp(ValueError, msg):
+        emsg = 'Unable to convert'
+        with six.assertRaisesRegex(self, ValueError, emsg):
             u.convert(1.0, v)
 
     def test_unknown_units(self):
@@ -673,12 +680,12 @@ class Test_convert(unittest.TestCase):
         v = Unit('no unit')
         m = Unit('m')
         val = 1.0
-        msg = 'Unable to convert'
-        with self.assertRaisesRegexp(ValueError, msg):
+        emsg = 'Unable to convert'
+        with six.assertRaisesRegex(self, ValueError, emsg):
             u.convert(val, m)
-        with self.assertRaisesRegexp(ValueError, msg):
+        with six.assertRaisesRegex(self, ValueError, emsg):
             m.convert(val, u)
-        with self.assertRaisesRegexp(ValueError, msg):
+        with six.assertRaisesRegex(self, ValueError, emsg):
             u.convert(val, v)
 
     def test_no_units(self):
@@ -686,12 +693,12 @@ class Test_convert(unittest.TestCase):
         v = Unit('unknown')
         m = Unit('m')
         val = 1.0
-        msg = 'Unable to convert'
-        with self.assertRaisesRegexp(ValueError, msg):
+        emsg = 'Unable to convert'
+        with six.assertRaisesRegex(self, ValueError, emsg):
             u.convert(val, m)
-        with self.assertRaisesRegexp(ValueError, msg):
+        with six.assertRaisesRegex(self, ValueError, emsg):
             m.convert(val, u)
-        with self.assertRaisesRegexp(ValueError, msg):
+        with six.assertRaisesRegex(self, ValueError, emsg):
             u.convert(val, v)
 
     def test_convert_time_units(self):
@@ -706,8 +713,8 @@ class Test_convert(unittest.TestCase):
         u = Unit('seconds since 1978-09-01 00:00:00', calendar='360_day')
         v = Unit('seconds since 1979-04-01 00:00:00', calendar='gregorian')
         u1point = np.array([54432000.], dtype=np.float32)
-        msg = 'Unable to convert'
-        with self.assertRaisesRegexp(ValueError, msg):
+        emsg = 'Unable to convert'
+        with six.assertRaisesRegex(self, ValueError, emsg):
             u.convert(u1point, v)
 
 
@@ -814,8 +821,8 @@ class Test__immutable(unittest.TestCase):
     def test_immutable(self):
         u = Unit('m')
         for name in dir(u):
-            msg = 'Instances .* are immutable'
-            with self.assertRaisesRegexp(AttributeError, msg):
+            emsg = 'Instances .* are immutable'
+            with six.assertRaisesRegex(self, AttributeError, emsg):
                 self._set_attr(u, name)
 
     def test_common_hash(self):
@@ -849,8 +856,8 @@ class Test__inplace(unittest.TestCase):
         # Test arrays are not equal without inplace conversions.
         converted = c.convert(orig, f)
 
-        msg = 'Arrays are not equal'
-        with self.assertRaisesRegexp(AssertionError, msg):
+        emsg = 'Arrays are not equal'
+        with six.assertRaisesRegex(self, AssertionError, emsg):
             np.testing.assert_array_equal(orig, converted)
         self.assertFalse(np.may_share_memory(orig, converted))
 
@@ -870,8 +877,8 @@ class Test__inplace(unittest.TestCase):
         # Test arrays are not equal without inplace conversions.
         converted = c.convert(orig, f)
 
-        msg = "Arrays are not equal"
-        with self.assertRaisesRegexp(AssertionError, msg):
+        emsg = "Arrays are not equal"
+        with six.assertRaisesRegex(self, AssertionError, emsg):
             np.testing.assert_array_equal(orig.data, converted.data)
         self.assertFalse(np.may_share_memory(orig, converted))
 
@@ -887,9 +894,9 @@ class Test__inplace(unittest.TestCase):
         # Manufacture a non-native byte-order array to be converted.
         orig = np.arange(4, dtype=np.float32).newbyteorder().byteswap()
 
-        msg = ('Unable to convert non-native byte ordered array in-place. '
-               'Consider byte-swapping first.')
-        with self.assertRaisesRegexp(ValueError, msg):
+        emsg = ('Unable to convert non-native byte ordered array in-place. '
+                'Consider byte-swapping first.')
+        with six.assertRaisesRegex(self, ValueError, emsg):
             converted = c.convert(orig, f, inplace=True)
 
         # Test we can do this when not-inplace
@@ -946,8 +953,8 @@ class Test_as_unit(unittest.TestCase):
 
     def test_not_unit_str(self):
         u_str = 'wibble'
-        msg = 'Failed to parse unit'
-        with self.assertRaisesRegexp(ValueError, msg):
+        emsg = 'Failed to parse unit'
+        with six.assertRaisesRegex(self, ValueError, emsg):
             unit.as_unit(u_str)
 
     def test_unknown_str(self):
