@@ -1294,7 +1294,7 @@ class Unit(_OrderedHashable):
             result = self.format(UT_DEFINITION)
         return result
 
-    def latex(self, separator='{\\cdot}'):
+    def latex(self, separator='{\cdot}'):
         """
         *(read-only)* A latex consumable string form of the unit.
 
@@ -1317,7 +1317,7 @@ class Unit(_OrderedHashable):
             >>> import cf_units
             >>> u = cf_units.Unit('kg kg-1')
             >>> u.latex()
-            '{kg}{\\cdot}{kg}^{-1}'
+            '{kg}{\cdot}{kg}^{-1}'
 
         """
 
@@ -1329,7 +1329,7 @@ class Unit(_OrderedHashable):
                 (unit, power) = match.group(1, 3)
                 # Replace micro with \mu, only prefix that requires this
                 if unit.startswith('micro'):
-                    newunitstr = '{\\mu}{' + unit.replace('micro', '') + '}'
+                    newunitstr = '{\mu}{' + unit.replace('micro', '') + '}'
                 else:
                     newunitstr = '{' + unit + '}'
                 # Add power to string if it exists
@@ -1342,7 +1342,7 @@ class Unit(_OrderedHashable):
 
         # Must use str(unit) here as unit.definition resolves units to
         # closest form, e.g. kg kg^-1 => 1
-        re_unit = re.compile('(^[^-+\\d\\^]+)([\\^]?)([-+]?[\\d]*)$')
+        re_unit = re.compile('(^[^-+\d\^]+)([\^]?)([-+]?[\d]*)$')
         latex_str = [conv_latex(unit, re_unit) for unit in str(self).split()]
         # Join using pre-defined separator
         return separator.join(latex_str)
