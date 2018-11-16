@@ -1514,7 +1514,8 @@ class Unit(_OrderedHashable):
             raise ValueError("Cannot %s a 'no-unit'." % op_label)
 
         if self.is_unknown() or other.is_unknown():
-            result = _Unit(_CATEGORY_UNKNOWN, None)
+            result = _Unit(_CATEGORY_UNKNOWN, _ud.NULL_UNIT,
+                           origin=_UNKNOWN_UNIT_STRING)
         else:
             try:
                 ut_unit = op_func(self.ut_unit, other.ut_unit)
