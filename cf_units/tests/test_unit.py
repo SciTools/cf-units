@@ -373,8 +373,13 @@ class Test_multiply(unittest.TestCase):
     def test_multiply_with_unknown_unit(self):
         u = Unit('unknown')
         v = Unit('meters')
+        self.assertIsNotNone
         self.assertTrue((u * v).is_unknown())
         self.assertTrue((v * u).is_unknown())
+        self.assertIsNotNone((u * v).origin)
+        self.assertIsNotNone((v * u).origin)
+        self.assertIsNotNone((u * v).ut_unit)
+        self.assertIsNotNone((v * u).ut_unit)
 
     def test_multiply_with_no_unit(self):
         u = Unit('meters')
