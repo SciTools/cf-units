@@ -373,13 +373,12 @@ class Test_multiply(unittest.TestCase):
     def test_multiply_with_unknown_unit(self):
         u = Unit('unknown')
         v = Unit('meters')
-        self.assertIsNotNone
         self.assertTrue((u * v).is_unknown())
         self.assertTrue((v * u).is_unknown())
-        self.assertIsNotNone((u * v).origin)
-        self.assertIsNotNone((v * u).origin)
-        self.assertIsNotNone((u * v).ut_unit)
-        self.assertIsNotNone((v * u).ut_unit)
+        self.assertEqual((u * v).origin, unit._UNKNOWN_UNIT_STRING)
+        self.assertEqual((v * u).origin, unit._UNKNOWN_UNIT_STRING)
+        self.assertEqual((u * v).ut_unit, unit._ud.NULL_UNIT)
+        self.assertEqual((v * u).ut_unit, unit._ud.NULL_UNIT)
 
     def test_multiply_with_no_unit(self):
         u = Unit('meters')
@@ -421,6 +420,10 @@ class Test_divide(unittest.TestCase):
         v = Unit('meters')
         self.assertTrue((u / v).is_unknown())
         self.assertTrue((v / u).is_unknown())
+        self.assertEqual((u / v).origin, unit._UNKNOWN_UNIT_STRING)
+        self.assertEqual((v / u).origin, unit._UNKNOWN_UNIT_STRING)
+        self.assertEqual((u / v).ut_unit, unit._ud.NULL_UNIT)
+        self.assertEqual((v / u).ut_unit, unit._ud.NULL_UNIT)
 
     def test_divide_with_no_unit(self):
         u = Unit('meters')
