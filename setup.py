@@ -35,6 +35,7 @@ def read(*parts):
     with open(os.path.join(DIR, *parts), 'rb') as f:
         return f.read().decode('utf-8')
 
+
 include_dir = get_config_var('INCLUDEDIR')
 include_dirs = [include_dir] if include_dir is not None else []
 library_dir = get_config_var('LIBDIR')
@@ -63,13 +64,15 @@ cmdclass.update(versioneer.get_cmdclass())
 require = read('requirements.txt')
 install_requires = [r.strip() for r in require.splitlines()]
 
+description = ('Units of measure as required by the Climate and Forecast (CF) '
+               'metadata conventions')
 
 setup(
     name=NAME,
     version=versioneer.get_version(),
     url='https://github.com/SciTools/{}'.format(NAME),
     author='Met Office',
-    description='Units of measure as required by the Climate and Forecast (CF) metadata conventions',
+    description=description,
     long_description='{}'.format(read('README.md')),
     long_description_content_type='text/markdown',
     packages=find_packages(),

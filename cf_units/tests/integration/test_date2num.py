@@ -23,11 +23,9 @@ import unittest
 import datetime
 
 import numpy as np
-import numpy.testing
 import six
 
-import cftime
-from cf_units import date2num, Unit
+from cf_units import date2num
 
 
 class Test(unittest.TestCase):

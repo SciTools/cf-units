@@ -22,7 +22,6 @@ from six.moves import (filter, input, map, range, zip)  # noqa
 import copy
 import unittest
 
-import cf_units
 from cf_units import as_unit, Unit
 
 
@@ -62,7 +61,6 @@ class TestAll(unittest.TestCase):
         # object) with no calendar, ensure that a cf_unit.Unit is returned
         # with default calendar (Gregorian).
         unit = StubUnit()
-        target = copy.copy(unit)
         result = as_unit(unit)
 
         self.assertEqual(result.calendar, 'gregorian')

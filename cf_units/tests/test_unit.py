@@ -897,7 +897,7 @@ class Test__inplace(unittest.TestCase):
         emsg = ('Unable to convert non-native byte ordered array in-place. '
                 'Consider byte-swapping first.')
         with six.assertRaisesRegex(self, ValueError, emsg):
-            converted = c.convert(orig, f, inplace=True)
+            c.convert(orig, f, inplace=True)
 
         # Test we can do this when not-inplace
         c.convert(orig, f)
