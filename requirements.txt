@@ -1,5 +1,5 @@
 six
-cftime
+cftime!=1.0.2.1
 cython
 numpy
 # udunits2 cannot be installed with pip, and it is expected to be installed separately.
