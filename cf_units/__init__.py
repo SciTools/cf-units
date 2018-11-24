@@ -1887,7 +1887,7 @@ class Unit(_OrderedHashable):
             ...                   calendar=cf_units.CALENDAR_STANDARD)
             >>> ut = u.utime()
             >>> print(ut.num2date(2))
-            1970-01-01 02:00:00
+            1970-01-01 02:00:00.000006
 
         """
         if self.calendar is None:
@@ -1934,7 +1934,7 @@ class Unit(_OrderedHashable):
             >>> u = cf_units.Unit('hours since 1970-01-01 00:00:00',
             ...                   calendar=cf_units.CALENDAR_STANDARD)
             >>> u.date2num(datetime.datetime(1970, 1, 1, 5))
-            4.999999999998181
+            5.00000000372529
             >>> u.date2num([datetime.datetime(1970, 1, 1, 5),
             ...             datetime.datetime(1970, 1, 1, 6)])
             array([5., 6.])
