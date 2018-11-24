@@ -65,18 +65,18 @@ def load(fname):
     return result
 
 
-def description():
+def long_description():
     fname = os.path.join(BASEDIR, 'README.md')
     with open(fname, 'rb') as fi:
         result = fi.read().decode('utf-8')
     return result
 
 
-
 include_dir = get_config_var('INCLUDEDIR')
 include_dirs = [include_dir] if include_dir is not None else []
 library_dir = get_config_var('LIBDIR')
 library_dirs = [library_dir] if library_dir is not None else []
+
 if sys.platform.startswith('win'):
     extra_extension_args = {}
 else:
@@ -118,7 +118,7 @@ setup(
     url='https://github.com/SciTools/{}'.format(NAME),
     author='Met Office',
     description=description,
-    long_description=description(),
+    long_description=long_description(),
     long_description_content_type='text/markdown',
     packages=find_packages(),
     package_data={'cf_units': list(file_walk_relative('cf_units/etc',
