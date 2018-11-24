@@ -10,13 +10,13 @@ install:
   # Install miniconda
   # -----------------
   - export CONDA_BASE=http://repo.continuum.io/miniconda/Miniconda
-  - if [[ "$TRAVIS_PYTHON_VERSION" == 2* ]]; then
+  - if [[ "${TRAVIS_PYTHON_VERSION}" == 2* ]]; then
       wget ${CONDA_BASE}2-latest-Linux-x86_64.sh -O miniconda.sh;
     else
       wget ${CONDA_BASE}3-latest-Linux-x86_64.sh -O miniconda.sh;
     fi
-  - bash miniconda.sh -b -p $HOME/miniconda
-  - export PATH="$HOME/miniconda/bin:$PATH"
+  - bash miniconda.sh -b -p ${HOME}/miniconda
+  - export PATH="${HOME}/miniconda/bin:${PATH}"
 
   # Create the basic testing environment
   # ------------------------------------
@@ -24,19 +24,20 @@ install:
   - conda update --quiet conda
   - conda config --add channels conda-forge
   - ENV_NAME='test-environment'
-  - conda create --name $ENV_NAME python=$PY udunits2 --file requirements.txt --file requirements-dev.txt
-  - source activate $ENV_NAME
+  - conda create --name ${ENV_NAME} python=$PY udunits2 --file requirements.txt --file requirements-dev.txt
+  - source activate ${ENV_NAME}
 
   # Output debug info.
-  - conda list
+  - conda list -n ${ENV_NAME}
+  - conda list -n ${ENV_NAME} --explicit
   - conda info -a
 
   # cf_units.
-  - PREFIX=$HOME/miniconda/envs/$ENV_NAME
+  - PREFIX=${HOME}/miniconda/envs/${ENV_NAME}
 
   - pip install -e .
 
 script:
-  - coverage run -m pytest cf_units cf_units
+  - coverage run -m pytest cf_units
 
 after_success: coveralls
