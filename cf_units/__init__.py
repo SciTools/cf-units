@@ -34,7 +34,6 @@ from contextlib import contextmanager
 import copy
 import os.path
 import sys
-import warnings
 
 import cftime
 import numpy as np
@@ -720,13 +719,10 @@ class Unit(_OrderedHashable):
         for name, value in zip(self._names, values):
             object.__setattr__(self, name, value)
 
-    def _as_tuple(self):
-        return tuple(getattr(self, name) for name in self._names)
-
     # Provide hash semantics
 
     def _identity(self):
-        return self._as_tuple()
+        return (self.name, self.calendar)
 
     def __hash__(self):
         return hash(self._identity())
@@ -1671,11 +1667,6 @@ class Unit(_OrderedHashable):
                                           self, e)
                 result = _Unit(_CATEGORY_UDUNIT, ut_unit)
         return result
-
-    def _identity(self):
-        # Redefine the comparison/hash/ordering identity as used by
-        # _OrderedHashable.
-        return (self.name, self.calendar)
 
     def __eq__(self, other):
         """

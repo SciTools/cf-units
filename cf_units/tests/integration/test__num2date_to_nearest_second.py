@@ -23,10 +23,9 @@ import unittest
 import datetime
 
 import numpy as np
-import numpy.testing
 import cftime
 
-from cf_units import _num2date_to_nearest_second, Unit
+from cf_units import _num2date_to_nearest_second
 
 
 class Test(unittest.TestCase):

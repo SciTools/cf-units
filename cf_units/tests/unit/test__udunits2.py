@@ -93,8 +93,7 @@ class Test_system(unittest.TestCase):
 
     def test_parse_invalid_unit(self):
         with self.assertRaises(_ud.UdunitsError):
-            unit = _ud.parse(self.system, b'jigawatt',
-                             _ud.UT_ASCII)
+            _ud.parse(self.system, b'jigawatt', _ud.UT_ASCII)
 
 
 class Test_unit(unittest.TestCase):
@@ -139,7 +138,7 @@ class Test_unit(unittest.TestCase):
         self.assertFalse(_ud.are_convertible(self.metre, self.second))
 
     def test_get_converter_valid(self):
-        cv = _ud.get_converter(self.metre, self.yard)
+        _ud.get_converter(self.metre, self.yard)
 
     def test_get_converter_invalid(self):
         with self.assertRaises(_ud.UdunitsError) as cm:
@@ -167,7 +166,7 @@ class Test_unit(unittest.TestCase):
     def test_offset_by_time_invalid(self):
         with self.assertRaises(_ud.UdunitsError) as cm:
             _ud.offset_by_time(self.metre, -31622400.0)
-        ex = cm.exception
+        cm.exception
 
         # The udunits package should set a status of UT_MEANINGLESS, according
         # to the documentation. However, it is setting it to UT_SUCCESS.

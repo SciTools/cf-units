@@ -37,7 +37,7 @@ class Test___init__(unittest.TestCase):
 
     def test_not_basestring_calendar(self):
         with self.assertRaises(TypeError):
-            u = Unit('hours since 1970-01-01 00:00:00', calendar=5)
+            Unit('hours since 1970-01-01 00:00:00', calendar=5)
 
     def test_hash_replacement(self):
         hash_unit = 'm # s-1'
