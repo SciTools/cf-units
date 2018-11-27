@@ -719,9 +719,6 @@ class Unit(_OrderedHashable):
         for name, value in zip(self._names, values):
             object.__setattr__(self, name, value)
 
-    def _as_tuple(self):
-        return tuple(getattr(self, name) for name in self._names)
-
     # Provide hash semantics
 
     def _identity(self):
