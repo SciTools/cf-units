@@ -5,7 +5,7 @@ import sys
 
 from distutils.sysconfig import get_config_var
 import numpy as np
-from setuptools import setup, Extension, find_packages
+from setuptools import Command, Extension, find_packages, setup
 import versioneer
 
 # Default to using cython, but use the .c files if it doesn't exist
@@ -14,8 +14,35 @@ try:
 except ImportError:
     cythonize = False
 
+COMPILER_DIRECTIVES = {}
+DEFINE_MACROS = None
+FLAG_COVERAGE = '--cython-coverage'  # custom flag enabling Cython line tracing
+BASEDIR = os.path.abspath(os.path.dirname(__file__))
 NAME = 'cf-units'
-DIR = os.path.abspath(os.path.dirname(__file__))
+CFUNITS_DIR = os.path.join(BASEDIR, 'cf_units')
+
+
+class CleanCython(Command):
+    description = 'Purge artifacts built by Cython'
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        for rpath, _, fnames in os.walk(CFUNITS_DIR):
+            for fname in fnames:
+                _, ext = os.path.splitext(fname)
+                if ext in ('.pyc', '.pyo', '.c', '.so'):
+                    artifact = os.path.join(rpath, fname)
+                    if os.path.exists(artifact):
+                        print('clean: removing file {!r}'.format(artifact))
+                        os.remove(artifact)
+                    else:
+                        print('clean: skipping file {!r}'.format(artifact))
 
 
 def file_walk_relative(top, remove=''):
@@ -31,15 +58,25 @@ def file_walk_relative(top, remove=''):
             yield os.path.join(root, file).replace(remove, '')
 
 
-def read(*parts):
-    with open(os.path.join(DIR, *parts), 'rb') as f:
-        return f.read().decode('utf-8')
+def load(fname):
+    result = []
+    with open(fname, 'r') as fi:
+        result = [package.strip() for package in fi.readlines()]
+    return result
+
+
+def long_description():
+    fname = os.path.join(BASEDIR, 'README.md')
+    with open(fname, 'rb') as fi:
+        result = fi.read().decode('utf-8')
+    return result
 
 
 include_dir = get_config_var('INCLUDEDIR')
 include_dirs = [include_dir] if include_dir is not None else []
 library_dir = get_config_var('LIBDIR')
 library_dirs = [library_dir] if library_dir is not None else []
+
 if sys.platform.startswith('win'):
     extra_extension_args = {}
 else:
@@ -48,21 +85,29 @@ else:
 
 ext = 'pyx' if cythonize else 'c'
 
+if FLAG_COVERAGE in sys.argv or os.environ.get('CYTHON_COVERAGE', None):
+    COMPILER_DIRECTIVES = {'linetrace': True}
+    DEFINE_MACROS = [('CYTHON_TRACE', '1'),
+                     ('CYTHON_TRACE_NOGIL', '1')]
+    if FLAG_COVERAGE in sys.argv:
+        sys.argv.remove(FLAG_COVERAGE)
+    print('enable: "linetrace" Cython compiler directive')
+
 udunits_ext = Extension('cf_units._udunits2',
                         ['cf_units/_udunits2.{}'.format(ext)],
                         include_dirs=include_dirs + [np.get_include()],
                         library_dirs=library_dirs,
                         libraries=['udunits2'],
+                        define_macros=DEFINE_MACROS,
                         **extra_extension_args)
 
 if cythonize:
-    [udunits_ext] = cythonize(udunits_ext)
+    [udunits_ext] = cythonize(udunits_ext,
+                              compiler_directives=COMPILER_DIRECTIVES,
+                              language_level=2)
 
-cmdclass = {}
+cmdclass = {'clean_cython': CleanCython}
 cmdclass.update(versioneer.get_cmdclass())
-
-require = read('requirements.txt')
-install_requires = [r.strip() for r in require.splitlines()]
 
 description = ('Units of measure as required by the Climate and Forecast (CF) '
                'metadata conventions')
@@ -73,13 +118,14 @@ setup(
     url='https://github.com/SciTools/{}'.format(NAME),
     author='Met Office',
     description=description,
-    long_description='{}'.format(read('README.md')),
+    long_description=long_description(),
     long_description_content_type='text/markdown',
     packages=find_packages(),
     package_data={'cf_units': list(file_walk_relative('cf_units/etc',
                                                       remove='cf_units/'))},
-    install_requires=install_requires,
-    tests_require=['pep8'],
+    install_requires=load('requirements.txt'),
+    setup_requires=['pytest-runner'],
+    tests_require=load('requirements-dev.txt'),
     test_suite='cf_units.tests',
     cmdclass=cmdclass,
     ext_modules=[udunits_ext]
