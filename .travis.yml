@@ -1,16 +1,15 @@
-language: python
+language: minimal
 
-matrix:
-  include:
-  - env: PY=2.7
-  - env: PY=3.6
-  - env: PY=3.7
+env:
+  - PYTHON_VERSION=2.7
+  - PYTHON_VERSION=3.6
+  - PYTHON_VERSION=3.7
 
 install:
   # Install miniconda
   # -----------------
   - export CONDA_BASE=http://repo.continuum.io/miniconda/Miniconda
-  - if [[ "${TRAVIS_PYTHON_VERSION}" == 2* ]]; then
+  - if [[ "${PYTHON_VERSION}" == 2* ]]; then
       wget ${CONDA_BASE}2-latest-Linux-x86_64.sh -O miniconda.sh;
     else
       wget ${CONDA_BASE}3-latest-Linux-x86_64.sh -O miniconda.sh;
@@ -24,7 +23,7 @@ install:
   - conda update --quiet conda
   - conda config --add channels conda-forge
   - ENV_NAME='test-environment'
-  - conda create --name ${ENV_NAME} python=$PY udunits2 --file requirements.txt --file requirements-dev.txt
+  - conda create --name ${ENV_NAME} python=${PYTHON_VERSION} udunits2 --file requirements.txt --file requirements-dev.txt
   - source activate ${ENV_NAME}
 
   # Output debug info.
@@ -34,7 +33,6 @@ install:
 
   # cf_units.
   - PREFIX=${HOME}/miniconda/envs/${ENV_NAME}
-
   - CYTHON_COVERAGE=1 pip install -e .
 
 script:
