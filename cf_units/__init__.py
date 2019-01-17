@@ -614,18 +614,6 @@ def _num2date_to_nearest_second(time_value, utime):
     return result
 
 
-########################################################################
-#
-# unit wrapper class for unidata/ucar UDUNITS-2
-#
-########################################################################
-
-def _Unit(category, ut_unit, calendar=None, origin=None):
-    unit = _OrderedHashable.__new__(Unit)
-    unit._init(category, ut_unit, calendar, origin)
-    return unit
-
-
 _CACHE = {}
 
 
@@ -716,6 +704,8 @@ class Unit(_OrderedHashable):
 
     """
     def _init_from_tuple(self, values):
+        # Implements the required interface for an _OrderedHashable.
+        # This will also ensure a Unit._init(*Unit.names) method exists.
         for name, value in zip(self._names, values):
             object.__setattr__(self, name, value)
 
@@ -858,7 +848,17 @@ class Unit(_OrderedHashable):
                     msg = 'Expected string-like calendar argument, got {!r}.'
                     raise TypeError(msg.format(type(calendar)))
 
-        self._init_from_tuple((category, ut_unit, calendar_, unit,))
+        # Call the OrderedHashable's init.
+        self._init(category, ut_unit, calendar_, unit,)
+
+    @classmethod
+    def _new_from_existing_ut(cls, category, ut_unit,
+                              calendar=None, origin=None):
+        # Short-circuit __init__ if we know what we are doing and already
+        # have a UT handle.
+        unit = cls.__new__(cls)
+        unit._init(category, ut_unit, calendar, origin)
+        return unit
 
     def _propogate_error(self, msg, ud_err):
         """
@@ -1317,7 +1317,7 @@ class Unit(_OrderedHashable):
         except _ud.UdunitsError as e:
             self._propogate_error('Failed to offset %r' % self, e)
         calendar = None
-        return _Unit(_CATEGORY_UDUNIT, ut_unit, calendar)
+        return Unit._new_from_existing_ut(_CATEGORY_UDUNIT, ut_unit, calendar)
 
     def invert(self):
         """
@@ -1345,7 +1345,8 @@ class Unit(_OrderedHashable):
             except _ud.UdunitsError as e:
                 self._propogate_error('Failed to invert %r' % self, e)
             calendar = None
-            result = _Unit(_CATEGORY_UDUNIT, ut_unit, calendar)
+            result = Unit._new_from_existing_ut(
+                _CATEGORY_UDUNIT, ut_unit, calendar)
         return result
 
     def root(self, root):
@@ -1388,7 +1389,8 @@ class Unit(_OrderedHashable):
                     self._propogate_error('Failed to take the root of %r' %
                                           self, e)
                 calendar = None
-                result = _Unit(_CATEGORY_UDUNIT, ut_unit, calendar)
+                result = Unit._new_from_existing_ut(
+                    _CATEGORY_UDUNIT, ut_unit, calendar)
         return result
 
     def log(self, base):
@@ -1425,7 +1427,8 @@ class Unit(_OrderedHashable):
                 msg = 'Failed to calculate logorithmic base of %r' % self
                 self._propogate_error(msg, e)
             calendar = None
-            result = _Unit(_CATEGORY_UDUNIT, ut_unit, calendar)
+            result = Unit._new_from_existing_ut(
+                _CATEGORY_UDUNIT, ut_unit, calendar)
         return result
 
     def __str__(self):
@@ -1482,7 +1485,8 @@ class Unit(_OrderedHashable):
                 self._propogate_error('Failed to offset %r' % self, e)
             else:
                 calendar = None
-                result = _Unit(_CATEGORY_UDUNIT, ut_unit, calendar)
+                result = Unit._new_from_existing_ut(
+                    _CATEGORY_UDUNIT, ut_unit, calendar)
         return result
 
     def __add__(self, other):
@@ -1509,7 +1513,7 @@ class Unit(_OrderedHashable):
             raise ValueError("Cannot %s a 'no-unit'." % op_label)
 
         if self.is_unknown() or other.is_unknown():
-            result = _Unit(_CATEGORY_UNKNOWN, None)
+            result = Unit(_UNKNOWN_UNIT_STRING)
         else:
             try:
                 ut_unit = op_func(self.ut_unit, other.ut_unit)
@@ -1517,7 +1521,8 @@ class Unit(_OrderedHashable):
                 msg = 'Failed to %s %r by %r' % (op_label, self, other)
                 self._propogate_error(msg, e)
             calendar = None
-            result = _Unit(_CATEGORY_UDUNIT, ut_unit, calendar)
+            result = Unit._new_from_existing_ut(
+                _CATEGORY_UDUNIT, ut_unit, calendar)
         return result
 
     def __rmul__(self, other):
@@ -1665,7 +1670,7 @@ class Unit(_OrderedHashable):
                 except _ud.UdunitsError as e:
                     self._propogate_error('Failed to raise the power of %r' %
                                           self, e)
-                result = _Unit(_CATEGORY_UDUNIT, ut_unit)
+                result = Unit._new_from_existing_ut(_CATEGORY_UDUNIT, ut_unit)
         return result
 
     def __eq__(self, other):
