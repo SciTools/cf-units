@@ -35,3 +35,4 @@ cf_units/etc/site.cfg
 .coverage
 .eggs
 .pytest_cache
+.idea
