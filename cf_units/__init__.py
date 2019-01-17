@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2015 - 2018, Met Office
+# (C) British Crown Copyright 2015 - 2019, Met Office
 #
 # This file is part of cf-units.
 #
@@ -1878,7 +1878,7 @@ class Unit(_OrderedHashable):
             ...                   calendar=cf_units.CALENDAR_STANDARD)
             >>> ut = u.utime()
             >>> print(ut.num2date(2))
-            1970-01-01 02:00:00.000006
+            1970-01-01 02:00:00
 
         """
         if self.calendar is None:
@@ -1924,8 +1924,8 @@ class Unit(_OrderedHashable):
             >>> import datetime
             >>> u = cf_units.Unit('hours since 1970-01-01 00:00:00',
             ...                   calendar=cf_units.CALENDAR_STANDARD)
-            >>> u.date2num(datetime.datetime(1970, 1, 1, 5))
-            5.00000000372529
+            >>> round(u.date2num(datetime.datetime(1970, 1, 1, 5)))
+            5.0
             >>> u.date2num([datetime.datetime(1970, 1, 1, 5),
             ...             datetime.datetime(1970, 1, 1, 6)])
             array([5., 6.])
