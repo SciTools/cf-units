@@ -28,6 +28,7 @@ import copy
 import datetime as datetime
 import operator
 import six
+import re
 
 try:
     from operator import truediv
@@ -189,6 +190,18 @@ class Test_format(unittest.TestCase):
         u = Unit('watt')
         self.assertEqual(u.format(unit.UT_DEFINITION), 'm2.kg.s-3')
 
+    def test_format_multiple_options(self):
+        u = Unit('watt')
+        self.assertEqual(
+            u.format([unit.UT_NAMES, unit.UT_DEFINITION]),
+            'meter^2-kilogram-second^-3')
+
+    def test_format_multiple_options_utf8(self):
+        u = Unit('watt')
+        self.assertEqual(
+            u.format([unit.UT_NAMES, unit.UT_DEFINITION, unit.UT_UTF8]),
+            u'meter²·kilogram·second⁻³')
+
     def test_format_unknown(self):
         u = Unit('?')
         self.assertEqual(u.format(), 'unknown')
@@ -196,6 +209,14 @@ class Test_format(unittest.TestCase):
     def test_format_no_unit(self):
         u = Unit('nounit')
         self.assertEqual(u.format(), 'no_unit')
+
+    def test_format_names_utf8(self):
+        u = Unit('m2')
+        self.assertEqual(u.format([unit.UT_UTF8, unit.UT_NAMES]), u'meter²')
+
+    def test_format_latin1(self):
+        u = Unit('m2')
+        self.assertEqual(u.format(unit.UT_LATIN1), u'm²')
 
 
 class Test_name(unittest.TestCase):
@@ -368,6 +389,12 @@ class Test_log(unittest.TestCase):
     def test_base_10(self):
         u = Unit('hPa')
         self.assertEqual(u.log(10), 'lg(re 100 Pa)')
+
+    def test_negative(self):
+        u = Unit('hPa')
+        msg = re.escape("Failed to calculate logorithmic base of Unit('hPa')")
+        with six.assertRaisesRegex(self, ValueError, msg):
+            u.log(-1)
 
     def test_not_numeric(self):
         u = Unit('hPa')

@@ -688,6 +688,26 @@ def is_vertical(unit):
     return as_unit(unit).is_vertical()
 
 
+def _ud_value_error(ud_err, message):
+    """
+    Return a ValueError that has extra context from a _udunits2.UdunitsError.
+
+    """
+    # NOTE: We aren't raising here, just giving the caller a well formatted
+    # exception that they can raise themselves.
+
+    ud_msg = ud_err.error_msg()
+    if ud_msg:
+        message = u'{}: {}'.format(message, ud_msg)
+
+    message = u'[{status}] {message}'.format(
+        status=ud_err.status_msg(), message=message)
+
+    if six.PY2:
+        message = message.encode('utf8')
+    return ValueError(message)
+
+
 class Unit(_OrderedHashable):
     """
     A class to represent S.I. units and support common operations to
@@ -847,9 +867,10 @@ class Unit(_OrderedHashable):
                 str_unit = unit
             try:
                 ut_unit = _ud.parse(_ud_system, unit.encode('utf8'), encoding)
-            except _ud.UdunitsError as e:
-                self._propogate_error(
-                    u'Failed to parse unit "{}"'.format(str_unit), e)
+            except _ud.UdunitsError as exception:
+                value_error = _ud_value_error(
+                    exception, u'Failed to parse unit "{}"'.format(str_unit))
+                six.raise_from(value_error, None)
             if _OP_SINCE in unit.lower():
                 if calendar is None:
                     calendar_ = CALENDAR_GREGORIAN
@@ -875,19 +896,6 @@ class Unit(_OrderedHashable):
         unit = cls.__new__(cls)
         unit._init(category, ut_unit, calendar, origin)
         return unit
-
-    def _propogate_error(self, msg, ud_err):
-        """
-        Retrieve the UDUNITS-2 ut_status, the implementation-defined string
-        corresponding to UDUNITS-2 errno from the UdunitsError and raise
-        generic exception.
-
-        """
-        error_msg = ': "%s"' % ud_err.error_msg() if ud_err.errnum != 0 else ''
-        msg = '[%s] %s%s' % (ud_err.status_msg(), msg, error_msg)
-        if six.PY2:
-            msg = msg.encode('utf8')
-        raise ValueError(msg)
 
     # NOTE:
     # "__getstate__" and "__setstate__" functions are defined here to
@@ -1223,12 +1231,14 @@ class Unit(_OrderedHashable):
                     bitmask |= i
             encoding = bitmask & \
                 (UT_ASCII | UT_ISO_8859_1 | UT_LATIN1 | UT_UTF8)
-            endocing_str = _encoding_lookup[encoding]
-            try:
-                result = _ud.format(self.ut_unit, bitmask)
-            except _ud.UdunitsError as e:
-                    self._propogate_error('Failed to format %r' % self, e)
-            return str(result.decode(endocing_str))
+            encoding_str = _encoding_lookup[encoding]
+            result = _ud.format(self.ut_unit, bitmask)
+
+            if six.PY2 and encoding_str != 'ascii':
+                result = six.text_type(result.decode(encoding_str))
+            else:
+                result = str(result.decode(encoding_str))
+            return result
 
     @property
     def name(self):
@@ -1333,8 +1343,10 @@ class Unit(_OrderedHashable):
                             ' required')
         try:
             ut_unit = _ud.offset_by_time(self.ut_unit, origin)
-        except _ud.UdunitsError as e:
-            self._propogate_error('Failed to offset %r' % self, e)
+        except _ud.UdunitsError as exception:
+            value_error = _ud_value_error(
+                exception, 'Failed to offset {!r}'.format(self))
+            six.raise_from(value_error, None)
         calendar = None
         return Unit._new_from_existing_ut(_CATEGORY_UDUNIT, ut_unit, calendar)
 
@@ -1359,13 +1371,9 @@ class Unit(_OrderedHashable):
         elif self.is_no_unit():
             raise ValueError("Cannot invert a 'no-unit'.")
         else:
-            try:
-                ut_unit = _ud.invert(self.ut_unit)
-            except _ud.UdunitsError as e:
-                self._propogate_error('Failed to invert %r' % self, e)
-            calendar = None
+            ut_unit = _ud.invert(self.ut_unit)
             result = Unit._new_from_existing_ut(
-                _CATEGORY_UDUNIT, ut_unit, calendar)
+                _CATEGORY_UDUNIT, ut_unit, calendar=None)
         return result
 
     def root(self, root):
@@ -1404,9 +1412,11 @@ class Unit(_OrderedHashable):
             else:
                 try:
                     ut_unit = _ud.root(self.ut_unit, root)
-                except _ud.UdunitsError as e:
-                    self._propogate_error('Failed to take the root of %r' %
-                                          self, e)
+                except _ud.UdunitsError as exception:
+                    value_error = _ud_value_error(
+                        exception,
+                        'Failed to take the root of {!r}'.format(self))
+                    six.raise_from(value_error, None)
                 calendar = None
                 result = Unit._new_from_existing_ut(
                     _CATEGORY_UDUNIT, ut_unit, calendar)
@@ -1442,9 +1452,12 @@ class Unit(_OrderedHashable):
             except TypeError:
                 raise TypeError('A numeric type for the base argument is '
                                 ' required')
-            except _ud.UdUnitsError as e:
-                msg = 'Failed to calculate logorithmic base of %r' % self
-                self._propogate_error(msg, e)
+            except _ud.UdunitsError as exception:
+                value_err = _ud_value_error(
+                    exception,
+                    'Failed to calculate logorithmic base '
+                    'of {!r}'.format(self))
+                six.raise_from(value_err, None)
             calendar = None
             result = Unit._new_from_existing_ut(
                 _CATEGORY_UDUNIT, ut_unit, calendar)
@@ -1505,12 +1518,9 @@ class Unit(_OrderedHashable):
                 ut_unit = _ud.offset(self.ut_unit, offset)
             except TypeError:
                 result = NotImplemented
-            except _ud.UdunitsError as e:
-                self._propogate_error('Failed to offset %r' % self, e)
             else:
-                calendar = None
                 result = Unit._new_from_existing_ut(
-                    _CATEGORY_UDUNIT, ut_unit, calendar)
+                    _CATEGORY_UDUNIT, ut_unit, calendar=None)
         return result
 
     def __add__(self, other):
@@ -1541,9 +1551,11 @@ class Unit(_OrderedHashable):
         else:
             try:
                 ut_unit = op_func(self.ut_unit, other.ut_unit)
-            except _ud.UdunitsError as e:
-                msg = 'Failed to %s %r by %r' % (op_label, self, other)
-                self._propogate_error(msg, e)
+            except _ud.UdunitsError as exception:
+                value_err = _ud_value_error(
+                    exception,
+                    'Failed to {} {!r} by {!r}'.format(op_label, self, other))
+                six.raise_from(value_err, None)
             calendar = None
             result = Unit._new_from_existing_ut(
                 _CATEGORY_UDUNIT, ut_unit, calendar)
@@ -1691,9 +1703,11 @@ class Unit(_OrderedHashable):
 
                 try:
                     ut_unit = _ud.raise_(self.ut_unit, power)
-                except _ud.UdunitsError as e:
-                    self._propogate_error('Failed to raise the power of %r' %
-                                          self, e)
+                except _ud.UdunitsError as exception:
+                    value_err = _ud_value_error(
+                        exception,
+                        'Failed to raise the power of {!r}'.format(self))
+                    six.raise_from(value_err, None)
                 result = Unit._new_from_existing_ut(_CATEGORY_UDUNIT, ut_unit)
         return result
 
@@ -1833,9 +1847,11 @@ class Unit(_OrderedHashable):
                 try:
                     ut_converter = _ud.get_converter(self.ut_unit,
                                                      other.ut_unit)
-                except _ud.UdunitsError as e:
-                    self._propogate_error('Failed to convert %r to %r' %
-                                          (self, other), e)
+                except _ud.UdunitsError as exception:
+                    value_err = _ud_value_error(
+                        exception,
+                        'Failed to convert {!r} to {!r}'.format(self, other))
+                    six.raise_from(value_err, None)
                 if isinstance(result, np.ndarray):
                     # Can only handle array of np.float32 or np.float64 so
                     # cast array of ints to array of floats of requested
