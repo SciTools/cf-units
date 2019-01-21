@@ -809,6 +809,10 @@ class Unit(_OrderedHashable):
         else:
             unit = str(unit).strip()
 
+        # For the sake of python 2, ensure that the string is a unicode.
+        if not isinstance(unit, six.text_type):
+            unit = six.text_type(unit.decode('utf8'))
+
         if unit.lower().endswith(' utc'):
             unit = unit[:unit.lower().rfind(' utc')]
 
@@ -831,7 +835,7 @@ class Unit(_OrderedHashable):
         else:
             category = _CATEGORY_UDUNIT
             try:
-                ut_unit = _ud.parse(_ud_system, unit.encode('ascii'), UT_ASCII)
+                ut_unit = _ud.parse(_ud_system, unit.encode('utf-8'), UT_UTF8)
             except _ud.UdunitsError as e:
                 self._propogate_error('Failed to parse unit "%s"' % unit, e)
             if _OP_SINCE in unit.lower():

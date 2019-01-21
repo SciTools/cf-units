@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # (C) British Crown Copyright 2010 - 2019, Met Office
 #
 # This file is part of cf-units.
@@ -73,6 +74,17 @@ class Test_unit__creation(unittest.TestCase):
     def test_unsupported_calendar(self):
         with six.assertRaisesRegex(self, ValueError, 'unsupported calendar'):
             Unit('hours since 1970-01-01 00:00:00', calendar='wibble')
+
+    def test_unicode_valid(self):
+        # Some unicode characters are allowed.
+        u = Unit('m²')
+        assert u.symbol == 'm2'
+
+    def test_unicode_invalid(self):
+        # Not all unicode characters are allowed.
+        msg = '[UT_UNKNOWN] Failed to parse unit "ø"'
+        with self.assertRaises(ValueError, msg=msg):
+            Unit('ø')
 
 
 class Test_modulus(unittest.TestCase):
