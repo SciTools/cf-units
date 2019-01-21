@@ -1897,7 +1897,7 @@ class Unit(_OrderedHashable):
         if self.is_long_time_interval():
             interval = self.origin.split(' ')[0]
             emsg = ('Time units with interval of "months", "years" '
-                    '(or singular of these) cannot be processed, got {!r}.')
+                    '(or singular of these) cannot be processed, got "{!s}".')
             raise ValueError(emsg.format(interval))
 
         #
