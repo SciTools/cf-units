@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2015 - 2018, Met Office
+# (C) British Crown Copyright 2015 - 2019, Met Office
 #
 # This file is part of cf-units.
 #
@@ -247,6 +247,15 @@ class Test_is_long_time_interval(unittest.TestCase):
         unit = Unit('K')
         result = unit.is_long_time_interval()
         self.assertFalse(result)
+
+
+class Test_format(unittest.TestCase):
+    def test_invalid_ut_unit(self):
+        # https://github.com/SciTools/cf-units/issues/133 flagged up that
+        # format should be a little more tolerant of a Unit that has not been
+        # constructed correctly when using pytest.
+        unit = Unit.__new__(Unit)
+        self.assertEqual(unit.format(), 'unknown')
 
 
 if __name__ == '__main__':
