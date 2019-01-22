@@ -809,8 +809,8 @@ class Unit(_OrderedHashable):
         else:
             unit = str(unit).strip()
 
-        # For the sake of python 2, ensure that the string is a unicode.
-        if not isinstance(unit, six.text_type):
+        if six.PY2:
+            # Ensure that the string is a unicode object.
             unit = six.text_type(unit.decode('utf8'))
 
         if unit.lower().endswith(' utc'):
