@@ -841,10 +841,15 @@ class Unit(_OrderedHashable):
             unit = _NO_UNIT_STRING
         else:
             category = _CATEGORY_UDUNIT
+            if six.PY2:
+                str_unit = unit.encode(sys.getdefaultencoding(), 'replace')
+            else:
+                str_unit = unit
             try:
                 ut_unit = _ud.parse(_ud_system, unit.encode('utf8'), encoding)
             except _ud.UdunitsError as e:
-                self._propogate_error('Failed to parse unit "%s"' % unit, e)
+                self._propogate_error(
+                    'Failed to parse unit "%s"' % str_unit, e)
             if _OP_SINCE in unit.lower():
                 if calendar is None:
                     calendar_ = CALENDAR_GREGORIAN
