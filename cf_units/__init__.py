@@ -804,14 +804,21 @@ class Unit(_OrderedHashable):
         ut_unit = _ud.NULL_UNIT
         calendar_ = None
 
+        encoding = UT_UTF8
+
         if unit is None:
             unit = ''
-        else:
-            unit = str(unit).strip()
 
         if six.PY2:
-            # Ensure that the string is a unicode object.
-            unit = six.text_type(unit.decode('utf8'))
+            if not isinstance(unit, six.text_type):
+                # Cast everything that isn't a unicode object to a str.
+                unit = str(unit)
+            if isinstance(unit, str):
+                # All str in py2 should be treated as ASCII.
+                encoding = UT_ASCII
+        else:
+            unit = str(unit)
+        unit = unit.strip()
 
         if unit.lower().endswith(' utc'):
             unit = unit[:unit.lower().rfind(' utc')]
@@ -835,7 +842,7 @@ class Unit(_OrderedHashable):
         else:
             category = _CATEGORY_UDUNIT
             try:
-                ut_unit = _ud.parse(_ud_system, unit.encode('utf-8'), UT_UTF8)
+                ut_unit = _ud.parse(_ud_system, unit.encode('utf8'), encoding)
             except _ud.UdunitsError as e:
                 self._propogate_error('Failed to parse unit "%s"' % unit, e)
             if _OP_SINCE in unit.lower():
@@ -1450,7 +1457,10 @@ class Unit(_OrderedHashable):
             'miles/hour'
 
         """
-        return self.origin or self.symbol
+        r = self.origin or self.symbol
+        if six.PY2 and sys.getdefaultencoding() == 'ascii':
+            r = r.encode('ascii', 'replace')
+        return r
 
     def __repr__(self):
         """

@@ -75,9 +75,26 @@ class Test_unit__creation(unittest.TestCase):
         with six.assertRaisesRegex(self, ValueError, 'unsupported calendar'):
             Unit('hours since 1970-01-01 00:00:00', calendar='wibble')
 
+    def test_calendar_w_unicode(self):
+        calendar = unit.CALENDAR_365_DAY
+        u = Unit(u'hours\xb2 hours-1 since epoch', calendar=calendar)
+        self.assertEqual(u.calendar, calendar)
+        if six.PY2:
+            # Python 2 str MUST return an ascii string, yet the input
+            # was a unicode. We therefore return the ASCII encoded form.
+            expected = 'hours? hours-1 since 1970-01-01 00:00:00'
+        else:
+            expected = 'hours\xb2 hours-1 since 1970-01-01 00:00:00'
+        self.assertEqual(str(u), expected)
+
+    @unittest.skipIf(six.PY2, "Unicode literals in str aren't a thing")
     def test_unicode_valid(self):
         # Some unicode characters are allowed.
         u = Unit('m²')
+        assert u.symbol == 'm2'
+
+    def test_py2k_unicode(self):
+        u = Unit(u'm\xb2')
         assert u.symbol == 'm2'
 
     def test_unicode_invalid(self):
