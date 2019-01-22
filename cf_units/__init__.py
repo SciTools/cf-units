@@ -1128,7 +1128,7 @@ class Unit(_OrderedHashable):
             False
 
         """
-        return self.category == _CATEGORY_UNKNOWN
+        return self.category == _CATEGORY_UNKNOWN or self.ut_unit is None
 
     def is_no_unit(self):
         """

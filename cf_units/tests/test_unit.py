@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2010 - 2018, Met Office
+# (C) British Crown Copyright 2010 - 2019, Met Office
 #
 # This file is part of cf-units.
 #
@@ -746,6 +746,12 @@ class Test_is_unknown(unittest.TestCase):
     def test_known_unit(self):
         u = Unit('meters')
         self.assertFalse(u.is_unknown())
+
+    def test_no_ut_pointer(self):
+        # Test that a unit that was poorly constructed has a
+        # degree of tolerance by making it unknown.
+        # https://github.com/SciTools/cf-units/issues/133 refers.
+        self.assertTrue(Unit.__new__(Unit).is_unknown())
 
 
 class Test_is_no_unit(unittest.TestCase):
