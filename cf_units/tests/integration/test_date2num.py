@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2016 - 2018, Met Office
+# (C) British Crown Copyright 2016 - 2019, Met Office
 #
 # This file is part of cf-units.
 #
@@ -73,7 +73,7 @@ class Test(unittest.TestCase):
         # This test should fail with an error that we need to catch properly.
         unit = 'years since 1970-01-01'
         date = datetime.datetime(1970, 1, 1, 0, 0, 5)
-        exp_emsg = 'interval of "months", "years" .* got \'years\'.'
+        exp_emsg = 'interval of "months", "years" .* got "years".'
         with six.assertRaisesRegex(self, ValueError, exp_emsg):
             date2num(date, unit, self.calendar)
 

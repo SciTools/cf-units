@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2013 - 2018, Met Office
+# (C) British Crown Copyright 2013 - 2019, Met Office
 #
 # This file is part of cf-units.
 #
@@ -52,9 +52,9 @@ LICENSE_TEMPLATE = """
 
 
 LICENSE_RE_PATTERN = re.escape(LICENSE_TEMPLATE).replace(r'\{YEARS\}', '(.*?)')
-# Add shebang possibility to the LICENSE_RE_PATTERN
-LICENSE_RE_PATTERN = r'(\#\!.*\n)?' + LICENSE_RE_PATTERN
-LICENSE_RE = re.compile(LICENSE_RE_PATTERN, re.MULTILINE)
+SHEBANG = r'(\#\!.*\n)?'
+ENCODING = r'(\# \-\*\- coding\: .* \-\*\-\n)?'
+LICENSE_RE = re.compile(SHEBANG + ENCODING + LICENSE_RE_PATTERN, re.MULTILINE)
 
 
 # Guess cf_units repo directory of cf_units - realpath is used to mitigate

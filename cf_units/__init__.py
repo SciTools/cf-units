@@ -804,10 +804,21 @@ class Unit(_OrderedHashable):
         ut_unit = _ud.NULL_UNIT
         calendar_ = None
 
+        encoding = UT_UTF8
+
         if unit is None:
             unit = ''
+
+        if six.PY2:
+            if not isinstance(unit, six.text_type):
+                # Cast everything that isn't a unicode object to a str.
+                unit = str(unit)
+            if isinstance(unit, str):
+                # All str in py2 should be treated as ASCII.
+                encoding = UT_ASCII
         else:
-            unit = str(unit).strip()
+            unit = str(unit)
+        unit = unit.strip()
 
         if unit.lower().endswith(' utc'):
             unit = unit[:unit.lower().rfind(' utc')]
@@ -830,10 +841,15 @@ class Unit(_OrderedHashable):
             unit = _NO_UNIT_STRING
         else:
             category = _CATEGORY_UDUNIT
+            if six.PY2:
+                str_unit = unit.encode(sys.getdefaultencoding(), 'replace')
+            else:
+                str_unit = unit
             try:
-                ut_unit = _ud.parse(_ud_system, unit.encode('ascii'), UT_ASCII)
+                ut_unit = _ud.parse(_ud_system, unit.encode('utf8'), encoding)
             except _ud.UdunitsError as e:
-                self._propogate_error('Failed to parse unit "%s"' % unit, e)
+                self._propogate_error(
+                    'Failed to parse unit "%s"' % str_unit, e)
             if _OP_SINCE in unit.lower():
                 if calendar is None:
                     calendar_ = CALENDAR_GREGORIAN
@@ -1446,7 +1462,10 @@ class Unit(_OrderedHashable):
             'miles/hour'
 
         """
-        return self.origin or self.symbol
+        r = self.origin or self.symbol
+        if six.PY2 and sys.getdefaultencoding() == 'ascii':
+            r = r.encode('ascii', 'replace')
+        return r
 
     def __repr__(self):
         """
@@ -1893,7 +1912,7 @@ class Unit(_OrderedHashable):
         if self.is_long_time_interval():
             interval = self.origin.split(' ')[0]
             emsg = ('Time units with interval of "months", "years" '
-                    '(or singular of these) cannot be processed, got {!r}.')
+                    '(or singular of these) cannot be processed, got "{!s}".')
             raise ValueError(emsg.format(interval))
 
         #
