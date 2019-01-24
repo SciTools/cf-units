@@ -841,15 +841,15 @@ class Unit(_OrderedHashable):
             unit = _NO_UNIT_STRING
         else:
             category = _CATEGORY_UDUNIT
-            if six.PY2:
-                str_unit = unit.encode(sys.getdefaultencoding(), 'replace')
+            if six.PY2 and not isinstance(unit, six.text_type):
+                str_unit = unit.encode('utf8')
             else:
                 str_unit = unit
             try:
                 ut_unit = _ud.parse(_ud_system, unit.encode('utf8'), encoding)
             except _ud.UdunitsError as e:
                 self._propogate_error(
-                    'Failed to parse unit "%s"' % str_unit, e)
+                    u'Failed to parse unit "{}"'.format(str_unit), e)
             if _OP_SINCE in unit.lower():
                 if calendar is None:
                     calendar_ = CALENDAR_GREGORIAN
@@ -884,7 +884,10 @@ class Unit(_OrderedHashable):
 
         """
         error_msg = ': "%s"' % ud_err.error_msg() if ud_err.errnum != 0 else ''
-        raise ValueError('[%s] %s%s' % (ud_err.status_msg(), msg, error_msg))
+        msg = '[%s] %s%s' % (ud_err.status_msg(), msg, error_msg)
+        if six.PY2:
+            msg = msg.encode('utf8')
+        raise ValueError(msg)
 
     # NOTE:
     # "__getstate__" and "__setstate__" functions are defined here to
@@ -1462,10 +1465,13 @@ class Unit(_OrderedHashable):
             'miles/hour'
 
         """
-        r = self.origin or self.symbol
-        if six.PY2 and sys.getdefaultencoding() == 'ascii':
-            r = r.encode('ascii', 'replace')
-        return r
+        return self.origin or self.symbol
+
+    if six.PY2:
+        __unicode__ = __str__
+
+        def __str__(self):
+            return unicode(self).encode('utf8')
 
     def __repr__(self):
         """
@@ -1482,12 +1488,11 @@ class Unit(_OrderedHashable):
             "Unit('meters')"
 
         """
-
         if self.calendar is None:
-            result = "%s('%s')" % (self.__class__.__name__, self)
+            result = "{}('{}')".format(self.__class__.__name__, self)
         else:
-            result = "%s('%s', calendar='%s')" % (self.__class__.__name__,
-                                                  self, self.calendar)
+            result = "{}('{}', calendar='{}')".format(
+                self.__class__.__name__, self, self.calendar)
         return result
 
     def _offset_common(self, offset):

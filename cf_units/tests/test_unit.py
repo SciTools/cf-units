@@ -79,18 +79,12 @@ class Test_unit__creation(unittest.TestCase):
         calendar = unit.CALENDAR_365_DAY
         u = Unit(u'hours\xb2 hours-1 since epoch', calendar=calendar)
         self.assertEqual(u.calendar, calendar)
-        if six.PY2:
-            # Python 2 str MUST return an ascii string, yet the input
-            # was a unicode. We therefore return the ASCII encoded form.
-            expected = 'hours? hours-1 since 1970-01-01 00:00:00'
-        else:
-            expected = 'hours\xb2 hours-1 since 1970-01-01 00:00:00'
-        self.assertEqual(str(u), expected)
+        expected = u'hours² hours-1 since 1970-01-01 00:00:00'
+        self.assertEqual(u.origin, expected)
 
-    @unittest.skipIf(six.PY2, "Unicode literals in str aren't a thing")
     def test_unicode_valid(self):
         # Some unicode characters are allowed.
-        u = Unit('m²')
+        u = Unit(u'm²')
         assert u.symbol == 'm2'
 
     def test_py2k_unicode(self):
@@ -99,9 +93,17 @@ class Test_unit__creation(unittest.TestCase):
 
     def test_unicode_invalid(self):
         # Not all unicode characters are allowed.
-        msg = '[UT_UNKNOWN] Failed to parse unit "ø"'
-        with self.assertRaises(ValueError, msg=msg):
-            Unit('ø')
+
+        if six.PY2:
+            msg = u'[UT_UNKNOWN] Failed to parse unit "ø"'
+            # NOTE: assertRaisesRegex doesn't work with unicode chars in py2 :(
+            with self.assertRaises(ValueError) as e:
+                Unit(u'ø')
+            self.assertIn(msg, e.exception.message.decode('utf8'))
+        else:
+            msg = r'Failed to parse unit \"ø\"'
+            with six.assertRaisesRegex(self, ValueError, msg):
+                Unit('ø')
 
 
 class Test_modulus(unittest.TestCase):
