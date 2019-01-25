@@ -27,8 +27,6 @@ import re
 import subprocess
 import unittest
 
-import pep8
-
 import cf_units
 
 
@@ -67,88 +65,6 @@ exclusion = ['Makefile', 'make.bat', 'build']
 DOCS_DIRS = glob(os.path.join(DOCS_DIR, '*'))
 DOCS_DIRS = [DOC_DIR for DOC_DIR in DOCS_DIRS if os.path.basename(DOC_DIR) not
              in exclusion]
-
-
-class StandardReportWithExclusions(pep8.StandardReport):
-    expected_bad_files = []
-    optional_bad_files = []
-    expected_bad_files += optional_bad_files
-    matched_exclusions = set()
-
-    if DOCS_DIRS:
-        expected_bad_files += []
-
-    def get_file_results(self):
-        # If the file had no errors, return self.file_errors (which will be 0)
-        if not self._deferred_print:
-            return self.file_errors
-
-        # Iterate over all of the patterns, to find a possible exclusion. If we
-        # the filename is to be excluded, go ahead and remove the counts that
-        # self.error added.
-        for pattern in self.expected_bad_files:
-            if fnmatch(self.filename, pattern):
-                self.matched_exclusions.add(pattern)
-                # invert the error method's counters.
-                for _, _, code, _, _ in self._deferred_print:
-                    self.counters[code] -= 1
-                    if self.counters[code] == 0:
-                        self.counters.pop(code)
-                        self.messages.pop(code)
-                    self.file_errors -= 1
-                    self.total_errors -= 1
-                return self.file_errors
-
-        # Otherwise call the superclass' method to print the bad results.
-        return super(StandardReportWithExclusions,
-                     self).get_file_results()
-
-
-class TestCodeFormat(unittest.TestCase):
-    def test_pep8_conformance(self):
-        #
-        #    Tests the cf_units codebase against the "pep8" tool.
-        #
-        #    Users can add their own excluded files (should files exist in the
-        #    local directory which is not in the repository) by adding a
-        #    ".pep8_test_exclude.txt" file in the same directory as this test.
-        #    The file should be a line separated list of filenames/directories
-        #    as can be passed to the "pep8" tool's exclude list.
-
-        # To get a list of bad files, rather than the specific errors, add
-        # "reporter=pep8.FileReport" to the StyleGuide constructor.
-        pep8style = pep8.StyleGuide(quiet=False,
-                                    reporter=StandardReportWithExclusions)
-
-        # Allow users to add their own exclude list.
-        extra_exclude_file = os.path.join(os.path.dirname(__file__),
-                                          '.pep8_test_exclude.txt')
-        if os.path.exists(extra_exclude_file):
-            with open(extra_exclude_file, 'r') as fh:
-                extra_exclude = [line.strip() for line in fh if line.strip()]
-            pep8style.options.exclude.extend(extra_exclude)
-
-        check_paths = [os.path.dirname(cf_units.__file__)]
-        if DOCS_DIRS:
-            check_paths.extend(DOCS_DIRS)
-
-        result = pep8style.check_files(check_paths)
-        self.assertEqual(result.total_errors, 0, "Found code syntax "
-                                                 "errors (and warnings).")
-
-        reporter = pep8style.options.reporter
-        # If we've been using the exclusions reporter, check that we didn't
-        # exclude files unnecessarily.
-        if reporter is StandardReportWithExclusions:
-            unexpectedly_good = sorted(set(reporter.expected_bad_files) -
-                                       set(reporter.optional_bad_files) -
-                                       reporter.matched_exclusions)
-
-            if unexpectedly_good:
-                self.fail('Some exclude patterns were unnecessary as the '
-                          'files they pointed to either passed the PEP8 tests '
-                          'or do not point to a file:\n  '
-                          '{}'.format('\n  '.join(unexpectedly_good)))
 
 
 class TestLicenseHeaders(unittest.TestCase):
