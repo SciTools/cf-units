@@ -1484,7 +1484,7 @@ class Unit(_OrderedHashable):
         __unicode__ = __str__
 
         def __str__(self):
-            return unicode(self).encode('utf8')
+            return unicode(self).encode('utf8')  # noqa: F821
 
     def __repr__(self):
         """
