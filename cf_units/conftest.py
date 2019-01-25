@@ -15,10 +15,21 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with cf-units.  If not, see <http://www.gnu.org/licenses/>.
 
+"""
+Configure pytest to ignore python 3 files in python 2.
 
-def py_3_only():
-    # This function is only syntactically valid in Python 3.
-    # We want PY2 users to see this syntax error, rather than a
-    # significantly more complex SyntaxError in the generated parser.
+"""
+import os.path
+import glob
+import six
 
-    return f'is_py_3!'
+
+if six.PY2:
+    here = os.path.dirname(__file__)
+    all_parse_py = glob.glob(
+        os.path.join(here, '_udunits2_parser', '*', '*.py'))
+    all_compiled_parse_py = glob.glob(
+        os.path.join(here, '_udunits2_parser', '*.py'))
+    collect_ignore = list(all_parse_py) + list(all_compiled_parse_py)
+
+    print(collect_ignore)

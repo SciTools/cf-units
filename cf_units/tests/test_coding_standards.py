@@ -155,7 +155,9 @@ class TestLicenseHeaders(unittest.TestCase):
                             'build/*',
                             'dist/*',
                             'versioneer.py',
-                            'cf_units/_version.py')
+                            'cf_units/_version.py',
+                            'cf_units/_udunits2_parser/parser/*'
+                            )
 
         try:
             last_change_by_fname = self.last_change_by_fname()
