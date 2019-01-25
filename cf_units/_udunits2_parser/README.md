@@ -30,4 +30,4 @@ to the UDUNITS-2 reference implementation.
 The usual ``pytest cf_units`` includes these tests by default.
 They are typically very fast to execute, but significant slowdowns were experienced
 (x15 slowdown) when left-recursive rules were not carefully implemented, therefore please
-be consious of performance when modifying the grammar.
+be conscious of performance when modifying the grammar.

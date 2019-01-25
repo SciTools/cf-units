@@ -1,4 +1,8 @@
 ---
 linters:
-    flake8:
-        python: 3
+  flake8:
+    python: 3
+
+files:
+  ignore:
+    - 'cf_units/_udunits2_parser/parser/*'
