@@ -109,3 +109,35 @@ class Timestamp(Terminal):
     # This is likely to change in the future, but there are some
     # gnarly test cases, and should not be undertaken lightly.
     pass
+
+
+class Visitor:
+    """
+    This class may be used to help traversing an expression graph.
+
+    It follows the same pattern as the Python ``ast.NodeVisitor``.
+    Users should typically not need to override either ``visit`` or
+    ``generic_visit``, and should instead implement ``visit_<ClassName>``.
+
+    Remember that each method MUST call ``generic_visit(node)`` if a node's
+    children should be processed.
+
+    This class is used in cf_units.latex to generate a latex representation of
+    an expression graph.
+
+    """
+    def visit(self, node):
+        """Visit a node."""
+        method = 'visit_' + node.__class__.__name__
+        visitor = getattr(self, method, self.generic_visit)
+        return visitor(node)
+
+    def generic_visit(self, node):
+        """
+        Called if no explicit visitor function exists for a node.
+
+        Can also be called by ``visit_<ClassName>`` implementations
+        if children of the node are to be processed.
+
+        """
+        return [self.visit(child) for child in node.children()]
