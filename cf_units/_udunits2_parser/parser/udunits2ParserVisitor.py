@@ -54,18 +54,8 @@ class udunits2ParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by udunits2Parser#signed_hour_minute.
-    def visitSigned_hour_minute(self, ctx:udunits2Parser.Signed_hour_minuteContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by udunits2Parser#clock.
-    def visitClock(self, ctx:udunits2Parser.ClockContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by udunits2Parser#shift.
-    def visitShift(self, ctx:udunits2Parser.ShiftContext):
+    # Visit a parse tree produced by udunits2Parser#timezone_offset.
+    def visitTimezone_offset(self, ctx:udunits2Parser.Timezone_offsetContext):
         return self.visitChildren(ctx)
 
 

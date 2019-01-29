@@ -122,6 +122,7 @@ testdata = [
     's since 1990-1-2+5:2',
     's since 1990-1-2 5 6:0',  # Undocumented packed_clock format?
     's since 19900102T5',  # Packed format (undocumented?)
+    's since 19900101T190030 +2',
     's since 199022T1',  # UGLY! (bug?).
 
     's since 1990 +2:0:2.9',
@@ -155,6 +156,7 @@ invalid = [
     '£',
     'hours from 1990-0-0 0:0:0',
     'hours since 1900-1 10:12 10:0 1',
+    's since 1990:01:02T1900 +1',
 ]
 
 

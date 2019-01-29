@@ -157,7 +157,7 @@ class UnitParseVisitor(udunits2ParserVisitor):
     def visitShift_spec(self, ctx):
         nodes = self.visitChildren(ctx)
         if isinstance(nodes, list):
-            nodes = graph.Shift(nodes[0], nodes[2])
+            nodes = graph.Shift(*nodes)
         return nodes
 
     def visitUnit_spec(self, ctx):

@@ -12,8 +12,8 @@ unit_spec:
 
 shift_spec:
     product
-    | product shift number    // e.g. Kelvin @ 273.15
-    | product shift timestamp // e.g. hours since 2001-12-31 23:59:59.999 +6
+    | product WS? SHIFT_OP WS? number    // e.g. Kelvin @ 273.15
+    | product WS? SHIFT_OP WS? timestamp // e.g. hours since 2001-12-31 23:59:59.999 +6
 ;
 
 product:
@@ -51,33 +51,23 @@ number:
 
 
 timestamp:
-    (DATE | INT)    // e.g "s since 1990", "s since 1990:01[:02]"
-    | ((DATE | INT) WS? signed_clock (WS? signed_hour_minute)?)
-    | DT_T_CLOCK  // "1990:01:02T1900"
-//     | (date WS+ signed_int)            // Date + packed_clock
-//     | (date WS+ signed_int WS+ clock)  // Date + (packed_clock - )
-//     | (date sign (INT|clock) WS+ hour_minute)  // Date + (packed_clock - tz offset)
-// 
-//     | (date WS+ signed_int ((WS+ INT) | (WS* signed_int)))  // Date + packed_clock + Timezone Offset
-    | WS? TIMESTAMP
+    (DATE | INT)     // e.g "s since 1990", "s since 1990:01[:02]"
 
-//    | (date WS+ clock WS+ ID) // UNKNOWN!
-//    | (TIMESTAMP WS+ INT) // UNKNOWN!
-//    | (TIMESTAMP WS+ ID) // TIMEZONE (UNDOCUMENTED)!
+    | ((DATE | INT) WS? signed_clock (WS? timezone_offset)?)    // e.g. "s since 1990:01:01 12:21 +6
+
+    | DT_T_CLOCK    // e.g. "s since 1990:01:02T1900"
+    | (TIMESTAMP WS? timezone_offset?)    // e.g. "s since 19900101T190030"
 ;
 
 signed_clock:
-    HOUR_MINUTE_SECOND | HOUR_MINUTE | integer 
+    HOUR_MINUTE_SECOND  // e.g. 10:11:12
+  | HOUR_MINUTE         // e.g. 10:11
+  | integer             // e.g. +101112
 ;
 
-signed_hour_minute:
-    // Second not allowed.
-    (HOUR_MINUTE | integer)
-    | (WS* SIGNED_INT)
-;
-
-clock: HOUR_MINUTE | HOUR_MINUTE_SECOND;
-
-shift:
-    WS* SHIFT_OP WS*
+timezone_offset:
+    HOUR_MINUTE         // e.g. 10:11
+    | integer           // e.g. 1011
+    // NOTE: UDUNITS2 also supports named timezones, but these aren't documented
+    // in the grammar, and aren't yet implemented here.
 ;
