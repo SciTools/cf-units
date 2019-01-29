@@ -20,8 +20,8 @@ import six
 if six.PY2:
     raise ImportError('Python3 required for cf-units latex support')
 
-import cf_units._udunits2_parser.graph as graph
-from cf_units._udunits2_parser import parse as _parse
+import cf_units._udunits2_parser.graph as graph  # noqa: E402
+from cf_units._udunits2_parser import parse as _parse  # noqa: E402
 
 
 class TeXVisitor(graph.Visitor):
