@@ -57,4 +57,5 @@ def test_shift():
 
 def test_complex():
     u = 'microW^2 / (5^-2)π per sec @ 42'
-    assert tex(u) == r'{\frac{{\frac{{{\mu}W}^{2}}{{5}^{-2}}}\cdot{π}}{sec}} @ {42}'
+    expected = r'{\frac{{\frac{{{\mu}W}^{2}}{{5}^{-2}}}\cdot{π}}{sec}} @ {42}'
+    assert tex(u) == expected
