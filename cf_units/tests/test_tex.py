@@ -18,7 +18,7 @@
 import pytest
 import six
 
-from cf_units.latex import tex
+from cf_units.tex import tex
 
 
 if six.PY2:

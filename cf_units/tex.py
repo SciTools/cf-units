@@ -15,11 +15,13 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with cf-units.  If not, see <http://www.gnu.org/licenses/>.
 
-try:
-    import cf_units._udunits2_parser.graph as graph
-    from cf_units._udunits2_parser import parse as _parse
-except SyntaxError:
-    raise ImportError('Python3 required for latex')
+import six
+
+if six.PY2:
+    raise ImportError('Python3 required for cf-units latex support')
+
+import cf_units._udunits2_parser.graph as graph
+from cf_units._udunits2_parser import parse as _parse
 
 
 class TeXVisitor(graph.Visitor):

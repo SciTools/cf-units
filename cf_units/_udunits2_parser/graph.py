@@ -119,11 +119,8 @@ class Visitor:
     Users should typically not need to override either ``visit`` or
     ``generic_visit``, and should instead implement ``visit_<ClassName>``.
 
-    Remember that each method MUST call ``generic_visit(node)`` if a node's
-    children should be processed.
-
-    This class is used in cf_units.latex to generate a latex representation of
-    an expression graph.
+    This class is used in cf_units.latex to generate a latex representation
+    of an expression graph.
 
     """
     def visit(self, node):
