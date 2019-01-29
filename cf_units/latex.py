@@ -15,14 +15,17 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with cf-units.  If not, see <http://www.gnu.org/licenses/>.
 
-import cf_units._udunits2_parser.graph as graph
-from cf_units._udunits2_parser import parse as _parse
+try:
+    import cf_units._udunits2_parser.graph as graph
+    from cf_units._udunits2_parser import parse as _parse
+except SyntaxError:
+    raise ImportError('Python3 required for latex')
 
 
 class TeXVisitor(graph.Visitor):
     def _format(self, fmt, lhs, rhs):
         return fmt.format(self.visit(lhs), self.visit(rhs))
-    
+ 
     def visit_Identifier(self, node):
         token = str(node)
         if token.startswith('micro'):
@@ -34,13 +37,13 @@ class TeXVisitor(graph.Visitor):
 
     def visit_Multiply(self, node):
         return self._format(r'{{{}}}\cdot{{{}}}', node.lhs, node.rhs)
-    
+ 
     def visit_Divide(self, node):
         return self._format(r'\frac{{{}}}{{{}}}', node.lhs, node.rhs)
-    
+ 
     def visit_Shift(self, node):
         return self._format('{{{}}} @ {{{}}}', node.unit, node.shift_from)
-    
+ 
     def generic_visit(self, node):
         result = [self.visit(child) for child in node.children()]
         if not result:
