@@ -36,6 +36,7 @@ power:
 basic_spec:
     ID
     | '(' shift_spec ')'
+// Log not yet implemented, but it is supported in UDUNITS2. 
 //    | LOGREF product_spec ')'
     | number
 ;
@@ -49,7 +50,7 @@ number:
 ;
 
 
-timestamp: WS?
+timestamp:
     (DATE | INT)    // e.g "s since 1990", "s since 1990:01[:02]"
     | ((DATE | INT) WS? signed_clock (WS? signed_hour_minute)?)
     | DT_T_CLOCK  // "1990:01:02T1900"

@@ -63,6 +63,9 @@ class UnitParseVisitor(udunits2ParserVisitor):
             result = result[0]
         return result
 
+    #: A dictionary mapping lexer TOKEN names to the action that should be
+    #: taken on them when visited. For full context of what is allowed, see
+    #: visitTerminal.
     TERM_HANDLERS = {
             'CLOSE_PAREN': None,
             'DATE': str,
@@ -85,6 +88,10 @@ class UnitParseVisitor(udunits2ParserVisitor):
     }
 
     def visitTerminal(self, ctx):
+        """
+        Return a graph.Node, or None, to represent the given lexer terminal.
+
+        """
         content = ctx.getText()
 
         symbol_idx = ctx.symbol.type
@@ -92,7 +99,6 @@ class UnitParseVisitor(udunits2ParserVisitor):
             # EOF, and all unmatched characters (which will have
             # already raised a SyntaxError).
             result = None
-
         else:
             name = TOKEN_ID_NAMES[symbol_idx]
             handler = self.TERM_HANDLERS[name]
@@ -102,9 +108,7 @@ class UnitParseVisitor(udunits2ParserVisitor):
             else:
                 result = handler
 
-        if result is None:
-            return None
-        elif not isinstance(result, graph.Node):
+        if result is not None and not isinstance(result, graph.Node):
             result = graph.Terminal(result)
         return result
 
