@@ -41,8 +41,8 @@ if six.PY2:
         os.path.join(here, 'tests', 'integration', 'parse', '*.py'))
 
     # Files that are python3 only.
-    python3_specific = [os.path.join(here, 'latex.py'),
-                        os.path.join(here, 'tests', 'test_latex.py')]
+    python3_specific = [os.path.join(here, 'tex.py'),
+                        os.path.join(here, 'tests', 'test_tex.py')]
 
     # collect_ignore is the special variable that pytest reads to
     # indicate which files should be ignored (and not even imported).
