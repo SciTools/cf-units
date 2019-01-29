@@ -13,6 +13,8 @@ omit =
     cf_units/_version.py
     cf_units/etc/*
     cf_units/tests/*
+    cf_units/_udunits2_parser/parser/*
+    cf_units/_udunits2_parser/compile.py
     .eggs
 
 
