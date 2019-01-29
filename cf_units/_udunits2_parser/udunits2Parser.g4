@@ -1,5 +1,8 @@
+// Derived from https://www.unidata.ucar.edu/software/udunits/udunits-2.0.4/udunits2lib.html#Grammar
+
 parser grammar udunits2Parser;
 
+// Use tokens from our UDUNITS2 lex rules.
 options { tokenVocab=udunits2Lexer; }
 
 
@@ -9,8 +12,8 @@ unit_spec:
 
 shift_spec:
     product
-    | product shift number    // Kelvin @ 273.15
-    | product shift timestamp // hours since 2001-12-31 23:59:59.999 +6
+    | product shift number    // e.g. Kelvin @ 273.15
+    | product shift timestamp // e.g. hours since 2001-12-31 23:59:59.999 +6
 ;
 
 product:

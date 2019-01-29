@@ -39,7 +39,7 @@ class Node:
     def _repr_ctx(self):
         # Return a dictionary that is useful for passing to string.format.
         kwargs = ', '.join(
-            '{}={}'.format(key, value)
+            '{}={!r}'.format(key, value)
             for key, value in self._attrs.items())
         return dict(cls_name=self.__class__.__name__, kwargs=kwargs)
 

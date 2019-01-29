@@ -29,7 +29,7 @@ def test_Node_attributes():
 
 def test_Node_str():
     n = g.Node(a=1, kwarg='two', arbitrary_kwargs=3)
-    assert str(n) == 'Node(a=1, kwarg=two, arbitrary_kwargs=3)'
+    assert str(n) == "Node(a=1, kwarg='two', arbitrary_kwargs=3)"
 
 
 def test_Node_children():

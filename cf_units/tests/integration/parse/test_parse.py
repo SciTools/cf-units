@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with cf-units.  If not, see <http://www.gnu.org/licenses/>.
 
+import re
+
 import pytest
 
 import cf_units
@@ -273,6 +275,33 @@ def test_known_issues(_, unit_str, expected):
     else:
         unit_expr = normalize(unit_str)
         assert unit_expr != expected
+
+
+def test_syntax_parse_error_quality():
+    # Check that the syntax error is giving us good context.
+
+    msg = re.escape(r"no viable alternative at input 'm^m' (inline, line 1)")
+    with pytest.raises(SyntaxError, match=msg) as err:
+        normalize('m^m 2s')
+    # The problem is with the m after "^", so make sure the exception is
+    # pointing at it (including the leading speechmark).
+    assert err.value.offset == 4
+
+
+def test_unknown_symbol_error():
+    msg = re.escape(r"mismatched input '×' expecting <EOF>")
+    with pytest.raises(SyntaxError, match=msg) as err:
+        # The × character is explicitly excluded in the UDUNITS2
+        # implementation. It would make some sense to support it in the
+        # future though.
+        normalize('Thing×Another')
+    # The 7th character (including the speechmark) is the problem, check that
+    # the exception points at the right location.
+    # correct location...
+    #  File "inline", line 1
+    #  'Thing×Another'
+    #        ^
+    assert err.value.offset == 7
 
 
 not_allowed = [

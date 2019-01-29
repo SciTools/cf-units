@@ -1,3 +1,5 @@
+# Derived from https://www.unidata.ucar.edu/software/udunits/udunits-2.0.4/udunits2lib.html#Grammar
+
 lexer grammar udunits2Lexer;
 
 // Whitespace is significant, and is not ignored.
@@ -81,9 +83,7 @@ LATIN_SUBSET:
 
 WS : [ ] ;
 
-// Any characters which fail to match will raise an error.
-// nb. without this token, we don't get quite as good error messages (e.g. "$")
-// TODO: test for this!
+// Any characters which fail to match should raise an error.
 ERRORCHARACTER : . ;
 
 
