@@ -1,3 +1,156 @@
 lexer grammar udunits2Lexer;
 
-ALL: .;
+// Whitespace is significant, and is not ignored.
+// For example: "m 2" == "m*2", yet "m2" == "m^2".
+
+
+SIGNED_INT : (MINUS|PLUS) INT ;
+
+PLUS: '+' ;
+fragment MINUS: '-' ;
+MULTIPLY: ('*' | '·' | MINUS) ;
+DIVIDE: WS* ('/' | ' PER ' | ' per ') WS*;
+PERIOD: '.' ;
+
+OPEN_PAREN: '(' ;
+CLOSE_PAREN: ')' ;
+SEMICOLON: ':' ;
+
+INT : '0'..'9'+ ;
+
+
+fragment ANY_INT: INT | SIGNED_INT ;
+E_POWER: ('E' | 'e') ANY_INT ;
+FLOAT:
+    // NOTE: floats themselves are context sensitive. (e.g. m2.3 === m^2 * 3 in udunits2)
+    // For this reason, FLOATS are parsed *after* MULTIPLY (which contains '.').
+    // This behaviour is reversed immediate after seeing an ID token.
+    // Example: -2.e5
+    (((ANY_INT PERIOD INT?)
+     |(ANY_INT? PERIOD INT)
+    ) E_POWER?)  // 1.2e-5, 1e2, 2.e4
+    | (ANY_INT E_POWER)
+;
+
+
+SHIFT_OP:
+  ( '@'
+  | 'after'
+  | 'from'
+  | 'since'
+  | 'ref'
+  )  -> pushMode(SHIFT_MODE)
+;
+
+
+UNICODE_EXPONENT:
+  // One or more ISO-8859-9 encoded exponent characters
+  ('⁻' | '⁺' | '¹' | '²' | '³' | '⁴' | '⁵' | '⁶' | '⁷' | '⁸' | '⁹' | '⁰')+
+; 
+
+RAISE :
+  ( '^'
+  | '**'
+  )
+;
+
+LOG: 'log' | 'lg' | 'ln' | 'lb';
+
+LOGREF: '(' WS* ('RE' | 're') ':'? WS*;
+
+//ID: one of
+//        <id>
+//        '%'
+//        "'"
+//        "\""
+//        degree sign
+//        greek mu character
+//
+
+ID:  ([A-Za-z_] | LATIN_SUBSET)+ -> mode(ID_SEEN);
+
+LATIN_SUBSET:
+    '\u00C0'..'\u00D6'  // UDUNITS implementation "\xc3([\x80-\x96])"
+  | '\u00D8'..'\u00F6'  // UDUNITS implementation "\xc3([\x98-\xB6])"
+  | '\u00F8'..'\u00FF'  // UDUNITS implementation "\xc3([\xB8-\xBF])"
+  | '\u0080' | '\u00AD' // Non-breaking space. " ". Why is this in UDUNITS?!
+  | '\u00B0'            // Degree symbol °
+  | '\u00B5'            // Mu µ
+  | 'π' | 'Ω'           // NOTE: Other symbols are allowed, as long as they are defined in the XML.
+;
+
+WS : [ ] ;
+
+// Any characters which fail to match will raise an error.
+// nb. without this token, we don't get quite as good error messages (e.g. "$")
+// TODO: test for this!
+ERRORCHARACTER : . ;
+
+
+mode SHIFT_MODE;
+// This mode is only enabled after seeing a SHIFT_OP token.
+// However, it is worth noting that the simplest form is just a number (e.g. m@10).
+
+// S_WS: ' ' -> skip;
+
+
+TIMEZONE: 'UTC' | 'Z' | 'GMT';
+
+fragment SIGN:
+    PLUS | MINUS
+;
+
+fragment HOUR:
+    // NOTE: -19 is fine, -20 is not (in the current udunits-2 implementation).
+    (SIGN? ('0'..'1')? ('0'..'9')) | (('2' ('0'..'3')))
+;
+
+fragment MINUTE:
+    ('0'..'5')? ('0'..'9')
+;
+
+fragment SECOND:
+    (MINUTE | '60') (PERIOD ('0'..'9')*)?
+;
+
+fragment MONTH:
+    ('0'? ('1'..'9')) | ('1' ('0'..'2'))
+;
+
+fragment DAY:
+    ('0'? ('1'..'9')) | (('1'..'2')('0'..'9')) | '30' | '31'
+;
+
+fragment YEAR:
+    ANY_INT INT? INT? INT?  // e.g. 9, 0001, 150, +2001 (=year 200 in UDUNITS2 implementation)
+;
+
+HOUR_MINUTE_SECOND: HOUR ':' MINUTE ':' SECOND;
+HOUR_MINUTE: HOUR ':' MINUTE;
+M_MINUS: '-';
+DATE: (YEAR MINUS MONTH (MINUS DAY)?);
+
+fragment CLOCK: HOUR (MINUTE SECOND?)?;
+
+TIMESTAMP: (YEAR (MONTH DAY?)? 'T' CLOCK);
+
+DT_T_CLOCK: DATE 'T' CLOCK; // UNDOCUMENTED
+
+{% for TOKEN in tokens['DEFAULT_MODE'] -%}
+    SHIFT_MODE_{{ TOKEN }}: {{TOKEN}} -> type({{TOKEN}});
+{% endfor %}
+
+
+mode ID_SEEN;
+
+ID_SEEN_SIGNED_INT: SIGNED_INT -> type(SIGNED_INT), mode(DEFAULT_MODE);
+
+EXTRA_MULTIPLY: (
+    '.'   // m.m, m.2 (=2m)
+  | '-'   // m-m (=m^2), m--2 (=-2m)
+) -> type(MULTIPLY), mode(DEFAULT_MODE);
+
+{% for TOKEN in tokens['DEFAULT_MODE'] if TOKEN not in ['FLOAT'] -%}
+    ID_SEEN_AUTO_{{ TOKEN }}: {{TOKEN}} -> type({{TOKEN}}), mode(DEFAULT_MODE);
+{% endfor %}
+// inherit // from DEFAULT_MODE: *;
