@@ -93,7 +93,7 @@ testdata = [
     'm.2.4',  # This is 2.4 * m
     'm0.2',   # But this is 2 m^0
     'm2.5',   # And this is 5m^2
-    'm2.3.4', # m^2
+    'm2.3.4',  # 0.4 * m^2
     'm--1',
 
     # Division
