@@ -27,7 +27,7 @@ from . import graph
 
 
 # Dictionary mapping token rule id to token name.
-TOKEN_ID_NAMES = {getattr(udunits2Lexer, rule, -1): rule
+TOKEN_ID_NAMES = {getattr(udunits2Lexer, rule, None): rule
                   for rule in udunits2Lexer.ruleNames}
 
 
@@ -44,25 +44,6 @@ class UnitParseVisitor(udunits2ParserVisitor):
     A visitor which converts the parse tree into an abstract expression graph.
 
     """
-    def defaultResult(self):
-        # Called once per ``visitChildren`` call.
-        return []
-
-    def aggregateResult(self, aggregate, nextResult):
-        # Always result a list from visitChildren
-        # (default behaviour is to return the last element).
-        if nextResult is not None:
-            aggregate.append(nextResult)
-        return aggregate
-
-    def visitChildren(self, node):
-        # If there is only a single item in the visitChildren's list,
-        # return the item. The list itself has no semantics.
-        result = super().visitChildren(node)
-        while isinstance(result, list) and len(result) == 1:
-            result = result[0]
-        return result
-
     #: A dictionary mapping lexer TOKEN names to the action that should be
     #: taken on them when visited. For full context of what is allowed, see
     #: visitTerminal.
@@ -86,6 +67,25 @@ class UnitParseVisitor(udunits2ParserVisitor):
             'WS': None,
             'UNICODE_EXPONENT': handle_UNICODE_EXPONENT,
     }
+
+    def defaultResult(self):
+        # Called once per ``visitChildren`` call.
+        return []
+
+    def aggregateResult(self, aggregate, nextResult):
+        # Always result a list from visitChildren
+        # (default behaviour is to return the last element).
+        if nextResult is not None:
+            aggregate.append(nextResult)
+        return aggregate
+
+    def visitChildren(self, node):
+        # If there is only a single item in the visitChildren's list,
+        # return the item. The list itself has no semantics.
+        result = super().visitChildren(node)
+        while isinstance(result, list) and len(result) == 1:
+            result = result[0]
+        return result
 
     def visitTerminal(self, ctx):
         """
