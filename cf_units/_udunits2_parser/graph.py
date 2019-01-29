@@ -76,26 +76,23 @@ class Identifier(Terminal):
 
 
 class BinaryOp(Node):
-    def __init__(self, op, lhs, rhs):
-        super().__init__(lhs=lhs, op=op, rhs=rhs)
-
-    def __str__(self):
-        return f'{self.lhs}{self.op}{self.rhs}'
+    def __init__(self, lhs, rhs):
+        super().__init__(lhs=lhs, rhs=rhs)
 
 
 class Raise(BinaryOp):
-    def __init__(self, lhs, rhs):
-        super().__init__(lhs=lhs, op=Operand('^'), rhs=rhs)
+    def __str__(self):
+        return f'{self.lhs}^{self.rhs}'
 
 
 class Multiply(BinaryOp):
-    def __init__(self, lhs, rhs):
-        super().__init__(lhs=lhs, op=Operand('·'), rhs=rhs)
+    def __str__(self):
+        return f'{self.lhs}·{self.rhs}'
 
 
 class Divide(BinaryOp):
-    def __init__(self, lhs, rhs):
-        super().__init__(lhs=lhs, op=Operand('/'), rhs=rhs)
+    def __str__(self):
+        return f'{self.lhs}/{self.rhs}'
 
 
 class Shift(Node):

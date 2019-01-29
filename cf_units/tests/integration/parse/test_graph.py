@@ -47,31 +47,26 @@ def test_large_graph():
     assert str(shift_from) == '10'
 
     assert isinstance(unit, g.Divide)
-    lhs, op, rhs = unit.children()
+    lhs, rhs = unit.children()
     assert str(lhs) == 'm^2/4.1·.2·π'
-    assert str(op) == '/'
     assert str(rhs) == 'second'
 
     assert isinstance(lhs, g.Multiply)
-    lhs, op, rhs = lhs.children()
+    lhs, rhs = lhs.children()
     assert str(lhs) == 'm^2/4.1·.2'
-    assert str(op) == '·'
     assert str(rhs) == 'π'
 
     assert isinstance(lhs, g.Multiply)
-    lhs, op, rhs = lhs.children()
+    lhs, rhs = lhs.children()
     assert str(lhs) == 'm^2/4.1'
-    assert str(op) == '·'
     assert str(rhs) == '.2'
 
     assert isinstance(lhs, g.Divide)
-    lhs, op, rhs = lhs.children()
+    lhs, rhs = lhs.children()
     assert str(lhs) == 'm^2'
-    assert str(op) == '/'
     assert str(rhs) == '4.1'
 
     assert isinstance(lhs, g.Raise)
-    lhs, op, rhs = lhs.children()
+    lhs, rhs = lhs.children()
     assert str(lhs) == 'm'
-    assert str(op) == '^'
     assert str(rhs) == '2'
