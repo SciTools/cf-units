@@ -29,8 +29,8 @@ You're welcome ;).
 
 import collections
 from pathlib import Path
-import subprocess
 import re
+import subprocess
 import urllib.request
 
 try:
