@@ -36,7 +36,13 @@ if six.PY2:
     all_compiled_parse_py = glob.glob(
         os.path.join(here, '_udunits2_parser', '*.py'))
 
+    # Files under cf_units/tests/integration/parse are python3 *only*.
+    parse_test_files = glob.glob(
+        os.path.join(here, 'tests', 'integration', 'parse', '*.py'))
+
     # collect_ignore is the special variable that pytest reads to
     # indicate which files should be ignored (and not even imported).
     # See also https://docs.pytest.org/en/latest/example/pythoncollection.html
-    collect_ignore = list(all_parse_py) + list(all_compiled_parse_py)
+    collect_ignore = (list(all_parse_py) +
+                      list(all_compiled_parse_py) +
+                      list(parse_test_files))

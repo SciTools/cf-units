@@ -94,6 +94,7 @@ def main():
     print('Compiling parser...')
     subprocess.run(
         ['java', '-jar', str(JAR), '-Dlanguage=Python3',
+         '-no-listener', '-visitor',
          str(PARSER), '-o', 'parser'],
         check=True)
 
