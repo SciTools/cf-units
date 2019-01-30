@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2010 - 2018, Met Office
+# (C) British Crown Copyright 2010 - 2019, Met Office
 #
 # This file is part of cf-units.
 #
@@ -24,7 +24,11 @@ from six.moves import (filter, input, map, range, zip)  # noqa
 
 from six import with_metaclass
 import abc
-import collections
+try:
+    from collections.abc import Hashable
+except ImportError:
+    # PY2
+    from collections import Hashable
 
 
 def approx_equal(a, b, max_absolute_error=1e-10, max_relative_error=1e-10):
@@ -84,8 +88,7 @@ class _MetaOrderedHashable(abc.ABCMeta):
             cls, name, bases, namespace)
 
 
-class _OrderedHashable(with_metaclass(_MetaOrderedHashable,
-                                      collections.Hashable)):
+class _OrderedHashable(with_metaclass(_MetaOrderedHashable, Hashable)):
     """
     Convenience class for creating "immutable", hashable, and ordered classes.
 
