@@ -92,6 +92,7 @@ if FLAG_COVERAGE in sys.argv or os.environ.get('CYTHON_COVERAGE', None):
         sys.argv.remove(FLAG_COVERAGE)
     print('enable: "linetrace" Cython compiler directive')
 
+
 def numpy_build_ext(pars):
     from setuptools.command.build_ext import build_ext as _build_ext
 
@@ -103,6 +104,7 @@ def numpy_build_ext(pars):
             self.include_dirs.append(numpy.get_include())
 
     return build_ext(pars)
+
 
 udunits_ext = Extension('cf_units._udunits2',
                         ['cf_units/_udunits2.{}'.format(ext)],
