@@ -4,7 +4,6 @@ import os
 import sys
 
 from distutils.sysconfig import get_config_var
-import numpy as np
 from setuptools import Command, Extension, find_packages, setup
 import versioneer
 
@@ -93,9 +92,21 @@ if FLAG_COVERAGE in sys.argv or os.environ.get('CYTHON_COVERAGE', None):
         sys.argv.remove(FLAG_COVERAGE)
     print('enable: "linetrace" Cython compiler directive')
 
+def numpy_build_ext(pars):
+    from setuptools.command.build_ext import build_ext as _build_ext
+
+    class build_ext(_build_ext):
+        def finalize_options(self):
+            _build_ext.finalize_options(self)
+            __builtins__.__NUMPY_SETUP__ = False
+            import numpy
+            self.include_dirs.append(numpy.get_include())
+
+    return build_ext(pars)
+
 udunits_ext = Extension('cf_units._udunits2',
                         ['cf_units/_udunits2.{}'.format(ext)],
-                        include_dirs=include_dirs + [np.get_include()],
+                        include_dirs=include_dirs,
                         library_dirs=library_dirs,
                         libraries=['udunits2'],
                         define_macros=DEFINE_MACROS,
@@ -106,7 +117,7 @@ if cythonize:
                               compiler_directives=COMPILER_DIRECTIVES,
                               language_level=2)
 
-cmdclass = {'clean_cython': CleanCython}
+cmdclass = {'clean_cython': CleanCython, 'build_ext': numpy_build_ext}
 cmdclass.update(versioneer.get_cmdclass())
 
 description = ('Units of measure as required by the Climate and Forecast (CF) '
@@ -124,7 +135,7 @@ setup(
     package_data={'cf_units': list(file_walk_relative('cf_units/etc',
                                                       remove='cf_units/'))},
     install_requires=load('requirements.txt'),
-    setup_requires=['pytest-runner'],
+    setup_requires=['pytest-runner', 'numpy'],
     tests_require=load('requirements-dev.txt'),
     test_suite='cf_units.tests',
     cmdclass=cmdclass,
