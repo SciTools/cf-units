@@ -1731,7 +1731,10 @@ class Unit(_OrderedHashable):
             True
 
         """
-        other = as_unit(other)
+        try:
+            other = as_unit(other)
+        except ValueError:
+            return NotImplemented
 
         # Compare category (i.e. unknown, no_unit, etc.).
         if self.category != other.category:
