@@ -667,6 +667,10 @@ class Test_equality(unittest.TestCase):
         v = Unit('no_unit')
         self.assertNotEqual(u, v)
 
+    def test_not_implemented(self):
+        u = Unit('meter')
+        self.assertFalse(u == {})
+
 
 class Test_non_equality(unittest.TestCase):
 
@@ -694,6 +698,10 @@ class Test_non_equality(unittest.TestCase):
     def test_no_unit(self):
         u = Unit('no_unit')
         self.assertFalse(u != 'no_unit')
+
+    def test_not_implemented(self):
+        u = Unit('meter')
+        self.assertNotEqual(u, {})
 
 
 class Test_convert(unittest.TestCase):
