@@ -1,7 +1,7 @@
 six
 cftime!=1.0.2.1
 cython
-numpy
+numpy<1.17.0
 antlr4-python3-runtime==4.7.2; python_version >= '3'
 
 # udunits2 cannot be installed with pip, and it is expected to be installed separately.
