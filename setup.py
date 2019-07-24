@@ -98,7 +98,7 @@ def numpy_build_ext(pars):
 
     class build_ext(_build_ext):
         def finalize_options(self):
-            # See https://github.com/erikrose/nose-progressive/pull/54
+            # See https://github.com/SciTools/cf-units/issues/151
             def _set_builtin(name, value):
                 if isinstance(__builtins__, dict):
                     __builtins__[name] = value
