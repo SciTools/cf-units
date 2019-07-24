@@ -98,8 +98,15 @@ def numpy_build_ext(pars):
 
     class build_ext(_build_ext):
         def finalize_options(self):
+            # See https://github.com/erikrose/nose-progressive/pull/54
+            def _set_builtin(name, value):
+                if isinstance(__builtins__, dict):
+                    __builtins__[name] = value
+                else:
+                    setattr(__builtins__, name, value)
+
             _build_ext.finalize_options(self)
-            __builtins__.__NUMPY_SETUP__ = False
+            _set_builtin('__NUMPY_SETUP__', False)
             import numpy
             self.include_dirs.append(numpy.get_include())
 
@@ -137,7 +144,7 @@ setup(
     package_data={'cf_units': list(file_walk_relative('cf_units/etc',
                                                       remove='cf_units/'))},
     install_requires=load('requirements.txt'),
-    setup_requires=['pytest-runner', 'numpy'],
+    setup_requires=['pytest-runner', 'numpy<1.17.0'],
     tests_require=load('requirements-dev.txt'),
     test_suite='cf_units.tests',
     cmdclass=cmdclass,
