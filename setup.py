@@ -144,7 +144,7 @@ setup(
     package_data={'cf_units': list(file_walk_relative('cf_units/etc',
                                                       remove='cf_units/'))},
     install_requires=load('requirements.txt'),
-    setup_requires=['pytest-runner', 'numpy<1.17.0'],
+    setup_requires=['pytest-runner', 'numpy'],
     tests_require=load('requirements-dev.txt'),
     test_suite='cf_units.tests',
     cmdclass=cmdclass,
