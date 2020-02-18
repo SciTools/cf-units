@@ -1,6 +1,5 @@
 six
 cftime!=1.0.2.1
-cython
 numpy
 antlr4-python3-runtime==4.7.2; python_version >= '3'
 
