@@ -16,13 +16,7 @@
 # along with cf-units.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from __future__ import (absolute_import, division, print_function)
-from six.moves import (filter, input, map, range, zip)  # noqa
-
-try:
-    import ConfigParser as configparser
-except ImportError:
-    import configparser
+import configparser
 
 import os.path
 import sys

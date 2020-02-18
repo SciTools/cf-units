@@ -16,9 +16,6 @@
 # along with cf-units.  If not, see <http://www.gnu.org/licenses/>.
 """Test function :func:`cf_units._num2date_to_nearest_second`."""
 
-from __future__ import (absolute_import, division, print_function)
-from six.moves import (filter, input, map, range, zip)  # noqa
-
 import unittest
 import datetime
 

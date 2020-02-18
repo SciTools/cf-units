@@ -15,9 +15,6 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with cf-units.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import (absolute_import, division, print_function)
-from six.moves import (filter, input, map, range, zip)  # noqa
-
 from datetime import datetime
 from fnmatch import fnmatch
 from glob import glob
@@ -188,57 +185,6 @@ class TestLicenseHeaders(unittest.TestCase):
         if failed:
             raise AssertionError(
                 'There were license header failures. See stdout.')
-
-
-class TestFutureImports(unittest.TestCase):
-    excluded = ('*/_version.py')
-
-    future_imports_pattern = re.compile(
-        r"^from __future__ import \(absolute_import,\s*division,\s*"
-        r"print_function(,\s*unicode_literals)?\)$",
-        flags=re.MULTILINE)
-
-    six_import_pattern = re.compile(
-        r"^from six.moves import \(filter, input, map, range, zip\)  # noqa$",
-        flags=re.MULTILINE)
-
-    def test_future_imports(self):
-        # Tests that every single Python file includes the appropriate
-        # __future__ import to enforce consistent behaviour.
-        check_paths = [os.path.dirname(cf_units.__file__)]
-        if DOCS_DIRS:
-            check_paths.extend(DOCS_DIRS)
-
-        failed = False
-        for dirpath, _, files in chain.from_iterable(os.walk(path)
-                                                     for path in check_paths):
-            for fname in files:
-                full_fname = os.path.join(dirpath, fname)
-                if not full_fname.endswith('.py'):
-                    continue
-                if not os.path.isfile(full_fname):
-                    continue
-                if any(fnmatch(full_fname, pat) for pat in self.excluded):
-                    continue
-
-                with open(full_fname, "r") as fh:
-                    content = fh.read()
-
-                    if re.search(self.future_imports_pattern, content) is None:
-                        print('The file {} has no valid __future__ imports '
-                              'and has not been excluded from the imports '
-                              'test.'.format(full_fname))
-                        failed = True
-
-                    if re.search(self.six_import_pattern, content) is None:
-                        print('The file {} has no valid six import '
-                              'and has not been excluded from the imports '
-                              'test.'.format(full_fname))
-                        failed = True
-
-        if failed:
-            raise AssertionError(
-                'There were __future__ import check failures. See stdout.')
 
 
 if __name__ == '__main__':

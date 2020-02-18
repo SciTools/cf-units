@@ -19,16 +19,8 @@ Miscellaneous utility functions.
 
 """
 
-from __future__ import (absolute_import, division, print_function)
-from six.moves import (filter, input, map, range, zip)  # noqa
-
-from six import with_metaclass
 import abc
-try:
-    from collections.abc import Hashable
-except ImportError:
-    # PY2
-    from collections import Hashable
+from collections.abc import Hashable
 
 
 def approx_equal(a, b, max_absolute_error=1e-10, max_relative_error=1e-10):
@@ -88,7 +80,7 @@ class _MetaOrderedHashable(abc.ABCMeta):
             cls, name, bases, namespace)
 
 
-class _OrderedHashable(with_metaclass(_MetaOrderedHashable, Hashable)):
+class _OrderedHashable(Hashable, metaclass=_MetaOrderedHashable):
     """
     Convenience class for creating "immutable", hashable, and ordered classes.
 
