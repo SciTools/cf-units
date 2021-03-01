@@ -75,11 +75,12 @@ class Test_convert__calendar(unittest.TestCase):
         self.assertEqual(expected.shape, result.shape)
 
     def test_non_gregorian_calendar_conversion_dtype(self):
-        data = np.arange(4, dtype=np.float32)
-        u1 = Unit('hours since 2000-01-01 00:00:00', calendar='360_day')
-        u2 = Unit('hours since 2000-01-02 00:00:00', calendar='360_day')
-        result = u1.convert(data, u2)
-        self.assertEqual(result.dtype, np.float32)
+        for start_dtype in [np.float32, np.float64]:
+            data = np.arange(4, dtype=start_dtype)
+            u1 = Unit('hours since 2000-01-01 00:00:00', calendar='360_day')
+            u2 = Unit('hours since 2000-01-02 00:00:00', calendar='360_day')
+            result = u1.convert(data, u2)
+            self.assertEqual(result.dtype, start_dtype)
 
 
 class Test_convert__endianness_time(unittest.TestCase):
