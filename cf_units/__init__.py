@@ -1738,10 +1738,8 @@ class Unit(_OrderedHashable):
                     result, self.cftime_unit, self.calendar)
                 result = cftime.date2num(
                     result_datetimes, other.cftime_unit, other.calendar)
-                # Preserve the datatype of the input array if it was float32.
-                if (isinstance(value, np.ndarray) and
-                   value.dtype == np.float32):
-                    result = result.astype(np.float32)
+                if isinstance(value, np.ndarray) and np.issubsctype(value.dtype, np.floating):
+                    result = result.astype(value.dtype)
             else:
                 try:
                     ut_converter = _ud.get_converter(self.ut_unit,
