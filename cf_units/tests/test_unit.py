@@ -986,7 +986,9 @@ class TestNumsAndDates(unittest.TestCase):
     def test_num2date(self):
         u = Unit('hours since 2010-11-02 12:00:00',
                  calendar=unit.CALENDAR_STANDARD)
-        self.assertEqual(str(u.num2date(1)), '2010-11-02 13:00:00')
+        res = u.num2date(1)
+        self.assertEqual(str(res), '2010-11-02 13:00:00')
+        self.assertIsInstance(res, datetime.datetime)
 
     def test_date2num(self):
         u = Unit('hours since 2010-11-02 12:00:00',

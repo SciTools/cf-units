@@ -494,7 +494,7 @@ def _discard_microsecond(date):
     return result
 
 
-def num2date(time_value, unit, calendar):
+def num2date(time_value, unit, calendar, only_use_cftime_datetimes=False):
     """
     Return datetime encoding of numeric time value (resolution of 1 second).
 
@@ -508,7 +508,7 @@ def num2date(time_value, unit, calendar):
     unit = 'days since 001-01-01 00:00:00'}
     calendar = 'proleptic_gregorian'.
 
-    The datetime instances returned are 'real' python datetime
+    By default, the datetime instances returned are 'real' python datetime
     objects if the date falls in the Gregorian calendar (i.e.
     calendar='proleptic_gregorian', or calendar = 'standard' or 'gregorian'
     and the date is after 1582-10-15). Otherwise, they are 'phony' datetime
@@ -534,6 +534,13 @@ def num2date(time_value, unit, calendar):
         unit='hours since 1800-01-01 00:00:00 -6:00'.
     * calendar (string):
         Name of the calendar, see cf_units.CALENDARS.
+
+    Kwargs:
+
+    * only_use_cftime_datetimes (bool):
+        If True, will always return cftime datetime objects, regardless of
+        calendar.  If False, returns datetime.datetime instances where
+        possible.  Defaults to False.
 
     Returns:
         datetime, or numpy.ndarray of datetime object.
@@ -561,10 +568,12 @@ def num2date(time_value, unit, calendar):
     if unit_string.endswith(" since epoch"):
         unit_string = unit_string.replace("epoch", EPOCH)
     unit_inst = Unit(unit_string, calendar=calendar)
-    return unit_inst.num2date(time_value)
+    return unit_inst.num2date(
+        time_value, only_use_cftime_datetimes=only_use_cftime_datetimes)
 
 
-def _num2date_to_nearest_second(time_value, utime):
+def _num2date_to_nearest_second(time_value, utime,
+                                only_use_cftime_datetimes=False):
     """
     Return datetime encoding of numeric time value with respect to the given
     time reference units, with a resolution of 1 second.
@@ -573,6 +582,11 @@ def _num2date_to_nearest_second(time_value, utime):
         Numeric time value/s.
     * utime (cftime.utime):
         cftime.utime object with which to perform the conversion/s.
+
+    * only_use_cftime_datetimes (bool):
+        If True, will always return cftime datetime objects, regardless of
+        calendar.  If False, returns datetime.datetime instances where
+        possible.  Defaults to False.
 
     Returns:
         datetime, or numpy.ndarray of datetime object.
@@ -592,7 +606,8 @@ def _num2date_to_nearest_second(time_value, utime):
     # later versions, if one wished to do so for the sake of consistency.
     has_half_seconds = np.logical_and(utime.units == 'seconds',
                                       time_values % 1. == 0.5)
-    dates = utime.num2date(time_values)
+    dates = utime.num2date(
+        time_values, only_use_cftime_datetimes=only_use_cftime_datetimes)
     try:
         # We can assume all or none of the dates have a microsecond attribute
         microseconds = np.array([d.microsecond if d else 0 for d in dates])
@@ -603,7 +618,9 @@ def _num2date_to_nearest_second(time_value, utime):
     if time_values[ceil_mask].size > 0:
         useconds = Unit('second')
         second_frac = useconds.convert(0.75, utime.units)
-        dates[ceil_mask] = utime.num2date(time_values[ceil_mask] + second_frac)
+        dates[ceil_mask] = utime.num2date(
+            time_values[ceil_mask] + second_frac,
+            only_use_cftime_datetimes=only_use_cftime_datetimes)
     dates[round_mask] = _discard_microsecond(dates[round_mask])
     result = dates[0] if shape is () else dates.reshape(shape)
     return result
@@ -1956,7 +1973,7 @@ class Unit(_OrderedHashable):
         date = _discard_microsecond(date)
         return cdf_utime.date2num(date)
 
-    def num2date(self, time_value):
+    def num2date(self, time_value, only_use_cftime_datetimes=False):
         """
         Returns a datetime-like object calculated from the numeric time
         value using the current calendar and the unit time reference.
@@ -1965,8 +1982,8 @@ class Unit(_OrderedHashable):
         '<time-unit> since <time-origin>'
         i.e. 'hours since 1970-01-01 00:00:00'
 
-        The datetime objects returned are 'real' Python datetime objects
-        if the date falls in the Gregorian calendar (i.e. the calendar
+        By default, the datetime objects returned are 'real' Python datetime
+        objects if the date falls in the Gregorian calendar (i.e. the calendar
         is 'standard', 'gregorian', or 'proleptic_gregorian' and the
         date is after 1582-10-15). Otherwise a 'phoney' datetime-like
         object (cftime.datetime) is returned which can handle dates
@@ -1977,8 +1994,15 @@ class Unit(_OrderedHashable):
 
         Args:
 
-        * time_value (float): Numeric time value/s. Maximum resolution
-          is 1 second.
+        * time_value (float):
+            Numeric time value/s. Maximum resolution is 1 second.
+
+        Kwargs:
+
+        * only_use_cftime_datetimes (bool):
+            If True, will always return cftime datetime objects, regardless of
+            calendar.  If False, returns datetime.datetime instances where
+            possible.  Defaults to False.
 
         Returns:
             datetime, or numpy.ndarray of datetime object.
@@ -1996,4 +2020,6 @@ class Unit(_OrderedHashable):
 
         """
         cdf_utime = self.utime()
-        return _num2date_to_nearest_second(time_value, cdf_utime)
+        return _num2date_to_nearest_second(
+            time_value, cdf_utime,
+            only_use_cftime_datetimes=only_use_cftime_datetimes)

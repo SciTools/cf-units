@@ -32,10 +32,12 @@ class Test(unittest.TestCase):
         self.uhours = cftime.utime('hours since 1970-01-01', calendar)
         self.udays = cftime.utime('days since 1970-01-01', calendar)
 
-    def check_dates(self, nums, utimes, expected):
+    def check_dates(self, nums, utimes, expected, only_cftime=False):
         for num, utime, exp in zip(nums, utimes, expected):
-            res = _num2date_to_nearest_second(num, utime)
+            res = _num2date_to_nearest_second(
+                num, utime, only_use_cftime_datetimes=only_cftime)
             self.assertEqual(exp, res)
+            self.assertIsInstance(res, type(exp))
 
     def check_timedelta(self, nums, utimes, expected):
         for num, utime, exp in zip(nums, utimes, expected):
@@ -51,6 +53,7 @@ class Test(unittest.TestCase):
         exp = datetime.datetime(1970, 1, 1, 0, 0, 5)
         res = _num2date_to_nearest_second(num, utime)
         self.assertEqual(exp, res)
+        self.assertIsInstance(res, datetime.datetime)
 
     def test_sequence(self):
         utime = cftime.utime('seconds since 1970-01-01',  'gregorian')
@@ -102,6 +105,27 @@ class Test(unittest.TestCase):
                     datetime.datetime(1971, 8, 24)]
 
         self.check_dates(nums, utimes, expected)
+
+    def test_simple_gregorian_cftime_type(self):
+        self.setup_units('gregorian')
+        nums = [20., 40.,
+                75., 150.,
+                8., 16.,
+                300., 600.]
+        utimes = [self.useconds, self.useconds,
+                  self.uminutes, self.uminutes,
+                  self.uhours, self.uhours,
+                  self.udays, self.udays]
+        expected = [cftime.DatetimeGregorian(1970, 1, 1, 0, 0, 20),
+                    cftime.DatetimeGregorian(1970, 1, 1, 0, 0, 40),
+                    cftime.DatetimeGregorian(1970, 1, 1, 1, 15),
+                    cftime.DatetimeGregorian(1970, 1, 1, 2, 30),
+                    cftime.DatetimeGregorian(1970, 1, 1, 8),
+                    cftime.DatetimeGregorian(1970, 1, 1, 16),
+                    cftime.DatetimeGregorian(1970, 10, 28),
+                    cftime.DatetimeGregorian(1971, 8, 24)]
+
+        self.check_dates(nums, utimes, expected, only_cftime=True)
 
     def test_fractional_gregorian(self):
         self.setup_units('gregorian')
