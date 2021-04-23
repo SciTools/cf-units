@@ -484,7 +484,7 @@ def _discard_microsecond(date):
     dates = np.asarray(date)
     shape = dates.shape
     dates = dates.ravel()
-    # Create date objects of the same type returned by utime.num2date()
+    # Create date objects of the same type returned by cftime.num2date()
     # (either datetime.datetime or cftime.datetime), discarding the
     # microseconds
     dates = np.array([d and d.__class__(d.year, d.month, d.day,
@@ -596,7 +596,7 @@ def _num2date_to_nearest_second(time_value, utime,
     time_values = time_values.ravel()
 
     # We account for the edge case where the time is in seconds and has a
-    # half second: utime.num2date() may produce a date that would round
+    # half second: cftime.num2date() may produce a date that would round
     # down.
     #
     # Note that this behaviour is different to the num2date function in version
@@ -606,7 +606,7 @@ def _num2date_to_nearest_second(time_value, utime,
     # later versions, if one wished to do so for the sake of consistency.
     has_half_seconds = np.logical_and(utime.units == 'seconds',
                                       time_values % 1. == 0.5)
-    dates = utime.num2date(
+    dates = cftime.num2date(
         time_values, only_use_cftime_datetimes=only_use_cftime_datetimes)
     try:
         # We can assume all or none of the dates have a microsecond attribute
@@ -618,7 +618,7 @@ def _num2date_to_nearest_second(time_value, utime,
     if time_values[ceil_mask].size > 0:
         useconds = Unit('second')
         second_frac = useconds.convert(0.75, utime.units)
-        dates[ceil_mask] = utime.num2date(
+        dates[ceil_mask] = cftime.num2date(
             time_values[ceil_mask] + second_frac,
             only_use_cftime_datetimes=only_use_cftime_datetimes)
     dates[round_mask] = _discard_microsecond(dates[round_mask])
