@@ -572,7 +572,7 @@ def num2date(time_value, unit, calendar, only_use_cftime_datetimes=False):
         time_value, only_use_cftime_datetimes=only_use_cftime_datetimes)
 
 
-def _num2date_to_nearest_second(time_value, units,
+def _num2date_to_nearest_second(time_value, utime, units,
                                 only_use_cftime_datetimes=False):
     """
     Return datetime encoding of numeric time value with respect to the given
@@ -580,6 +580,8 @@ def _num2date_to_nearest_second(time_value, units,
 
     * time_value (float):
         Numeric time value/s.
+    * utime (cftime.utime):
+        cftime.utime object with which to perform the conversion/s.
     * units (Unit):
         Unit object with which to perform the conversion/s.
 
@@ -604,7 +606,7 @@ def _num2date_to_nearest_second(time_value, units,
     # those versions, a half-second value would be rounded up or down
     # arbitrarily. It is probably not possible to replicate that behaviour with
     # later versions, if one wished to do so for the sake of consistency.
-    has_half_seconds = np.logical_and(units.calendar.startswith('seconds'),
+    has_half_seconds = np.logical_and(utime.units == 'seconds',
                                       time_values % 1. == 0.5)
     dates = cftime.num2date(
         time_values, units.origin, calendar=units.calendar,
@@ -618,7 +620,7 @@ def _num2date_to_nearest_second(time_value, units,
     ceil_mask = np.logical_or(has_half_seconds, microseconds >= 500000)
     if time_values[ceil_mask].size > 0:
         useconds = Unit('second')
-        second_frac = useconds.convert(0.75, units)
+        second_frac = useconds.convert(0.75, utime.units)
         dates[ceil_mask] = cftime.num2date(
             time_values[ceil_mask] + second_frac, units.origin,
             calendar=units.calendar,
@@ -2021,6 +2023,7 @@ class Unit(_OrderedHashable):
             ['1970-01-01 06:00:00', '1970-01-01 07:00:00']
 
         """
+        cdf_utime = self.utime()
         return _num2date_to_nearest_second(
-            time_value, self,
+            time_value, cdf_utime, self,
             only_use_cftime_datetimes=only_use_cftime_datetimes)
