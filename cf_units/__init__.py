@@ -2022,7 +2022,6 @@ class Unit(_OrderedHashable):
 
         """
         cdf_utime = self.utime()
-
         return _num2date_to_nearest_second(
             time_value, cdf_utime,
             only_use_cftime_datetimes=only_use_cftime_datetimes)
