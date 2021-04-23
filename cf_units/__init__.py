@@ -572,7 +572,7 @@ def num2date(time_value, unit, calendar, only_use_cftime_datetimes=False):
         time_value, only_use_cftime_datetimes=only_use_cftime_datetimes)
 
 
-def _num2date_to_nearest_second(time_value, utime,
+def _num2date_to_nearest_second(time_value, utime, 
                                 only_use_cftime_datetimes=False):
     """
     Return datetime encoding of numeric time value with respect to the given
@@ -2022,6 +2022,7 @@ class Unit(_OrderedHashable):
 
         """
         cdf_utime = self.utime()
+        
         return _num2date_to_nearest_second(
             time_value, cdf_utime,
             only_use_cftime_datetimes=only_use_cftime_datetimes)
