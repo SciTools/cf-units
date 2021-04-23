@@ -572,7 +572,7 @@ def num2date(time_value, unit, calendar, only_use_cftime_datetimes=False):
         time_value, only_use_cftime_datetimes=only_use_cftime_datetimes)
 
 
-def _num2date_to_nearest_second(time_value, utime, units,
+def _num2date_to_nearest_second(time_value, utime,
                                 only_use_cftime_datetimes=False):
     """
     Return datetime encoding of numeric time value with respect to the given
@@ -582,8 +582,6 @@ def _num2date_to_nearest_second(time_value, utime, units,
         Numeric time value/s.
     * utime (cftime.utime):
         cftime.utime object with which to perform the conversion/s.
-    * units (Unit):
-        Unit object with which to perform the conversion/s.
 
     * only_use_cftime_datetimes (bool):
         If True, will always return cftime datetime objects, regardless of
@@ -609,7 +607,7 @@ def _num2date_to_nearest_second(time_value, utime, units,
     has_half_seconds = np.logical_and(utime.units == 'seconds',
                                       time_values % 1. == 0.5)
     dates = cftime.num2date(
-        time_values, units.origin, calendar=units.calendar,
+        time_values, utime.unit_string, calendar=utime.calendar,
         only_use_cftime_datetimes=only_use_cftime_datetimes)
     try:
         # We can assume all or none of the dates have a microsecond attribute
@@ -622,8 +620,8 @@ def _num2date_to_nearest_second(time_value, utime, units,
         useconds = Unit('second')
         second_frac = useconds.convert(0.75, utime.units)
         dates[ceil_mask] = cftime.num2date(
-            time_values[ceil_mask] + second_frac, units.origin,
-            calendar=units.calendar,
+            time_values[ceil_mask] + second_frac, utime.unit_string,
+            calendar=utime.calendar,
             only_use_cftime_datetimes=only_use_cftime_datetimes)
     dates[round_mask] = _discard_microsecond(dates[round_mask])
     result = dates[0] if shape is () else dates.reshape(shape)
@@ -2025,5 +2023,5 @@ class Unit(_OrderedHashable):
         """
         cdf_utime = self.utime()
         return _num2date_to_nearest_second(
-            time_value, cdf_utime, self,
+            time_value, cdf_utime,
             only_use_cftime_datetimes=only_use_cftime_datetimes)
