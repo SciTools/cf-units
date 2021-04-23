@@ -462,7 +462,6 @@ def date2num(date, unit, calendar):
     if unit_string.endswith(" since epoch"):
         unit_string = unit_string.replace("epoch", EPOCH)
     unit_inst = Unit(unit_string, calendar=calendar)
-
     return unit_inst.date2num(date)
 
 
