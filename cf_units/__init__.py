@@ -572,8 +572,7 @@ def num2date(time_value, unit, calendar, only_use_cftime_datetimes=False):
         time_value, only_use_cftime_datetimes=only_use_cftime_datetimes)
 
 
-def _num2date_to_nearest_second(time_value, utime,
-                                only_use_cftime_datetimes=False):
+def _num2date_to_nearest_second(time_value, utime):
     """
     Return datetime encoding of numeric time value with respect to the given
     time reference units, with a resolution of 1 second.
@@ -582,11 +581,6 @@ def _num2date_to_nearest_second(time_value, utime,
         Numeric time value/s.
     * utime (cftime.utime):
         cftime.utime object with which to perform the conversion/s.
-
-    * only_use_cftime_datetimes (bool):
-        If True, will always return cftime datetime objects, regardless of
-        calendar.  If False, returns datetime.datetime instances where
-        possible.  Defaults to False.
 
     Returns:
         datetime, or numpy.ndarray of datetime object.
@@ -606,9 +600,7 @@ def _num2date_to_nearest_second(time_value, utime,
     # later versions, if one wished to do so for the sake of consistency.
     has_half_seconds = np.logical_and(utime.units == 'seconds',
                                       time_values % 1. == 0.5)
-    dates = cftime.num2date(
-        time_values, utime.unit_string, calendar=utime.calendar,
-        only_use_cftime_datetimes=only_use_cftime_datetimes)
+    dates = utime.num2date(time_values)
     try:
         # We can assume all or none of the dates have a microsecond attribute
         microseconds = np.array([d.microsecond if d else 0 for d in dates])
@@ -619,10 +611,7 @@ def _num2date_to_nearest_second(time_value, utime,
     if time_values[ceil_mask].size > 0:
         useconds = Unit('second')
         second_frac = useconds.convert(0.75, utime.units)
-        dates[ceil_mask] = cftime.num2date(
-            time_values[ceil_mask] + second_frac, utime.unit_string,
-            calendar=utime.calendar,
-            only_use_cftime_datetimes=only_use_cftime_datetimes)
+        dates[ceil_mask] = utime.num2date(time_values[ceil_mask] + second_frac)
     dates[round_mask] = _discard_microsecond(dates[round_mask])
     result = dates[0] if shape is () else dates.reshape(shape)
     return result
@@ -1897,7 +1886,7 @@ class Unit(_OrderedHashable):
             raise ValueError("Unable to convert from '%r' to '%r'." %
                              (self, other))
 
-    def utime(self):
+    def utime(self, only_use_cftime_datetimes=False):
         """
         Returns a cftime.utime object which performs conversions of
         numeric time values to/from datetime objects given the current
@@ -1906,6 +1895,13 @@ class Unit(_OrderedHashable):
         The current unit time reference must be of the form:
         '<time-unit> since <time-origin>'
         i.e. 'hours since 1970-01-01 00:00:00'
+
+        Kwargs:
+
+        * only_use_cftime_datetimes (bool):
+            If True, num2date method will always return cftime datetime
+            objects, regardless of calendar.  If False, returns
+            datetime.datetime instances where possible.  Defaults to False.
 
         Returns:
             cftime.utime.
@@ -2021,7 +2017,7 @@ class Unit(_OrderedHashable):
             ['1970-01-01 06:00:00', '1970-01-01 07:00:00']
 
         """
-        cdf_utime = self.utime()
-        return _num2date_to_nearest_second(
-            time_value, cdf_utime,
+        cdf_utime = self.utime(
             only_use_cftime_datetimes=only_use_cftime_datetimes)
+
+        return _num2date_to_nearest_second(time_value, cdf_utime)
