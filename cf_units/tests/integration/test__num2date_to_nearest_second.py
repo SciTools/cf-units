@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2016 - 2020, Met Office
+# (C) British Crown Copyright 2016 - 2021, Met Office
 #
 # This file is part of cf-units.
 #
@@ -51,6 +51,7 @@ class Test(unittest.TestCase):
         exp = datetime.datetime(1970, 1, 1, 0, 0, 5)
         res = _num2date_to_nearest_second(num, utime)
         self.assertEqual(exp, res)
+        self.assertIsInstance(res, datetime.datetime)
 
     def test_sequence(self):
         utime = cftime.utime('seconds since 1970-01-01',  'gregorian')
