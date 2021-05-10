@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2015 - 2019, Met Office
+# (C) British Crown Copyright 2015 - 2020, Met Office
 #
 # This file is part of cf-units.
 #
@@ -15,9 +15,6 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with cf-units.  If not, see <http://www.gnu.org/licenses/>.
 """Unit tests for the `cf_units.Unit` class."""
-
-from __future__ import (absolute_import, division, print_function)
-from six.moves import (filter, input, map, range, zip)  # noqa
 
 import unittest
 

@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2019, Met Office
+# (C) British Crown Copyright 2019 - 2020, Met Office
 #
 # This file is part of cf-units.
 #
@@ -16,13 +16,8 @@
 # along with cf-units.  If not, see <http://www.gnu.org/licenses/>.
 
 import pytest
-import six
 
 from cf_units.tex import tex
-
-
-if six.PY2:
-    pytest.skip('skipping latex in Python2')
 
 
 def test_basic():

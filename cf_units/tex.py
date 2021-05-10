@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2019, Met Office
+# (C) British Crown Copyright 2019 - 2020, Met Office
 #
 # This file is part of cf-units.
 #
@@ -14,11 +14,6 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with cf-units.  If not, see <http://www.gnu.org/licenses/>.
-
-import six
-
-if six.PY2:
-    raise ImportError('Python3 required for cf-units latex support')
 
 import cf_units._udunits2_parser.graph as graph  # noqa: E402
 from cf_units._udunits2_parser import parse as _parse  # noqa: E402

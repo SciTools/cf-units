@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2017 - 2018, Met Office
+# (C) British Crown Copyright 2017 - 2020, Met Office
 #
 # This file is part of cf-units.
 #
@@ -19,9 +19,6 @@
 In most cases, we don't test the correctness
 of the operations, only that they return valid objects or raise an
 exception where expected."""
-
-from __future__ import (absolute_import, division, print_function)
-from six.moves import (filter, input, map, range, zip)  # noqa
 
 import errno
 import unittest

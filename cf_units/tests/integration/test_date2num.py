@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2016 - 2019, Met Office
+# (C) British Crown Copyright 2016 - 2020, Met Office
 #
 # This file is part of cf-units.
 #
@@ -16,14 +16,10 @@
 # along with cf-units.  If not, see <http://www.gnu.org/licenses/>.
 """Test function :func:`cf_units.date2num`."""
 
-from __future__ import (absolute_import, division, print_function)
-from six.moves import (filter, input, map, range, zip)  # noqa
-
 import unittest
 import datetime
 
 import numpy as np
-import six
 
 from cf_units import date2num
 
@@ -74,7 +70,7 @@ class Test(unittest.TestCase):
         unit = 'years since 1970-01-01'
         date = datetime.datetime(1970, 1, 1, 0, 0, 5)
         exp_emsg = 'interval of "months", "years" .* got "years".'
-        with six.assertRaisesRegex(self, ValueError, exp_emsg):
+        with self.assertRaisesRegex(ValueError, exp_emsg):
             date2num(date, unit, self.calendar)
 
 

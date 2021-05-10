@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2015 - 2019, Met Office
+# (C) British Crown Copyright 2015 - 2020, Met Office
 #
 # This file is part of cf-units.
 #
@@ -24,11 +24,6 @@ See also: `UDUNITS-2
 <http://www.unidata.ucar.edu/software/udunits>`_.
 
 """
-
-from __future__ import (absolute_import, division, print_function)
-from six.moves import (filter, input, map, range, zip)  # noqa
-
-import six
 
 from contextlib import contextmanager
 import copy
@@ -630,7 +625,7 @@ def as_unit(unit):
         result = unit
     else:
         result = None
-        use_cache = isinstance(unit, six.string_types) or unit is None
+        use_cache = isinstance(unit, (str,)) or unit is None
         if use_cache:
             result = _CACHE.get(unit)
         if result is None:
@@ -703,8 +698,6 @@ def _ud_value_error(ud_err, message):
     message = u'[{status}] {message}'.format(
         status=ud_err.status_msg(), message=message)
 
-    if six.PY2:
-        message = message.encode('utf8')
     return ValueError(message)
 
 
@@ -829,16 +822,7 @@ class Unit(_OrderedHashable):
         if unit is None:
             unit = ''
 
-        if six.PY2:
-            if not isinstance(unit, six.text_type):
-                # Cast everything that isn't a unicode object to a str.
-                unit = str(unit)
-            if isinstance(unit, str):
-                # All str in py2 should be treated as ASCII.
-                encoding = UT_ASCII
-        else:
-            unit = str(unit)
-        unit = unit.strip()
+        unit = str(unit).strip()
 
         if unit.lower().endswith(' utc'):
             unit = unit[:unit.lower().rfind(' utc')]
@@ -861,20 +845,17 @@ class Unit(_OrderedHashable):
             unit = _NO_UNIT_STRING
         else:
             category = _CATEGORY_UDUNIT
-            if six.PY2 and not isinstance(unit, six.text_type):
-                str_unit = unit.encode('utf8')
-            else:
-                str_unit = unit
+            str_unit = unit
             try:
                 ut_unit = _ud.parse(_ud_system, unit.encode('utf8'), encoding)
             except _ud.UdunitsError as exception:
                 value_error = _ud_value_error(
                     exception, u'Failed to parse unit "{}"'.format(str_unit))
-                six.raise_from(value_error, None)
+                raise value_error from None
             if _OP_SINCE in unit.lower():
                 if calendar is None:
                     calendar_ = CALENDAR_GREGORIAN
-                elif isinstance(calendar, six.string_types):
+                elif isinstance(calendar, (str,)):
                     calendar_ = calendar.lower()
                     if calendar_ in CALENDAR_ALIASES:
                         calendar_ = CALENDAR_ALIASES[calendar_]
@@ -1234,10 +1215,7 @@ class Unit(_OrderedHashable):
             encoding_str = _encoding_lookup[encoding]
             result = _ud.format(self.ut_unit, bitmask)
 
-            if six.PY2 and encoding_str != 'ascii':
-                result = six.text_type(result.decode(encoding_str))
-            else:
-                result = str(result.decode(encoding_str))
+            result = str(result.decode(encoding_str))
             return result
 
     @property
@@ -1338,7 +1316,7 @@ class Unit(_OrderedHashable):
 
         """
 
-        if not isinstance(origin, (float, six.integer_types)):
+        if not isinstance(origin, (float, (int,))):
             raise TypeError('a numeric type for the origin argument is'
                             ' required')
         try:
@@ -1346,7 +1324,7 @@ class Unit(_OrderedHashable):
         except _ud.UdunitsError as exception:
             value_error = _ud_value_error(
                 exception, 'Failed to offset {!r}'.format(self))
-            six.raise_from(value_error, None)
+            raise value_error from None
         calendar = None
         return Unit._new_from_existing_ut(_CATEGORY_UDUNIT, ut_unit, calendar)
 
@@ -1416,7 +1394,7 @@ class Unit(_OrderedHashable):
                     value_error = _ud_value_error(
                         exception,
                         'Failed to take the root of {!r}'.format(self))
-                    six.raise_from(value_error, None)
+                    raise value_error from None
                 calendar = None
                 result = Unit._new_from_existing_ut(
                     _CATEGORY_UDUNIT, ut_unit, calendar)
@@ -1457,7 +1435,7 @@ class Unit(_OrderedHashable):
                     exception,
                     'Failed to calculate logorithmic base '
                     'of {!r}'.format(self))
-                six.raise_from(value_err, None)
+                raise value_err from None
             calendar = None
             result = Unit._new_from_existing_ut(
                 _CATEGORY_UDUNIT, ut_unit, calendar)
@@ -1479,12 +1457,6 @@ class Unit(_OrderedHashable):
 
         """
         return self.origin or self.symbol
-
-    if six.PY2:
-        __unicode__ = __str__
-
-        def __str__(self):
-            return unicode(self).encode('utf8')  # noqa: F821
 
     def __repr__(self):
         """
@@ -1555,7 +1527,7 @@ class Unit(_OrderedHashable):
                 value_err = _ud_value_error(
                     exception,
                     'Failed to {} {!r} by {!r}'.format(op_label, self, other))
-                six.raise_from(value_err, None)
+                raise value_err from None
             calendar = None
             result = Unit._new_from_existing_ut(
                 _CATEGORY_UDUNIT, ut_unit, calendar)
@@ -1707,7 +1679,7 @@ class Unit(_OrderedHashable):
                     value_err = _ud_value_error(
                         exception,
                         'Failed to raise the power of {!r}'.format(self))
-                    six.raise_from(value_err, None)
+                    raise value_err from None
                 result = Unit._new_from_existing_ut(_CATEGORY_UDUNIT, ut_unit)
         return result
 
@@ -1854,7 +1826,7 @@ class Unit(_OrderedHashable):
                     value_err = _ud_value_error(
                         exception,
                         'Failed to convert {!r} to {!r}'.format(self, other))
-                    six.raise_from(value_err, None)
+                    raise value_err from None
                 if isinstance(result, np.ndarray):
                     # Can only handle array of np.float32 or np.float64 so
                     # cast array of ints to array of floats of requested
