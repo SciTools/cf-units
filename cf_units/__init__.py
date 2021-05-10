@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2015 - 2020, Met Office
+# (C) British Crown Copyright 2015 - 2021, Met Office
 #
 # This file is part of cf-units.
 #
@@ -442,14 +442,14 @@ def date2num(date, unit, calendar):
 
         >>> import cf_units
         >>> import datetime
-        >>> dt1 = datetime.datetime(1970, 1, 1, 6, 0, 0)
-        >>> dt2 = datetime.datetime(1970, 1, 1, 7, 0, 0)
+        >>> dt1 = datetime.datetime(1970, 1, 1, 6, 30, 0)
+        >>> dt2 = datetime.datetime(1970, 1, 1, 7, 30, 0)
         >>> cf_units.date2num(dt1, 'hours since 1970-01-01 00:00:00',
         ...               cf_units.CALENDAR_STANDARD)
-        6.0
+        6.5
         >>> cf_units.date2num([dt1, dt2], 'hours since 1970-01-01 00:00:00',
         ...               cf_units.CALENDAR_STANDARD)
-        array([6., 7.])
+        array([6.5, 7.5])
 
     """
 
@@ -1944,11 +1944,11 @@ class Unit(_OrderedHashable):
             >>> import datetime
             >>> u = cf_units.Unit('hours since 1970-01-01 00:00:00',
             ...                   calendar=cf_units.CALENDAR_STANDARD)
-            >>> round(u.date2num(datetime.datetime(1970, 1, 1, 5)))
-            5.0
-            >>> u.date2num([datetime.datetime(1970, 1, 1, 5),
-            ...             datetime.datetime(1970, 1, 1, 6)])
-            array([5., 6.])
+            >>> u.date2num(datetime.datetime(1970, 1, 1, 5, 30))
+            5.5
+            >>> u.date2num([datetime.datetime(1970, 1, 1, 5, 30),
+            ...             datetime.datetime(1970, 1, 1, 6, 30)])
+            array([5.5, 6.5])
 
         """
 
