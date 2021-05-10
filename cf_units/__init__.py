@@ -572,7 +572,8 @@ def num2date(time_value, unit, calendar, only_use_cftime_datetimes=False):
         time_value, only_use_cftime_datetimes=only_use_cftime_datetimes)
 
 
-def _num2date_to_nearest_second(time_value, utime):
+def _num2date_to_nearest_second(time_value, utime,
+                                only_use_cftime_datetimes=False):
     """
     Return datetime encoding of numeric time value with respect to the given
     time reference units, with a resolution of 1 second.
@@ -581,6 +582,11 @@ def _num2date_to_nearest_second(time_value, utime):
         Numeric time value/s.
     * utime (cftime.utime):
         cftime.utime object with which to perform the conversion/s.
+
+    * only_use_cftime_datetimes (bool):
+        If True, will always return cftime datetime objects, regardless of
+        calendar.  If False, returns datetime.datetime instances where
+        possible.  Defaults to False.
 
     Returns:
         datetime, or numpy.ndarray of datetime object.
@@ -600,7 +606,9 @@ def _num2date_to_nearest_second(time_value, utime):
     # later versions, if one wished to do so for the sake of consistency.
     has_half_seconds = np.logical_and(utime.units == 'seconds',
                                       time_values % 1. == 0.5)
-    dates = utime.num2date(time_values)
+    dates = cftime.num2date(
+        time_values, utime.unit_string, calendar=utime.calendar,
+        only_use_cftime_datetimes=only_use_cftime_datetimes)
     try:
         # We can assume all or none of the dates have a microsecond attribute
         microseconds = np.array([d.microsecond if d else 0 for d in dates])
@@ -611,7 +619,10 @@ def _num2date_to_nearest_second(time_value, utime):
     if time_values[ceil_mask].size > 0:
         useconds = Unit('second')
         second_frac = useconds.convert(0.75, utime.units)
-        dates[ceil_mask] = utime.num2date(time_values[ceil_mask] + second_frac)
+        dates[ceil_mask] = cftime.num2date(
+            time_values[ceil_mask] + second_frac, utime.unit_string,
+            calendar=utime.calendar,
+            only_use_cftime_datetimes=only_use_cftime_datetimes)
     dates[round_mask] = _discard_microsecond(dates[round_mask])
     result = dates[0] if shape is () else dates.reshape(shape)
     return result
