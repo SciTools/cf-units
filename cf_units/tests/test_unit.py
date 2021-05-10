@@ -29,6 +29,7 @@ import re
 from operator import truediv
 
 import numpy as np
+import cftime
 
 import cf_units as unit
 from cf_units import suppress_errors
@@ -262,7 +263,7 @@ class Test__apply_offset(unittest.TestCase):
     def test_not_numerical_offset(self):
         u = Unit('meter')
         with self.assertRaisesRegex(TypeError,
-                                   'unsupported operand type'):
+                                    'unsupported operand type'):
             operator.add(u, 'not_a_number')
 
     def test_unit_unknown(self):
@@ -989,6 +990,13 @@ class TestNumsAndDates(unittest.TestCase):
         res = u.num2date(1)
         self.assertEqual(str(res), '2010-11-02 13:00:00')
         self.assertIsInstance(res, datetime.datetime)
+
+    def test_num2date_cftime_type(self):
+        u = Unit('hours since 2010-11-02 12:00:00',
+                 calendar=unit.CALENDAR_STANDARD)
+        res = u.num2date(1, only_use_cftime_datetimes=True)
+        self.assertEqual(str(res), '2010-11-02 13:00:00')
+        self.assertIsInstance(res, cftime.DatetimeGregorian)
 
     def test_date2num(self):
         u = Unit('hours since 2010-11-02 12:00:00',
