@@ -7,6 +7,10 @@ Units of measure as defined by the Climate and Forecast (CF) metadata
 conventions.
 </h4>
 
+### `v2.1.5` branch - not to be merged back as-is
+
+This branch enforces legacy behaviour for uses of `cftime.num2date()`. `master` branch already wraps the latest `cftime.num2date()` default behaviour, which now returns a `cftime.datetime` object instead of a `datetime.datetime`; all future releases should include this as the default behaviour.
+
 <p align="center">
 <!-- https://shields.io/ is a good source of these -->
 <a href="https://anaconda.org/conda-forge/cf-units">
