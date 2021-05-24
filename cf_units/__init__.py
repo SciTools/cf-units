@@ -494,7 +494,7 @@ def _discard_microsecond(date):
     return result
 
 
-def num2date(time_value, unit, calendar, only_use_cftime_datetimes=False):
+def num2date(time_value, unit, calendar, only_use_cftime_datetimes=True):
     """
     Return datetime encoding of numeric time value (resolution of 1 second).
 
@@ -508,14 +508,11 @@ def num2date(time_value, unit, calendar, only_use_cftime_datetimes=False):
     unit = 'days since 001-01-01 00:00:00'}
     calendar = 'proleptic_gregorian'.
 
-    By default, the datetime instances returned are 'real' python datetime
-    objects if the date falls in the Gregorian calendar (i.e.
-    calendar='proleptic_gregorian', or calendar = 'standard' or 'gregorian'
-    and the date is after 1582-10-15). Otherwise, they are 'phony' datetime
-    objects which support some but not all the methods of 'real' python
-    datetime objects.  This is because the python datetime module cannot
-    use the 'proleptic_gregorian' calendar, even before the switch
-    occured from the Julian calendar in 1582. The datetime instances
+    By default, the datetime instances returned are cftime.datetime objects,
+    regardless of calendar.  If the only_use_cftime_datetimes keyword is set to
+    False, they are datetime.datetime objects if the date falls in the
+    Gregorian calendar (i.e. calendar is 'proleptic_gregorian', 'standard' or
+    'gregorian' and the date is after 1582-10-15). The datetime instances
     do not contain a time-zone offset, even if the specified unit
     contains one.
 
@@ -540,7 +537,7 @@ def num2date(time_value, unit, calendar, only_use_cftime_datetimes=False):
     * only_use_cftime_datetimes (bool):
         If True, will always return cftime datetime objects, regardless of
         calendar.  If False, returns datetime.datetime instances where
-        possible.  Defaults to False.
+        possible.  Defaults to True.
 
     Returns:
         datetime, or numpy.ndarray of datetime object.
@@ -573,7 +570,7 @@ def num2date(time_value, unit, calendar, only_use_cftime_datetimes=False):
 
 
 def _num2date_to_nearest_second(time_value, utime,
-                                only_use_cftime_datetimes=False):
+                                only_use_cftime_datetimes=True):
     """
     Return datetime encoding of numeric time value with respect to the given
     time reference units, with a resolution of 1 second.
@@ -586,7 +583,7 @@ def _num2date_to_nearest_second(time_value, utime,
     * only_use_cftime_datetimes (bool):
         If True, will always return cftime datetime objects, regardless of
         calendar.  If False, returns datetime.datetime instances where
-        possible.  Defaults to False.
+        possible.  Defaults to True.
 
     Returns:
         datetime, or numpy.ndarray of datetime object.
@@ -1984,7 +1981,7 @@ class Unit(_OrderedHashable):
         date = _discard_microsecond(date)
         return cdf_utime.date2num(date)
 
-    def num2date(self, time_value, only_use_cftime_datetimes=False):
+    def num2date(self, time_value, only_use_cftime_datetimes=True):
         """
         Returns a datetime-like object calculated from the numeric time
         value using the current calendar and the unit time reference.
@@ -1993,12 +1990,13 @@ class Unit(_OrderedHashable):
         '<time-unit> since <time-origin>'
         i.e. 'hours since 1970-01-01 00:00:00'
 
-        By default, the datetime objects returned are 'real' Python datetime
-        objects if the date falls in the Gregorian calendar (i.e. the calendar
-        is 'standard', 'gregorian', or 'proleptic_gregorian' and the
-        date is after 1582-10-15). Otherwise a 'phoney' datetime-like
-        object (cftime.datetime) is returned which can handle dates
-        that don't exist in the Proleptic Gregorian calendar.
+        By default, the datetime instances returned are cftime.datetime
+        objects, regardless of calendar.  If the only_use_cftime_datetimes
+        keyword is set to False, they are datetime.datetime objects if the date
+        falls in the Gregorian calendar (i.e. calendar is
+        'proleptic_gregorian', 'standard' or gregorian' and the date is after
+        1582-10-15). The datetime instances do not contain a time-zone offset,
+        even if the specified unit contains one.
 
         Works for scalars, sequences and numpy arrays. Returns a scalar
         if input is a scalar, else returns a numpy array.
@@ -2013,7 +2011,7 @@ class Unit(_OrderedHashable):
         * only_use_cftime_datetimes (bool):
             If True, will always return cftime datetime objects, regardless of
             calendar.  If False, returns datetime.datetime instances where
-            possible.  Defaults to False.
+            possible.  Defaults to True.
 
         Returns:
             datetime, or numpy.ndarray of datetime object.
