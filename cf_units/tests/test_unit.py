@@ -989,14 +989,14 @@ class TestNumsAndDates(unittest.TestCase):
                  calendar=unit.CALENDAR_STANDARD)
         res = u.num2date(1)
         self.assertEqual(str(res), '2010-11-02 13:00:00')
-        self.assertIsInstance(res, datetime.datetime)
+        self.assertIsInstance(res, cftime.DatetimeGregorian)
 
-    def test_num2date_cftime_type(self):
+    def test_num2date_py_datetime_type(self):
         u = Unit('hours since 2010-11-02 12:00:00',
                  calendar=unit.CALENDAR_STANDARD)
-        res = u.num2date(1, only_use_cftime_datetimes=True)
+        res = u.num2date(1, only_use_cftime_datetimes=False)
         self.assertEqual(str(res), '2010-11-02 13:00:00')
-        self.assertIsInstance(res, cftime.DatetimeGregorian)
+        self.assertIsInstance(res, datetime.datetime)
 
     def test_date2num(self):
         u = Unit('hours since 2010-11-02 12:00:00',
