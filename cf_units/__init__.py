@@ -359,14 +359,14 @@ def julian_day2date(julian_day, calendar):
 
         >>> import cf_units
         >>> import datetime
-        >>> dt = datetime.datetime(1970, 1, 1, 0, 0, 0)
+        >>> dt = cftime.datetime(1970, 1, 1, 0, 0, 0)
         >>> jd = cf_units.date2julian_day(dt, cf_units.CALENDAR_STANDARD)
         >>> print(cf_units.julian_day2date(jd, cf_units.CALENDAR_STANDARD))
         1970-01-01 00:00:00
 
     """
 
-    return cftime.DateFromJulianDay(julian_day, calendar)
+    return cftime.datetime.fromordinal(julian_day, calendar)
 
 
 def date2julian_day(date, calendar):
@@ -398,13 +398,13 @@ def date2julian_day(date, calendar):
 
         >>> import cf_units
         >>> import datetime
-        >>> cf_units.date2julian_day(datetime.datetime(1970, 1, 1, 0, 0, 0),
+        >>> cf_units.date2julian_day(cftime.datetime(1970, 1, 1, 0, 0, 0),
         ...                          cf_units.CALENDAR_STANDARD)
         2440587.5...
 
     """
 
-    return cftime.JulianDayFromDate(date, calendar)
+    return date.toordinal(fractional=True)
 
 
 def date2num(date, unit, calendar):
