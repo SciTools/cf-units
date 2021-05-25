@@ -587,7 +587,7 @@ def _num2date_to_nearest_second(time_value, unit,
 
     Returns:
         datetime, or numpy.ndarray of datetime object.
-        
+
     """
     time_values = np.asanyarray(time_value)
     shape = time_values.shape

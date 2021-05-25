@@ -114,9 +114,9 @@ class Test(unittest.TestCase):
                 8., 16.,
                 300., 600.]
         units = [self.useconds, self.useconds,
-                  self.uminutes, self.uminutes,
-                  self.uhours, self.uhours,
-                  self.udays, self.udays]
+                 self.uminutes, self.uminutes,
+                 self.uhours, self.uhours,
+                 self.udays, self.udays]
         expected = [cftime.DatetimeGregorian(1970, 1, 1, 0, 0, 20),
                     cftime.DatetimeGregorian(1970, 1, 1, 0, 0, 40),
                     cftime.DatetimeGregorian(1970, 1, 1, 1, 15),
@@ -227,9 +227,9 @@ class Test(unittest.TestCase):
                 8., 16.,
                 300., 600.]
         units = [self.useconds, self.useconds,
-                  self.uminutes, self.uminutes,
-                  self.uhours, self.uhours,
-                  self.udays, self.udays]
+                 self.uminutes, self.uminutes,
+                 self.uhours, self.uhours,
+                 self.udays, self.udays]
         # Expected results in (days, seconds) delta from unit epoch.
         expected = [(0, nums[0]),
                     (0, nums[1]),
@@ -248,8 +248,8 @@ class Test(unittest.TestCase):
                 15./60., 30./60.,
                 8./24., 16./24.]
         units = [self.uminutes, self.uminutes,
-                  self.uhours, self.uhours,
-                  self.udays, self.udays]
+                 self.uhours, self.uhours,
+                 self.udays, self.udays]
         # Expected results in (days, seconds) delta from unit epoch.
         expected = [(0, nums[0]*60),
                     (0, nums[1]*60),
