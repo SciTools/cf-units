@@ -506,8 +506,9 @@ def num2date(time_value, unit, calendar, only_use_cftime_datetimes=True):
 
     Like the :func:`matplotlib.dates.num2date` function, except that it allows
     for different units and calendars.  If
-    unit = 'days since 1970-01-01 00:00:00' and
-    calendar = 'proleptic_gregorian',
+    unit = 'days since 1970-01-01 00:00:00',
+    calendar = 'proleptic_gregorian' and
+    only_use_cftime_datetimes = False
     behaves the same as matplotlib with the default epoch of 1970-01-01.
 
     By default, the datetime instances returned are cftime.datetime objects,
