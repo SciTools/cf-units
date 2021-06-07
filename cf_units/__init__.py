@@ -503,7 +503,7 @@ def num2date(time_value, unit, calendar, only_use_cftime_datetimes=True):
     calendar arguments. The returned datetime object represent UTC with
     no time-zone offset, even if the specified unit contain a time-zone
     offset.
-    
+
     Like the :func:`matplotlib.dates.num2date` function, except that it allows
     for different units and calendars.  If
     unit = 'days since 1970-01-01 00:00:00' and
