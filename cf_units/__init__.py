@@ -418,9 +418,10 @@ def date2num(date, unit, calendar):
     applied to the returned numeric values.
 
     Like the :func:`matplotlib.dates.date2num` function, except that it allows
-    for different units and calendars.  Behaves the same as if
-    unit = 'days since 0001-01-01 00:00:00' and
-    calendar = 'proleptic_gregorian'.
+    for different units and calendars.  If
+    unit = 'days since 1970-01-01 00:00:00' and
+    calendar = 'proleptic_gregorian',
+    behaves the same as matplotlib with the default epoch of 1970-01-01.
 
     Args:
 
@@ -502,11 +503,12 @@ def num2date(time_value, unit, calendar, only_use_cftime_datetimes=True):
     calendar arguments. The returned datetime object represent UTC with
     no time-zone offset, even if the specified unit contain a time-zone
     offset.
-
+    
     Like the :func:`matplotlib.dates.num2date` function, except that it allows
-    for different units and calendars.  Behaves the same if
-    unit = 'days since 001-01-01 00:00:00'}
-    calendar = 'proleptic_gregorian'.
+    for different units and calendars.  If
+    unit = 'days since 1970-01-01 00:00:00' and
+    calendar = 'proleptic_gregorian',
+    behaves the same as matplotlib with the default epoch of 1970-01-01.
 
     By default, the datetime instances returned are cftime.datetime objects,
     regardless of calendar.  If the only_use_cftime_datetimes keyword is set to
