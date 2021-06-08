@@ -54,7 +54,7 @@ class Test(unittest.TestCase):
         exp = datetime.datetime(1970, 1, 1, 0, 0, 5)
         res = _num2date_to_nearest_second(num, unit)
         self.assertEqual(exp, res)
-        self.assertIsInstance(res, cftime.DatetimeGregorian)
+        self.assertIsInstance(res, cftime.datetime)
 
     def test_sequence(self):
         unit = cf_units.Unit('seconds since 1970-01-01',  'gregorian')
@@ -117,14 +117,15 @@ class Test(unittest.TestCase):
                  self.uminutes, self.uminutes,
                  self.uhours, self.uhours,
                  self.udays, self.udays]
-        expected = [cftime.DatetimeGregorian(1970, 1, 1, 0, 0, 20),
-                    cftime.DatetimeGregorian(1970, 1, 1, 0, 0, 40),
-                    cftime.DatetimeGregorian(1970, 1, 1, 1, 15),
-                    cftime.DatetimeGregorian(1970, 1, 1, 2, 30),
-                    cftime.DatetimeGregorian(1970, 1, 1, 8),
-                    cftime.DatetimeGregorian(1970, 1, 1, 16),
-                    cftime.DatetimeGregorian(1970, 10, 28),
-                    cftime.DatetimeGregorian(1971, 8, 24)]
+        expected = [
+            cftime.datetime(1970, 1, 1, 0, 0, 20, calendar='gregorian'),
+            cftime.datetime(1970, 1, 1, 0, 0, 40, calendar='gregorian'),
+            cftime.datetime(1970, 1, 1, 1, 15, calendar='gregorian'),
+            cftime.datetime(1970, 1, 1, 2, 30, calendar='gregorian'),
+            cftime.datetime(1970, 1, 1, 8, calendar='gregorian'),
+            cftime.datetime(1970, 1, 1, 16, calendar='gregorian'),
+            cftime.datetime(1970, 10, 28, calendar='gregorian'),
+            cftime.datetime(1971, 8, 24, calendar='gregorian')]
 
         self.check_dates(nums, units, expected)
 
@@ -136,12 +137,13 @@ class Test(unittest.TestCase):
         units = [self.uminutes, self.uminutes,
                  self.uhours, self.uhours,
                  self.udays, self.udays]
-        expected = [cftime.DatetimeGregorian(1970, 1, 1, 0, 0, 5),
-                    cftime.DatetimeGregorian(1970, 1, 1, 0, 0, 10),
-                    cftime.DatetimeGregorian(1970, 1, 1, 0, 15),
-                    cftime.DatetimeGregorian(1970, 1, 1, 0, 30),
-                    cftime.DatetimeGregorian(1970, 1, 1, 8),
-                    cftime.DatetimeGregorian(1970, 1, 1, 16)]
+        expected = [
+            cftime.datetime(1970, 1, 1, 0, 0, 5, calendar='gregorian'),
+            cftime.datetime(1970, 1, 1, 0, 0, 10, calendar='gregorian'),
+            cftime.datetime(1970, 1, 1, 0, 15, calendar='gregorian'),
+            cftime.datetime(1970, 1, 1, 0, 30, calendar='gregorian'),
+            cftime.datetime(1970, 1, 1, 8, calendar='gregorian'),
+            cftime.datetime(1970, 1, 1, 16, calendar='gregorian')]
 
         self.check_dates(nums, units, expected)
 
@@ -150,13 +152,13 @@ class Test(unittest.TestCase):
         nums = [0.25, 0.5, 0.75,
                 1.5, 2.5, 3.5, 4.5]
         units = [self.useconds] * 7
-        expected = [cftime.DatetimeGregorian(1970, 1, 1, 0, 0, 0),
-                    cftime.DatetimeGregorian(1970, 1, 1, 0, 0, 1),
-                    cftime.DatetimeGregorian(1970, 1, 1, 0, 0, 1),
-                    cftime.DatetimeGregorian(1970, 1, 1, 0, 0, 2),
-                    cftime.DatetimeGregorian(1970, 1, 1, 0, 0, 3),
-                    cftime.DatetimeGregorian(1970, 1, 1, 0, 0, 4),
-                    cftime.DatetimeGregorian(1970, 1, 1, 0, 0, 5)]
+        expected = [cftime.datetime(1970, 1, 1, 0, 0, 0, calendar='gregorian'),
+                    cftime.datetime(1970, 1, 1, 0, 0, 1, calendar='gregorian'),
+                    cftime.datetime(1970, 1, 1, 0, 0, 1, calendar='gregorian'),
+                    cftime.datetime(1970, 1, 1, 0, 0, 2, calendar='gregorian'),
+                    cftime.datetime(1970, 1, 1, 0, 0, 3, calendar='gregorian'),
+                    cftime.datetime(1970, 1, 1, 0, 0, 4, calendar='gregorian'),
+                    cftime.datetime(1970, 1, 1, 0, 0, 5, calendar='gregorian')]
 
         self.check_dates(nums, units, expected)
 

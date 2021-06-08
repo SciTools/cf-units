@@ -62,8 +62,6 @@ __all__ = ['CALENDAR_STANDARD',
            'UT_ASCII',
            'FLOAT32',
            'FLOAT64',
-           'julian_day2date',
-           'date2julian_day',
            'is_time',
            'is_vertical',
            'Unit',
@@ -324,89 +322,6 @@ def decode_time(time):
     return _ud.decode_time(time)
 
 
-def julian_day2date(julian_day, calendar):
-    """
-    Return a cftime datetime-like object representing the Julian day.
-
-    If calendar is 'standard' or 'gregorian', Julian day follows
-    Julian calendar on and before 1582-10-5, Gregorian calendar after
-    1582-10-15.
-    If calendar is 'proleptic_gregorian', Julian Day follows Gregorian
-    calendar.
-    If calendar is 'julian', Julian Day follows Julian calendar.
-
-    The datetime object is a 'real' datetime object if the date falls in
-    the Gregorian calendar (i.e. calendar is 'proleptic_gregorian', or
-    calendar is 'standard'/'gregorian' and the date is after 1582-10-15).
-    Otherwise, it's a 'phony' datetime object which is actually an instance
-    of cftime.datetime.
-
-    Algorithm:
-        Meeus, Jean (1998) Astronomical Algorithms (2nd Edition).
-        Willmann-Bell, Virginia. p. 63.
-
-    Args:
-
-    * julian_day (float):
-        Julian day with a resolution of 1 second.
-    * calendar (string):
-        Name of the calendar, see cf_units.CALENDARS.
-
-    Returns:
-        datetime or cftime.datetime.
-
-    For example:
-
-        >>> import cf_units
-        >>> import datetime
-        >>> dt = cftime.datetime(1970, 1, 1, 0, 0, 0)
-        >>> jd = cf_units.date2julian_day(dt, cf_units.CALENDAR_STANDARD)
-        >>> print(cf_units.julian_day2date(jd, cf_units.CALENDAR_STANDARD))
-        1970-01-01 00:00:00
-
-    """
-
-    return cftime.datetime.fromordinal(julian_day, calendar)
-
-
-def date2julian_day(date, calendar):
-    """
-    Return the Julian day (resolution of 1 second) from a cftime
-    datetime-like object.
-
-    If calendar is 'standard' or 'gregorian', Julian day follows Julian
-    calendar on and before 1582-10-5, Gregorian calendar after 1582-10-15.
-    If calendar is 'proleptic_gregorian', Julian day follows Gregorian
-    calendar.
-    If calendar is 'julian', Julian day follows Julian calendar.
-
-    Algorithm:
-        Meeus, Jean (1998) Astronomical Algorithms (2nd Edition).
-        Willmann-Bell, Virginia. p. 63.
-
-    Args:
-
-    * date (cftime.date):
-        Date and time representation.
-    * calendar (string):
-        Name of the calendar, see cf_units.CALENDARS.
-
-    Returns:
-        float.
-
-    For example:
-
-        >>> import cf_units
-        >>> import datetime
-        >>> cf_units.date2julian_day(cftime.datetime(1970, 1, 1, 0, 0, 0),
-        ...                          cf_units.CALENDAR_STANDARD)
-        2440587.5...
-
-    """
-
-    return date.toordinal(fractional=True)
-
-
 def date2num(date, unit, calendar):
     """
     Return numeric time value (resolution of 1 second) encoding of
@@ -416,12 +331,6 @@ def date2num(date, unit, calendar):
     calendar arguments. The datetime objects must be in UTC with no
     time-zone offset. If there is a time-zone offset in unit, it will be
     applied to the returned numeric values.
-
-    Like the :func:`matplotlib.dates.date2num` function, except that it allows
-    for different units and calendars.  If
-    unit = 'days since 1970-01-01 00:00:00' and
-    calendar = 'proleptic_gregorian',
-    behaves the same as matplotlib with the default epoch of 1970-01-01.
 
     Args:
 
@@ -491,7 +400,7 @@ def _discard_microsecond(date):
     dates = np.array([d and d.__class__(d.year, d.month, d.day,
                                         d.hour, d.minute, d.second)
                       for d in dates])
-    result = dates[0] if shape is () else dates.reshape(shape)
+    result = dates[0] if shape == () else dates.reshape(shape)
     return result
 
 
@@ -503,13 +412,6 @@ def num2date(time_value, unit, calendar, only_use_cftime_datetimes=True):
     calendar arguments. The returned datetime object represent UTC with
     no time-zone offset, even if the specified unit contain a time-zone
     offset.
-
-    Like the :func:`matplotlib.dates.num2date` function, except that it allows
-    for different units and calendars.  If
-    unit = 'days since 1970-01-01 00:00:00',
-    calendar = 'proleptic_gregorian' and
-    only_use_cftime_datetimes = False
-    behaves the same as matplotlib with the default epoch of 1970-01-01.
 
     By default, the datetime instances returned are cftime.datetime objects,
     regardless of calendar.  If the only_use_cftime_datetimes keyword is set to
@@ -609,9 +511,10 @@ def _num2date_to_nearest_second(time_value, unit,
     time_units = cftime_unit.split(' ')[0]
     has_half_seconds = np.logical_and(time_units == 'seconds',
                                       time_values % 1. == 0.5)
-    dates = cftime.num2date(
-        time_values, cftime_unit, calendar=unit.calendar,
+    num2date_kwargs = dict(
+        units=cftime_unit, calendar=unit.calendar,
         only_use_cftime_datetimes=only_use_cftime_datetimes)
+    dates = cftime.num2date(time_values, **num2date_kwargs)
     try:
         # We can assume all or none of the dates have a microsecond attribute
         microseconds = np.array([d.microsecond if d else 0 for d in dates])
@@ -623,11 +526,9 @@ def _num2date_to_nearest_second(time_value, unit,
         useconds = Unit('second')
         second_frac = useconds.convert(0.75, time_units)
         dates[ceil_mask] = cftime.num2date(
-            time_values[ceil_mask] + second_frac, cftime_unit,
-            calendar=unit.calendar,
-            only_use_cftime_datetimes=only_use_cftime_datetimes)
+            time_values[ceil_mask] + second_frac, **num2date_kwargs)
     dates[round_mask] = _discard_microsecond(dates[round_mask])
-    result = dates[0] if shape is () else dates.reshape(shape)
+    result = dates[0] if shape == () else dates.reshape(shape)
     return result
 
 
