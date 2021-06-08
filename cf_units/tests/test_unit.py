@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# (C) British Crown Copyright 2010 - 2020, Met Office
+# (C) British Crown Copyright 2010 - 2021, Met Office
 #
 # This file is part of cf-units.
 #
@@ -29,6 +29,7 @@ import re
 from operator import truediv
 
 import numpy as np
+import cftime
 
 import cf_units as unit
 from cf_units import suppress_errors
@@ -262,7 +263,7 @@ class Test__apply_offset(unittest.TestCase):
     def test_not_numerical_offset(self):
         u = Unit('meter')
         with self.assertRaisesRegex(TypeError,
-                                   'unsupported operand type'):
+                                    'unsupported operand type'):
             operator.add(u, 'not_a_number')
 
     def test_unit_unknown(self):
@@ -986,7 +987,17 @@ class TestNumsAndDates(unittest.TestCase):
     def test_num2date(self):
         u = Unit('hours since 2010-11-02 12:00:00',
                  calendar=unit.CALENDAR_STANDARD)
-        self.assertEqual(str(u.num2date(1)), '2010-11-02 13:00:00')
+        res = u.num2date(1)
+        self.assertEqual(str(res), '2010-11-02 13:00:00')
+        self.assertEqual(res.calendar, 'gregorian')
+        self.assertIsInstance(res, cftime.datetime)
+
+    def test_num2date_py_datetime_type(self):
+        u = Unit('hours since 2010-11-02 12:00:00',
+                 calendar=unit.CALENDAR_STANDARD)
+        res = u.num2date(1, only_use_cftime_datetimes=False)
+        self.assertEqual(str(res), '2010-11-02 13:00:00')
+        self.assertIsInstance(res, datetime.datetime)
 
     def test_date2num(self):
         u = Unit('hours since 2010-11-02 12:00:00',
