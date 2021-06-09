@@ -979,6 +979,21 @@ class TestNumsAndDates(unittest.TestCase):
         d = datetime.datetime(2010, 11, 2, 13, 0, 0)
         self.assertEqual(str(u.num2date(u.date2num(d))), "2010-11-02 13:00:00")
 
+    def test_num2pydate_simple(self):
+        u = Unit('hours since 2010-11-02 12:00:00',
+                 calendar=unit.CALENDAR_STANDARD)
+        result = u.num2pydate(1)
+        expected = datetime.datetime(2010, 11, 2, 13)
+        self.assertEqual(result, expected)
+        self.assertIsInstance(result, datetime.datetime)
+
+    def test_num2pydate_wrong_calendar(self):
+        u = Unit('hours since 2010-11-02 12:00:00',
+                 calendar=unit.CALENDAR_360_DAY)
+        with self.assertRaisesRegex(ValueError,
+                                    'illegal calendar or reference date'):
+            u.num2pydate(1)
+
 
 class Test_as_unit(unittest.TestCase):
     def test_already_unit(self):
