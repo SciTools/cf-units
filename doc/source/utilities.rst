@@ -13,6 +13,7 @@ These are documented below.
 
 .. autofunction:: date2num
 .. autofunction:: num2date
+.. autofunction:: num2pydate
 
 .. autodata:: CALENDARS
 .. autodata:: CALENDAR_ALIASES

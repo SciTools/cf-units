@@ -503,6 +503,25 @@ def num2date(
     )
 
 
+def num2pydate(time_value, unit, calendar):
+    """
+    Convert time value(s) to python datetime.datetime objects, or raise an
+    exception if this is not possible.  Same as::
+
+        num2date(time_value, unit, calendar,
+                 only_use_cftime_datetimes=False,
+                 only_use_python_datetimes=True)
+
+    """
+    return num2date(
+        time_value,
+        unit,
+        calendar,
+        only_use_cftime_datetimes=False,
+        only_use_python_datetimes=True,
+    )
+
+
 def _num2date_to_nearest_second(
     time_value,
     unit,
@@ -2018,4 +2037,20 @@ class Unit(_OrderedHashable):
             self,
             only_use_cftime_datetimes=only_use_cftime_datetimes,
             only_use_python_datetimes=only_use_python_datetimes,
+        )
+
+    def num2pydate(self, time_value):
+        """
+        Convert time value(s) to python datetime.datetime objects, or raise an
+        exception if this is not possible.  Same as::
+
+            num2date(time_value, unit, calendar,
+                     only_use_cftime_datetimes=False,
+                     only_use_python_datetimes=True)
+
+        """
+        return self.num2date(
+            time_value,
+            only_use_cftime_datetimes=False,
+            only_use_python_datetimes=True,
         )
