@@ -2044,9 +2044,8 @@ class Unit(_OrderedHashable):
         Convert time value(s) to python datetime.datetime objects, or raise an
         exception if this is not possible.  Same as::
 
-            num2date(time_value, unit, calendar,
-                     only_use_cftime_datetimes=False,
-                     only_use_python_datetimes=True)
+            unit.num2date(time_value, only_use_cftime_datetimes=False,
+                          only_use_python_datetimes=True)
 
         """
         return self.num2date(
