@@ -2,5 +2,5 @@
 blank_issues_enabled: false
 contact_links:
   -  name: 💬 cf-units GitHub Discussions
-     url: https://github.com/SciTools/cf-units
+     url: https://github.com/SciTools/cf-units/discussions
      about: Engage with the cf-units community to discuss your issue
