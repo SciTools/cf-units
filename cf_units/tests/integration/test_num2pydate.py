@@ -19,8 +19,6 @@
 import unittest
 import datetime
 
-import numpy as np
-
 from cf_units import num2pydate
 
 
