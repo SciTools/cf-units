@@ -14,7 +14,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with cf-units.  If not, see <http://www.gnu.org/licenses/>.
-"""Test function :func:`cf_units.date2num`."""
+"""Test function :func:`cf_units.num2pydate`."""
 
 import unittest
 import datetime
