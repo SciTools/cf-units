@@ -147,8 +147,13 @@ setup(
                       # udunits2 cannot be installed with pip, and it is
                       #  expected to be installed separately.
                       ],
+<<<<<<< HEAD
     setup_requires=['cython', 'numpy'],
     tests_require=['codecov',
+=======
+    setup_requires=['pytest-runner', 'numpy', 'cython'],
+    tests_require=['coveralls',
+>>>>>>> Switched from Travis to Cirrus. Updated requirements architecture.
                    'cython',
                    'jinja2',
                    'pep8',
