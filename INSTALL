@@ -26,7 +26,7 @@ Installing from source
 The latest cf-units source release is available from
 https://github.com/SciTools/cf-units/releases.
 
-cf-units makes use of cftime, cython, numpy, setuptools, six and udunits2.
+cf-units makes use of cftime, cython, numpy, setuptools and udunits2.
 These dependencies must be in place before you can successfully install
 cf-units. Once you have satisfied the requirements detailed below,
 extract the cf-units source package, change to the new directory, and enter::
@@ -75,9 +75,6 @@ udunits2 2.2.26 or later (https://www.unidata.ucar.edu/downloads/udunits/index.j
 
 setuptools (https://pypi.org/project/setuptools/)
     Python package for installing/removing python packages.
-
-six (https://pypi.org/project/six/)
-    Python 2 and 3 compatibility library.
 
 
 Optional
