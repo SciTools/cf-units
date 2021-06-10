@@ -75,4 +75,5 @@ linux_task:
     - source ${HOME}/mambaforge/etc/profile.d/conda.sh >/dev/null 2>&1
     - conda activate py${PY_VER} >/dev/null 2>&1
     - CYTHON_COVERAGE=1 pip install --no-deps --editable .
+    - pytest
     - ${COVERAGE}
