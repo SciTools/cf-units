@@ -21,7 +21,7 @@ conventions.
 <a href="https://github.com/SciTools/cf-units/graphs/contributors">
 <img src="https://img.shields.io/github/contributors/SciTools/cf-units.svg"
  alt="# contributors" /></a>
-<a href="https://cirrus-ci.com/github/SciTools-/cf-units">
+<a href="https://cirrus-ci.com/github/SciTools/cf-units">
 <img src="https://api.cirrus-ci.com/github/SciTools/cf-units.svg?branch=master"
  alt="cirrus-ci" /></a>
 <a href="https://codecov.io/gh/SciTools/cf-units">
