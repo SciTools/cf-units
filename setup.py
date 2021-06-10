@@ -148,7 +148,7 @@ setup(
                       #  expected to be installed separately.
                       ],
     setup_requires=['pytest-runner', 'numpy', 'cython'],
-    tests_require=['coveralls',
+    tests_require=['codecov',
                    'cython',
                    'jinja2',
                    'pep8',

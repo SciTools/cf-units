@@ -18,7 +18,7 @@ dependencies:
   - udunits2
 
 # test dependencies
-  - coveralls
+  - codecov
   - jinja2
   - pep8
   - pytest
