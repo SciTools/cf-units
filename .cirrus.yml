@@ -38,7 +38,7 @@ linux_task:
       PY_VER: "3.8"
     env:
       PY_VER: "3.9"
-      COVERAGE: "coveralls"
+      COVERAGE: "codecov"
   name: "${CIRRUS_OS}: py${PY_VER}"
   container:
     image: gcc:latest
@@ -75,5 +75,5 @@ linux_task:
     - source ${HOME}/mambaforge/etc/profile.d/conda.sh >/dev/null 2>&1
     - conda activate py${PY_VER} >/dev/null 2>&1
     - CYTHON_COVERAGE=1 pip install --no-deps --editable .
-    - pytest
+    - pytest --cov-report=xml --cov
     - ${COVERAGE}
