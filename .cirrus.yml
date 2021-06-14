@@ -45,11 +45,11 @@ linux_task:
   mamba_cache:
     folder: ${HOME}/mambaforge
     fingerprint_script:
-      - wget --quiet https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-Linux-x86_64.sh -O mambaforge.sh
       - echo "${CIRRUS_OS} $(sha256sum mambaforge.sh)"
       - echo "${MAMBA_CACHE_PACKAGES}"
       - echo "$(date +%Y).$(expr $(date +%U) / ${CACHE_PERIOD}):${MAMBA_CACHE_BUILD}"
     populate_script:
+      - wget --quiet https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-Linux-x86_64.sh -O mambaforge.sh
       - bash mambaforge.sh -b -p ${HOME}/mambaforge
       - conda config --set always_yes yes --set changeps1 no
       - conda config --set show_channel_urls True
