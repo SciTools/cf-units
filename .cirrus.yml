@@ -17,7 +17,7 @@ env:
   # Maximum cache period (in weeks) before forcing a new cache upload.
   CACHE_PERIOD: "2"
   # Increment the build number to force new mambaforge cache upload.
-  MAMBA_CACHE_BUILD: "0"
+  MAMBA_CACHE_BUILD: "1"
   # Increment the build number to force new cf-units cache upload.
   CFUNITS_CACHE_BUILD: "0"
   # Base environment conda packages to be installed
