@@ -1,0 +1,27 @@
+name: cf-units-dev
+
+channels:
+  - conda-forge
+
+dependencies:
+  - python 3.7
+
+# setup dependencies
+  - cython
+  - numpy
+
+# core dependencies
+  - antlr-python-runtime 4.7.2.*
+  - cftime>=1.2
+  - numpy
+  - udunits2
+
+# test dependencies
+  - codecov
+  - jinja2
+  - pep8
+  - pytest
+  - pytest-cov
+
+# dev dependencies
+  - pip

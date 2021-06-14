@@ -21,12 +21,12 @@ conventions.
 <a href="https://github.com/SciTools/cf-units/graphs/contributors">
 <img src="https://img.shields.io/github/contributors/SciTools/cf-units.svg"
  alt="# contributors" /></a>
-<a href="https://travis-ci.org/SciTools/cf-units/branches">
-<img src="https://api.travis-ci.org/repositories/SciTools/cf-units.svg?branch=master"
- alt="Travis-CI" /></a>
-<a href='https://coveralls.io/github/SciTools/cf-units?branch=master'>
-<img src='https://coveralls.io/repos/github/SciTools/cf-units/badge.svg?branch=master'
- alt='Coverage Status' /></a>
+<a href="https://cirrus-ci.com/github/SciTools/cf-units">
+<img src="https://api.cirrus-ci.com/github/SciTools/cf-units.svg?branch=master"
+ alt="cirrus-ci" /></a>
+<a href="https://codecov.io/gh/SciTools/cf-units">
+<img src="https://codecov.io/gh/SciTools/cf-units/branch/master/graph/badge.svg?token=6LlYlyTUZG"
+ alt="Coverage Status" /></a>
 <!-- <a href="https://zenodo.org/badge/latestdoi/5282596">
 <img src="https://zenodo.org/badge/5282596.svg"
  alt="zenodo" /></a> -->

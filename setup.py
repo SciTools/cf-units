@@ -141,9 +141,20 @@ setup(
     packages=find_packages(),
     package_data={'cf_units': list(file_walk_relative('cf_units/etc',
                                                       remove='cf_units/'))},
-    install_requires=load('requirements.txt'),
-    setup_requires=['pytest-runner', 'numpy', 'cython'],
-    tests_require=load('requirements-dev.txt'),
+    install_requires=['antlr4-python3-runtime==4.7.2',
+                      'cftime>=1.2',
+                      'numpy',
+                      # udunits2 cannot be installed with pip, and it is
+                      #  expected to be installed separately.
+                      ],
+    setup_requires=['cython', 'numpy'],
+    tests_require=['codecov',
+                   'cython',
+                   'jinja2',
+                   'pep8',
+                   'pip',
+                   'pytest',
+                   'pytest-cov'],
     test_suite='cf_units.tests',
     cmdclass=cmdclass,
     ext_modules=[udunits_ext]
