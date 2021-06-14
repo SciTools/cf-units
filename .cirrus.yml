@@ -8,7 +8,7 @@
 # Global defaults.
 #
 container:
-  image: python:latest
+  image: gcc:latest
   cpu: 2
   memory: 4G
 
@@ -40,8 +40,6 @@ linux_task:
       PY_VER: "3.9"
       COVERAGE: "codecov"
   name: "${CIRRUS_OS}: py${PY_VER}"
-  container:
-    image: gcc:latest
   env:
     PATH: ${HOME}/mambaforge/bin:${PATH}
   mamba_cache:
