@@ -147,7 +147,7 @@ setup(
                       # udunits2 cannot be installed with pip, and it is
                       #  expected to be installed separately.
                       ],
-    setup_requires=['pytest-runner', 'numpy', 'cython'],
+    setup_requires=['cython', 'numpy'],
     tests_require=['codecov',
                    'cython',
                    'jinja2',
