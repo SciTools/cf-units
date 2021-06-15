@@ -7,9 +7,8 @@ branch = True
 plugins = Cython.Coverage
 include =
     cf_units/*
-omit = 
+omit =
     setup.py
-    versioneer.py
     cf_units/_version.py
     cf_units/etc/*
     cf_units/tests/*

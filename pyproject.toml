@@ -1,0 +1,20 @@
+[build-system]
+# Defined by PEP 518
+requires = [
+  "setuptools>=42",
+  "setuptools_scm[toml]>=6.0",
+  "wheel",
+  "numpy",
+  "Cython"
+]
+# Defined by PEP 517
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+addopts = "-ra -v --doctest-modules"
+doctest_optionflags = "NORMALIZE_WHITESPACE ELLIPSIS NUMBER"
+minversion = "6.0"
+testpaths = "cf_units"
+
+[tool.setuptools_scm]
+write_to = "cf_units/_version.py"

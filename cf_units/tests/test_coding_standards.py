@@ -151,7 +151,6 @@ class TestLicenseHeaders(unittest.TestCase):
         exclude_patterns = ('setup.py',
                             'build/*',
                             'dist/*',
-                            'versioneer.py',
                             'cf_units/_version.py',
                             'cf_units/_udunits2_parser/parser/*'
                             )

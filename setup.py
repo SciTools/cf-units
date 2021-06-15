@@ -2,8 +2,7 @@ import os
 import sys
 
 from distutils.sysconfig import get_config_var
-from setuptools import Command, Extension, find_packages, setup
-import versioneer
+from setuptools import Command, Extension, setup
 
 # Default to using cython, but use the .c files if it doesn't exist
 try:
@@ -15,7 +14,6 @@ COMPILER_DIRECTIVES = {}
 DEFINE_MACROS = None
 FLAG_COVERAGE = '--cython-coverage'  # custom flag enabling Cython line tracing
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
-NAME = 'cf-units'
 CFUNITS_DIR = os.path.join(BASEDIR, 'cf_units')
 
 
@@ -40,33 +38,6 @@ class CleanCython(Command):
                         os.remove(artifact)
                     else:
                         print('clean: skipping file {!r}'.format(artifact))
-
-
-def file_walk_relative(top, remove=''):
-    """
-    Returns a generator of files from the top of the tree, removing
-    the given prefix from the root/file result.
-
-    """
-    top = top.replace('/', os.path.sep)
-    remove = remove.replace('/', os.path.sep)
-    for root, dirs, files in os.walk(top):
-        for file in files:
-            yield os.path.join(root, file).replace(remove, '')
-
-
-def load(fname):
-    result = []
-    with open(fname, 'r') as fi:
-        result = [package.strip() for package in fi.readlines()]
-    return result
-
-
-def long_description():
-    fname = os.path.join(BASEDIR, 'README.md')
-    with open(fname, 'rb') as fi:
-        result = fi.read().decode('utf-8')
-    return result
 
 
 include_dir = get_config_var('INCLUDEDIR')
@@ -125,37 +96,10 @@ if cythonize:
                               language_level=2)
 
 cmdclass = {'clean_cython': CleanCython, 'build_ext': numpy_build_ext}
-cmdclass.update(versioneer.get_cmdclass())
 
-description = ('Units of measure as required by the Climate and Forecast (CF) '
-               'metadata conventions')
-
-setup(
-    name=NAME,
-    version=versioneer.get_version(),
-    url='https://github.com/SciTools/{}'.format(NAME),
-    author='Met Office',
-    description=description,
-    long_description=long_description(),
-    long_description_content_type='text/markdown',
-    packages=find_packages(),
-    package_data={'cf_units': list(file_walk_relative('cf_units/etc',
-                                                      remove='cf_units/'))},
-    install_requires=['antlr4-python3-runtime==4.7.2',
-                      'cftime>=1.2',
-                      'numpy',
-                      # udunits2 cannot be installed with pip, and it is
-                      #  expected to be installed separately.
-                      ],
-    setup_requires=['cython', 'numpy'],
-    tests_require=['codecov',
-                   'cython',
-                   'jinja2',
-                   'pep8',
-                   'pip',
-                   'pytest',
-                   'pytest-cov'],
-    test_suite='cf_units.tests',
+kwargs = dict(
     cmdclass=cmdclass,
-    ext_modules=[udunits_ext]
-    )
+    ext_modules=[udunits_ext],
+)
+
+setup(**kwargs)
