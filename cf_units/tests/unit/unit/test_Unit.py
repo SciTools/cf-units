@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2015 - 2020, Met Office
+# (C) British Crown Copyright 2015 - 2021, Met Office
 #
 # This file is part of cf-units.
 #
@@ -75,11 +75,22 @@ class Test_convert__calendar(unittest.TestCase):
         self.assertEqual(expected.shape, result.shape)
 
     def test_non_gregorian_calendar_conversion_dtype(self):
-        data = np.arange(4, dtype=np.float32)
-        u1 = Unit('hours since 2000-01-01 00:00:00', calendar='360_day')
-        u2 = Unit('hours since 2000-01-02 00:00:00', calendar='360_day')
-        result = u1.convert(data, u2)
-        self.assertEqual(result.dtype, np.float32)
+        for start_dtype, exp_convert in (
+            (np.float32, True),
+            (np.float64, True),
+            (np.int32, False),
+            (np.int64, False),
+            (np.int, False),
+        ):
+            data = np.arange(4, dtype=start_dtype)
+            u1 = Unit('hours since 2000-01-01 00:00:00', calendar='360_day')
+            u2 = Unit('hours since 2000-01-02 00:00:00', calendar='360_day')
+            result = u1.convert(data, u2)
+
+            if exp_convert:
+                self.assertEqual(result.dtype, start_dtype)
+            else:
+                self.assertEqual(result.dtype, np.int64)
 
 
 class Test_convert__endianness_time(unittest.TestCase):
