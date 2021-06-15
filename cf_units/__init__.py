@@ -1738,7 +1738,11 @@ class Unit(_OrderedHashable):
                     result, self.cftime_unit, self.calendar)
                 result = cftime.date2num(
                     result_datetimes, other.cftime_unit, other.calendar)
-                if isinstance(value, np.ndarray) and np.issubsctype(value.dtype, np.floating):
+                convert_type = (
+                    isinstance(value, np.ndarray)
+                    and np.issubsctype(value.dtype, np.floating)
+                )
+                if convert_type:
                     result = result.astype(value.dtype)
             else:
                 try:
