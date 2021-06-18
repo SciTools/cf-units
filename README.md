@@ -78,13 +78,13 @@ Documentation can be found at <https://scitools.org.uk/cf-units/docs/latest/>.
   of related projects: use the
   [Discussions space](https://github.com/SciTools/cf-units/discussions).
 - Report bugs:
-  [submit a GitHub issue](https://github.com/SciTools/cf-units/issues)
-- Suggest features: see our [contributing guide](.github/CONTRIBUTING.md)
+  [submit a GitHub issue](https://github.com/SciTools/cf-units/issues).
+- Suggest features: see our [contributing guide](.github/CONTRIBUTING.md).
 
 
 ## Credits, copyright and license
 
-cf-units is developed collaboratively under the SciTools umberella.
+cf-units is developed collaboratively under the SciTools umbrella.
 
 A full list of code contributors ("cf-units contributors") can be found at
 https://github.com/SciTools/cf-units/graphs/contributors.
