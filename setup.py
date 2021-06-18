@@ -1,4 +1,5 @@
-import os
+from os import environ
+from pathlib import Path
 import sys
 
 from distutils.sysconfig import get_config_var
@@ -13,8 +14,8 @@ except ImportError:
 COMPILER_DIRECTIVES = {}
 DEFINE_MACROS = None
 FLAG_COVERAGE = '--cython-coverage'  # custom flag enabling Cython line tracing
-BASEDIR = os.path.abspath(os.path.dirname(__file__))
-CFUNITS_DIR = os.path.join(BASEDIR, 'cf_units')
+BASEDIR = Path(__file__).parent.absolute()
+CFUNITS_DIR = BASEDIR / 'cf_units'
 
 
 class CleanCython(Command):
@@ -28,16 +29,12 @@ class CleanCython(Command):
         pass
 
     def run(self):
-        for rpath, _, fnames in os.walk(CFUNITS_DIR):
-            for fname in fnames:
-                _, ext = os.path.splitext(fname)
-                if ext in ('.pyc', '.pyo', '.c', '.so'):
-                    artifact = os.path.join(rpath, fname)
-                    if os.path.exists(artifact):
-                        print('clean: removing file {!r}'.format(artifact))
-                        os.remove(artifact)
-                    else:
-                        print('clean: skipping file {!r}'.format(artifact))
+        for path in CFUNITS_DIR.rglob("*"):
+            if path.suffix in ('.pyc', '.pyo', '.c', '.so'):
+                message = f'clean: removing file {path}'
+            else:
+                message = f'clean: skipping file {path}'
+            print(message)
 
 
 include_dir = get_config_var('INCLUDEDIR')
@@ -53,7 +50,7 @@ else:
 
 ext = 'pyx' if cythonize else 'c'
 
-if FLAG_COVERAGE in sys.argv or os.environ.get('CYTHON_COVERAGE', None):
+if FLAG_COVERAGE in sys.argv or environ.get('CYTHON_COVERAGE', None):
     COMPILER_DIRECTIVES = {'linetrace': True}
     DEFINE_MACROS = [('CYTHON_TRACE', '1'),
                      ('CYTHON_TRACE_NOGIL', '1')]
