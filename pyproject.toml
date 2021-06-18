@@ -12,7 +12,9 @@ build-backend = "setuptools.build_meta"
 
 [tool.coverage.run]
 branch = true
-plugins = "Cython.Coverage"
+plugins = [
+    "Cython.Coverage"
+]
 include = [
     "cf_units/*"
 ]
