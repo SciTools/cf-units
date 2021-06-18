@@ -50,7 +50,7 @@ NOTE: This entire README can be markdown linted with
 - [Overview](#overview)
   - [Example](#example)
 - [Get in touch](#get-in-touch)
-- [License and copyright](#license-and-copyright)
+- [Credits, copyright and license](#credits--copyright-and-license)
 
 <!-- tocstop -->
 
@@ -75,17 +75,27 @@ Documentation can be found at <https://scitools.org.uk/cf-units/docs/latest/>.
 ## Get in touch
 
 - Questions, ideas, general discussion or announcements
-  of related projects use the
-  [Google Group](https://groups.google.com/forum/#!forum/scitools-iris).
-- Report bugs, suggest features or view the source code on
-  [GitHub](https://github.com/SciTools/cf-units).
+  of related projects: use the
+  [Discussions space](https://github.com/SciTools/cf-units/discussions).
+- Report bugs:
+  [submit a GitHub issue](https://github.com/SciTools/cf-units/issues)
+- Suggest features: see our [contributing guide](.github/CONTRIBUTING.md)
 
-## License and copyright
 
-cf-units is licensed under GNU Lesser General Public License (LGPLv3).
+## Credits, copyright and license
 
-Development occurs on GitHub at <https://github.com/SciTools/cf-units>, with a
-contributor's license agreement (CLA) that can be found at
-<https://scitools.org.uk/governance.html>.
+cf-units is developed collaboratively under the SciTools umberella.
 
-(C) British Crown Copyright, Met Office
+A full list of code contributors ("cf-units contributors") can be found at
+https://github.com/SciTools/cf-units/graphs/contributors.
+
+Code is just one of many ways of positively contributing to cf-units, please
+see our [contributing guide](.github/CONTRIBUTING.md) for more details on how
+you can get involved.
+
+cf-units is released under a LGPL license with a shared copyright model.
+See [COPYING](COPYING) and [COPYING.LESSER](COPYING.LESSER) for full terms.
+
+The [Met Office](https://metoffice.gov.uk) has made a significant
+contribution to the development, maintenance and support of this library.
+All Met Office contributions are copyright on behalf of the British Crown.
