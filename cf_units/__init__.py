@@ -40,11 +40,7 @@ from cf_units import _udunits2 as _ud
 from cf_units._udunits2 import (UT_ASCII, UT_ISO_8859_1, UT_LATIN1, UT_UTF8,
                                 UT_NAMES, UT_DEFINITION)
 
-
-# Define __version__ based on versioneer's interpretation.
-from ._version import get_versions
-__version__ = get_versions()['version']
-del get_versions
+from ._version import version as __version__  # noqa: F401
 
 __all__ = ['CALENDAR_STANDARD',
            'CALENDAR_GREGORIAN',

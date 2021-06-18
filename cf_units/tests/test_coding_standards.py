@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2013 - 2020, Met Office
+# (C) British Crown Copyright 2013 - 2021, Met Office
 #
 # This file is part of cf-units.
 #
@@ -151,7 +151,6 @@ class TestLicenseHeaders(unittest.TestCase):
         exclude_patterns = ('setup.py',
                             'build/*',
                             'dist/*',
-                            'versioneer.py',
                             'cf_units/_version.py',
                             'cf_units/_udunits2_parser/parser/*'
                             )
