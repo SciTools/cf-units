@@ -50,7 +50,7 @@ NOTE: This entire README can be markdown linted with
 - [Overview](#overview)
   - [Example](#example)
 - [Get in touch](#get-in-touch)
-- [Credits, copyright and license](#credits--copyright-and-license)
+- [Credits, copyright and license](#credits-copyright-and-license)
 
 <!-- tocstop -->
 
