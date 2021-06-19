@@ -19,7 +19,6 @@ dependencies:
 # test dependencies
   - codecov
   - jinja2
-  - pep8
   - pytest
   - pytest-cov
 
