@@ -26,68 +26,38 @@ Installing from source
 The latest cf-units source release is available from
 https://github.com/SciTools/cf-units/releases.
 
-cf-units makes use of cftime, cython, numpy, setuptools and udunits2.
-These dependencies must be in place before you can successfully install
-cf-units. Once you have satisfied the requirements detailed below,
-extract the cf-units source package, change to the new directory, and enter::
-
-  python setup.py install
-
-For non-standard locations, additional build lib & include paths
-can be provided as per-usual at build_ext phase::
-
-  python setup.py build_ext -I/path/to/include -L/path/to/lib
-  python setup.py install
-
 
 Build and runtime requirements
 ==============================
-These are external packages which you will need to have installed before
-installing and running cf-units.
+See the ``requirements/`` directory for the external packages you will need to
+have installed before installing and running cf-units.
 
-Many of these packages are available in Linux package managers
+The recommended way to provision requirements is using Conda::
+
+  conda env create -f requirements/cf-units.yml
+
+All requirements except ``udunits2`` are also available individually via PyPI::
+
+  pip install numpy
+
+Many of the packages are also available in Linux package managers
 such as aptitude and yum. For example, it may be possible to install
 Numpy using::
 
   apt-get install python-numpy
 
-If you are installing dependencies with a package manager on Linux,
-you may need to install the development packages (look for a "-dev"
-postfix) in addition to the core packages.
 
-python 2.7 or later (https://www.python.org/)
-    cf-units is compatible with Python 2 and Python 3.
+Installing cf-units
+===================
+Once you have satisfied the requirements detailed above, extract the cf-units
+source package, change to the new directory, and enter::
 
-cftime 1.0.0 or later (https://unidata.github.io/cftime/)
-    Python package for decoding time units conforming to
-    Climate and Forecasting (CF) netCDF conventions.
+  pip install .
 
-cython (https://pypi.org/project/Cython/)
-    Optimising static compiler for Python and the extended Cython
-    programming language.
+For non-standard locations, additional build lib & include paths
+can be provided as per-usual at ``build_ext`` phase::
 
-numpy 1.14 or later (https://pypi.org/project/numpy/)
-    Python package for scientific computing including a powerful N-dimensional
-    array object.
-
-udunits2 2.2.26 or later (https://www.unidata.ucar.edu/downloads/udunits/index.jsp)
-    C library for units of physical quantities.
-
-setuptools (https://pypi.org/project/setuptools/)
-    Python package for installing/removing python packages.
-
-
-Optional
-''''''''
-These packages are required for the full cf-units test suite to run.
-
-pep8 1.4.6* (https://pypi.org/project/pep8/)
-    Python package for software testing.
-
-pytest (https://pypi.org/project/pytest/)
-    Python testing framework.
-
-* Those packages have been tested with a specific build.
+  pip install --global-option=build_ext --global-option="-I/path/to/include2 --global-option="-L/path/to/lib" .
 
 
 Custom site configuration
