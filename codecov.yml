@@ -3,4 +3,4 @@ coverage:
     project:
       default:
         target: auto     # auto compares coverage to the previous base commit
-        threshold: 5%  # coverage can drop by up to 0.5% while still posting success
+        threshold: 0.5%  # coverage can drop by up to 0.5% while still posting success
