@@ -1,58 +1,39 @@
-<h1 align="center" style="margin:1em;">
-  <a href="https://scitools.org.uk/cf-units/docs/latest/">cf-units</a>
-</h1>
+# [cf-units](https://scitools.org.uk/cf-units/docs/latest/)
 
-<h4 align="center">
-Units of measure as defined by the Climate and Forecast (CF) metadata
-conventions.
-</h4>
+#### Units of measure as defined by the Climate and Forecast (CF) metadata conventions.
 
-<p align="center">
-<!-- https://shields.io/ is a good source of these -->
-<a href="https://anaconda.org/conda-forge/cf-units">
-<img src="https://img.shields.io/conda/dn/conda-forge/cf-units.svg"
- alt="conda-forge downloads" /></a>
-<a href="https://github.com/SciTools/cf-units/releases">
-<img src="https://img.shields.io/github/tag/SciTools/cf-units.svg"
- alt="Latest version" /></a>
-<a href="https://github.com/SciTools/cf-units/commits/master">
-<img src="https://img.shields.io/github/commits-since/SciTools/cf-units/latest.svg"
- alt="Commits since last release" /></a>
-<a href="https://github.com/SciTools/cf-units/graphs/contributors">
-<img src="https://img.shields.io/github/contributors/SciTools/cf-units.svg"
- alt="# contributors" /></a>
-<a href="https://cirrus-ci.com/github/SciTools/cf-units">
-<img src="https://api.cirrus-ci.com/github/SciTools/cf-units.svg?branch=master"
- alt="cirrus-ci" /></a>
-<a href="https://codecov.io/gh/SciTools/cf-units">
-<img src="https://codecov.io/gh/SciTools/cf-units/branch/master/graph/badge.svg?token=6LlYlyTUZG"
- alt="Coverage Status" /></a>
-<!-- <a href="https://zenodo.org/badge/latestdoi/5282596">
-<img src="https://zenodo.org/badge/5282596.svg"
- alt="zenodo" /></a> -->
-</p>
-<br>
+[comment]: # (https://shields.io/ is a good source of these)
+[![Build Status](https://api.cirrus-ci.com/github/SciTools/cf-units.svg)](https://cirrus-ci.com/github/SciTools/cf-units)
+[![Coverage Status](https://codecov.io/gh/SciTools/cf-units/branch/master/graph/badge.svg?token=6LlYlyTUZG)](https://codecov.io/gh/SciTools/cf-units)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/SciTools/cf-units/master.svg)](https://results.pre-commit.ci/latest/github/SciTools/cf-units/master)
+,
+[![conda-forge downloads](https://img.shields.io/conda/vn/conda-forge/cf-units?color=orange&label=conda-forge&logo=conda-forge&logoColor=white)](https://anaconda.org/conda-forge/cf-units)
+[![PyPI](https://img.shields.io/pypi/v/cf-units?color=orange&label=pypi&logo=python&logoColor=white)](https://pypi.org/project/cf-units/)
+[![Latest version](https://img.shields.io/github/tag/SciTools/cf-units)](https://github.com/SciTools/cf-units/releases)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3723086.svg)](https://doi.org/10.5281/zenodo.3723086)
+,
+[![Black](https://img.shields.io/badge/code%20style-black-000000)](https://github.com/psf/black)
+[![Flake8](https://img.shields.io/badge/lint-flake8-lightgrey)](https://github.com/PyCQA/flake8)
+[![isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
+,
+[![Licence](https://img.shields.io/github/license/SciTools/cf-units)](COPYING)
+[![Contributors](https://img.shields.io/github/contributors/SciTools/cf-units)](https://github.com/SciTools/cf-units/graphs/contributors)
+[![Commits since last release](https://img.shields.io/github/commits-since/SciTools/cf-units/latest.svg)](https://github.com/SciTools/cf-units/commits/master)
 
 # Table of contents
 
-<!--
-NOTE: toc auto-generated with https://github.com/jonschlinkert/markdown-toc
-    $> markdown-toc -i --bullets='-' README.md
-
-NOTE: This entire README can be markdown linted with
+[comment]:
+  # (NOTE: toc auto-generated with https://github.com/jonschlinkert/markdown-toc
+      $> markdown-toc -i --bullets='-' README.md)
+[comment]:
+  # (This entire README can be markdown linted with
     https://github.com/igorshubovych/markdownlint-cli
-    $ echo '{"no-inline-html": false}' > .markdownrc
-    $ markdownlint README.md
--->
-
-<!-- toc -->
+      $ markdownlint README.md)
 
 - [Overview](#overview)
   - [Example](#example)
 - [Get in touch](#get-in-touch)
 - [Credits, copyright and license](#credits-copyright-and-license)
-
-<!-- tocstop -->
 
 ## Overview
 
@@ -80,7 +61,6 @@ Documentation can be found at <https://scitools.org.uk/cf-units/docs/latest/>.
 - Report bugs:
   [submit a GitHub issue](https://github.com/SciTools/cf-units/issues).
 - Suggest features: see our [contributing guide](.github/CONTRIBUTING.md).
-
 
 ## Credits, copyright and license
 
