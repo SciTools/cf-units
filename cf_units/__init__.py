@@ -62,6 +62,7 @@ __all__ = [
     "encode_date",
     "encode_time",
     "num2date",
+    "num2pydate",
     "suppress_errors",
 ]
 
