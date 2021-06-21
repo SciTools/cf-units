@@ -29,6 +29,10 @@ env:
 #
 lint_task:
   auto_cancellation: true
+  container:
+    image: python:latest
+    cpu: 2
+    memory: 4G
   name: "${CIRRUS_OS}: linting"
   lint_script:
     - python -m pip install --retries 3 pre-commit
