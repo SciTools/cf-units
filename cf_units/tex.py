@@ -14,21 +14,21 @@ class TeXVisitor(graph.Visitor):
 
     def visit_Identifier(self, node):
         token = str(node)
-        if token.startswith('micro'):
-            token = token.replace('micro', '{\mu}')
+        if token.startswith("micro"):
+            token = token.replace("micro", r"{\mu}")
         return token
 
     def visit_Raise(self, node):
-        return self._format('{{{}}}^{{{}}}', node.lhs, node.rhs)
+        return self._format("{{{}}}^{{{}}}", node.lhs, node.rhs)
 
     def visit_Multiply(self, node):
-        return self._format(r'{{{}}}\cdot{{{}}}', node.lhs, node.rhs)
+        return self._format(r"{{{}}}\cdot{{{}}}", node.lhs, node.rhs)
 
     def visit_Divide(self, node):
-        return self._format(r'\frac{{{}}}{{{}}}', node.lhs, node.rhs)
+        return self._format(r"\frac{{{}}}{{{}}}", node.lhs, node.rhs)
 
     def visit_Shift(self, node):
-        return self._format('{{{}}} @ {{{}}}', node.unit, node.shift_from)
+        return self._format("{{{}}} @ {{{}}}", node.unit, node.shift_from)
 
     def generic_visit(self, node):
         result = [self.visit(child) for child in node.children()]

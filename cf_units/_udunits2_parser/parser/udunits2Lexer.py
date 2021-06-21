@@ -1,9 +1,9 @@
 # Generated from /Users/pelson/dev/scitools/cf-units/cf_units/_udunits2_parser/parser/udunits2Lexer.g4 by ANTLR 4.7.2
-from antlr4 import *
+import sys
 from io import StringIO
 from typing.io import TextIO
-import sys
 
+from antlr4 import *
 
 
 def serializedATN():
@@ -14,8 +14,8 @@ def serializedATN():
         buf.write("\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22")
         buf.write("\t\22\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27")
         buf.write("\4\30\t\30\4\31\t\31\4\32\t\32\4\33\t\33\4\34\t\34\4\35")
-        buf.write("\t\35\4\36\t\36\4\37\t\37\4 \t \4!\t!\4\"\t\"\4#\t#\4")
-        buf.write("$\t$\4%\t%\4&\t&\4\'\t\'\4(\t(\4)\t)\4*\t*\4+\t+\4,\t")
+        buf.write('\t\35\4\36\t\36\4\37\t\37\4 \t \4!\t!\4"\t"\4#\t#\4')
+        buf.write("$\t$\4%\t%\4&\t&\4'\t'\4(\t(\4)\t)\4*\t*\4+\t+\4,\t")
         buf.write(",\4-\t-\4.\t.\4/\t/\4\60\t\60\4\61\t\61\4\62\t\62\4\63")
         buf.write("\t\63\4\64\t\64\4\65\t\65\4\66\t\66\4\67\t\67\48\t8\4")
         buf.write("9\t9\4:\t:\4;\t;\4<\t<\4=\t=\4>\t>\4?\t?\4@\t@\4A\tA\4")
@@ -46,10 +46,10 @@ def serializedATN():
         buf.write("\35\3\35\3\35\5\35\u0172\n\35\3\36\5\36\u0175\n\36\3\36")
         buf.write("\3\36\3\36\3\36\3\36\3\36\3\36\5\36\u017e\n\36\3\37\3")
         buf.write("\37\5\37\u0182\n\37\3\37\5\37\u0185\n\37\3\37\5\37\u0188")
-        buf.write("\n\37\3 \3 \3 \3 \3 \3 \3!\3!\3!\3!\3\"\3\"\3#\3#\3#\3")
+        buf.write('\n\37\3 \3 \3 \3 \3 \3 \3!\3!\3!\3!\3"\3"\3#\3#\3#\3')
         buf.write("#\3#\3#\5#\u019c\n#\3$\3$\3$\5$\u01a1\n$\5$\u01a3\n$\3")
         buf.write("%\3%\3%\5%\u01a8\n%\5%\u01aa\n%\3%\3%\3%\3&\3&\3&\3&\3")
-        buf.write("\'\3\'\3\'\3\'\3(\3(\3(\3(\3)\3)\3)\3)\3*\3*\3*\3*\3+")
+        buf.write("'\3'\3'\3'\3(\3(\3(\3(\3)\3)\3)\3)\3*\3*\3*\3*\3+")
         buf.write("\3+\3+\3+\3,\3,\3,\3,\3-\3-\3-\3-\3.\3.\3.\3.\3/\3/\3")
         buf.write("/\3/\3\60\3\60\3\60\3\60\3\61\3\61\3\61\3\61\3\62\3\62")
         buf.write("\3\62\3\62\3\63\3\63\3\63\3\63\3\64\3\64\3\64\3\64\3\65")
@@ -62,7 +62,7 @@ def serializedATN():
         buf.write("J\3J\3J\3K\3K\3K\3K\3K\3L\3L\3L\3L\3L\3M\3M\3M\3M\3M\3")
         buf.write("N\3N\3N\3N\3N\3O\3O\3O\3O\3O\2\2P\5\3\7\4\t\2\13\5\r\6")
         buf.write("\17\7\21\b\23\t\25\n\27\13\31\2\33\f\35\r\37\16!\17#\20")
-        buf.write("%\21\'\22)\23+\24-\25/\26\61\27\63\2\65\2\67\29\2;\2=")
+        buf.write("%\21'\22)\23+\24-\25/\26\61\27\63\2\65\2\67\29\2;\2=")
         buf.write("\2?\2A\30C\31E\32G\33I\2K\34M\35O\2Q\2S\2U\2W\2Y\2[\2")
         buf.write("]\2_\2a\2c\2e\2g\2i\2k\2m\2o\2q\2s\2u\2w\2y\2{\2}\2\177")
         buf.write("\2\u0081\2\u0083\2\u0085\2\u0087\2\u0089\2\u008b\2\u008d")
@@ -71,11 +71,11 @@ def serializedATN():
         buf.write("g\6\2\u00b4\u00b5\u00bb\u00bb\u2072\u2072\u2076\u207d")
         buf.write("\5\2C\\aac|\13\2\u0082\u0082\u00af\u00af\u00b2\u00b2\u00b7")
         buf.write("\u00b7\u00c2\u00d8\u00da\u00f8\u00fa\u0101\u03ab\u03ab")
-        buf.write("\u03c2\u03c2\3\2\"\"\2\u0292\2\5\3\2\2\2\2\7\3\2\2\2\2")
+        buf.write('\u03c2\u03c2\3\2""\2\u0292\2\5\3\2\2\2\2\7\3\2\2\2\2')
         buf.write("\13\3\2\2\2\2\r\3\2\2\2\2\17\3\2\2\2\2\21\3\2\2\2\2\23")
         buf.write("\3\2\2\2\2\25\3\2\2\2\2\27\3\2\2\2\2\33\3\2\2\2\2\35\3")
         buf.write("\2\2\2\2\37\3\2\2\2\2!\3\2\2\2\2#\3\2\2\2\2%\3\2\2\2\2")
-        buf.write("\'\3\2\2\2\2)\3\2\2\2\2+\3\2\2\2\2-\3\2\2\2\2/\3\2\2\2")
+        buf.write("'\3\2\2\2\2)\3\2\2\2\2+\3\2\2\2\2-\3\2\2\2\2/\3\2\2\2")
         buf.write("\3\61\3\2\2\2\3A\3\2\2\2\3C\3\2\2\2\3E\3\2\2\2\3G\3\2")
         buf.write("\2\2\3K\3\2\2\2\3M\3\2\2\2\3O\3\2\2\2\3Q\3\2\2\2\3S\3")
         buf.write("\2\2\2\3U\3\2\2\2\3W\3\2\2\2\3Y\3\2\2\2\3[\3\2\2\2\3]")
@@ -92,7 +92,7 @@ def serializedATN():
         buf.write("\2\2\21\u00ca\3\2\2\2\23\u00cc\3\2\2\2\25\u00ce\3\2\2")
         buf.write("\2\27\u00d1\3\2\2\2\31\u00d7\3\2\2\2\33\u00d9\3\2\2\2")
         buf.write("\35\u00ef\3\2\2\2\37\u0103\3\2\2\2!\u0108\3\2\2\2#\u010f")
-        buf.write("\3\2\2\2%\u011a\3\2\2\2\'\u011c\3\2\2\2)\u0134\3\2\2\2")
+        buf.write("\3\2\2\2%\u011a\3\2\2\2'\u011c\3\2\2\2)\u0134\3\2\2\2")
         buf.write("+\u013a\3\2\2\2-\u013c\3\2\2\2/\u013e\3\2\2\2\61\u0147")
         buf.write("\3\2\2\2\63\u014b\3\2\2\2\65\u0156\3\2\2\2\67\u0159\3")
         buf.write("\2\2\29\u0160\3\2\2\2;\u0171\3\2\2\2=\u017d\3\2\2\2?\u017f")
@@ -119,10 +119,10 @@ def serializedATN():
         buf.write("\3\2\2\2\u00ae\f\3\2\2\2\u00af\u00b1\5-\26\2\u00b0\u00af")
         buf.write("\3\2\2\2\u00b1\u00b4\3\2\2\2\u00b2\u00b0\3\2\2\2\u00b2")
         buf.write("\u00b3\3\2\2\2\u00b3\u00c0\3\2\2\2\u00b4\u00b2\3\2\2\2")
-        buf.write("\u00b5\u00c1\7\61\2\2\u00b6\u00b7\7\"\2\2\u00b7\u00b8")
+        buf.write('\u00b5\u00c1\7\61\2\2\u00b6\u00b7\7"\2\2\u00b7\u00b8')
         buf.write("\7R\2\2\u00b8\u00b9\7G\2\2\u00b9\u00ba\7T\2\2\u00ba\u00c1")
-        buf.write("\7\"\2\2\u00bb\u00bc\7\"\2\2\u00bc\u00bd\7r\2\2\u00bd")
-        buf.write("\u00be\7g\2\2\u00be\u00bf\7t\2\2\u00bf\u00c1\7\"\2\2\u00c0")
+        buf.write('\7"\2\2\u00bb\u00bc\7"\2\2\u00bc\u00bd\7r\2\2\u00bd')
+        buf.write('\u00be\7g\2\2\u00be\u00bf\7t\2\2\u00bf\u00c1\7"\2\2\u00c0')
         buf.write("\u00b5\3\2\2\2\u00c0\u00b6\3\2\2\2\u00c0\u00bb\3\2\2\2")
         buf.write("\u00c1\u00c5\3\2\2\2\u00c2\u00c4\5-\26\2\u00c3\u00c2\3")
         buf.write("\2\2\2\u00c4\u00c7\3\2\2\2\u00c5\u00c3\3\2\2\2\u00c5\u00c6")
@@ -155,7 +155,7 @@ def serializedATN():
         buf.write("\2\2\2\u0104\u0105\3\2\2\2\u0105\u0106\b\17\2\2\u0106")
         buf.write(" \3\2\2\2\u0107\u0109\t\4\2\2\u0108\u0107\3\2\2\2\u0109")
         buf.write("\u010a\3\2\2\2\u010a\u0108\3\2\2\2\u010a\u010b\3\2\2\2")
-        buf.write("\u010b\"\3\2\2\2\u010c\u0110\7`\2\2\u010d\u010e\7,\2\2")
+        buf.write('\u010b"\3\2\2\2\u010c\u0110\7`\2\2\u010d\u010e\7,\2\2')
         buf.write("\u010e\u0110\7,\2\2\u010f\u010c\3\2\2\2\u010f\u010d\3")
         buf.write("\2\2\2\u0110$\3\2\2\2\u0111\u0112\7n\2\2\u0112\u0113\7")
         buf.write("q\2\2\u0113\u011b\7i\2\2\u0114\u0115\7n\2\2\u0115\u011b")
@@ -227,7 +227,7 @@ def serializedATN():
         buf.write("\u01aa\u01ab\3\2\2\2\u01ab\u01ac\7V\2\2\u01ac\u01ad\5")
         buf.write("I$\2\u01adL\3\2\2\2\u01ae\u01af\5G#\2\u01af\u01b0\7V\2")
         buf.write("\2\u01b0\u01b1\5I$\2\u01b1N\3\2\2\2\u01b2\u01b3\5\5\2")
-        buf.write("\2\u01b3\u01b4\3\2\2\2\u01b4\u01b5\b\'\4\2\u01b5P\3\2")
+        buf.write("\2\u01b3\u01b4\3\2\2\2\u01b4\u01b5\b'\4\2\u01b5P\3\2")
         buf.write("\2\2\u01b6\u01b7\5\7\3\2\u01b7\u01b8\3\2\2\2\u01b8\u01b9")
         buf.write("\b(\5\2\u01b9R\3\2\2\2\u01ba\u01bb\5\13\5\2\u01bb\u01bc")
         buf.write("\3\2\2\2\u01bc\u01bd\b)\6\2\u01bdT\3\2\2\2\u01be\u01bf")
@@ -247,7 +247,7 @@ def serializedATN():
         buf.write("\2\2\2\u01e4\u01e5\b\63\20\2\u01e5h\3\2\2\2\u01e6\u01e7")
         buf.write("\5#\21\2\u01e7\u01e8\3\2\2\2\u01e8\u01e9\b\64\21\2\u01e9")
         buf.write("j\3\2\2\2\u01ea\u01eb\5%\22\2\u01eb\u01ec\3\2\2\2\u01ec")
-        buf.write("\u01ed\b\65\22\2\u01edl\3\2\2\2\u01ee\u01ef\5\'\23\2\u01ef")
+        buf.write("\u01ed\b\65\22\2\u01edl\3\2\2\2\u01ee\u01ef\5'\23\2\u01ef")
         buf.write("\u01f0\3\2\2\2\u01f0\u01f1\b\66\23\2\u01f1n\3\2\2\2\u01f2")
         buf.write("\u01f3\5)\24\2\u01f3\u01f4\3\2\2\2\u01f4\u01f5\b\67\24")
         buf.write("\2\u01f5p\3\2\2\2\u01f6\u01f7\5+\25\2\u01f7\u01f8\3\2")
@@ -284,7 +284,7 @@ def serializedATN():
         buf.write("\bI\21\2\u024b\u024c\bI\30\2\u024c\u0094\3\2\2\2\u024d")
         buf.write("\u024e\5%\22\2\u024e\u024f\3\2\2\2\u024f\u0250\bJ\22\2")
         buf.write("\u0250\u0251\bJ\30\2\u0251\u0096\3\2\2\2\u0252\u0253\5")
-        buf.write("\'\23\2\u0253\u0254\3\2\2\2\u0254\u0255\bK\23\2\u0255")
+        buf.write("'\23\2\u0253\u0254\3\2\2\2\u0254\u0255\bK\23\2\u0255")
         buf.write("\u0256\bK\30\2\u0256\u0098\3\2\2\2\u0257\u0258\5)\24\2")
         buf.write("\u0258\u0259\3\2\2\2\u0259\u025a\bL\24\2\u025a\u025b\b")
         buf.write("L\30\2\u025b\u009a\3\2\2\2\u025c\u025d\5+\25\2\u025d\u025e")
@@ -308,7 +308,7 @@ class udunits2Lexer(Lexer):
 
     atn = ATNDeserializer().deserialize(serializedATN())
 
-    decisionsToDFA = [ DFA(ds, i) for i, ds in enumerate(atn.decisionToState) ]
+    decisionsToDFA = [DFA(ds, i) for i, ds in enumerate(atn.decisionToState)]
 
     SHIFT_MODE = 1
     ID_SEEN = 2
@@ -341,49 +341,131 @@ class udunits2Lexer(Lexer):
     TIMESTAMP = 26
     DT_T_CLOCK = 27
 
-    channelNames = [ u"DEFAULT_TOKEN_CHANNEL", u"HIDDEN" ]
+    channelNames = ["DEFAULT_TOKEN_CHANNEL", "HIDDEN"]
 
-    modeNames = [ "DEFAULT_MODE", "SHIFT_MODE", "ID_SEEN" ]
+    modeNames = ["DEFAULT_MODE", "SHIFT_MODE", "ID_SEEN"]
 
-    literalNames = [ "<INVALID>",
-            "'+'", "'.'", "'('", "')'", "':'", "'-'" ]
+    literalNames = ["<INVALID>", "'+'", "'.'", "'('", "')'", "':'", "'-'"]
 
-    symbolicNames = [ "<INVALID>",
-            "SIGNED_INT", "PLUS", "MULTIPLY", "DIVIDE", "PERIOD", "OPEN_PAREN", 
-            "CLOSE_PAREN", "SEMICOLON", "INT", "E_POWER", "FLOAT", "SHIFT_OP", 
-            "UNICODE_EXPONENT", "RAISE", "LOG", "LOGREF", "ID", "LATIN_SUBSET", 
-            "WS", "ERRORCHARACTER", "TIMEZONE", "HOUR_MINUTE_SECOND", "HOUR_MINUTE", 
-            "M_MINUS", "DATE", "TIMESTAMP", "DT_T_CLOCK" ]
+    symbolicNames = [
+        "<INVALID>",
+        "SIGNED_INT",
+        "PLUS",
+        "MULTIPLY",
+        "DIVIDE",
+        "PERIOD",
+        "OPEN_PAREN",
+        "CLOSE_PAREN",
+        "SEMICOLON",
+        "INT",
+        "E_POWER",
+        "FLOAT",
+        "SHIFT_OP",
+        "UNICODE_EXPONENT",
+        "RAISE",
+        "LOG",
+        "LOGREF",
+        "ID",
+        "LATIN_SUBSET",
+        "WS",
+        "ERRORCHARACTER",
+        "TIMEZONE",
+        "HOUR_MINUTE_SECOND",
+        "HOUR_MINUTE",
+        "M_MINUS",
+        "DATE",
+        "TIMESTAMP",
+        "DT_T_CLOCK",
+    ]
 
-    ruleNames = [ "SIGNED_INT", "PLUS", "MINUS", "MULTIPLY", "DIVIDE", "PERIOD", 
-                  "OPEN_PAREN", "CLOSE_PAREN", "SEMICOLON", "INT", "ANY_INT", 
-                  "E_POWER", "FLOAT", "SHIFT_OP", "UNICODE_EXPONENT", "RAISE", 
-                  "LOG", "LOGREF", "ID", "LATIN_SUBSET", "WS", "ERRORCHARACTER", 
-                  "TIMEZONE", "SIGN", "HOUR", "MINUTE", "SECOND", "MONTH", 
-                  "DAY", "YEAR", "HOUR_MINUTE_SECOND", "HOUR_MINUTE", "M_MINUS", 
-                  "DATE", "CLOCK", "TIMESTAMP", "DT_T_CLOCK", "SHIFT_MODE_SIGNED_INT", 
-                  "SHIFT_MODE_PLUS", "SHIFT_MODE_MULTIPLY", "SHIFT_MODE_DIVIDE", 
-                  "SHIFT_MODE_PERIOD", "SHIFT_MODE_OPEN_PAREN", "SHIFT_MODE_CLOSE_PAREN", 
-                  "SHIFT_MODE_SEMICOLON", "SHIFT_MODE_INT", "SHIFT_MODE_E_POWER", 
-                  "SHIFT_MODE_FLOAT", "SHIFT_MODE_SHIFT_OP", "SHIFT_MODE_UNICODE_EXPONENT", 
-                  "SHIFT_MODE_RAISE", "SHIFT_MODE_LOG", "SHIFT_MODE_LOGREF", 
-                  "SHIFT_MODE_ID", "SHIFT_MODE_LATIN_SUBSET", "SHIFT_MODE_WS", 
-                  "SHIFT_MODE_ERRORCHARACTER", "ID_SEEN_SIGNED_INT", "EXTRA_MULTIPLY", 
-                  "ID_SEEN_AUTO_SIGNED_INT", "ID_SEEN_AUTO_PLUS", "ID_SEEN_AUTO_MULTIPLY", 
-                  "ID_SEEN_AUTO_DIVIDE", "ID_SEEN_AUTO_PERIOD", "ID_SEEN_AUTO_OPEN_PAREN", 
-                  "ID_SEEN_AUTO_CLOSE_PAREN", "ID_SEEN_AUTO_SEMICOLON", 
-                  "ID_SEEN_AUTO_INT", "ID_SEEN_AUTO_E_POWER", "ID_SEEN_AUTO_SHIFT_OP", 
-                  "ID_SEEN_AUTO_UNICODE_EXPONENT", "ID_SEEN_AUTO_RAISE", 
-                  "ID_SEEN_AUTO_LOG", "ID_SEEN_AUTO_LOGREF", "ID_SEEN_AUTO_ID", 
-                  "ID_SEEN_AUTO_LATIN_SUBSET", "ID_SEEN_AUTO_WS", "ID_SEEN_AUTO_ERRORCHARACTER" ]
+    ruleNames = [
+        "SIGNED_INT",
+        "PLUS",
+        "MINUS",
+        "MULTIPLY",
+        "DIVIDE",
+        "PERIOD",
+        "OPEN_PAREN",
+        "CLOSE_PAREN",
+        "SEMICOLON",
+        "INT",
+        "ANY_INT",
+        "E_POWER",
+        "FLOAT",
+        "SHIFT_OP",
+        "UNICODE_EXPONENT",
+        "RAISE",
+        "LOG",
+        "LOGREF",
+        "ID",
+        "LATIN_SUBSET",
+        "WS",
+        "ERRORCHARACTER",
+        "TIMEZONE",
+        "SIGN",
+        "HOUR",
+        "MINUTE",
+        "SECOND",
+        "MONTH",
+        "DAY",
+        "YEAR",
+        "HOUR_MINUTE_SECOND",
+        "HOUR_MINUTE",
+        "M_MINUS",
+        "DATE",
+        "CLOCK",
+        "TIMESTAMP",
+        "DT_T_CLOCK",
+        "SHIFT_MODE_SIGNED_INT",
+        "SHIFT_MODE_PLUS",
+        "SHIFT_MODE_MULTIPLY",
+        "SHIFT_MODE_DIVIDE",
+        "SHIFT_MODE_PERIOD",
+        "SHIFT_MODE_OPEN_PAREN",
+        "SHIFT_MODE_CLOSE_PAREN",
+        "SHIFT_MODE_SEMICOLON",
+        "SHIFT_MODE_INT",
+        "SHIFT_MODE_E_POWER",
+        "SHIFT_MODE_FLOAT",
+        "SHIFT_MODE_SHIFT_OP",
+        "SHIFT_MODE_UNICODE_EXPONENT",
+        "SHIFT_MODE_RAISE",
+        "SHIFT_MODE_LOG",
+        "SHIFT_MODE_LOGREF",
+        "SHIFT_MODE_ID",
+        "SHIFT_MODE_LATIN_SUBSET",
+        "SHIFT_MODE_WS",
+        "SHIFT_MODE_ERRORCHARACTER",
+        "ID_SEEN_SIGNED_INT",
+        "EXTRA_MULTIPLY",
+        "ID_SEEN_AUTO_SIGNED_INT",
+        "ID_SEEN_AUTO_PLUS",
+        "ID_SEEN_AUTO_MULTIPLY",
+        "ID_SEEN_AUTO_DIVIDE",
+        "ID_SEEN_AUTO_PERIOD",
+        "ID_SEEN_AUTO_OPEN_PAREN",
+        "ID_SEEN_AUTO_CLOSE_PAREN",
+        "ID_SEEN_AUTO_SEMICOLON",
+        "ID_SEEN_AUTO_INT",
+        "ID_SEEN_AUTO_E_POWER",
+        "ID_SEEN_AUTO_SHIFT_OP",
+        "ID_SEEN_AUTO_UNICODE_EXPONENT",
+        "ID_SEEN_AUTO_RAISE",
+        "ID_SEEN_AUTO_LOG",
+        "ID_SEEN_AUTO_LOGREF",
+        "ID_SEEN_AUTO_ID",
+        "ID_SEEN_AUTO_LATIN_SUBSET",
+        "ID_SEEN_AUTO_WS",
+        "ID_SEEN_AUTO_ERRORCHARACTER",
+    ]
 
     grammarFileName = "udunits2Lexer.g4"
 
-    def __init__(self, input=None, output:TextIO = sys.stdout):
+    def __init__(self, input=None, output: TextIO = sys.stdout):
         super().__init__(input, output)
         self.checkVersion("4.7.2")
-        self._interp = LexerATNSimulator(self, self.atn, self.decisionsToDFA, PredictionContextCache())
+        self._interp = LexerATNSimulator(
+            self, self.atn, self.decisionsToDFA, PredictionContextCache()
+        )
         self._actions = None
         self._predicates = None
-
-

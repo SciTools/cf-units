@@ -6,7 +6,6 @@
 
 
 import configparser
-
 import os.path
 import sys
 
@@ -28,11 +27,11 @@ def get_option(section, option, default=None):
 ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
 
 # The full path to the configuration directory of the active cf_units instance.
-CONFIG_PATH = os.path.join(ROOT_PATH, 'etc')
+CONFIG_PATH = os.path.join(ROOT_PATH, "etc")
 
 # Load the optional "site.cfg" file if it exists.
 if sys.version_info >= (3, 2):
     config = configparser.ConfigParser()
 else:
     config = configparser.SafeConfigParser()
-config.read([os.path.join(CONFIG_PATH, 'site.cfg')])
+config.read([os.path.join(CONFIG_PATH, "site.cfg")])

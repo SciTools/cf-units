@@ -10,6 +10,7 @@ class Node:
     Represents a node in an expression graph.
 
     """
+
     def __init__(self, **kwargs):
         self._attrs = kwargs
 
@@ -27,13 +28,13 @@ class Node:
 
     def _repr_ctx(self):
         # Return a dictionary that is useful for passing to string.format.
-        kwargs = ', '.join(
-            '{}={!r}'.format(key, value)
-            for key, value in self._attrs.items())
+        kwargs = ", ".join(
+            "{}={!r}".format(key, value) for key, value in self._attrs.items()
+        )
         return dict(cls_name=self.__class__.__name__, kwargs=kwargs)
 
     def __repr__(self):
-        return '{cls_name}({kwargs})'.format(**self._repr_ctx())
+        return "{cls_name}({kwargs})".format(**self._repr_ctx())
 
 
 class Terminal(Node):
@@ -41,6 +42,7 @@ class Terminal(Node):
     A generic terminal node in an expression graph.
 
     """
+
     def __init__(self, content):
         super().__init__(content=content)
 
@@ -48,7 +50,7 @@ class Terminal(Node):
         return []
 
     def __str__(self):
-        return '{}'.format(self.content)
+        return "{}".format(self.content)
 
 
 class Operand(Terminal):
@@ -61,6 +63,7 @@ class Number(Terminal):
 
 class Identifier(Terminal):
     """The unit itself (e.g. meters, m, km and π)"""
+
     pass
 
 
@@ -71,17 +74,17 @@ class BinaryOp(Node):
 
 class Raise(BinaryOp):
     def __str__(self):
-        return f'{self.lhs}^{self.rhs}'
+        return f"{self.lhs}^{self.rhs}"
 
 
 class Multiply(BinaryOp):
     def __str__(self):
-        return f'{self.lhs}·{self.rhs}'
+        return f"{self.lhs}·{self.rhs}"
 
 
 class Divide(BinaryOp):
     def __str__(self):
-        return f'{self.lhs}/{self.rhs}'
+        return f"{self.lhs}/{self.rhs}"
 
 
 class Shift(Node):
@@ -90,7 +93,7 @@ class Shift(Node):
         super().__init__(unit=unit, shift_from=shift_from)
 
     def __str__(self):
-        return f'({self.unit} @ {self.shift_from})'
+        return f"({self.unit} @ {self.shift_from})"
 
 
 class Timestamp(Terminal):
@@ -112,9 +115,10 @@ class Visitor:
     of an expression graph.
 
     """
+
     def visit(self, node):
         """Visit a node."""
-        method = 'visit_' + node.__class__.__name__
+        method = "visit_" + node.__class__.__name__
         visitor = getattr(self, method, self.generic_visit)
         return visitor(node)
 

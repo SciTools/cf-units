@@ -14,49 +14,56 @@ See also: `UDUNITS-2
 
 """
 
-from contextlib import contextmanager
 import copy
 import os.path
 import sys
+from contextlib import contextmanager
 
 import cftime
 import numpy as np
 
+from cf_units import _udunits2 as _ud
+from cf_units._udunits2 import (
+    UT_ASCII,
+    UT_DEFINITION,
+    UT_ISO_8859_1,
+    UT_LATIN1,
+    UT_NAMES,
+    UT_UTF8,
+)
+
 from . import config
+from ._version import version as __version__  # noqa: F401
 from .util import _OrderedHashable, approx_equal
 
-from cf_units import _udunits2 as _ud
-from cf_units._udunits2 import (UT_ASCII, UT_ISO_8859_1, UT_LATIN1, UT_UTF8,
-                                UT_NAMES, UT_DEFINITION)
-
-from ._version import version as __version__  # noqa: F401
-
-__all__ = ['CALENDAR_STANDARD',
-           'CALENDAR_GREGORIAN',
-           'CALENDAR_PROLEPTIC_GREGORIAN',
-           'CALENDAR_NO_LEAP',
-           'CALENDAR_JULIAN',
-           'CALENDAR_ALL_LEAP',
-           'CALENDAR_365_DAY',
-           'CALENDAR_366_DAY',
-           'CALENDAR_360_DAY',
-           'CALENDARS',
-           'CALENDAR_ALIASES',
-           'UT_NAMES',
-           'UT_DEFINITION',
-           'UT_ASCII',
-           'FLOAT32',
-           'FLOAT64',
-           'is_time',
-           'is_vertical',
-           'Unit',
-           'date2num',
-           'decode_time',
-           'encode_clock',
-           'encode_date',
-           'encode_time',
-           'num2date',
-           'suppress_errors']
+__all__ = [
+    "CALENDAR_STANDARD",
+    "CALENDAR_GREGORIAN",
+    "CALENDAR_PROLEPTIC_GREGORIAN",
+    "CALENDAR_NO_LEAP",
+    "CALENDAR_JULIAN",
+    "CALENDAR_ALL_LEAP",
+    "CALENDAR_365_DAY",
+    "CALENDAR_366_DAY",
+    "CALENDAR_360_DAY",
+    "CALENDARS",
+    "CALENDAR_ALIASES",
+    "UT_NAMES",
+    "UT_DEFINITION",
+    "UT_ASCII",
+    "FLOAT32",
+    "FLOAT64",
+    "is_time",
+    "is_vertical",
+    "Unit",
+    "date2num",
+    "decode_time",
+    "encode_clock",
+    "encode_date",
+    "encode_time",
+    "num2date",
+    "suppress_errors",
+]
 
 
 ########################################################################
@@ -68,52 +75,66 @@ __all__ = ['CALENDAR_STANDARD',
 #
 # default constants
 #
-EPOCH = '1970-01-01 00:00:00'
-_UNKNOWN_UNIT_STRING = 'unknown'
-_UNKNOWN_UNIT_SYMBOL = '?'
-_UNKNOWN_UNIT = [_UNKNOWN_UNIT_STRING, _UNKNOWN_UNIT_SYMBOL, '???', '']
-_NO_UNIT_STRING = 'no_unit'
-_NO_UNIT_SYMBOL = '-'
-_NO_UNIT = [_NO_UNIT_STRING, _NO_UNIT_SYMBOL, 'no unit', 'no-unit', 'nounit']
-_UNIT_DIMENSIONLESS = '1'
-_OP_SINCE = ' since '
+EPOCH = "1970-01-01 00:00:00"
+_UNKNOWN_UNIT_STRING = "unknown"
+_UNKNOWN_UNIT_SYMBOL = "?"
+_UNKNOWN_UNIT = [_UNKNOWN_UNIT_STRING, _UNKNOWN_UNIT_SYMBOL, "???", ""]
+_NO_UNIT_STRING = "no_unit"
+_NO_UNIT_SYMBOL = "-"
+_NO_UNIT = [_NO_UNIT_STRING, _NO_UNIT_SYMBOL, "no unit", "no-unit", "nounit"]
+_UNIT_DIMENSIONLESS = "1"
+_OP_SINCE = " since "
 _CATEGORY_UNKNOWN, _CATEGORY_NO_UNIT, _CATEGORY_UDUNIT = range(3)
 
 
 #
 # libudunits2 constants
 #
-UT_FORMATS = [UT_ASCII, UT_ISO_8859_1, UT_LATIN1, UT_UTF8, UT_NAMES,
-              UT_DEFINITION]
+UT_FORMATS = [
+    UT_ASCII,
+    UT_ISO_8859_1,
+    UT_LATIN1,
+    UT_UTF8,
+    UT_NAMES,
+    UT_DEFINITION,
+]
 
 #
 # cftime constants
 #
-CALENDAR_STANDARD = 'standard'
-CALENDAR_GREGORIAN = 'gregorian'
-CALENDAR_PROLEPTIC_GREGORIAN = 'proleptic_gregorian'
-CALENDAR_NO_LEAP = 'noleap'
-CALENDAR_JULIAN = 'julian'
-CALENDAR_ALL_LEAP = 'all_leap'
-CALENDAR_365_DAY = '365_day'
-CALENDAR_366_DAY = '366_day'
-CALENDAR_360_DAY = '360_day'
+CALENDAR_STANDARD = "standard"
+CALENDAR_GREGORIAN = "gregorian"
+CALENDAR_PROLEPTIC_GREGORIAN = "proleptic_gregorian"
+CALENDAR_NO_LEAP = "noleap"
+CALENDAR_JULIAN = "julian"
+CALENDAR_ALL_LEAP = "all_leap"
+CALENDAR_365_DAY = "365_day"
+CALENDAR_366_DAY = "366_day"
+CALENDAR_360_DAY = "360_day"
 
 #: The calendars recognised by cf_units.
 #: These are accessible as strings, or as constants in the form
 #: ``cf_units.CALENDAR_{ calendar_name.upper() }``. For example,
 #: ``cf_units.CALENDAR_NO_LEAP`` and ``cf_units.CALENDAR_366_DAY``.
-CALENDARS = [CALENDAR_STANDARD, CALENDAR_GREGORIAN,
-             CALENDAR_PROLEPTIC_GREGORIAN, CALENDAR_NO_LEAP, CALENDAR_JULIAN,
-             CALENDAR_ALL_LEAP, CALENDAR_365_DAY, CALENDAR_366_DAY,
-             CALENDAR_360_DAY]
+CALENDARS = [
+    CALENDAR_STANDARD,
+    CALENDAR_GREGORIAN,
+    CALENDAR_PROLEPTIC_GREGORIAN,
+    CALENDAR_NO_LEAP,
+    CALENDAR_JULIAN,
+    CALENDAR_ALL_LEAP,
+    CALENDAR_365_DAY,
+    CALENDAR_366_DAY,
+    CALENDAR_360_DAY,
+]
 
 #: Where calendars have multiple names, we map the alias to the
 #: definitive form.
 CALENDAR_ALIASES = {
     CALENDAR_STANDARD: CALENDAR_GREGORIAN,
     CALENDAR_NO_LEAP: CALENDAR_365_DAY,
-    CALENDAR_ALL_LEAP: CALENDAR_366_DAY}
+    CALENDAR_ALL_LEAP: CALENDAR_366_DAY,
+}
 
 
 #
@@ -129,16 +150,16 @@ FLOAT64 = np.float64
 ########################################################################
 
 # Convenience dictionary for the Unit convert method.
-_cv_convert_scalar = {FLOAT32: _ud.convert_float,
-                      FLOAT64: _ud.convert_double}
-_cv_convert_array = {FLOAT32: _ud.convert_floats,
-                     FLOAT64: _ud.convert_doubles}
+_cv_convert_scalar = {FLOAT32: _ud.convert_float, FLOAT64: _ud.convert_double}
+_cv_convert_array = {FLOAT32: _ud.convert_floats, FLOAT64: _ud.convert_doubles}
 
 # Map of ut_encodings to encoding strings
-_encoding_lookup = {UT_ASCII: 'ascii',
-                    UT_ISO_8859_1: 'iso_8859_1',
-                    UT_LATIN1: 'latin1',
-                    UT_UTF8: 'utf-8'}
+_encoding_lookup = {
+    UT_ASCII: "ascii",
+    UT_ISO_8859_1: "iso_8859_1",
+    UT_LATIN1: "latin1",
+    UT_UTF8: "utf-8",
+}
 
 
 @contextmanager
@@ -166,16 +187,20 @@ with suppress_errors():
         _ud_system = _ud.read_xml()
     except _ud.UdunitsError:
         _alt_xml_path = config.get_option(
-            'System', 'udunits2_xml_path',
-            default=os.path.join(sys.prefix, 'share', 'udunits',
-                                 'udunits2.xml'))
+            "System",
+            "udunits2_xml_path",
+            default=os.path.join(
+                sys.prefix, "share", "udunits", "udunits2.xml"
+            ),
+        )
         try:
             _ud_system = _ud.read_xml(_alt_xml_path.encode())
         except _ud.UdunitsError as e:
-            error_msg = ': "%s"' % e.error_msg() if e.errnum else ''
+            error_msg = ': "%s"' % e.error_msg() if e.errnum else ""
             raise OSError(
-                '[%s] Failed to open UDUNITS-2 XML unit database%s'
-                % (e.status_msg(), error_msg))
+                "[%s] Failed to open UDUNITS-2 XML unit database%s"
+                % (e.status_msg(), error_msg)
+            )
 
 
 ########################################################################
@@ -183,6 +208,7 @@ with suppress_errors():
 # module level function definitions
 #
 ########################################################################
+
 
 def encode_time(year, month, day, hour, minute, second):
     """
@@ -382,9 +408,13 @@ def _discard_microsecond(date):
     # Create date objects of the same type returned by cftime.num2date()
     # (either datetime.datetime or cftime.datetime), discarding the
     # microseconds
-    dates = np.array([d and d.__class__(d.year, d.month, d.day,
-                                        d.hour, d.minute, d.second)
-                      for d in dates])
+    dates = np.array(
+        [
+            d
+            and d.__class__(d.year, d.month, d.day, d.hour, d.minute, d.second)
+            for d in dates
+        ]
+    )
     result = dates[0] if shape == () else dates.reshape(shape)
     return result
 
@@ -456,11 +486,13 @@ def num2date(time_value, unit, calendar, only_use_cftime_datetimes=True):
         unit_string = unit_string.replace("epoch", EPOCH)
     unit_inst = Unit(unit_string, calendar=calendar)
     return unit_inst.num2date(
-        time_value, only_use_cftime_datetimes=only_use_cftime_datetimes)
+        time_value, only_use_cftime_datetimes=only_use_cftime_datetimes
+    )
 
 
-def _num2date_to_nearest_second(time_value, unit,
-                                only_use_cftime_datetimes=True):
+def _num2date_to_nearest_second(
+    time_value, unit, only_use_cftime_datetimes=True
+):
     """
     Return datetime encoding of numeric time value with respect to the given
     time reference units, with a resolution of 1 second.
@@ -493,12 +525,15 @@ def _num2date_to_nearest_second(time_value, unit,
     # arbitrarily. It is probably not possible to replicate that behaviour with
     # later versions, if one wished to do so for the sake of consistency.
     cftime_unit = unit.cftime_unit
-    time_units = cftime_unit.split(' ')[0]
-    has_half_seconds = np.logical_and(time_units == 'seconds',
-                                      time_values % 1. == 0.5)
+    time_units = cftime_unit.split(" ")[0]
+    has_half_seconds = np.logical_and(
+        time_units == "seconds", time_values % 1.0 == 0.5
+    )
     num2date_kwargs = dict(
-        units=cftime_unit, calendar=unit.calendar,
-        only_use_cftime_datetimes=only_use_cftime_datetimes)
+        units=cftime_unit,
+        calendar=unit.calendar,
+        only_use_cftime_datetimes=only_use_cftime_datetimes,
+    )
     dates = cftime.num2date(time_values, **num2date_kwargs)
     try:
         # We can assume all or none of the dates have a microsecond attribute
@@ -508,10 +543,11 @@ def _num2date_to_nearest_second(time_value, unit,
     round_mask = np.logical_or(has_half_seconds, microseconds != 0)
     ceil_mask = np.logical_or(has_half_seconds, microseconds >= 500000)
     if time_values[ceil_mask].size > 0:
-        useconds = Unit('second')
+        useconds = Unit("second")
         second_frac = useconds.convert(0.75, time_units)
         dates[ceil_mask] = cftime.num2date(
-            time_values[ceil_mask] + second_frac, **num2date_kwargs)
+            time_values[ceil_mask] + second_frac, **num2date_kwargs
+        )
     dates[round_mask] = _discard_microsecond(dates[round_mask])
     result = dates[0] if shape == () else dates.reshape(shape)
     return result
@@ -539,7 +575,7 @@ def as_unit(unit):
         if result is None:
             # Typically unit is a string, however we cater for other types of
             # 'unit' (e.g. iris.unit.Unit).
-            result = Unit(unit, calendar=getattr(unit, 'calendar', None))
+            result = Unit(unit, calendar=getattr(unit, "calendar", None))
             if use_cache:
                 _CACHE[unit] = result
     return result
@@ -601,10 +637,11 @@ def _ud_value_error(ud_err, message):
 
     ud_msg = ud_err.error_msg()
     if ud_msg:
-        message = u'{}: {}'.format(message, ud_msg)
+        message = "{}: {}".format(message, ud_msg)
 
-    message = u'[{status}] {message}'.format(
-        status=ud_err.status_msg(), message=message)
+    message = "[{status}] {message}".format(
+        status=ud_err.status_msg(), message=message
+    )
 
     return ValueError(message)
 
@@ -624,6 +661,7 @@ class Unit(_OrderedHashable):
     This class also supports time and calendar defintion and manipulation.
 
     """
+
     def _init_from_tuple(self, values):
         # Implements the required interface for an _OrderedHashable.
         # This will also ensure a Unit._init(*Unit.names) method exists.
@@ -646,28 +684,30 @@ class Unit(_OrderedHashable):
     # Prevent attribute updates
 
     def __setattr__(self, name, value):
-        raise AttributeError('Instances of %s are immutable' %
-                             type(self).__name__)
+        raise AttributeError(
+            "Instances of %s are immutable" % type(self).__name__
+        )
 
     def __delattr__(self, name):
-        raise AttributeError('Instances of %s are immutable' %
-                             type(self).__name__)
+        raise AttributeError(
+            "Instances of %s are immutable" % type(self).__name__
+        )
 
     # Declare the attribute names relevant to the ordered and hashable
     #  behaviour.
-    _names = ('category', 'ut_unit', 'calendar', 'origin')
+    _names = ("category", "ut_unit", "calendar", "origin")
 
     category = None
-    'Is this an unknown unit, a no-unit, or a UDUNITS-2 unit.'
+    "Is this an unknown unit, a no-unit, or a UDUNITS-2 unit."
 
     ut_unit = None
-    'Reference to the quantity defining the UDUNITS-2 unit.'
+    "Reference to the quantity defining the UDUNITS-2 unit."
 
     calendar = None
-    'Represents the unit calendar name, see cf_units.CALENDARS'
+    "Represents the unit calendar name, see cf_units.CALENDARS"
 
     origin = None
-    'The original string used to create this unit.'
+    "The original string used to create this unit."
 
     __slots__ = ()
 
@@ -728,12 +768,12 @@ class Unit(_OrderedHashable):
         encoding = UT_UTF8
 
         if unit is None:
-            unit = ''
+            unit = ""
 
         unit = str(unit).strip()
 
-        if unit.lower().endswith(' utc'):
-            unit = unit[:unit.lower().rfind(' utc')]
+        if unit.lower().endswith(" utc"):
+            unit = unit[: unit.lower().rfind(" utc")]
 
         if unit.endswith(" since epoch"):
             unit = unit.replace("epoch", EPOCH)
@@ -755,10 +795,11 @@ class Unit(_OrderedHashable):
             category = _CATEGORY_UDUNIT
             str_unit = unit
             try:
-                ut_unit = _ud.parse(_ud_system, unit.encode('utf8'), encoding)
+                ut_unit = _ud.parse(_ud_system, unit.encode("utf8"), encoding)
             except _ud.UdunitsError as exception:
                 value_error = _ud_value_error(
-                    exception, u'Failed to parse unit "{}"'.format(str_unit))
+                    exception, 'Failed to parse unit "{}"'.format(str_unit)
+                )
                 raise value_error from None
             if _OP_SINCE in unit.lower():
                 if calendar is None:
@@ -768,18 +809,24 @@ class Unit(_OrderedHashable):
                     if calendar_ in CALENDAR_ALIASES:
                         calendar_ = CALENDAR_ALIASES[calendar_]
                     if calendar_ not in CALENDARS:
-                        msg = '{!r} is an unsupported calendar.'
+                        msg = "{!r} is an unsupported calendar."
                         raise ValueError(msg.format(calendar))
                 else:
-                    msg = 'Expected string-like calendar argument, got {!r}.'
+                    msg = "Expected string-like calendar argument, got {!r}."
                     raise TypeError(msg.format(type(calendar)))
 
         # Call the OrderedHashable's init.
-        self._init(category, ut_unit, calendar_, unit,)
+        self._init(
+            category,
+            ut_unit,
+            calendar_,
+            unit,
+        )
 
     @classmethod
-    def _new_from_existing_ut(cls, category, ut_unit,
-                              calendar=None, origin=None):
+    def _new_from_existing_ut(
+        cls, category, ut_unit, calendar=None, origin=None
+    ):
         # Short-circuit __init__ if we know what we are doing and already
         # have a UT handle.
         unit = cls.__new__(cls)
@@ -798,14 +845,14 @@ class Unit(_OrderedHashable):
     def __getstate__(self):
         # state capture method for Pickle.dump()
         #  - return the instance data needed to reconstruct a Unit value
-        return {'unit_text': self.origin, 'calendar': self.calendar}
+        return {"unit_text": self.origin, "calendar": self.calendar}
 
     def __setstate__(self, state):
         # object reconstruction method for Pickle.load()
         # intercept the Pickle.load() operation and call own __init__ again
         #  - this is to ensure a valid ut_unit attribute (as these
         #    handles aren't persistent)
-        self.__init__(state['unit_text'], calendar=state['calendar'])
+        self.__init__(state["unit_text"], calendar=state["calendar"])
 
     def __copy__(self):
         return self
@@ -834,7 +881,7 @@ class Unit(_OrderedHashable):
         if self.is_unknown() or self.is_no_unit():
             result = False
         else:
-            day = _ud.get_unit_by_name(_ud_system, b'day')
+            day = _ud.get_unit_by_name(_ud_system, b"day")
             result = _ud.are_convertible(self.ut_unit, day)
         return result
 
@@ -860,10 +907,10 @@ class Unit(_OrderedHashable):
         if self.is_unknown() or self.is_no_unit():
             result = False
         else:
-            bar = _ud.get_unit_by_name(_ud_system, b'bar')
+            bar = _ud.get_unit_by_name(_ud_system, b"bar")
             result = _ud.are_convertible(self.ut_unit, bar)
             if not result:
-                meter = _ud.get_unit_by_name(_ud_system, b'meter')
+                meter = _ud.get_unit_by_name(_ud_system, b"meter")
                 result = _ud.are_convertible(self.ut_unit, meter)
         return result
 
@@ -913,10 +960,11 @@ class Unit(_OrderedHashable):
 
         """
         result = False
-        long_time_intervals = ['year', 'month']
+        long_time_intervals = ["year", "month"]
         if self.is_time_reference():
-            result = any(interval in self.origin
-                         for interval in long_time_intervals)
+            result = any(
+                interval in self.origin for interval in long_time_intervals
+            )
         return result
 
     def title(self, value):
@@ -941,9 +989,9 @@ class Unit(_OrderedHashable):
         """
         if self.is_time_reference():
             dt = self.num2date(value)
-            result = dt.strftime('%Y-%m-%d %H:%M:%S')
+            result = dt.strftime("%Y-%m-%d %H:%M:%S")
         else:
-            result = '%s %s' % (str(value), self)
+            result = "%s %s" % (str(value), self)
         return result
 
     @property
@@ -968,9 +1016,9 @@ class Unit(_OrderedHashable):
 
         """
 
-        if self == 'radians':
+        if self == "radians":
             result = np.pi * 2
-        elif self == 'degrees':
+        elif self == "degrees":
             result = 360.0
         else:
             result = None
@@ -997,12 +1045,17 @@ class Unit(_OrderedHashable):
 
         """
         other = as_unit(other)
-        if self.is_unknown() or self.is_no_unit() or other.is_unknown() or \
-           other.is_no_unit():
+        if (
+            self.is_unknown()
+            or self.is_no_unit()
+            or other.is_unknown()
+            or other.is_no_unit()
+        ):
             result = False
         else:
-            result = (self.calendar == other.calendar and
-                      _ud.are_convertible(self.ut_unit, other.ut_unit))
+            result = self.calendar == other.calendar and _ud.are_convertible(
+                self.ut_unit, other.ut_unit
+            )
         return result
 
     def is_dimensionless(self):
@@ -1023,8 +1076,9 @@ class Unit(_OrderedHashable):
             True
 
         """
-        return (self.category == _CATEGORY_UDUNIT and
-                bool(_ud.is_dimensionless(self.ut_unit)))
+        return self.category == _CATEGORY_UDUNIT and bool(
+            _ud.is_dimensionless(self.ut_unit)
+        )
 
     def is_unknown(self):
         """
@@ -1118,8 +1172,9 @@ class Unit(_OrderedHashable):
                     option = [option]
                 for i in option:
                     bitmask |= i
-            encoding = bitmask & \
-                (UT_ASCII | UT_ISO_8859_1 | UT_LATIN1 | UT_UTF8)
+            encoding = bitmask & (
+                UT_ASCII | UT_ISO_8859_1 | UT_LATIN1 | UT_UTF8
+            )
             encoding_str = _encoding_lookup[encoding]
             result = _ud.format(self.ut_unit, bitmask)
 
@@ -1225,13 +1280,15 @@ class Unit(_OrderedHashable):
         """
 
         if not isinstance(origin, (float, (int,))):
-            raise TypeError('a numeric type for the origin argument is'
-                            ' required')
+            raise TypeError(
+                "a numeric type for the origin argument is" " required"
+            )
         try:
             ut_unit = _ud.offset_by_time(self.ut_unit, origin)
         except _ud.UdunitsError as exception:
             value_error = _ud_value_error(
-                exception, 'Failed to offset {!r}'.format(self))
+                exception, "Failed to offset {!r}".format(self)
+            )
             raise value_error from None
         calendar = None
         return Unit._new_from_existing_ut(_CATEGORY_UDUNIT, ut_unit, calendar)
@@ -1259,7 +1316,8 @@ class Unit(_OrderedHashable):
         else:
             ut_unit = _ud.invert(self.ut_unit)
             result = Unit._new_from_existing_ut(
-                _CATEGORY_UDUNIT, ut_unit, calendar=None)
+                _CATEGORY_UDUNIT, ut_unit, calendar=None
+            )
         return result
 
     def root(self, root):
@@ -1286,14 +1344,14 @@ class Unit(_OrderedHashable):
 
         """
         if round(root) != root:
-            raise TypeError('An integer for the root argument is required')
+            raise TypeError("An integer for the root argument is required")
         if self.is_unknown():
             result = self
         elif self.is_no_unit():
             raise ValueError("Cannot take the root of a 'no-unit'.")
         else:
             # only update the unit if it is not scalar
-            if self == Unit('1'):
+            if self == Unit("1"):
                 result = self
             else:
                 try:
@@ -1301,11 +1359,13 @@ class Unit(_OrderedHashable):
                 except _ud.UdunitsError as exception:
                     value_error = _ud_value_error(
                         exception,
-                        'Failed to take the root of {!r}'.format(self))
+                        "Failed to take the root of {!r}".format(self),
+                    )
                     raise value_error from None
                 calendar = None
                 result = Unit._new_from_existing_ut(
-                    _CATEGORY_UDUNIT, ut_unit, calendar)
+                    _CATEGORY_UDUNIT, ut_unit, calendar
+                )
         return result
 
     def log(self, base):
@@ -1336,17 +1396,20 @@ class Unit(_OrderedHashable):
             try:
                 ut_unit = _ud.log(base, self.ut_unit)
             except TypeError:
-                raise TypeError('A numeric type for the base argument is '
-                                ' required')
+                raise TypeError(
+                    "A numeric type for the base argument is " " required"
+                )
             except _ud.UdunitsError as exception:
                 value_err = _ud_value_error(
                     exception,
-                    'Failed to calculate logorithmic base '
-                    'of {!r}'.format(self))
+                    "Failed to calculate logorithmic base "
+                    "of {!r}".format(self),
+                )
                 raise value_err from None
             calendar = None
             result = Unit._new_from_existing_ut(
-                _CATEGORY_UDUNIT, ut_unit, calendar)
+                _CATEGORY_UDUNIT, ut_unit, calendar
+            )
         return result
 
     def __str__(self):
@@ -1385,7 +1448,8 @@ class Unit(_OrderedHashable):
             result = "{}('{}')".format(self.__class__.__name__, self)
         else:
             result = "{}('{}', calendar='{}')".format(
-                self.__class__.__name__, self, self.calendar)
+                self.__class__.__name__, self, self.calendar
+            )
         return result
 
     def _offset_common(self, offset):
@@ -1400,7 +1464,8 @@ class Unit(_OrderedHashable):
                 result = NotImplemented
             else:
                 result = Unit._new_from_existing_ut(
-                    _CATEGORY_UDUNIT, ut_unit, calendar=None)
+                    _CATEGORY_UDUNIT, ut_unit, calendar=None
+                )
         return result
 
     def __add__(self, other):
@@ -1434,11 +1499,13 @@ class Unit(_OrderedHashable):
             except _ud.UdunitsError as exception:
                 value_err = _ud_value_error(
                     exception,
-                    'Failed to {} {!r} by {!r}'.format(op_label, self, other))
+                    "Failed to {} {!r} by {!r}".format(op_label, self, other),
+                )
                 raise value_err from None
             calendar = None
             result = Unit._new_from_existing_ut(
-                _CATEGORY_UDUNIT, ut_unit, calendar)
+                _CATEGORY_UDUNIT, ut_unit, calendar
+            )
         return result
 
     def __rmul__(self, other):
@@ -1553,14 +1620,15 @@ class Unit(_OrderedHashable):
         try:
             power = float(power)
         except ValueError:
-            raise TypeError('A numeric value is required for the power'
-                            ' argument.')
+            raise TypeError(
+                "A numeric value is required for the power" " argument."
+            )
 
         if self.is_unknown():
             result = self
         elif self.is_no_unit():
             raise ValueError("Cannot raise the power of a 'no-unit'.")
-        elif self == Unit('1'):
+        elif self == Unit("1"):
             # 1 ** N -> 1
             result = self
         else:
@@ -1570,14 +1638,14 @@ class Unit(_OrderedHashable):
             # root.
             if not approx_equal(power, 0.0) and abs(power) < 1:
                 if not approx_equal(1 / power, round(1 / power)):
-                    raise ValueError('Cannot raise a unit by a decimal.')
+                    raise ValueError("Cannot raise a unit by a decimal.")
                 root = int(round(1 / power))
                 result = self.root(root)
             else:
                 # Failing that, check for powers which are (very nearly) simple
                 # integer values.
                 if not approx_equal(power, round(power)):
-                    msg = 'Cannot raise a unit by a decimal (got %s).' % power
+                    msg = "Cannot raise a unit by a decimal (got %s)." % power
                     raise ValueError(msg)
                 power = int(round(power))
 
@@ -1586,7 +1654,8 @@ class Unit(_OrderedHashable):
                 except _ud.UdunitsError as exception:
                     value_err = _ud_value_error(
                         exception,
-                        'Failed to raise the power of {!r}'.format(self))
+                        "Failed to raise the power of {!r}".format(self),
+                    )
                     raise value_err from None
                 result = Unit._new_from_existing_ut(_CATEGORY_UDUNIT, ut_unit)
         return result
@@ -1717,26 +1786,31 @@ class Unit(_OrderedHashable):
                 result = copy.deepcopy(value)
             # Use cftime for converting reference times that are not using a
             # gregorian calendar as it handles these and udunits does not.
-            if self.is_time_reference() \
-                    and self.calendar != CALENDAR_GREGORIAN:
+            if (
+                self.is_time_reference()
+                and self.calendar != CALENDAR_GREGORIAN
+            ):
                 result_datetimes = cftime.num2date(
-                    result, self.cftime_unit, self.calendar)
-                result = cftime.date2num(
-                    result_datetimes, other.cftime_unit, other.calendar)
-                convert_type = (
-                    isinstance(value, np.ndarray)
-                    and np.issubsctype(value.dtype, np.floating)
+                    result, self.cftime_unit, self.calendar
                 )
+                result = cftime.date2num(
+                    result_datetimes, other.cftime_unit, other.calendar
+                )
+                convert_type = isinstance(
+                    value, np.ndarray
+                ) and np.issubsctype(value.dtype, np.floating)
                 if convert_type:
                     result = result.astype(value.dtype)
             else:
                 try:
-                    ut_converter = _ud.get_converter(self.ut_unit,
-                                                     other.ut_unit)
+                    ut_converter = _ud.get_converter(
+                        self.ut_unit, other.ut_unit
+                    )
                 except _ud.UdunitsError as exception:
                     value_err = _ud_value_error(
                         exception,
-                        'Failed to convert {!r} to {!r}'.format(self, other))
+                        "Failed to convert {!r} to {!r}".format(self, other),
+                    )
                     raise value_err from None
                 if isinstance(result, np.ndarray):
                     # Can only handle array of np.float32 or np.float64 so
@@ -1747,47 +1821,54 @@ class Unit(_OrderedHashable):
                     # Convert arrays with explicit endianness to native
                     # endianness: udunits seems to be tripped up by arrays
                     # with endianness other than native.
-                    if result.dtype.byteorder != '=':
+                    if result.dtype.byteorder != "=":
                         if inplace:
                             raise ValueError(
-                                'Unable to convert non-native byte ordered '
-                                'array in-place. Consider byte-swapping '
-                                'first.')
+                                "Unable to convert non-native byte ordered "
+                                "array in-place. Consider byte-swapping "
+                                "first."
+                            )
                         else:
                             result = result.astype(result.dtype.type)
                     # Strict type check of numpy array.
                     if result.dtype.type not in (np.float32, np.float64):
                         raise TypeError(
-                            "Expect a numpy array of '%s' or '%s'" %
-                            np.float32, np.float64)
+                            "Expect a numpy array of '%s' or '%s'"
+                            % np.float32,
+                            np.float64,
+                        )
                     ctype = result.dtype.type
                     # Utilise global convenience dictionary
                     # _cv_convert_array to convert our array in 1d form
-                    result_tmp = result.ravel(order='A')
+                    result_tmp = result.ravel(order="A")
                     # Do the actual conversion.
                     _cv_convert_array[ctype](
-                            ut_converter, result_tmp, result_tmp)
+                        ut_converter, result_tmp, result_tmp
+                    )
                     # If result_tmp was a copy, not a view (i.e. not C
                     # contiguous), copy the data back to the original.
                     if not np.shares_memory(result, result_tmp):
                         result_tmp = result_tmp.reshape(
-                            result.shape, order='A')
+                            result.shape, order="A"
+                        )
                         if isinstance(result, np.ma.MaskedArray):
                             result.data[...] = result_tmp
                         else:
                             result[...] = result_tmp
                 else:
                     if ctype not in _cv_convert_scalar:
-                        raise ValueError('Invalid target type. Can only '
-                                         'convert to float or double.')
+                        raise ValueError(
+                            "Invalid target type. Can only "
+                            "convert to float or double."
+                        )
                     # Utilise global convenience dictionary
                     # _cv_convert_scalar
-                    result = _cv_convert_scalar[ctype](ut_converter,
-                                                       result)
+                    result = _cv_convert_scalar[ctype](ut_converter, result)
             return result
         else:
-            raise ValueError("Unable to convert from '%r' to '%r'." %
-                             (self, other))
+            raise ValueError(
+                "Unable to convert from '%r' to '%r'." % (self, other)
+            )
 
     @property
     def cftime_unit(self):
@@ -1797,13 +1878,15 @@ class Unit(_OrderedHashable):
 
         """
         if self.calendar is None:
-            raise ValueError('Unit has undefined calendar')
+            raise ValueError("Unit has undefined calendar")
 
         # `cftime` cannot parse long time intervals ("months" or "years").
         if self.is_long_time_interval():
-            interval = self.origin.split(' ')[0]
-            emsg = ('Time units with interval of "months", "years" '
-                    '(or singular of these) cannot be processed, got "{!s}".')
+            interval = self.origin.split(" ")[0]
+            emsg = (
+                'Time units with interval of "months", "years" '
+                '(or singular of these) cannot be processed, got "{!s}".'
+            )
             raise ValueError(emsg.format(interval))
 
         #
@@ -1899,5 +1982,7 @@ class Unit(_OrderedHashable):
         """
 
         return _num2date_to_nearest_second(
-            time_value, self,
-            only_use_cftime_datetimes=only_use_cftime_datetimes)
+            time_value,
+            self,
+            only_use_cftime_datetimes=only_use_cftime_datetimes,
+        )
