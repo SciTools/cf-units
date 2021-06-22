@@ -5,8 +5,8 @@
 # licensing details.
 """Test function :func:`cf_units.num2pydate`."""
 
-import unittest
 import datetime
+import unittest
 
 from cf_units import num2pydate
 
