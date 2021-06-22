@@ -965,12 +965,17 @@ class TestNumsAndDates(unittest.TestCase):
         self.assertIsInstance(res, datetime.datetime)
 
     def test_num2date_wrong_calendar(self):
-        u = Unit('hours since 2010-11-02 12:00:00',
-                 calendar=unit.CALENDAR_360_DAY)
-        with self.assertRaisesRegex(ValueError,
-                                    'illegal calendar or reference date'):
-            u.num2date(1, only_use_cftime_datetimes=False,
-                       only_use_python_datetimes=True)
+        u = Unit(
+            "hours since 2010-11-02 12:00:00", calendar=unit.CALENDAR_360_DAY
+        )
+        with self.assertRaisesRegex(
+            ValueError, "illegal calendar or reference date"
+        ):
+            u.num2date(
+                1,
+                only_use_cftime_datetimes=False,
+                only_use_python_datetimes=True,
+            )
 
     def test_date2num(self):
         u = Unit(
@@ -980,18 +985,21 @@ class TestNumsAndDates(unittest.TestCase):
         self.assertEqual(str(u.num2date(u.date2num(d))), "2010-11-02 13:00:00")
 
     def test_num2pydate_simple(self):
-        u = Unit('hours since 2010-11-02 12:00:00',
-                 calendar=unit.CALENDAR_STANDARD)
+        u = Unit(
+            "hours since 2010-11-02 12:00:00", calendar=unit.CALENDAR_STANDARD
+        )
         result = u.num2pydate(1)
         expected = datetime.datetime(2010, 11, 2, 13)
         self.assertEqual(result, expected)
         self.assertIsInstance(result, datetime.datetime)
 
     def test_num2pydate_wrong_calendar(self):
-        u = Unit('hours since 2010-11-02 12:00:00',
-                 calendar=unit.CALENDAR_360_DAY)
-        with self.assertRaisesRegex(ValueError,
-                                    'illegal calendar or reference date'):
+        u = Unit(
+            "hours since 2010-11-02 12:00:00", calendar=unit.CALENDAR_360_DAY
+        )
+        with self.assertRaisesRegex(
+            ValueError, "illegal calendar or reference date"
+        ):
             u.num2pydate(1)
 
 
