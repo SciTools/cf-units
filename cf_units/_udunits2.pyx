@@ -16,8 +16,8 @@ See also: `UDUNITS-2
 # cython: nonecheck=True
 
 import numpy as np
-cimport numpy as np
 
+cimport numpy as np
 from libc cimport errno, string
 
 

@@ -22,8 +22,21 @@ env:
   CFUNITS_CACHE_BUILD: "0"
   # Base environment conda packages to be installed
   MAMBA_CACHE_PACKAGES: "pip conda-lock"
-  # Increment the build number to force new pip cache upload.
-  PIP_CACHE_BUILD: "0"
+
+
+#
+# Linting
+#
+lint_task:
+  auto_cancellation: true
+  container:
+    image: python:latest
+    cpu: 2
+    memory: 4G
+  name: "${CIRRUS_OS}: linting"
+  lint_script:
+    - python -m pip install --retries 3 pre-commit
+    - pre-commit run --all-files
 
 
 #

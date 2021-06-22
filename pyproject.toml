@@ -43,3 +43,31 @@ testpaths = "cf_units"
 
 [tool.setuptools_scm]
 write_to = "cf_units/_version.py"
+
+[tool.black]
+line-length = 79
+target-version = ['py37', 'py38', 'py39']
+include = '\.pyi?$'
+exclude = '''
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+)
+'''
+
+[tool.isort]
+known_first_party = "cf_units"
+line_length = 79
+profile = "black"
+skip_gitignore = "True"
+verbose = "False"

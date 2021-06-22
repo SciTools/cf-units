@@ -46,27 +46,33 @@ class _MetaOrderedHashable(abc.ABCMeta):
     def __new__(cls, name, bases, namespace):
         # We only want to modify concrete classes that have defined the
         # "_names" property.
-        if '_names' in namespace and \
-                not isinstance(namespace['_names'], abc.abstractproperty):
-            args = ', '.join(namespace['_names'])
+        if "_names" in namespace and not isinstance(
+            namespace["_names"], abc.abstractproperty
+        ):
+            args = ", ".join(namespace["_names"])
 
             # Ensure the class has a constructor with explicit arguments.
-            if '__init__' not in namespace:
+            if "__init__" not in namespace:
                 # Create a default __init__ method for the class
-                method_source = ('def __init__(self, %s):\n '
-                                 'self._init_from_tuple((%s,))' % (args, args))
+                method_source = (
+                    "def __init__(self, %s):\n "
+                    "self._init_from_tuple((%s,))" % (args, args)
+                )
                 exec(method_source, namespace)
 
             # Ensure the class has a "helper constructor" with explicit
             # arguments.
-            if '_init' not in namespace:
+            if "_init" not in namespace:
                 # Create a default _init method for the class
-                method_source = ('def _init(self, %s):\n '
-                                 'self._init_from_tuple((%s,))' % (args, args))
+                method_source = (
+                    "def _init(self, %s):\n "
+                    "self._init_from_tuple((%s,))" % (args, args)
+                )
                 exec(method_source, namespace)
 
         return super(_MetaOrderedHashable, cls).__new__(
-            cls, name, bases, namespace)
+            cls, name, bases, namespace
+        )
 
 
 class _OrderedHashable(Hashable, metaclass=_MetaOrderedHashable):
@@ -87,4 +93,5 @@ class _OrderedHashable(Hashable, metaclass=_MetaOrderedHashable):
         its attributes are themselves hashable.
 
     """
+
     pass

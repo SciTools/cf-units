@@ -1,0 +1,37 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: "v4.0.1"
+    hooks:
+        # Prevent giant files from being committed.
+    -   id: check-added-large-files
+        # Check whether files parse as valid Python.
+    -   id: check-ast
+        # Check for file name conflicts on case-insensitive filesytems.
+    -   id: check-case-conflict
+        # Check for files that contain merge conflict strings.
+    -   id: check-merge-conflict
+        # Check for debugger imports and py37+ `breakpoint()` calls in Python source.
+    -   id: debug-statements
+        # Don't commit to main branch.
+    -   id: no-commit-to-branch
+-   repo: https://github.com/psf/black
+    rev: "21.6b0"
+    hooks:
+    -   id: black
+        # Force black to run on whole repo, using settings from pyproject.toml
+        pass_filenames: false
+        args: ["--config=./pyproject.toml", "--check", "."]
+-   repo: https://github.com/PyCQA/flake8
+    rev: "3.9.2"
+    hooks:
+        # Run flake8.
+    -   id: flake8
+        args: ["--config=./setup.cfg"]
+-   repo: https://github.com/pycqa/isort
+    rev: "5.8.0"
+    hooks:
+    -   id: isort
+        name: isort
+        args: ["--filter-files", "--check"]

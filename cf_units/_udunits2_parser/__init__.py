@@ -6,25 +6,26 @@
 
 import unicodedata
 
-from antlr4 import InputStream, CommonTokenStream
+from antlr4 import CommonTokenStream, InputStream
 from antlr4.error.ErrorListener import ErrorListener
 
+from . import graph
 from .parser.udunits2Lexer import udunits2Lexer
 from .parser.udunits2Parser import udunits2Parser
 from .parser.udunits2ParserVisitor import udunits2ParserVisitor
-from . import graph
-
 
 # Dictionary mapping token rule id to token name.
-TOKEN_ID_NAMES = {getattr(udunits2Lexer, rule, None): rule
-                  for rule in udunits2Lexer.ruleNames}
+TOKEN_ID_NAMES = {
+    getattr(udunits2Lexer, rule, None): rule
+    for rule in udunits2Lexer.ruleNames
+}
 
 
 def handle_UNICODE_EXPONENT(string):
     # Convert unicode to compatibility form, replacing unicode minus with
     # ascii minus (which is actually a less good version
     # of unicode minus).
-    normd = unicodedata.normalize('NFKC', string).replace('−', '-')
+    normd = unicodedata.normalize("NFKC", string).replace("−", "-")
     return int(normd)
 
 
@@ -33,28 +34,29 @@ class UnitParseVisitor(udunits2ParserVisitor):
     A visitor which converts the parse tree into an abstract expression graph.
 
     """
+
     #: A dictionary mapping lexer TOKEN names to the action that should be
     #: taken on them when visited. For full context of what is allowed, see
     #: visitTerminal.
     TERM_HANDLERS = {
-            'CLOSE_PAREN': None,
-            'DATE': str,
-            'DIVIDE': graph.Operand('/'),  # Drop context, such as " per ".
-            'E_POWER': str,
-            'FLOAT': graph.Number,  # Preserve precision as str.
-            'HOUR_MINUTE_SECOND': str,
-            'HOUR_MINUTE': str,
-            'ID': graph.Identifier,
-            'INT': lambda c: graph.Number(int(c)),
-            'MULTIPLY': graph.Operand('*'),
-            'OPEN_PAREN': None,
-            'PERIOD': str,
-            'RAISE': graph.Operand,
-            'TIMESTAMP': graph.Timestamp,
-            'SIGNED_INT': lambda c: graph.Number(int(c)),
-            'SHIFT_OP': None,
-            'WS': None,
-            'UNICODE_EXPONENT': handle_UNICODE_EXPONENT,
+        "CLOSE_PAREN": None,
+        "DATE": str,
+        "DIVIDE": graph.Operand("/"),  # Drop context, such as " per ".
+        "E_POWER": str,
+        "FLOAT": graph.Number,  # Preserve precision as str.
+        "HOUR_MINUTE_SECOND": str,
+        "HOUR_MINUTE": str,
+        "ID": graph.Identifier,
+        "INT": lambda c: graph.Number(int(c)),
+        "MULTIPLY": graph.Operand("*"),
+        "OPEN_PAREN": None,
+        "PERIOD": str,
+        "RAISE": graph.Operand,
+        "TIMESTAMP": graph.Timestamp,
+        "SIGNED_INT": lambda c: graph.Number(int(c)),
+        "SHIFT_OP": None,
+        "WS": None,
+        "UNICODE_EXPONENT": handle_UNICODE_EXPONENT,
     }
 
     def defaultResult(self):
@@ -116,7 +118,7 @@ class UnitParseVisitor(udunits2ParserVisitor):
             # e.g. 1*2/3*4*5 = 1*(2/(3*(4*5)))
             for node in nodes[:-1][::-1]:
                 if isinstance(node, graph.Operand):
-                    if node.content == '/':
+                    if node.content == "/":
                         op_type = graph.Divide
                     else:
                         op_type = graph.Multiply
@@ -152,7 +154,7 @@ class UnitParseVisitor(udunits2ParserVisitor):
     def visitUnit_spec(self, ctx):
         node = self.visitChildren(ctx)
         if not node:
-            node = graph.Terminal('')
+            node = graph.Terminal("")
         return node
 
 
@@ -161,13 +163,14 @@ class SyntaxErrorRaiser(ErrorListener):
     Turn any parse errors into sensible SyntaxErrors.
 
     """
+
     def __init__(self, unit_string):
         self.unit_string = unit_string
         super(ErrorListener, self).__init__()
 
     def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
         # https://stackoverflow.com/a/36367357/741316
-        context = ("inline", line, column+2, "'{}'".format(self.unit_string))
+        context = ("inline", line, column + 2, "'{}'".format(self.unit_string))
         syntax_error = SyntaxError(msg, context)
         raise syntax_error from None
 
@@ -186,7 +189,7 @@ def _debug_tokens(unit_string):
     parser.unit_spec()
 
     for token in stream.tokens:
-        if token.text == '<EOF>':
+        if token.text == "<EOF>":
             continue
         token_type_idx = token.type
         rule = TOKEN_ID_NAMES[token_type_idx]
