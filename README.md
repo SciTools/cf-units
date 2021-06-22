@@ -22,13 +22,13 @@
 
 # Table of contents
 
-[comment]:
-  # (NOTE: toc auto-generated with https://github.com/jonschlinkert/markdown-toc
-      $> markdown-toc -i --bullets='-' README.md)
-[comment]:
-  # (This entire README can be markdown linted with
-    https://github.com/igorshubovych/markdownlint-cli
-      $ markdownlint README.md)
+[comment]: # (NOTE: toc auto-generated with
+  https://github.com/jonschlinkert/markdown-toc
+    $> markdown-toc -i --bullets='-' README.md)
+
+[comment]: # (This entire README can be markdown linted with
+  https://github.com/igorshubovych/markdownlint-cli
+    $ markdownlint README.md)
 
 - [Overview](#overview)
   - [Example](#example)
