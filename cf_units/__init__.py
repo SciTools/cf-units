@@ -62,6 +62,7 @@ __all__ = [
     "encode_date",
     "encode_time",
     "num2date",
+    "num2pydate",
     "suppress_errors",
 ]
 
@@ -419,7 +420,13 @@ def _discard_microsecond(date):
     return result
 
 
-def num2date(time_value, unit, calendar, only_use_cftime_datetimes=True):
+def num2date(
+    time_value,
+    unit,
+    calendar,
+    only_use_cftime_datetimes=True,
+    only_use_python_datetimes=False,
+):
     """
     Return datetime encoding of numeric time value (resolution of 1 second).
 
@@ -459,6 +466,11 @@ def num2date(time_value, unit, calendar, only_use_cftime_datetimes=True):
         calendar.  If False, returns datetime.datetime instances where
         possible.  Defaults to True.
 
+    * only_use_python_datetimes (bool):
+        If True, will always return datetime.datetime instances where
+        possible, and raise an exception if not.  Ignored if
+        only_use_cftime_datetimes is True.  Defaults to False.
+
     Returns:
         datetime, or numpy.ndarray of datetime object.
 
@@ -486,12 +498,36 @@ def num2date(time_value, unit, calendar, only_use_cftime_datetimes=True):
         unit_string = unit_string.replace("epoch", EPOCH)
     unit_inst = Unit(unit_string, calendar=calendar)
     return unit_inst.num2date(
-        time_value, only_use_cftime_datetimes=only_use_cftime_datetimes
+        time_value,
+        only_use_cftime_datetimes=only_use_cftime_datetimes,
+        only_use_python_datetimes=only_use_python_datetimes,
+    )
+
+
+def num2pydate(time_value, unit, calendar):
+    """
+    Convert time value(s) to python datetime.datetime objects, or raise an
+    exception if this is not possible.  Same as::
+
+        num2date(time_value, unit, calendar,
+                 only_use_cftime_datetimes=False,
+                 only_use_python_datetimes=True)
+
+    """
+    return num2date(
+        time_value,
+        unit,
+        calendar,
+        only_use_cftime_datetimes=False,
+        only_use_python_datetimes=True,
     )
 
 
 def _num2date_to_nearest_second(
-    time_value, unit, only_use_cftime_datetimes=True
+    time_value,
+    unit,
+    only_use_cftime_datetimes=True,
+    only_use_python_datetimes=False,
 ):
     """
     Return datetime encoding of numeric time value with respect to the given
@@ -506,6 +542,11 @@ def _num2date_to_nearest_second(
         If True, will always return cftime datetime objects, regardless of
         calendar.  If False, returns datetime.datetime instances where
         possible.  Defaults to True.
+
+    * only_use_python_datetimes (bool):
+        If True, will always return datetime.datetime instances where
+        possible, and raise an exception if not.  Ignored if
+        only_use_cftime_datetimes is True.  Defaults to False.
 
     Returns:
         datetime, or numpy.ndarray of datetime object.
@@ -533,6 +574,7 @@ def _num2date_to_nearest_second(
         units=cftime_unit,
         calendar=unit.calendar,
         only_use_cftime_datetimes=only_use_cftime_datetimes,
+        only_use_python_datetimes=only_use_python_datetimes,
     )
     dates = cftime.num2date(time_values, **num2date_kwargs)
     try:
@@ -1933,7 +1975,12 @@ class Unit(_OrderedHashable):
         date = _discard_microsecond(date)
         return cftime.date2num(date, self.cftime_unit, self.calendar)
 
-    def num2date(self, time_value, only_use_cftime_datetimes=True):
+    def num2date(
+        self,
+        time_value,
+        only_use_cftime_datetimes=True,
+        only_use_python_datetimes=False,
+    ):
         """
         Returns a datetime-like object calculated from the numeric time
         value using the current calendar and the unit time reference.
@@ -1965,6 +2012,11 @@ class Unit(_OrderedHashable):
             calendar.  If False, returns datetime.datetime instances where
             possible.  Defaults to True.
 
+        * only_use_python_datetimes (bool):
+            If True, will always return datetime.datetime instances where
+            possible, and raise an exception if not.  Ignored if
+            only_use_cftime_datetimes is True.  Defaults to False.
+
         Returns:
             datetime, or numpy.ndarray of datetime object.
 
@@ -1985,4 +2037,20 @@ class Unit(_OrderedHashable):
             time_value,
             self,
             only_use_cftime_datetimes=only_use_cftime_datetimes,
+            only_use_python_datetimes=only_use_python_datetimes,
+        )
+
+    def num2pydate(self, time_value):
+        """
+        Convert time value(s) to python datetime.datetime objects, or raise an
+        exception if this is not possible.  Same as::
+
+            unit.num2date(time_value, only_use_cftime_datetimes=False,
+                          only_use_python_datetimes=True)
+
+        """
+        return self.num2date(
+            time_value,
+            only_use_cftime_datetimes=False,
+            only_use_python_datetimes=True,
         )

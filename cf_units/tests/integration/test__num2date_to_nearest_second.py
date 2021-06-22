@@ -252,6 +252,18 @@ class Test(unittest.TestCase):
 
         self.check_timedelta(nums, units, expected)
 
+    def test_pydatetime_wrong_calendar(self):
+        unit = cf_units.Unit("days since 1970-01-01", calendar="360_day")
+        with self.assertRaisesRegex(
+            ValueError, "illegal calendar or reference date"
+        ):
+            _num2date_to_nearest_second(
+                1,
+                unit,
+                only_use_cftime_datetimes=False,
+                only_use_python_datetimes=True,
+            )
+
     # 365 day Calendar tests
 
     def test_simple_365_day(self):
