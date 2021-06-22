@@ -4,8 +4,8 @@
 
 [comment]: # (https://shields.io/ is a good source of these)
 [![Build Status](https://api.cirrus-ci.com/github/SciTools/cf-units.svg)](https://cirrus-ci.com/github/SciTools/cf-units)
-[![Coverage Status](https://codecov.io/gh/SciTools/cf-units/branch/master/graph/badge.svg?token=6LlYlyTUZG)](https://codecov.io/gh/SciTools/cf-units)
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/SciTools/cf-units/master.svg)](https://results.pre-commit.ci/latest/github/SciTools/cf-units/master)
+[![Coverage Status](https://codecov.io/gh/SciTools/cf-units/branch/main/graph/badge.svg?token=6LlYlyTUZG)](https://codecov.io/gh/SciTools/cf-units)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/SciTools/cf-units/main.svg)](https://results.pre-commit.ci/latest/github/SciTools/cf-units/main)
 ,
 [![conda-forge downloads](https://img.shields.io/conda/vn/conda-forge/cf-units?color=orange&label=conda-forge&logo=conda-forge&logoColor=white)](https://anaconda.org/conda-forge/cf-units)
 [![PyPI](https://img.shields.io/pypi/v/cf-units?color=orange&label=pypi&logo=python&logoColor=white)](https://pypi.org/project/cf-units/)
@@ -18,17 +18,17 @@
 ,
 [![Licence](https://img.shields.io/github/license/SciTools/cf-units)](COPYING)
 [![Contributors](https://img.shields.io/github/contributors/SciTools/cf-units)](https://github.com/SciTools/cf-units/graphs/contributors)
-[![Commits since last release](https://img.shields.io/github/commits-since/SciTools/cf-units/latest.svg)](https://github.com/SciTools/cf-units/commits/master)
+[![Commits since last release](https://img.shields.io/github/commits-since/SciTools/cf-units/latest.svg)](https://github.com/SciTools/cf-units/commits/main)
 
 # Table of contents
 
-[comment]:
-  # (NOTE: toc auto-generated with https://github.com/jonschlinkert/markdown-toc
-      $> markdown-toc -i --bullets='-' README.md)
-[comment]:
-  # (This entire README can be markdown linted with
-    https://github.com/igorshubovych/markdownlint-cli
-      $ markdownlint README.md)
+[comment]: # (NOTE: toc auto-generated with
+  https://github.com/jonschlinkert/markdown-toc
+    $> markdown-toc -i --bullets='-' README.md)
+
+[comment]: # (This entire README can be markdown linted with
+  https://github.com/igorshubovych/markdownlint-cli
+    $ markdownlint README.md)
 
 - [Overview](#overview)
   - [Example](#example)
