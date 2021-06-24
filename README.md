@@ -1,4 +1,4 @@
-# [cf-units](https://scitools.org.uk/cf-units/docs/latest/)
+# [cf-units](https://cf-units.readthedocs.io/en/latest/)
 
 #### Units of measure as defined by the Climate and Forecast (CF) metadata conventions.
 
@@ -43,7 +43,7 @@ conventions.
 Provision of a wrapper class to support Unidata/UCAR UDUNITS-2 library, and the
 cftime calendar functionality.
 
-Documentation can be found at <https://scitools.org.uk/cf-units/docs/latest/>.
+Documentation can be found at <https://cf-units.readthedocs.io/en/latest/>.
 
 ### Example
 
