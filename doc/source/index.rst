@@ -14,6 +14,9 @@ Contents:
     unit
     utilities
 
+cf-units is part of SciTools, for more information see https://scitools.org.uk/.
+For **cf-units 2.0** and earlier documentation please see the
+`legacy documentation <https://scitools.org.uk/cf-units/docs/v2.0/>`_.
 
 
 Indices and tables
