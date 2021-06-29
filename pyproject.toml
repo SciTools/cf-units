@@ -62,6 +62,7 @@ exclude = '''
     | build
     | dist
   )/
+  | _version.py
 )
 '''
 
