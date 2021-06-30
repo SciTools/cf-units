@@ -410,20 +410,7 @@ def _discard_microsecond(date):
     # Create date objects of the same type returned by cftime.num2date()
     # (either datetime.datetime or cftime.datetime), discarding the
     # microseconds
-    discard = []
-    for dt in dates:
-        if dt:
-            kwargs = dict(
-                year=dt.year,
-                month=dt.month,
-                day=dt.day,
-                hour=dt.hour,
-                minute=dt.minute,
-                second=dt.second,
-            )
-            if isinstance(dt, cftime.datetime):
-                kwargs["calendar"] = dt.calendar
-            discard.append(dt.__class__(**kwargs))
+    discard = [dt.replace(microsecond=0) for dt in dates if dt]
     if discard:
         dates = np.array(discard)
         if shape == ():
