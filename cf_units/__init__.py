@@ -562,20 +562,20 @@ def _num2date_to_nearest_second(
         only_use_python_datetimes=only_use_python_datetimes,
     )
     dates = cftime.num2date(time_values, **num2date_kwargs)
-    try:
-        # We can assume all or none of the dates have a microsecond attribute
-        microseconds = np.array([d.microsecond if d else 0 for d in dates])
-    except AttributeError:
-        microseconds = 0
-    round_mask = np.logical_or(has_half_seconds, microseconds != 0)
-    ceil_mask = np.logical_or(has_half_seconds, microseconds >= 500000)
-    if time_values[ceil_mask].size > 0:
-        useconds = Unit("second")
-        second_frac = useconds.convert(0.75, time_units)
-        dates[ceil_mask] = cftime.num2date(
-            time_values[ceil_mask] + second_frac, **num2date_kwargs
-        )
-    dates[round_mask] = _discard_microsecond(dates[round_mask])
+    # try:
+    #     # We can assume all or none of the dates have a microsecond attribute
+    #     microseconds = np.array([d.microsecond if d else 0 for d in dates])
+    # except AttributeError:
+    #     microseconds = 0
+    # round_mask = np.logical_or(has_half_seconds, microseconds != 0)
+    # ceil_mask = np.logical_or(has_half_seconds, microseconds >= 500000)
+    # if time_values[ceil_mask].size > 0:
+    #     useconds = Unit("second")
+    #     second_frac = useconds.convert(0.75, time_units)
+    #     dates[ceil_mask] = cftime.num2date(
+    #         time_values[ceil_mask] + second_frac, **num2date_kwargs
+    #     )
+    # dates[round_mask] = _discard_microsecond(dates[round_mask])
     result = dates[0] if shape == () else dates.reshape(shape)
     return result
 
@@ -1979,7 +1979,7 @@ class Unit(_OrderedHashable):
 
         """
 
-        date = _discard_microsecond(date)
+        # date = _discard_microsecond(date)
         return cftime.date2num(date, self.cftime_unit, self.calendar)
 
     def num2date(
