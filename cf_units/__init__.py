@@ -403,23 +403,14 @@ def _discard_microsecond(date):
         datetime, or numpy.ndarray of datetime object.
 
     """
-    dates = np.asarray(date)
+    dates = np.asanyarray(date)
     shape = dates.shape
     dates = dates.ravel()
-    result = None
-    # Create date objects of the same type returned by cftime.num2date()
-    # (either datetime.datetime or cftime.datetime), discarding the
-    # microseconds
-    discard = [dt.replace(microsecond=0) for dt in dates if dt]
-    if discard:
-        dates = np.array(discard)
-        if shape == ():
-            result = dates[0]
-        else:
-            if np.prod(shape) == dates.size:
-                result = dates.reshape(shape)
-            else:
-                result = dates
+
+    # using the "and" pattern to support masked arrays of datetimes
+    dates = np.array([dt and dt.replace(microsecond=0) for dt in dates])
+    result = dates[0] if shape == () else dates.reshape(shape)
+
     return result
 
 

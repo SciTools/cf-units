@@ -10,6 +10,7 @@ import unittest
 
 import cftime
 import numpy as np
+import numpy.ma as ma
 
 from cf_units import _discard_microsecond as discard_microsecond
 
@@ -75,34 +76,46 @@ class Test__cftime(unittest.TestCase):
 
 class Test__falsy(unittest.TestCase):
     def setUp(self):
-        kwargs = dict(year=1, month=2, day=3, hour=4, minute=5, second=6)
+        self.kwargs = dict(year=1, month=2, day=3, hour=4, minute=5, second=6)
+        self.calendar = "360_day"
+        microsecond = 7
         self.cftime = cftime.datetime(
-            **kwargs, microsecond=0, calendar="gregorian"
+            **self.kwargs, microsecond=microsecond, calendar=self.calendar
         )
-        self.datetime = datetime.datetime(**kwargs, microsecond=0)
+        self.datetime = datetime.datetime(
+            **self.kwargs, microsecond=microsecond
+        )
 
     def test_single__none(self):
         self.assertIsNone(discard_microsecond(None))
 
     def test_single__false(self):
-        self.assertIsNone(discard_microsecond(False))
+        self.assertFalse(discard_microsecond(False))
 
     def test_multi__falsy(self):
-        self.assertIsNone(discard_microsecond([None, False, 0]))
+        falsy = np.array([None, False, 0])
+        actual = discard_microsecond(falsy)
+        np.testing.assert_array_equal(falsy, actual)
 
-    def test_multi__mixed(self):
-        dates = [None, self.cftime, False, self.datetime]
+    def test_masked(self):
+        data = [self.cftime, self.datetime, self.cftime, self.datetime]
+        mask = [1, 0, 0, 1]
+        dates = ma.masked_array(data, mask=mask)
         actual = discard_microsecond(dates)
-        expected = np.array([self.cftime, self.datetime])
-        np.testing.assert_array_equal(expected, actual)
-
-    def test_multi__mixed_ravel(self):
-        dates = np.array([None, self.cftime, False, self.datetime]).reshape(
-            2, 2
+        expected = np.array(
+            [
+                ma.masked,
+                datetime.datetime(**self.kwargs),
+                cftime.datetime(**self.kwargs, calendar=self.calendar),
+                ma.masked,
+            ]
         )
-        actual = discard_microsecond(dates)
-        expected = np.array([self.cftime, self.datetime])
-        np.testing.assert_array_equal(expected, actual)
+        self.assertEqual(expected.shape, actual.shape)
+        for i, masked in enumerate(mask):
+            if masked:
+                self.assertIs(expected[i], actual[i])
+            else:
+                self.assertEqual(expected[i], actual[i])
 
 
 if __name__ == "__main__":
