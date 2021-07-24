@@ -5,3 +5,4 @@ include cf_units/etc/site.cfg.template
 include CHANGES COPYING COPYING.LESSER INSTALL
 exclude cf_units/etc/site.cfg
 graft requirements
+prune .github
