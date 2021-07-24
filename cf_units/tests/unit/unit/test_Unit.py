@@ -67,7 +67,7 @@ class Test_convert__calendar(unittest.TestCase):
             (np.float64, True),
             (np.int32, False),
             (np.int64, False),
-            (np.int, False),
+            (int, False),
         ):
             data = np.arange(4, dtype=start_dtype)
             u1 = Unit("hours since 2000-01-01 00:00:00", calendar="360_day")
