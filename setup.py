@@ -62,7 +62,7 @@ def get_library_dirs():
 def get_package_data():
     package_data = None
     # Determine whether we're building a wheel.
-    if environ.get("CFUNITS_WHEEL") is not None:
+    if "bdist_wheel" in sys.argv:
         # The protocol is that the UDUNITS2_XML_PATH environment variable
         # identifies the root UDUNITS2 XML file and parent directory containing
         # all the XML resource files that require to be bundled within this
