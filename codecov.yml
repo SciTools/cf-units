@@ -1,3 +1,6 @@
+ignore:
+  - cf_units/_version.py
+  - cf_units/config.py
 coverage:
   status:
     project:
