@@ -4,8 +4,6 @@ yum install -y udunits2-devel
 PYTHONS=("cp37-cp37m" "cp38-cp38" "cp39-cp39")
 WHEELHOUSE="/github/workspace/wheelhouse/"
 
-cp /usr/include/udunits2/* /usr/include/
-
 export UDUNITS2_INCDIR="/usr/include/udunits2"
 export UDUNITS2_LIBDIR="/usr/lib64"
 export UDUNITS2_XML_PATH="/usr/share/udunits/udunits2.xml"
