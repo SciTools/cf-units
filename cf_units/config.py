@@ -6,8 +6,8 @@
 
 
 import configparser
-import os.path
-import sys
+from pathlib import Path
+from tempfile import NamedTemporaryFile
 
 
 # Returns simple string options.
@@ -24,14 +24,39 @@ def get_option(section, option, default=None):
 
 
 # Figure out the full path to the "cf_units" package.
-ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
+ROOT_PATH = Path(__file__).resolve().parent
 
 # The full path to the configuration directory of the active cf_units instance.
-CONFIG_PATH = os.path.join(ROOT_PATH, "etc")
+CONFIG_PATH = ROOT_PATH / "etc"
+
+# The full path to the configuration file.
+SITE_PATH = CONFIG_PATH / "site.cfg"
 
 # Load the optional "site.cfg" file if it exists.
-if sys.version_info >= (3, 2):
-    config = configparser.ConfigParser()
-else:
-    config = configparser.SafeConfigParser()
-config.read([os.path.join(CONFIG_PATH, "site.cfg")])
+config = configparser.ConfigParser()
+
+# Auto-generate the "site.cfg" only when it doesn't exist
+# *and* the UDUNITS2 XML file/s are bundled within the cf-units
+# package i.e., typically for a wheel installation.
+xml_database = None
+if not SITE_PATH.is_file():
+    SHARE_PATH = CONFIG_PATH / "share"
+    xml_database = SHARE_PATH / "udunits2.xml"
+    if not xml_database.is_file():
+        xml_database = SHARE_PATH / "udunits2_combined.xml"
+        if not xml_database.is_file():
+            xml_database = None
+    if xml_database is not None:
+        with NamedTemporaryFile(mode="w+t", delete=False) as tmp:
+            site_cfg = f"""[System]
+            udunits2_xml_path = {xml_database}
+            """
+            tmp.file.write(site_cfg)
+        SITE_PATH = Path(tmp.name)
+
+# Only attempt to read and parse an existing "site.cfg"
+if SITE_PATH.is_file():
+    config.read([SITE_PATH])
+    if xml_database is not None:
+        # Tidy the auto-generated file.
+        SITE_PATH.unlink()
