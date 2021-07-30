@@ -1,0 +1,85 @@
+name: pypi-publish
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  build-artifacts:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Get tags
+      shell: bash
+      run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+
+    - name: Build linux wheels
+      uses: ./.github/workflows/actions/manylinux2014_x86_64
+
+    - name: List built artifacts
+      shell: bash
+      working-directory: dist
+      run: ls
+
+    - name: Check built artifacts
+      shell: bash
+      working-directory: dist
+      run: |
+        python -m pip install wheel twine
+        python -m twine check *
+
+    - name: Inspect built wheels
+      shell: bash
+      working-directory: dist
+      run: |
+        for WHEEL in *.whl; do
+          echo -e "\n${WHEEL}"
+          python -m zipfile --list ${WHEEL}
+        done
+
+    - name: Upload built artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: pypi-artifacts
+        path: dist
+
+  test-artifacts:
+    needs: build-artifacts
+    name: Test ${{ matrix.tag }} for Python ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: [3.7, 3.8, 3.9]
+        include:
+          - python: 3.7
+            tag: cp37-cp37m
+          - python: 3.8
+            tag: cp38-cp38
+          - python: 3.9
+            tag: cp39-cp39
+    steps:
+      - name: Download built artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: pypi-artifacts
+          path: dist
+
+      - name: Setup Python ${{ matrix.python }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Install ${{ matrix.tag }}
+        env:
+          TAG: ${{ matrix.tag }}
+        shell: bash
+        working-directory: dist
+        run: python -m pip install cf_units-*-${TAG}-*.whl
+
+      - name: Test ${{ matrix.tag }}
+        shell: bash
+        run: |
+          python -m pip install pytest
+          python -m pytest --pyargs cf_units

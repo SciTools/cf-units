@@ -15,6 +15,7 @@ import unittest
 import numpy as np
 
 from cf_units import _udunits2 as _ud
+from cf_units.config import get_xml_path
 
 _ud.set_error_message_handler(_ud.ignore)
 
@@ -26,7 +27,10 @@ class Test_get_system(unittest.TestCase):
     """
 
     def test_read_xml(self):
-        system = _ud.read_xml()
+        try:
+            system = _ud.read_xml()
+        except _ud.UdunitsError:
+            system = _ud.read_xml(get_xml_path())
 
         self.assertIsNotNone(system)
 
@@ -46,7 +50,10 @@ class Test_system(unittest.TestCase):
     """
 
     def setUp(self):
-        self.system = _ud.read_xml()
+        try:
+            self.system = _ud.read_xml()
+        except _ud.UdunitsError:
+            self.system = _ud.read_xml(get_xml_path())
 
     def test_get_unit_by_name(self):
         unit = _ud.get_unit_by_name(self.system, b"metre")
@@ -91,7 +98,11 @@ class Test_unit(unittest.TestCase):
     """
 
     def setUp(self):
-        self.system = _ud.read_xml()
+        try:
+            self.system = _ud.read_xml()
+        except _ud.UdunitsError:
+            self.system = _ud.read_xml(get_xml_path())
+
         self.metre = _ud.get_unit_by_name(self.system, b"metre")
         self.yard = _ud.get_unit_by_name(self.system, b"yard")
         self.second = _ud.get_unit_by_name(self.system, b"second")
@@ -267,7 +278,11 @@ class Test_convert(unittest.TestCase):
     """
 
     def setUp(self):
-        system = _ud.read_xml()
+        try:
+            system = _ud.read_xml()
+        except _ud.UdunitsError:
+            system = _ud.read_xml(get_xml_path())
+
         metre = _ud.get_unit_by_name(system, b"metre")
         yard = _ud.get_unit_by_name(system, b"yard")
         self.converter = _ud.get_converter(metre, yard)
