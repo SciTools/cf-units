@@ -13,6 +13,6 @@ for PYTHON in ${PYTHONS[@]}; do
     /opt/python/${PYTHON}/bin/python -m build --sdist --wheel . --outdir ${WHEELHOUSE}
 done
 
-for whl in ${WHEELHOUSE} cf_units*.whl; do
-    auditwheel repair $whl
+for BDIST_WHEEL in ${WHEELHOUSE}/cf_units*.whl; do
+    auditwheel repair ${BDIST_WHEEL}
 done
