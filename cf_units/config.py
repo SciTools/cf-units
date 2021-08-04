@@ -6,6 +6,7 @@
 
 
 import configparser
+import sys
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
@@ -21,6 +22,17 @@ def get_option(section, option, default=None):
     if config.has_option(section, option):
         value = config.get(section, option)
     return value
+
+
+def get_xml_path():
+    """Return the alternative path to the UDUNITS2 XMl file"""
+    default = Path(sys.prefix) / "share" / "udunits" / "udunits2.xml"
+    path = get_option(
+        "System",
+        "udunits2_xml_path",
+        default=str(default),
+    )
+    return path.encode()
 
 
 # Figure out the full path to the "cf_units" package.
