@@ -15,8 +15,6 @@ See also: `UDUNITS-2
 """
 
 import copy
-import os.path
-import sys
 from contextlib import contextmanager
 
 import cftime
@@ -187,15 +185,8 @@ with suppress_errors():
     try:
         _ud_system = _ud.read_xml()
     except _ud.UdunitsError:
-        _alt_xml_path = config.get_option(
-            "System",
-            "udunits2_xml_path",
-            default=os.path.join(
-                sys.prefix, "share", "udunits", "udunits2.xml"
-            ),
-        )
         try:
-            _ud_system = _ud.read_xml(_alt_xml_path.encode())
+            _ud_system = _ud.read_xml(config.get_xml_path())
         except _ud.UdunitsError as e:
             error_msg = ': "%s"' % e.error_msg() if e.errnum else ""
             raise OSError(
