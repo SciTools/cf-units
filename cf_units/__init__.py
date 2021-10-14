@@ -135,6 +135,10 @@ CALENDAR_ALIASES = {
     CALENDAR_ALL_LEAP: CALENDAR_366_DAY,
 }
 
+#: Calendars that possibly could be converted into each other
+#: depending on min/max date
+GREGORIAN_CALENDARS = {CALENDAR_STANDARD, CALENDAR_PROLEPTIC_GREGORIAN}
+JULIAN_CALENDARS = {CALENDAR_STANDARD, CALENDAR_JULIAN}
 
 #
 # floating point types
@@ -962,7 +966,12 @@ class Unit(_OrderedHashable):
             True
 
         """
-        return self.calendar is not None
+        try:
+            result = self.calendar is not None
+        except ValueError:
+            result = False
+        print(result)
+        return result
 
     def is_long_time_interval(self):
         """
@@ -1791,22 +1800,61 @@ class Unit(_OrderedHashable):
 
         .. note::
 
-           Conversion between unit calendars is not permitted unless the
-           calendars are aliases, see :attr:`cf_units.CALENDAR_ALIASES`.
-
+          Conversion between unit calendars is permitted only if one of the
+           following conditions are met:
+           * the calendars are aliases, see :attr:`cf_units.CALENDAR_ALIASES`.
+           * the calendars are ``standard`` and ``proleptic_gregorian`` and
+               all `value``s represent dates onwards from 1582-10-15 0:0:0
+           * the calendars are ``standard`` and ``julian`` and all
+               ``value``s represent dates before 1582-10-5 0:0:0
            >>> from cf_units import Unit
-           >>> a = Unit('days since 1850-1-1', calendar='gregorian')
+           >>> a = Unit('days since 1850-1-1', calendar='proleptic_gregorian')
            >>> b = Unit('days since 1851-1-1', calendar='standard')
            >>> a.convert(365.75, b)
            0.75
+           >>> a = Unit('days since 1582-10-4', calendar='julian')
+           >>> b = Unit('days since 1582-9-4', calendar='standard')
+           >>>  a.convert(0, b)
+           30.0
+           >>> a = Unit('days since 1583-10-15', calendar='standard')
+           >>> b = Unit('days since 1582-10-15', calendar='proleptic_gregorian')
+           >>> a.convert(0, b)
+           365
 
         """
+
         other = as_unit(other)
 
         if self == other:
             return value
 
-        if self.is_convertible(other):
+        if self.is_time_reference and other.is_time_reference:
+            print(self)
+            print(other)
+            print(value)
+            min_date, max_date = tuple(
+                self.num2date([np.min(value), np.max(value)])
+            )
+            is_gregorian_ok = (
+                {self.calendar, other.calendar} == GREGORIAN_CALENDARS
+            ) and Unit("days since 1582-10-15 ", calendar="standard").date2num(
+                min_date
+            ) >= 0
+            is_julian_ok = (
+                {self.calendar, other.calendar} == JULIAN_CALENDARS
+            ) and Unit("days since 1582-10-5", calendar="julian").date2num(
+                max_date
+            ) < 0
+        else:
+            is_gregorian_ok = False
+            is_julian_ok = False
+
+        if is_gregorian_ok or is_julian_ok:
+            self_newcalendar = Unit(str(self), other.calendar)
+            result = self_newcalendar.convert(
+                value, other, ctype=ctype, inplace=inplace
+            )
+        elif self.is_convertible(other):
             if inplace:
                 result = value
             else:
@@ -1888,11 +1936,11 @@ class Unit(_OrderedHashable):
                     # Utilise global convenience dictionary
                     # _cv_convert_scalar
                     result = _cv_convert_scalar[ctype](ut_converter, result)
-            return result
         else:
             raise ValueError(
                 "Unable to convert from '%r' to '%r'." % (self, other)
             )
+        return result
 
     @property
     def cftime_unit(self):
