@@ -47,7 +47,7 @@ class Test_unit__creation(unittest.TestCase):
 
     def test_no_calendar(self):
         u = Unit("hours since 1970-01-01 00:00:00")
-        self.assertEqual(u.calendar, unit.CALENDAR_GREGORIAN)
+        self.assertEqual(u.calendar, unit.CALENDAR_STANDARD)
 
     def test_unsupported_calendar(self):
         with self.assertRaisesRegex(ValueError, "unsupported calendar"):
@@ -576,9 +576,9 @@ class Test_stringify(unittest.TestCase):
 
     def test___repr___time_unit(self):
         u = Unit(
-            "hours since 2007-01-15 12:06:00", calendar=unit.CALENDAR_STANDARD
+            "hours since 2007-01-15 12:06:00", calendar=unit.CALENDAR_GREGORIAN
         )
-        exp = "Unit('hours since 2007-01-15 12:06:00', calendar='gregorian')"
+        exp = "Unit('hours since 2007-01-15 12:06:00', calendar='standard')"
         self.assertEqual(repr(u), exp)
 
 
@@ -949,11 +949,11 @@ class TestTimeEncoding(unittest.TestCase):
 class TestNumsAndDates(unittest.TestCase):
     def test_num2date(self):
         u = Unit(
-            "hours since 2010-11-02 12:00:00", calendar=unit.CALENDAR_STANDARD
+            "hours since 2010-11-02 12:00:00", calendar=unit.CALENDAR_GREGORIAN
         )
         res = u.num2date(1)
         self.assertEqual(str(res), "2010-11-02 13:00:00")
-        self.assertEqual(res.calendar, "gregorian")
+        self.assertEqual(res.calendar, "standard")
         self.assertIsInstance(res, cftime.datetime)
 
     def test_num2date_py_datetime_type(self):
