@@ -52,6 +52,8 @@ task:
     env:
       PY_VER: "3.9"
       COVERAGE: "codecov"
+    env:
+      PY_VER: "3.10"
   name: "${CIRRUS_OS}: py${PY_VER}"
   env:
     PATH: ${HOME}/mambaforge/bin:${PATH}
