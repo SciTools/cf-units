@@ -488,7 +488,7 @@ class Test_power(unittest.TestCase):
     def test_unit_power(self):
         u = Unit("amp")
         v = Unit("m")
-        emsg = "argument must be a string or a number"
+        emsg = "argument must be a string or a (real |)number"
         with self.assertRaisesRegex(TypeError, emsg):
             operator.pow(u, v)
 
@@ -513,7 +513,7 @@ class Test_power__unknown(unittest.TestCase):
 
     def test_unit_power(self):
         v = Unit("m")
-        emsg = "argument must be a string or a number"
+        emsg = "argument must be a string or a (real |)number"
         with self.assertRaisesRegex(TypeError, emsg):
             operator.pow(self.u, v)
 
@@ -544,7 +544,7 @@ class Test_power__no_unit(unittest.TestCase):
 
     def test_unit_power(self):
         v = Unit("m")
-        emsg = "argument must be a string or a number"
+        emsg = "argument must be a string or a (real |)number"
         with self.assertRaisesRegex(TypeError, emsg):
             operator.pow(self.u, v)
 
