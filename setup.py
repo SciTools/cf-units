@@ -60,7 +60,7 @@ def get_library_dirs():
 
 
 def get_package_data():
-    package_data = None
+    package_data = {}
     # Determine whether we're building a wheel.
     if "bdist_wheel" in sys.argv:
         # The protocol is that the UDUNITS2_XML_PATH environment variable
