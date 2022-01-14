@@ -22,7 +22,7 @@ repos:
     -   id: black
         # Force black to run on whole repo, using settings from pyproject.toml
         pass_filenames: false
-        args: ["--config=./pyproject.toml", "--check", "."]
+        args: ["--config=./pyproject.toml", "."]
 -   repo: https://github.com/PyCQA/flake8
     rev: "4.0.1"
     hooks:
@@ -34,4 +34,4 @@ repos:
     hooks:
     -   id: isort
         name: isort
-        args: ["--filter-files", "--check"]
+        args: ["--filter-files"]
