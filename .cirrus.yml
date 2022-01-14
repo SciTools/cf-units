@@ -33,12 +33,10 @@ task:
     image: python:latest
     cpu: 2
     memory: 4G
-  name: "${CIRRUS_OS}: linting"
-  lint_script:
+  name: "${CIRRUS_OS}: precommit hooks"
+  precommit_script:
     - python -m pip install --retries 3 pre-commit
-    - pre-commit run --all-files black
-    - pre-commit run --all-files flake8
-    - pre-commit run --all-files isort
+    - SKIP="no-commit-to-branch" pre-commit run --all-files
 
 
 #
