@@ -36,9 +36,7 @@ task:
   name: "${CIRRUS_OS}: precommit hooks"
   precommit_script:
     - python -m pip install --retries 3 pre-commit
-    - pre-commit run --all-files black
-    - pre-commit run --all-files flake8
-    - pre-commit run --all-files isort
+    - SKIP="no-commit-to-branch" pre-commit run --all-files
 
 
 #
