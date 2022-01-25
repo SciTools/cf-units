@@ -6,7 +6,7 @@ set -e
 
 yum install -y udunits2-devel
 
-PYTHONS=("cp37-cp37m" "cp38-cp38" "cp39-cp39")
+PYTHONS=("cp37-cp37m" "cp38-cp38" "cp39-cp39" "cp310-cp310")
 WHEELHOUSE="/github/workspace/wheelhouse"
 MANYLINUX="manylinux2014_x86_64"
 DISTRIBUTION="dist"

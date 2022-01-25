@@ -59,6 +59,8 @@ jobs:
             tag: cp38-cp38
           - python: 3.9
             tag: cp39-cp39
+          - python: "3.10"
+            tag: cp310-cp310
     steps:
       - name: Download built artifacts
         uses: actions/download-artifact@v2
