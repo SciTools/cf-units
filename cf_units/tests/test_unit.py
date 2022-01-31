@@ -453,19 +453,19 @@ class Test_divide(unittest.TestCase):
 class Test_power(unittest.TestCase):
     def test_basic(self):
         u = Unit("m^2")
-        self.assertEqual(u ** 0.5, Unit("m"))
+        self.assertEqual(u**0.5, Unit("m"))
 
     def test_integer_power(self):
         u = Unit("amp")
-        self.assertEqual(u ** 2, Unit("A^2"))
+        self.assertEqual(u**2, Unit("A^2"))
 
     def test_float_power(self):
         u = Unit("amp")
-        self.assertEqual(u ** 3.0, Unit("A^3"))
+        self.assertEqual(u**3.0, Unit("A^3"))
 
     def test_dimensionless(self):
         u = Unit("1")
-        self.assertEqual(u ** 2, u)
+        self.assertEqual(u**2, u)
 
     def test_power(self):
         u = Unit("amp")
@@ -498,10 +498,10 @@ class Test_power__unknown(unittest.TestCase):
         self.u = Unit("unknown")
 
     def test_integer_power(self):
-        self.assertEqual(self.u ** 2, Unit("unknown"))
+        self.assertEqual(self.u**2, Unit("unknown"))
 
     def test_float_power(self):
-        self.assertEqual(self.u ** 3.0, Unit("unknown"))
+        self.assertEqual(self.u**3.0, Unit("unknown"))
 
     def test_not_numeric(self):
         emsg = "numeric value is required"
@@ -509,7 +509,7 @@ class Test_power__unknown(unittest.TestCase):
             operator.pow(self.u, "not_a_number")
 
     def test_bad_power(self):
-        self.assertEqual(self.u ** 0.4, self.u)
+        self.assertEqual(self.u**0.4, self.u)
 
     def test_unit_power(self):
         v = Unit("m")
