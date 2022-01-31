@@ -2,7 +2,7 @@
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: "v4.0.1"
+    rev: "v4.1.0"
     hooks:
         # Prevent giant files from being committed.
     -   id: check-added-large-files
@@ -17,7 +17,7 @@ repos:
         # Don't commit to main branch.
     -   id: no-commit-to-branch
 -   repo: https://github.com/psf/black
-    rev: "21.10b0"
+    rev: "22.1.0"
     hooks:
     -   id: black
         # Force black to run on whole repo, using settings from pyproject.toml
@@ -30,7 +30,7 @@ repos:
     -   id: flake8
         args: ["--config=./setup.cfg"]
 -   repo: https://github.com/pycqa/isort
-    rev: "5.9.3"
+    rev: "5.10.1"
     hooks:
     -   id: isort
         name: isort
