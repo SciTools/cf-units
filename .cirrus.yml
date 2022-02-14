@@ -79,7 +79,7 @@ task:
       - cat ${CIRRUS_WORKING_DIR}/requirements/py$(echo ${PY_VER} | tr -d ".").yml
     populate_script:
       - conda-lock --mamba --platform linux-64 --file ${CIRRUS_WORKING_DIR}/requirements/py$(echo ${PY_VER} | tr -d ".").yml
-      - mamba create --name py${PY_VER} --quiet --file conda-linux-64.lock
+      - mamba create --name py${PY_VER} --quiet --file conda-linux-64.lock --yes
       - cp conda-linux-64.lock ${HOME}/mambaforge/envs/py${PY_VER}
   test_script:
     - cat ${HOME}/mambaforge/envs/py${PY_VER}/conda-linux-64.lock >&2
