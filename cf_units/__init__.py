@@ -1813,10 +1813,7 @@ class Unit(_OrderedHashable):
                 result = copy.deepcopy(value)
             # Use cftime for converting reference times that are not using a
             # gregorian calendar as it handles these and udunits does not.
-            if (
-                self.is_time_reference()
-                and self.calendar != CALENDAR_STANDARD
-            ):
+            if self.is_time_reference() and self.calendar != CALENDAR_STANDARD:
                 result_datetimes = cftime.num2date(
                     result, self.cftime_unit, self.calendar
                 )
