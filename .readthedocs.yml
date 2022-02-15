@@ -9,7 +9,7 @@ conda:
   environment: requirements/cf-units.yml
 
 sphinx:
-  configuration: doc/source/conf.py
+  configuration: docs/source/conf.py
   fail_on_warning: false
 
 python:
