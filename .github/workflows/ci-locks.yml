@@ -9,10 +9,8 @@ name: ci-locks
 
 on:
   workflow_dispatch:
-  push:
-  pull_request:
-#  schedule:
-#    - cron: 3 0 * * 1
+  schedule:
+    - cron: 3 0 * * 1
 
 
 jobs:
