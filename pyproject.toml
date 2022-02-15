@@ -43,10 +43,11 @@ testpaths = "cf_units"
 
 [tool.setuptools_scm]
 write_to = "cf_units/_version.py"
+local_scheme = "dirty-tag"
 
 [tool.black]
 line-length = 79
-target-version = ['py37', 'py38', 'py39']
+target-version = ['py38', 'py39', 'py310']
 include = '\.pyi?$'
 exclude = '''
 (
