@@ -4,7 +4,7 @@
 files: |
     (?x)(
         setup\.py|
-        lib\/geovista\/.+\.py
+        cf_units\/.+\.py
     )
 minimum_pre_commit_version: 1.21.0
 
