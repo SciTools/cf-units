@@ -28,11 +28,6 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Get tags
-      shell: bash
-      run: |
-        git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-
     - name: "Building bdist"
       uses: pypa/cibuildwheel@v2.3.1
       env:
@@ -40,7 +35,7 @@ jobs:
         CIBW_ARCHS: ${{ matrix.arch }}
         CIBW_BUILD_FRONTEND: build
         CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
-        CIBW_BEFORE_BUILD_LINUX: yum install -y udunits2-devel
+        CIBW_BEFORE_BUILD_LINUX: yum install -y udunits2-devel; pip install setuptools_scm
         CIBW_TEST_REQUIRES: pytest
         CIBW_TEST_COMMAND: >
           python -c 'import cf_units; print(f"cf-units v{cf_units.__version__}")' &&
