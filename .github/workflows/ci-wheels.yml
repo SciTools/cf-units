@@ -29,6 +29,9 @@ jobs:
         CIBW_BUILD_FRONTEND: build
         CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
         CIBW_BEFORE_BUILD_LINUX: yum install -y udunits2-devel
+        CIBW_TEST_REQUIRES: pytest
+        CIBW_TEST_COMMAND: >
+          python -c 'import cf_units; print(f"cf-units v{cf_units.__version__}")'
         UDUNITS2_INCDIR: /usr/include/udunits2
         UDUNITS2_LIBDIR: /usr/lib64
         UDUNITS2_XML_PATH: /usr/share/udunits/udunits2.xml
