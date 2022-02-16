@@ -4,7 +4,7 @@ requires = [
   "setuptools>=42",
   "setuptools_scm[toml]>=6.0",
   "wheel",
-  "numpy",
+  "oldest-supported-numpy",
   "Cython"
 ]
 # Defined by PEP 517
