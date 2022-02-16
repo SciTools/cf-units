@@ -1,8 +1,9 @@
 [build-system]
 # Defined by PEP 518
 requires = [
-  "setuptools>=42",
-  "setuptools_scm[toml]>=6.0",
+  "setuptools>=45",
+  "setuptools_scm[toml]>=6.2",
+  "setuptools_scm_git_archive",
   "wheel",
   "oldest-supported-numpy",
   "Cython"
