@@ -8,7 +8,7 @@ on:
 
 jobs:
   build_bdist:
-    name: "Build binary wheel distribution on ${{ matrix.os }}"
+    name: "Build bdist on ${{ matrix.os }} ${{ matrix.arch }}"
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
