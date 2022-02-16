@@ -121,6 +121,6 @@ jobs:
     - uses: pypa/gh-action-pypi-publish@release/v1
       with:
         user: __token__
-        password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+        password: ${{ secrets.PYPI_API_TOKEN }}
         print_hash: true
 
