@@ -5,6 +5,9 @@ channels:
 
 dependencies:
 # setup dependencies
+  - setuptools >=45
+  - setuptools_scm >=6.2
+  - setuptools_scm_git_archive
   - cython
   - numpy
 
@@ -25,5 +28,4 @@ dependencies:
   - pre-commit
 
 # docs dependencies
-  - setuptools_scm
   - sphinx
