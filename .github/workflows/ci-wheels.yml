@@ -13,6 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # TBD: extend to support osx and windows
         os: [ubuntu-latest]
         arch: [auto64]
 
