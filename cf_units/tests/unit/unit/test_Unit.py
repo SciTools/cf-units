@@ -15,8 +15,8 @@ from cf_units import Unit
 
 class Test___init__(unittest.TestCase):
     def test_capitalised_calendar(self):
-        calendar = "GrEgoRian"
-        expected = cf_units.CALENDAR_GREGORIAN
+        calendar = "StAnDaRd"
+        expected = cf_units.CALENDAR_STANDARD
         u = Unit("hours since 1970-01-01 00:00:00", calendar=calendar)
         self.assertEqual(u.calendar, expected)
 

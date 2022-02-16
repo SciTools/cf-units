@@ -130,7 +130,7 @@ CALENDARS = [
 #: Where calendars have multiple names, we map the alias to the
 #: definitive form.
 CALENDAR_ALIASES = {
-    CALENDAR_STANDARD: CALENDAR_GREGORIAN,
+    CALENDAR_GREGORIAN: CALENDAR_STANDARD,
     CALENDAR_NO_LEAP: CALENDAR_365_DAY,
     CALENDAR_ALL_LEAP: CALENDAR_366_DAY,
 }
@@ -830,7 +830,7 @@ class Unit(_OrderedHashable):
                 raise value_error from None
             if _OP_SINCE in unit.lower():
                 if calendar is None:
-                    calendar_ = CALENDAR_GREGORIAN
+                    calendar_ = CALENDAR_STANDARD
                 elif isinstance(calendar, (str,)):
                     calendar_ = calendar.lower()
                     if calendar_ in CALENDAR_ALIASES:
@@ -1813,10 +1813,7 @@ class Unit(_OrderedHashable):
                 result = copy.deepcopy(value)
             # Use cftime for converting reference times that are not using a
             # gregorian calendar as it handles these and udunits does not.
-            if (
-                self.is_time_reference()
-                and self.calendar != CALENDAR_GREGORIAN
-            ):
+            if self.is_time_reference() and self.calendar != CALENDAR_STANDARD:
                 result_datetimes = cftime.num2date(
                     result, self.cftime_unit, self.calendar
                 )

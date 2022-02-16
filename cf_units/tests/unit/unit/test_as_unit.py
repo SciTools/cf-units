@@ -46,11 +46,11 @@ class TestAll(unittest.TestCase):
     def test_non_cf_unit_no_calendar(self):
         # On passing as_unit a cf_unit.Unit-like object (not a cf_unit.Unit
         # object) with no calendar, ensure that a cf_unit.Unit is returned
-        # with default calendar (Gregorian).
+        # with default calendar (standard).
         unit = StubUnit()
         result = as_unit(unit)
 
-        self.assertEqual(result.calendar, "gregorian")
+        self.assertEqual(result.calendar, "standard")
         self.assertIsInstance(result, Unit)
 
     def test_non_cf_unit_with_calendar(self):
