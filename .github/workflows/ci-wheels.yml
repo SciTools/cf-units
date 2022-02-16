@@ -28,6 +28,11 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Get tags
+      shell: bash
+      run: |
+        git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+
     - name: "Building bdist"
       uses: pypa/cibuildwheel@v2.3.1
       env:
@@ -60,6 +65,7 @@ jobs:
         fetch-depth: 0
 
     - name: "Building sdist"
+      shell: bash
       run: |
         pipx run build --sdist 
 
@@ -79,7 +85,8 @@ jobs:
         name: pypi-artifacts
         path: ${{ github.workspace }}/dist
 
-    - run: |
+    - shell: bash
+      run: |
         ls -l ${{ github.workspace }}/dist
 
 
