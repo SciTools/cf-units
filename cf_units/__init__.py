@@ -970,7 +970,6 @@ class Unit(_OrderedHashable):
             result = self.calendar is not None
         except ValueError:
             result = False
-        print(result)
         return result
 
     def is_long_time_interval(self):
@@ -1804,9 +1803,9 @@ class Unit(_OrderedHashable):
            following conditions are met:
            * the calendars are aliases, see :attr:`cf_units.CALENDAR_ALIASES`.
            * the calendars are ``standard`` and ``proleptic_gregorian`` and
-               all `value``s represent dates onwards from 1582-10-15 0:0:0
+               all `value``s represent datetimes onwards from 1582-10-15 0:0:0
            * the calendars are ``standard`` and ``julian`` and all
-               ``value``s represent dates before 1582-10-5 0:0:0
+               ``value``s represent datetimes before 1582-10-5 0:0:0
            >>> from cf_units import Unit
            >>> a = Unit('days since 1850-1-1', calendar='proleptic_gregorian')
            >>> b = Unit('days since 1851-1-1', calendar='standard')
@@ -1828,10 +1827,7 @@ class Unit(_OrderedHashable):
         if self == other:
             return value
 
-        if self.is_time_reference and other.is_time_reference:
-            print(self)
-            print(other)
-            print(value)
+        if self.is_time_reference() and other.is_time_reference():
             min_date, max_date = tuple(
                 self.num2date([np.min(value), np.max(value)])
             )
@@ -2062,7 +2058,6 @@ class Unit(_OrderedHashable):
             ['1970-01-01 06:00:00', '1970-01-01 07:00:00']
 
         """
-
         return _num2date_to_nearest_second(
             time_value,
             self,
