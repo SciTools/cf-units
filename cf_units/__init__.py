@@ -20,6 +20,9 @@ from contextlib import contextmanager
 import cftime
 import numpy as np
 
+# low level cftime function for checking date part of unit string in Unit
+from cftime._cftime import _dateparse as _time_unit_parse_date
+
 from cf_units import _udunits2 as _ud
 from cf_units._udunits2 import (
     UT_ASCII,
@@ -789,6 +792,7 @@ class Unit(_OrderedHashable):
             >>> unknown = Unit(None)
 
         """
+
         ut_unit = _ud.NULL_UNIT
         calendar_ = None
 
@@ -838,6 +842,14 @@ class Unit(_OrderedHashable):
                     if calendar_ not in CALENDARS:
                         msg = "{!r} is an unsupported calendar."
                         raise ValueError(msg.format(calendar))
+                    else:
+                        # check date/time point for valid origin:
+                        print(unit)
+                        print(calendar)
+                        try:
+                            _ = _time_unit_parse_date(unit, calendar_)
+                        except TypeError:
+                            raise ValueError("Cannot parse the time unit")
                 else:
                     msg = "Expected string-like calendar argument, got {!r}."
                     raise TypeError(msg.format(type(calendar)))
