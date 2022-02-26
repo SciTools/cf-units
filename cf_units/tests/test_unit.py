@@ -53,12 +53,58 @@ class Test_unit__creation(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unsupported calendar"):
             Unit("hours since 1970-01-01 00:00:00", calendar="wibble")
 
-    def test_calendar_w_unicode(self):
-        calendar = unit.CALENDAR_365_DAY
-        u = Unit("hours\xb2 hours-1 since epoch", calendar=calendar)
-        self.assertEqual(u.calendar, calendar)
-        expected = "hours² hours-1 since 1970-01-01 00:00:00"
-        self.assertEqual(u.origin, expected)
+    # ####
+    def test_malformed_monthday_in_time_unit(self):
+        with self.assertRaisesRegex(ValueError, "Failed to parse unit"):
+            Unit("hours since 1970-0101 00:00:00", calendar="standard")
+
+    def test_illegal_string_in_time_unit(self):
+        with self.assertRaisesRegex(ValueError, "Failed to parse unit"):
+            Unit("hours since haywire", calendar="proleptic_gregorian")
+
+    def test_illegal_month0_in_time_unit(self):
+        with self.assertRaisesRegex(ValueError, "Illegal date/time in unit"):
+            Unit("days since 1970-0-1 00:00:00", calendar="standard")
+
+    def test_illegal_month13_in_time_unit(self):
+        with self.assertRaisesRegex(ValueError, "Illegal date/time in unit"):
+            Unit("days since 1970-13-01", calendar="standard")
+
+    def test_illegal_day0_in_time_unit(self):
+        with self.assertRaisesRegex(ValueError, "Failed date/time in unit"):
+            Unit("days since 1970-01-0", calendar="julian")
+
+    def test_illegal_leap_day_in_time_unit(self):
+        with self.assertRaisesRegex(ValueError, "Illegal date/time in unit"):
+            Unit("days since 1971-2-29", calendar="standard")
+
+    def test_illegal_hour_in_time_unit(self):
+        with self.assertRaisesRegex(ValueError, "Illegal date/time in unit"):
+            Unit("days since 1971-2-28 24:00:00", calendar="standard")
+
+    def test_standard_year0_in_time_unit(self):
+        with self.assertRaisesRegex(
+            ValueError, "Year <= 0 should raise a warning or an error"
+        ):
+            Unit("days since 0-1-1 0:0:0", calendar="standard")
+
+    def test_julian_year0_in_time_unit(self):
+        with self.assertRaisesRegex(
+            ValueError, "Year <= 0 should raise a warning or an error"
+        ):
+            Unit("days since 0-1-1 0:0:0", calendar="julian")
+
+    def test_standard_negative_year_in_time_unit(self):
+        with self.assertRaisesRegex(
+            ValueError, "Year <= 0 should raise a warning or an error"
+        ):
+            Unit("days since -1-1-1 0:0:0", calendar="standard")
+
+    def test_julian_negative_year_in_time_unit(self):
+        with self.assertRaisesRegex(
+            ValueError, "Year <= 0 should raise a warning or an error"
+        ):
+            Unit("days since -10-1-1", calendar="julian")
 
     def test_unicode_valid(self):
         # Some unicode characters are allowed.

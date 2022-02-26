@@ -844,12 +844,17 @@ class Unit(_OrderedHashable):
                         raise ValueError(msg.format(calendar))
                     else:
                         # check date/time point for valid origin:
-                        print(unit)
-                        print(calendar)
                         try:
-                            _ = _time_unit_parse_date(unit, calendar_)
-                        except TypeError:
-                            raise ValueError("Cannot parse the time unit")
+                            origin = _time_unit_parse_date(unit, calendar_)
+                            if origin.year <= 0 and calendar_ in {
+                                CALENDAR_STANDARD,
+                                CALENDAR_JULIAN,
+                            }:
+                                raise ValueError(
+                                    "Year <= 0 should raise a warning or an error"
+                                )
+                        except (TypeError, ValueError) as e:
+                            raise ValueError(str(e))
                 else:
                     msg = "Expected string-like calendar argument, got {!r}."
                     raise TypeError(msg.format(type(calendar)))
