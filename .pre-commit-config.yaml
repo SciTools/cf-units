@@ -19,22 +19,28 @@ repos:
     -   id: no-commit-to-branch
 
 -   repo: https://github.com/psf/black
-    rev: 21.10b0
+    rev: 22.1.0
     hooks:
     -   id: black
         types: [file, python]
-        args: ["--config=./pyproject.toml", "."]
+        args: [--config=./pyproject.toml]
 
 -   repo: https://github.com/PyCQA/flake8
     rev: 4.0.1
     hooks:
     -   id: flake8
         types: [file, python]
-        args: ["--config=./setup.cfg"]
+        args: [--config=./setup.cfg]
 
--   repo: https://github.com/pycqa/isort
-    rev: 5.9.3
+-   repo: https://github.com/PyCQA/isort
+    rev: 5.10.1
     hooks:
     -   id: isort
         types: [file, python]
-        args: ["--filter-files"]
+        args: [--filter-files]
+
+-   repo: https://github.com/aio-libs/sort-all
+    rev: v1.2.0
+    hooks:
+    -   id: sort-all
+        types: [file, python]
