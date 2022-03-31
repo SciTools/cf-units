@@ -1,0 +1,106 @@
+# Reference:
+#   - https://github.com/actions/cache
+#   - https://github.com/actions/checkout
+#   - https://github.com/conda-incubator/setup-miniconda
+
+name: ci-tests
+
+on:
+  pull_request:
+
+  push:
+    branches-ignore:
+      - "conda-lock-auto-update"
+      - "pre-commit-ci-update-config"
+      - "dependabot/*"
+
+
+jobs:
+  run-tests:
+    name: "Test ${{ matrix.version }} on ${{ matrix.os }}"
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash -l {0}
+    env:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      CYTHON_COVERAGE: 1
+      ENV_NAME: "ci-tests"
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        version: [py38, py39, py310]
+        include:
+          - os: ubuntu-latest
+            platform: linux
+          - os: ubuntu-latest
+            version: py310
+            posargs: "--cov-report=xml --cov"
+            post-command: codecov
+          - version: py310
+            os: macos-latest
+            platform: osx
+    steps:
+    - name: "Checkout"
+      uses: actions/checkout@v2
+
+    - name: "Environment configure"
+      env:
+        # Maximum cache period (in weeks) before forcing a cache refresh.
+        CACHE_WEEKS: 2
+      run: |
+        echo "CACHE_PERIOD=$(date +%Y).$(expr $(date +%U) / ${CACHE_WEEKS})" >> ${GITHUB_ENV}
+
+    - name: "Conda package cache"
+      uses: actions/cache@v2
+      env:
+        # Increment the build number to force a cache refresh.
+        CACHE_BUILD: 1
+      with:
+        path: ~/conda_pkgs_dir
+        key: ${{ runner.os }}-conda-pkgs-${{ env.ENV_NAME }}-${{ matrix.version }}-p${{ env.CACHE_PERIOD }}-b${{ env.CACHE_BUILD }}
+
+    - name: "Conda install"
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        miniforge-version: latest
+        channels: conda-forge,defaults
+        activate-environment: ${{ env.ENV_NAME }}
+        auto-update-conda: false
+        use-only-tar-bz2: true
+
+    - name: "Conda environment cache"
+      id: conda-env-cache
+      uses: actions/cache@v2
+      env:
+        # Increment the build number to force a cache refresh.
+        CACHE_BUILD: 1
+      with:
+        path: ${{ env.CONDA }}/envs/${{ env.ENV_NAME }}
+        key: ${{ runner.os }}-conda-env-${{ env.ENV_NAME }}-${{ matrix.version }}-p${{ env.CACHE_PERIOD }}-b${{ env.CACHE_BUILD }}
+
+    - name: "Conda environment update"
+      if: steps.conda-env-cache.outputs.cache-hit != 'true'
+      run: |
+        conda install --name ${{ env.ENV_NAME }} tox
+
+    - name: "Conda info"
+      run: |
+        conda info
+        conda list
+
+    - name: "Tox cache"
+      uses: actions/cache@v2
+      env:
+        # Increment the build number to forece a cache refresh.
+        CACHE_BUILD: 1
+        TOX_INI: ${{ github.workspace }}/tox.ini
+      with:
+        path: ${{ github.workspace }}/.tox
+        key: ${{ runner.os }}-tox-${{ env.ENV_NAME }}-${{ matrix.version }}-p${{ env.CACHE_PERIOD }}-b${{ env.CACHE_BUILD }}-${{ hashFiles(env.TOX_INI) }}
+
+    - name: "Run ${{ matrix.os }} on ${{ matrix.version}} tests"
+      env:
+        POST_COMMAND: ${{ matrix.post-command }}
+      run: |
+        tox -e ${{ matrix.version }}-${{ matrix.platform }}-test -- ${{ matrix.posargs }}

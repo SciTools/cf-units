@@ -1,10 +1,11 @@
 [build-system]
 # Defined by PEP 518
 requires = [
-  "setuptools>=42",
-  "setuptools_scm[toml]>=6.0",
+  "setuptools>=45",
+  "setuptools_scm[toml]>=6.2",
+  "setuptools_scm_git_archive",
   "wheel",
-  "numpy",
+  "oldest-supported-numpy",
   "Cython"
 ]
 # Defined by PEP 517
@@ -43,10 +44,12 @@ testpaths = "cf_units"
 
 [tool.setuptools_scm]
 write_to = "cf_units/_version.py"
+local_scheme = "dirty-tag"
 
 [tool.black]
 line-length = 79
-target-version = ['py37', 'py38', 'py39']
+# TBD: add "py310" when supported on pre-commit.ci
+target-version = ["py38", "py39"]
 include = '\.pyi?$'
 exclude = '''
 (

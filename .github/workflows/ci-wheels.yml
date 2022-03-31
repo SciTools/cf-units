@@ -1,0 +1,133 @@
+# Reference:
+#   - https://github.com/actions/checkout
+#   - https://github.com/actions/download-artifact
+#   - https://github.com/actions/upload-artifact
+#   - https://github.com/pypa/cibuildwheel
+#   - https://github.com/pypa/build
+#   - https://github.com/pypa/gh-action-pypi-publish
+#   - https://test.pypi.org/help/#apitoken
+
+name: ci-wheels
+
+on:
+  pull_request:
+
+  push:
+    branches-ignore:
+      - "conda-lock-auto-update"
+      - "pre-commit-ci-update-config"
+      - "dependabot/*"
+
+
+jobs:
+  build_bdist:
+    name: "Build bdist ${{ matrix.arch }} ${{ matrix.os }}"
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # TBD: extend to support osx and windows
+        os: [ubuntu-latest]
+        arch: [auto64]
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: "Building bdist"
+      uses: pypa/cibuildwheel@v2.3.1
+      env:
+        CIBW_SKIP: "cp36-* cp37-* pp* *-musllinux*"
+        CIBW_ARCHS: ${{ matrix.arch }}
+        CIBW_BUILD_FRONTEND: build
+        CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
+        CIBW_BEFORE_BUILD_LINUX: yum install -y udunits2-devel
+        CIBW_TEST_REQUIRES: pytest
+        CIBW_TEST_COMMAND: >
+          python -c 'import cf_units; print(f"cf-units v{cf_units.__version__}")' &&
+          python -m pytest --pyargs cf_units
+        UDUNITS2_INCDIR: /usr/include/udunits2
+        UDUNITS2_LIBDIR: /usr/lib64
+        UDUNITS2_XML_PATH: /usr/share/udunits/udunits2.xml
+        CIBW_ENVIRONMENT_PASS_LINUX: UDUNITS2_INCDIR UDUNITS2_LIBDIR UDUNITS2_XML_PATH
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: pypi-artifacts
+        path: ${{ github.workspace }}/wheelhouse/*.whl
+
+
+  build_sdist:
+    name: "Build sdist"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: "Building sdist"
+      shell: bash
+      run: |
+        pipx run build --sdist 
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: pypi-artifacts
+        path: ${{ github.workspace }}/dist/*.tar.gz
+
+
+  show-artifacts:
+    needs: [build_bdist, build_sdist]
+    name: "Show artifacts"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/download-artifact@v2
+      with:
+        name: pypi-artifacts
+        path: ${{ github.workspace }}/dist
+
+    - shell: bash
+      run: |
+        ls -l ${{ github.workspace }}/dist
+
+
+  publish-artifacts-test-pypi:
+    needs: [build_bdist, build_sdist]
+    name: "Publish to Test PyPI"
+    runs-on: ubuntu-latest
+    # upload to Test PyPI for every commit on main branch
+    if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
+    steps:
+    - uses: actions/download-artifact@v2
+      with:
+        name: pypi-artifacts
+        path: ${{ github.workspace }}/dist
+
+    - uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        user: __token__
+        password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+        repository_url: https://test.pypi.org/legacy/
+        skip_existing: true
+        print_hash: true
+
+
+  publish-artifacts-pypi:
+    needs: [build_bdist, build_sdist]
+    name: "Publish to PyPI"
+    runs-on: ubuntu-latest
+    # upload to PyPI for every tag starting with 'v'
+    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
+    steps:
+    - uses: actions/download-artifact@v2
+      with:
+        name: pypi-artifacts
+        path: ${{ github.workspace }}/dist
+
+    - uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        user: __token__
+        password: ${{ secrets.PYPI_API_TOKEN }}
+        print_hash: true
+
