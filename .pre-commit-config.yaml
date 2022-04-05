@@ -3,7 +3,7 @@
 
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.0.1
+    rev: v4.1.0
     hooks:
         # Prevent giant files from being committed.
     -   id: check-added-large-files
@@ -19,7 +19,7 @@ repos:
     -   id: no-commit-to-branch
 
 -   repo: https://github.com/psf/black
-    rev: 22.1.0
+    rev: 22.3.0
     hooks:
     -   id: black
         types: [file, python]
