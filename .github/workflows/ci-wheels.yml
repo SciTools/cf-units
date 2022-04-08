@@ -52,7 +52,7 @@ jobs:
         UDUNITS2_XML_PATH: /usr/share/udunits/udunits2.xml
         CIBW_ENVIRONMENT_PASS_LINUX: UDUNITS2_INCDIR UDUNITS2_LIBDIR UDUNITS2_XML_PATH
 
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: pypi-artifacts
         path: ${{ github.workspace }}/wheelhouse/*.whl
@@ -71,7 +71,7 @@ jobs:
       run: |
         pipx run build --sdist 
 
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: pypi-artifacts
         path: ${{ github.workspace }}/dist/*.tar.gz
