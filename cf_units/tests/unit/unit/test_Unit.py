@@ -31,6 +31,51 @@ class Test___init__(unittest.TestCase):
         self.assertEqual(u, expected)
 
 
+class Test_change_calendar(unittest.TestCase):
+    def test_modern_standard_to_proleptic_gregorian(self):
+        u = Unit("hours since 1970-01-01 00:00:00", calendar="standard")
+        expected = Unit(
+            "hours since 1970-01-01 00:00:00", calendar="proleptic_gregorian"
+        )
+        result = u.change_calendar("proleptic_gregorian")
+        self.assertEqual(result, expected)
+
+    def test_ancient_standard_to_proleptic_gregorian(self):
+        u = Unit("hours since 1500-01-01 00:00:00", calendar="standard")
+        expected = Unit(
+            "hours since 1500-01-10 00:00:00", calendar="proleptic_gregorian"
+        )
+        result = u.change_calendar("proleptic_gregorian")
+        self.assertEqual(result, expected)
+
+    def test_no_change(self):
+        u = Unit("hours since 1500-01-01 00:00:00", calendar="standard")
+        result = u.change_calendar("standard")
+        self.assertEqual(result, u)
+        # Docstring states that a new unit is returned, so check these are not
+        # the same object.
+        self.assertIsNot(result, u)
+
+    def test_long_time_interval(self):
+        u = Unit("months since 1970-01-01", calendar="standard")
+        with self.assertRaisesRegex(ValueError, "cannot be processed"):
+            u.change_calendar("proleptic_gregorian")
+
+    def test_wrong_calendar(self):
+        u = Unit("days since 1900-01-01", calendar="360_day")
+        with self.assertRaisesRegex(
+            ValueError, "change_calendar only works for real-world calendars"
+        ):
+            u.change_calendar("standard")
+
+    def test_non_time_unit(self):
+        u = Unit("m")
+        with self.assertRaisesRegex(
+            ValueError, "unit is not a time reference"
+        ):
+            u.change_calendar("standard")
+
+
 class Test_convert__calendar(unittest.TestCase):
     class MyStr(str):
         pass

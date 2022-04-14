@@ -1746,6 +1746,31 @@ class Unit(_OrderedHashable):
         """
         return not self == other
 
+    def change_calendar(self, calendar):
+        """
+        Returns a new unit with the requested calendar, modifying the reference
+        date if necessary.  Only works with calenders that represent the real
+        world (standard, proleptic_gregorian, julian) and with short time
+        intervals (days or less).
+
+        For example:
+
+            >>> from cf_units import Unit
+            >>> u = Unit('days since 1500-01-01', calendar='proleptic_gregorian')
+            >>> u.change_calendar('standard')
+            Unit('days since 1499-12-23T00:00:00', calendar='standard')
+
+        """
+        if not self.is_time_reference():
+            raise ValueError("unit is not a time reference")
+
+        ref_date = self.num2date(0)
+        new_ref_date = ref_date.change_calendar(calendar)
+        time_units = self.origin.split(_OP_SINCE)[0]
+        new_origin = _OP_SINCE.join([time_units, new_ref_date.isoformat()])
+
+        return Unit(new_origin, calendar=calendar)
+
     def convert(self, value, other, ctype=FLOAT64, inplace=False):
         """
         Converts a single value or NumPy array of values from the current unit
