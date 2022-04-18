@@ -30,7 +30,7 @@ https://conda.anaconda.org/conda-forge/linux-64/udunits2-2.2.28-hc3e0081_0.tar.b
 https://conda.anaconda.org/conda-forge/linux-64/zlib-1.2.11-h166bdaf_1014.tar.bz2#def3b82d1a03aa695bb38ac1dd072ff2
 https://conda.anaconda.org/conda-forge/linux-64/libcblas-3.9.0-14_linux64_openblas.tar.bz2#1b41ea4c32014d878e84de4e5690df7a
 https://conda.anaconda.org/conda-forge/linux-64/liblapack-3.9.0-14_linux64_openblas.tar.bz2#13367ebd0243a949cee7564b13c3cd42
-https://conda.anaconda.org/conda-forge/linux-64/sqlite-3.37.1-h4ff8645_0.tar.bz2#8057ac02d6d10a162d7eb4b0ca7ed291
+https://conda.anaconda.org/conda-forge/linux-64/sqlite-3.38.2-h4ff8645_0.tar.bz2#9d4b7a876d5531fdbb682ed526f8b847
 https://conda.anaconda.org/conda-forge/linux-64/python-3.10.4-h9a8a25e_0_cpython.tar.bz2#4c6ebd5ba5e606f77a58154b37d96851
 https://conda.anaconda.org/conda-forge/noarch/alabaster-0.7.12-py_0.tar.bz2#2489a97287f90176ecdc3ca982b4b0a0
 https://conda.anaconda.org/conda-forge/noarch/attrs-21.4.0-pyhd8ed1ab_0.tar.bz2#f70280205d7044c8b8358c8de3190e5d
@@ -74,10 +74,10 @@ https://conda.anaconda.org/conda-forge/noarch/packaging-21.3-pyhd8ed1ab_0.tar.bz
 https://conda.anaconda.org/conda-forge/linux-64/pluggy-1.0.0-py310hff52083_3.tar.bz2#97f9a22577338f91a94dfac5c1a65a50
 https://conda.anaconda.org/conda-forge/linux-64/pysocks-1.7.1-py310hff52083_5.tar.bz2#378f2260e871f3ea46c6fa58d9f05277
 https://conda.anaconda.org/conda-forge/linux-64/pyyaml-6.0-py310h5764c6d_4.tar.bz2#505dcf6be997e732d7a33831950dc3cf
-https://conda.anaconda.org/conda-forge/linux-64/setuptools-62.0.0-py310hff52083_0.tar.bz2#ed4d017b618853b0598f75a213c3ad3a
-https://conda.anaconda.org/conda-forge/linux-64/virtualenv-20.14.0-py310hff52083_1.tar.bz2#54032907e139116c602a89b006d5f9e7
+https://conda.anaconda.org/conda-forge/linux-64/setuptools-62.1.0-py310hff52083_0.tar.bz2#0e8c326a8c2b97aa026311009bd79d69
+https://conda.anaconda.org/conda-forge/linux-64/virtualenv-20.14.1-py310hff52083_0.tar.bz2#c2b05400e3206a62a8238d8ccbae2bdd
 https://conda.anaconda.org/conda-forge/linux-64/brotlipy-0.7.0-py310h5764c6d_1004.tar.bz2#6499bb11b7feffb63b26847fc9181319
-https://conda.anaconda.org/conda-forge/linux-64/cftime-1.6.0-py310hde88566_0.tar.bz2#93df48c7694990f5bd73c6f8bbcbfe1b
+https://conda.anaconda.org/conda-forge/linux-64/cftime-1.6.0-py310hde88566_1.tar.bz2#e9505227ecb7a00a4a9fffc7a9a98d14
 https://conda.anaconda.org/conda-forge/linux-64/cryptography-36.0.2-py310h597c629_1.tar.bz2#e8c95a1b5542c95fc054e9ace7269708
 https://conda.anaconda.org/conda-forge/noarch/jinja2-3.1.1-pyhd8ed1ab_0.tar.bz2#40b3f446c61729cdd21ed9d85627df6e
 https://conda.anaconda.org/conda-forge/noarch/nodeenv-1.6.0-pyhd8ed1ab_0.tar.bz2#0941325bf48969e2b3b19d0951740950

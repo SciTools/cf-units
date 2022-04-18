@@ -18,7 +18,7 @@ https://conda.anaconda.org/conda-forge/osx-64/readline-8.1-h05e3726_0.tar.bz2#28
 https://conda.anaconda.org/conda-forge/osx-64/tk-8.6.12-h5dbffcc_0.tar.bz2#8e9480d9c47061db2ed1b4ecce519a7f
 https://conda.anaconda.org/conda-forge/osx-64/zlib-1.2.11-h6c3fc93_1014.tar.bz2#98b82f6a8de694bc6259f2d1a69bc02b
 https://conda.anaconda.org/conda-forge/osx-64/libgfortran-5.0.0-9_3_0_h6c81a4c_23.tar.bz2#60f48cef2d50674e0428c5579b6c3f66
-https://conda.anaconda.org/conda-forge/osx-64/sqlite-3.37.1-hb516253_0.tar.bz2#74b34f1a97c76b71f5f2b1fecbb6bec8
+https://conda.anaconda.org/conda-forge/osx-64/sqlite-3.38.2-hb516253_0.tar.bz2#64d2659183fdbe910c5a87145fb367df
 https://conda.anaconda.org/conda-forge/osx-64/udunits2-2.2.28-h06ef574_0.tar.bz2#74131a7d532fbff820580d4494118245
 https://conda.anaconda.org/conda-forge/osx-64/libopenblas-0.3.20-openmp_hb3cd9ec_0.tar.bz2#d862e4a5c6e7bf0bc9d66a38f5c73142
 https://conda.anaconda.org/conda-forge/osx-64/python-3.8.13-h394c593_0_cpython.tar.bz2#6d0c7bf13396e2f00e57cbd929f697f8
@@ -66,8 +66,8 @@ https://conda.anaconda.org/conda-forge/noarch/packaging-21.3-pyhd8ed1ab_0.tar.bz
 https://conda.anaconda.org/conda-forge/osx-64/pluggy-1.0.0-py38h50d1736_3.tar.bz2#49de2850464c426eec1959b97858ec58
 https://conda.anaconda.org/conda-forge/osx-64/pysocks-1.7.1-py38h50d1736_5.tar.bz2#b417ade9775612d9a2520b12bbab2cb0
 https://conda.anaconda.org/conda-forge/osx-64/pyyaml-6.0-py38hed1de0f_4.tar.bz2#827c0e27214cb208fa43fe4d6230546e
-https://conda.anaconda.org/conda-forge/osx-64/setuptools-62.0.0-py38h50d1736_0.tar.bz2#1213456b6d95ef7666af9e7078f66380
-https://conda.anaconda.org/conda-forge/osx-64/virtualenv-20.14.0-py38h50d1736_1.tar.bz2#8d222bc8dd3d89103e2b255d2cd478cb
+https://conda.anaconda.org/conda-forge/osx-64/setuptools-62.1.0-py38h50d1736_0.tar.bz2#f96c5fb23b5fdc29802d9b81617d453f
+https://conda.anaconda.org/conda-forge/osx-64/virtualenv-20.14.1-py38h50d1736_0.tar.bz2#030ce9453617def125e3b92425b8ce19
 https://conda.anaconda.org/conda-forge/osx-64/brotlipy-0.7.0-py38hed1de0f_1004.tar.bz2#157c0392031cd8d8c3153f92121642de
 https://conda.anaconda.org/conda-forge/osx-64/cryptography-36.0.2-py38h826b3c8_1.tar.bz2#a691a647fb448b2456165cbdc23f104c
 https://conda.anaconda.org/conda-forge/noarch/jinja2-3.1.1-pyhd8ed1ab_0.tar.bz2#40b3f446c61729cdd21ed9d85627df6e
@@ -77,7 +77,7 @@ https://conda.anaconda.org/conda-forge/noarch/pip-22.0.4-pyhd8ed1ab_0.tar.bz2#b1
 https://conda.anaconda.org/conda-forge/noarch/pygments-2.11.2-pyhd8ed1ab_0.tar.bz2#caef60540e2239e27bf62569a5015e3b
 https://conda.anaconda.org/conda-forge/osx-64/pytest-7.1.1-py38h50d1736_1.tar.bz2#f85c5767394dd301603f813dca2b67ca
 https://conda.anaconda.org/conda-forge/osx-64/ukkonen-1.0.1-py38h8b7791e_2.tar.bz2#e3b3dbd512c27223c7df30a185780152
-https://conda.anaconda.org/conda-forge/osx-64/cftime-1.6.0-py38h4221b65_0.tar.bz2#f14ca8ffd62ead94edd9f469df9febdf
+https://conda.anaconda.org/conda-forge/osx-64/cftime-1.6.0-py38h4277f33_1.tar.bz2#95a9cc184c02095c4f6cdfb01c6ee471
 https://conda.anaconda.org/conda-forge/noarch/identify-2.4.12-pyhd8ed1ab_0.tar.bz2#9f7b07b3f40905fcf600aacf63ae0c41
 https://conda.anaconda.org/conda-forge/noarch/pyopenssl-22.0.0-pyhd8ed1ab_0.tar.bz2#1d7e241dfaf5475e893d4b824bb71b44
 https://conda.anaconda.org/conda-forge/noarch/pytest-cov-3.0.0-pyhd8ed1ab_0.tar.bz2#0f7cac11bb696b62d378bde725bfc3eb
