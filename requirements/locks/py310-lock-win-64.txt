@@ -76,7 +76,7 @@ https://conda.anaconda.org/conda-forge/win-64/numpy-1.22.3-py310hcae7c84_2.tar.b
 https://conda.anaconda.org/conda-forge/noarch/pip-22.0.4-pyhd8ed1ab_0.tar.bz2#b1239ce8ef2a1eec485c398a683c5bff
 https://conda.anaconda.org/conda-forge/noarch/pygments-2.11.2-pyhd8ed1ab_0.tar.bz2#caef60540e2239e27bf62569a5015e3b
 https://conda.anaconda.org/conda-forge/win-64/pysocks-1.7.1-py310h5588dad_5.tar.bz2#8b84a5de3ffa12a5aaeea385140bba27
-https://conda.anaconda.org/conda-forge/win-64/pytest-7.1.1-py310h5588dad_1.tar.bz2#5eefa33aefb10da52753bf17385332f8
+https://conda.anaconda.org/conda-forge/win-64/pytest-7.1.2-py310h5588dad_0.tar.bz2#752fb46d83358bc421474e1abc542e9d
 https://conda.anaconda.org/conda-forge/win-64/ukkonen-1.0.1-py310h476a331_2.tar.bz2#a6a3ce7a3f9d95648bfc8eef30961012
 https://conda.anaconda.org/conda-forge/win-64/cftime-1.6.0-py310h2873277_1.tar.bz2#aff6c7bbafcd29c40008872368175920
 https://conda.anaconda.org/conda-forge/noarch/identify-2.4.12-pyhd8ed1ab_0.tar.bz2#9f7b07b3f40905fcf600aacf63ae0c41

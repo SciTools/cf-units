@@ -75,7 +75,7 @@ https://conda.anaconda.org/conda-forge/noarch/nodeenv-1.6.0-pyhd8ed1ab_0.tar.bz2
 https://conda.anaconda.org/conda-forge/osx-64/numpy-1.22.3-py38h57719e9_2.tar.bz2#3879f9a9fe791db014e3e22ce91f2547
 https://conda.anaconda.org/conda-forge/noarch/pip-22.0.4-pyhd8ed1ab_0.tar.bz2#b1239ce8ef2a1eec485c398a683c5bff
 https://conda.anaconda.org/conda-forge/noarch/pygments-2.11.2-pyhd8ed1ab_0.tar.bz2#caef60540e2239e27bf62569a5015e3b
-https://conda.anaconda.org/conda-forge/osx-64/pytest-7.1.1-py38h50d1736_1.tar.bz2#f85c5767394dd301603f813dca2b67ca
+https://conda.anaconda.org/conda-forge/osx-64/pytest-7.1.2-py38h50d1736_0.tar.bz2#ab3679da5581765f2fa1b0a16ca89a03
 https://conda.anaconda.org/conda-forge/osx-64/ukkonen-1.0.1-py38h8b7791e_2.tar.bz2#e3b3dbd512c27223c7df30a185780152
 https://conda.anaconda.org/conda-forge/osx-64/cftime-1.6.0-py38h4277f33_1.tar.bz2#95a9cc184c02095c4f6cdfb01c6ee471
 https://conda.anaconda.org/conda-forge/noarch/identify-2.4.12-pyhd8ed1ab_0.tar.bz2#9f7b07b3f40905fcf600aacf63ae0c41
