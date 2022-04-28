@@ -1749,7 +1749,7 @@ class Unit(_OrderedHashable):
     def change_calendar(self, calendar):
         """
         Returns a new unit with the requested calendar, modifying the reference
-        date if necessary.  Only works with calenders that represent the real
+        date if necessary.  Only works with calendars that represent the real
         world (standard, proleptic_gregorian, julian) and with short time
         intervals (days or less).
 
