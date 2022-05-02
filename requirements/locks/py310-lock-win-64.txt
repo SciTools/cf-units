@@ -13,7 +13,7 @@ https://conda.anaconda.org/conda-forge/win-64/expat-2.4.8-h39d44d4_0.tar.bz2#f8e
 https://conda.anaconda.org/conda-forge/win-64/libffi-3.4.2-h8ffe710_5.tar.bz2#2c96d1b6915b408893f9472569dee135
 https://conda.anaconda.org/conda-forge/win-64/libzlib-1.2.11-h8ffe710_1014.tar.bz2#5e57ffcf6d651d94d329a3e9ce1f8f21
 https://conda.anaconda.org/conda-forge/win-64/openssl-1.1.1n-h8ffe710_0.tar.bz2#f2d2768c9d3f84fc3e99f96b66a49ba4
-https://conda.anaconda.org/conda-forge/win-64/sqlite-3.38.2-h8ffe710_0.tar.bz2#dd6683d0095934d1635bada2aca053e3
+https://conda.anaconda.org/conda-forge/win-64/sqlite-3.38.3-h8ffe710_0.tar.bz2#4f5ed8455aaaa4005d49ac6d45346f88
 https://conda.anaconda.org/conda-forge/win-64/tbb-2021.5.0-h2d74725_1.tar.bz2#8f00f39dbd7deaba11410b0b6e7b2cb4
 https://conda.anaconda.org/conda-forge/win-64/tk-8.6.12-h8ffe710_0.tar.bz2#c69a5047cc9291ae40afd4a1ad6f0c0f
 https://conda.anaconda.org/conda-forge/win-64/xz-5.2.5-h62dcd97_1.tar.bz2#eabcbfedd14d7c18a514afca09ea0ebb
@@ -57,7 +57,7 @@ https://conda.anaconda.org/conda-forge/win-64/certifi-2021.10.8-py310h5588dad_2.
 https://conda.anaconda.org/conda-forge/win-64/cffi-1.15.0-py310hcbf9ad4_0.tar.bz2#ffea8be6c3b061eb7361a8686af44861
 https://conda.anaconda.org/conda-forge/win-64/coverage-6.3.2-py310he2412df_2.tar.bz2#3f99934318d33bf6d9452d3737980ab6
 https://conda.anaconda.org/conda-forge/win-64/cython-0.29.28-py310h8a704f9_2.tar.bz2#e2e2e9c35ce59665051246ccc17c67c5
-https://conda.anaconda.org/conda-forge/win-64/docutils-0.17.1-py310h5588dad_1.tar.bz2#7d2f1b2cd46fe267f15f579e897e680e
+https://conda.anaconda.org/conda-forge/win-64/docutils-0.17.1-py310h5588dad_2.tar.bz2#b74e63d3826ead3a178f8e2777c8dcab
 https://conda.anaconda.org/conda-forge/win-64/importlib-metadata-4.11.3-py310h5588dad_1.tar.bz2#babf3152d2d04200112e9a4f5c2942ca
 https://conda.anaconda.org/conda-forge/win-64/libcblas-3.9.0-14_win64_mkl.tar.bz2#b73477bd66b6efdcbcb8c7fb527794ae
 https://conda.anaconda.org/conda-forge/win-64/liblapack-3.9.0-14_win64_mkl.tar.bz2#741ce71c5f5522fbec9508830b05cc32
@@ -72,7 +72,7 @@ https://conda.anaconda.org/conda-forge/win-64/brotlipy-0.7.0-py310he2412df_1004.
 https://conda.anaconda.org/conda-forge/win-64/cryptography-36.0.2-py310ha857299_1.tar.bz2#e722c2ea87eb855f13f5302248433ef7
 https://conda.anaconda.org/conda-forge/noarch/jinja2-3.1.1-pyhd8ed1ab_0.tar.bz2#40b3f446c61729cdd21ed9d85627df6e
 https://conda.anaconda.org/conda-forge/noarch/nodeenv-1.6.0-pyhd8ed1ab_0.tar.bz2#0941325bf48969e2b3b19d0951740950
-https://conda.anaconda.org/conda-forge/win-64/numpy-1.22.3-py310hcae7c84_2.tar.bz2#b03a111fe8e23212995abfe1576bc91d
+https://conda.anaconda.org/conda-forge/win-64/numpy-1.22.3-py310hed7ac4c_2.tar.bz2#7438ec44f882f4132e726b98248c1c01
 https://conda.anaconda.org/conda-forge/noarch/pip-22.0.4-pyhd8ed1ab_0.tar.bz2#b1239ce8ef2a1eec485c398a683c5bff
 https://conda.anaconda.org/conda-forge/noarch/pygments-2.12.0-pyhd8ed1ab_0.tar.bz2#cb27e2ded147e5bcc7eafc1c6d343cb3
 https://conda.anaconda.org/conda-forge/win-64/pysocks-1.7.1-py310h5588dad_5.tar.bz2#8b84a5de3ffa12a5aaeea385140bba27
@@ -80,7 +80,7 @@ https://conda.anaconda.org/conda-forge/win-64/pytest-7.1.2-py310h5588dad_0.tar.b
 https://conda.anaconda.org/conda-forge/noarch/setuptools-scm-6.4.2-pyhd8ed1ab_0.tar.bz2#4b55bf84b0f8113833a653d7ba1f52c8
 https://conda.anaconda.org/conda-forge/win-64/ukkonen-1.0.1-py310h476a331_2.tar.bz2#a6a3ce7a3f9d95648bfc8eef30961012
 https://conda.anaconda.org/conda-forge/win-64/cftime-1.6.0-py310h2873277_1.tar.bz2#aff6c7bbafcd29c40008872368175920
-https://conda.anaconda.org/conda-forge/noarch/identify-2.4.12-pyhd8ed1ab_0.tar.bz2#9f7b07b3f40905fcf600aacf63ae0c41
+https://conda.anaconda.org/conda-forge/noarch/identify-2.5.0-pyhd8ed1ab_0.tar.bz2#030048290bb28d917f82830d6e01d111
 https://conda.anaconda.org/conda-forge/noarch/pyopenssl-22.0.0-pyhd8ed1ab_0.tar.bz2#1d7e241dfaf5475e893d4b824bb71b44
 https://conda.anaconda.org/conda-forge/noarch/pytest-cov-3.0.0-pyhd8ed1ab_0.tar.bz2#0f7cac11bb696b62d378bde725bfc3eb
 https://conda.anaconda.org/conda-forge/noarch/setuptools_scm-6.4.2-hd8ed1ab_0.tar.bz2#160f4a41b7490ae06f70e0a122075eaf
