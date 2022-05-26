@@ -6,7 +6,6 @@
 """Test function :func:`cf_units.num2pydate`."""
 
 import datetime
-import unittest
 
 import pytest
 
@@ -28,4 +27,4 @@ class Test:
 
 
 if __name__ == "__main__":
-    unittest.main()
+    pytest.main([__file__])

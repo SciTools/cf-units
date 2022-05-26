@@ -12,7 +12,6 @@ import copy
 import datetime as datetime
 import operator
 import re
-import unittest
 from operator import truediv
 
 import cftime
@@ -1077,4 +1076,4 @@ class Test_is_vertical:
 
 
 if __name__ == "__main__":
-    unittest.main()
+    pytest.main([__file__])

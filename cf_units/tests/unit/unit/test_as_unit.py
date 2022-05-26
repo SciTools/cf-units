@@ -6,7 +6,8 @@
 """Unit tests for the `cf_units.as_unit` function."""
 
 import copy
-import unittest
+
+import pytest
 
 from cf_units import Unit, as_unit
 
@@ -62,4 +63,4 @@ class TestAll:
 
 
 if __name__ == "__main__":
-    unittest.main()
+    pytest.main([__file__])

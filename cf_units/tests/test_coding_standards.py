@@ -6,7 +6,6 @@
 
 import os
 import subprocess
-import unittest
 from datetime import datetime
 from fnmatch import fnmatch
 from glob import glob
@@ -135,4 +134,4 @@ class TestLicenseHeaders:
 
 
 if __name__ == "__main__":
-    unittest.main()
+    pytest.main([__file__])

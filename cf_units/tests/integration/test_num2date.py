@@ -5,7 +5,6 @@
 # licensing details.
 """Test function :func:`cf_units.num2date`."""
 
-import unittest
 
 import pytest
 
@@ -27,4 +26,4 @@ class Test:
 
 
 if __name__ == "__main__":
-    unittest.main()
+    pytest.main([__file__])

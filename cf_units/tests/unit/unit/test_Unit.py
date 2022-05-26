@@ -5,7 +5,6 @@
 # licensing details.
 """Unit tests for the `cf_units.Unit` class."""
 
-import unittest
 
 import numpy as np
 import pytest
@@ -309,4 +308,4 @@ class Test_format:
 
 
 if __name__ == "__main__":
-    unittest.main()
+    pytest.main([__file__])

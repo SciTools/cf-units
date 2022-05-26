@@ -6,11 +6,11 @@
 """Unit tests for the `cf_units._discard_microsecond` function."""
 
 import datetime
-import unittest
 
 import cftime
 import numpy as np
 import numpy.ma as ma
+import pytest
 
 from cf_units import _discard_microsecond as discard_microsecond
 
@@ -119,4 +119,4 @@ class Test__falsy:
 
 
 if __name__ == "__main__":
-    unittest.main()
+    pytest.main([__file__])

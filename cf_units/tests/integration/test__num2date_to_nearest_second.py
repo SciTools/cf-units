@@ -6,7 +6,6 @@
 """Test function :func:`cf_units._num2date_to_nearest_second`."""
 
 import datetime
-import unittest
 
 import cftime
 import numpy as np
@@ -343,4 +342,4 @@ class Test:
 
 
 if __name__ == "__main__":
-    unittest.main()
+    pytest.main([__file__])

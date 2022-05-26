@@ -10,7 +10,6 @@ of the operations, only that they return valid objects or raise an
 exception where expected."""
 
 import errno
-import unittest
 
 import numpy as np
 import pytest
@@ -312,4 +311,4 @@ class Test_convert:
 
 
 if __name__ == "__main__":
-    unittest.main()
+    pytest.main([__file__])
