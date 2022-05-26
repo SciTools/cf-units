@@ -20,11 +20,10 @@ class Test:
 
     def test_single(self):
         date = datetime.datetime(1970, 1, 1, 0, 0, 5)
-        exp = 5.0
+        exp = 5
         res = date2num(date, self.unit, self.calendar)
-        # num2date won't return an exact value representing the date,
-        # even if one exists
-        assert round(abs(exp - res), 4) == 0
+
+        assert exp == res
 
     def test_sequence(self):
         dates = [
@@ -55,12 +54,12 @@ class Test:
         res = date2num(dates, self.unit, self.calendar)
         assert exp_shape == res.shape
 
-    def test_discard_mircosecond(self):
+    def test_discard_microsecond(self):
         date = datetime.datetime(1970, 1, 1, 0, 0, 5, 750000)
-        exp = 5.0
+        exp = 5
         res = date2num(date, self.unit, self.calendar)
 
-        assert round(abs(exp - res), 4) == 0
+        assert exp == res
 
     def test_long_time_interval(self):
         # This test should fail with an error that we need to catch properly.
