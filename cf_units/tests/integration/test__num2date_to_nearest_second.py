@@ -10,6 +10,7 @@ import unittest
 
 import cftime
 import numpy as np
+import pytest
 
 import cf_units
 from cf_units import _num2date_to_nearest_second
@@ -27,8 +28,8 @@ class Test(unittest.TestCase):
             res = _num2date_to_nearest_second(
                 num, unit, only_use_cftime_datetimes=only_cftime
             )
-            self.assertEqual(exp, res)
-            self.assertIsInstance(res, type(exp))
+            assert exp == res
+            assert isinstance(res, type(exp))
 
     def check_timedelta(self, nums, units, expected):
         for num, unit, exp in zip(nums, units, expected):
@@ -36,15 +37,15 @@ class Test(unittest.TestCase):
             res = _num2date_to_nearest_second(num, unit)
             delta = res - epoch
             seconds = np.round(delta.seconds + (delta.microseconds / 1000000))
-            self.assertEqual((delta.days, seconds), exp)
+            assert (delta.days, seconds) == exp
 
     def test_scalar(self):
         unit = cf_units.Unit("seconds since 1970-01-01", "gregorian")
         num = 5.0
         exp = datetime.datetime(1970, 1, 1, 0, 0, 5)
         res = _num2date_to_nearest_second(num, unit)
-        self.assertEqual(exp, res)
-        self.assertIsInstance(res, cftime.datetime)
+        assert exp == res
+        assert isinstance(res, cftime.datetime)
 
     def test_sequence(self):
         unit = cf_units.Unit("seconds since 1970-01-01", "gregorian")
@@ -64,7 +65,7 @@ class Test(unittest.TestCase):
         nums = [[20.0, 40.0, 60.0], [80, 100.0, 120.0]]
         exp_shape = (2, 3)
         res = _num2date_to_nearest_second(nums, unit)
-        self.assertEqual(exp_shape, res.shape)
+        assert exp_shape == res.shape
 
     def test_masked_ndarray(self):
         unit = cf_units.Unit("seconds since 1970-01-01", "gregorian")
@@ -254,8 +255,8 @@ class Test(unittest.TestCase):
 
     def test_pydatetime_wrong_calendar(self):
         unit = cf_units.Unit("days since 1970-01-01", calendar="360_day")
-        with self.assertRaisesRegex(
-            ValueError, "illegal calendar or reference date"
+        with pytest.raises(
+            ValueError, match="illegal calendar or reference date"
         ):
             _num2date_to_nearest_second(
                 1,

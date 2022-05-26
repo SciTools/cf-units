@@ -23,7 +23,7 @@ class Test__datetime(unittest.TestCase):
     def test_single(self):
         dt = datetime.datetime(**self.kwargs, microsecond=7)
         actual = discard_microsecond(dt)
-        self.assertEqual(self.expected, actual)
+        assert self.expected == actual
 
     def test_multi(self):
         shape = (5, 2)
@@ -49,7 +49,7 @@ class Test__cftime(unittest.TestCase):
             expected = cftime.datetime(
                 **self.kwargs, microsecond=0, calendar=calendar
             )
-            self.assertEqual(expected, actual)
+            assert expected == actual
 
     def test_multi(self):
         shape = (2, 5)
@@ -87,10 +87,10 @@ class Test__falsy(unittest.TestCase):
         )
 
     def test_single__none(self):
-        self.assertIsNone(discard_microsecond(None))
+        assert discard_microsecond(None) is None
 
     def test_single__false(self):
-        self.assertFalse(discard_microsecond(False))
+        assert not discard_microsecond(False)
 
     def test_multi__falsy(self):
         falsy = np.array([None, False, 0])
@@ -110,12 +110,12 @@ class Test__falsy(unittest.TestCase):
                 ma.masked,
             ]
         )
-        self.assertEqual(expected.shape, actual.shape)
+        assert expected.shape == actual.shape
         for i, masked in enumerate(mask):
             if masked:
-                self.assertIs(expected[i], actual[i])
+                assert expected[i] is actual[i]
             else:
-                self.assertEqual(expected[i], actual[i])
+                assert expected[i] == actual[i]
 
 
 if __name__ == "__main__":

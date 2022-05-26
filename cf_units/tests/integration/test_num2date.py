@@ -7,13 +7,15 @@
 
 import unittest
 
+import pytest
+
 from cf_units import num2date
 
 
 class Test(unittest.TestCase):
     def test_num2date_wrong_calendar(self):
-        with self.assertRaisesRegex(
-            ValueError, "illegal calendar or reference date"
+        with pytest.raises(
+            ValueError, match="illegal calendar or reference date"
         ):
             num2date(
                 1,
