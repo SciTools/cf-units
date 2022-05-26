@@ -304,9 +304,6 @@ class Test_invert:
 
 
 class Test_root:
-    def setup_method(self):
-        cf_units.suppress_errors()
-
     def test_square_root(self):
         u = Unit("volt^2")
         assert u.root(2) == "V"
