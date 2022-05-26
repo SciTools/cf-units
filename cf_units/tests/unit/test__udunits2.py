@@ -35,12 +35,11 @@ class Test_get_system:
         assert system is not None
 
     def test_read_xml_invalid_path(self):
-        with pytest.raises(_ud.UdunitsError) as cm:
+        with pytest.raises(_ud.UdunitsError) as ex:
             _ud.read_xml(b"/not/a/path.xml")
-        ex = cm.exception
 
-        assert ex.status_msg() == "UT_OPEN_ARG"
-        assert ex.errnum == errno.ENOENT
+        assert ex.match("UT_OPEN_ARG")
+        assert ex.value.errnum == errno.ENOENT
 
 
 class Test_system:
@@ -141,11 +140,10 @@ class Test_unit:
         _ud.get_converter(self.metre, self.yard)
 
     def test_get_converter_invalid(self):
-        with pytest.raises(_ud.UdunitsError) as cm:
+        with pytest.raises(_ud.UdunitsError) as ex:
             _ud.get_converter(self.metre, self.second)
-        ex = cm.exception
 
-        assert ex.status_msg() == "UT_MEANINGLESS"
+        assert ex.match("UT_MEANINGLESS")
 
     def test_scale(self):
         mm = _ud.scale(0.001, self.metre)
@@ -163,14 +161,15 @@ class Test_unit:
 
         assert time_since is not None
 
+    @pytest.mark.xfail
     def test_offset_by_time_invalid(self):
-        with pytest.raises(_ud.UdunitsError) as cm:
+        with pytest.raises(_ud.UdunitsError) as ex:
             _ud.offset_by_time(self.metre, -31622400.0)
-        cm.exception
+
+        assert ex.match("UT_MEANINGLESS")
 
         # The udunits package should set a status of UT_MEANINGLESS, according
         # to the documentation. However, it is setting it to UT_SUCCESS.
-        # self.assertEqual(ex.status_msg(), 'UT_MEANINGLESS')
 
     def test_multiply(self):
         metre_second = _ud.multiply(self.metre, self.second)
