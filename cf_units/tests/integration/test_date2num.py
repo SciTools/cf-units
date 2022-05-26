@@ -6,25 +6,24 @@
 """Test function :func:`cf_units.date2num`."""
 
 import datetime
-import unittest
 
 import numpy as np
+import pytest
 
 from cf_units import date2num
 
 
-class Test(unittest.TestCase):
-    def setUp(self):
+class Test:
+    def setup_method(self):
         self.unit = "seconds since 1970-01-01"
         self.calendar = "gregorian"
 
     def test_single(self):
         date = datetime.datetime(1970, 1, 1, 0, 0, 5)
-        exp = 5.0
+        exp = 5
         res = date2num(date, self.unit, self.calendar)
-        # num2date won't return an exact value representing the date,
-        # even if one exists
-        self.assertAlmostEqual(exp, res, places=4)
+
+        assert exp == res
 
     def test_sequence(self):
         dates = [
@@ -53,23 +52,19 @@ class Test(unittest.TestCase):
         ]
         exp_shape = (2, 3)
         res = date2num(dates, self.unit, self.calendar)
-        self.assertEqual(exp_shape, res.shape)
+        assert exp_shape == res.shape
 
-    def test_discard_mircosecond(self):
+    def test_discard_microsecond(self):
         date = datetime.datetime(1970, 1, 1, 0, 0, 5, 750000)
-        exp = 5.0
+        exp = 5
         res = date2num(date, self.unit, self.calendar)
 
-        self.assertAlmostEqual(exp, res, places=4)
+        assert exp == res
 
     def test_long_time_interval(self):
         # This test should fail with an error that we need to catch properly.
         unit = "years since 1970-01-01"
         date = datetime.datetime(1970, 1, 1, 0, 0, 5)
         exp_emsg = 'interval of "months", "years" .* got "years".'
-        with self.assertRaisesRegex(ValueError, exp_emsg):
+        with pytest.raises(ValueError, match=exp_emsg):
             date2num(date, unit, self.calendar)
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -6,7 +6,6 @@
 """Unit tests for the `cf_units._discard_microsecond` function."""
 
 import datetime
-import unittest
 
 import cftime
 import numpy as np
@@ -15,15 +14,15 @@ import numpy.ma as ma
 from cf_units import _discard_microsecond as discard_microsecond
 
 
-class Test__datetime(unittest.TestCase):
-    def setUp(self):
+class Test__datetime:
+    def setup_method(self):
         self.kwargs = dict(year=1, month=2, day=3, hour=4, minute=5, second=6)
         self.expected = datetime.datetime(**self.kwargs, microsecond=0)
 
     def test_single(self):
         dt = datetime.datetime(**self.kwargs, microsecond=7)
         actual = discard_microsecond(dt)
-        self.assertEqual(self.expected, actual)
+        assert self.expected == actual
 
     def test_multi(self):
         shape = (5, 2)
@@ -37,8 +36,8 @@ class Test__datetime(unittest.TestCase):
         np.testing.assert_array_equal(expected, actual)
 
 
-class Test__cftime(unittest.TestCase):
-    def setUp(self):
+class Test__cftime:
+    def setup_method(self):
         self.kwargs = dict(year=1, month=2, day=3, hour=4, minute=5, second=6)
         self.calendars = cftime._cftime._calendars
 
@@ -49,7 +48,7 @@ class Test__cftime(unittest.TestCase):
             expected = cftime.datetime(
                 **self.kwargs, microsecond=0, calendar=calendar
             )
-            self.assertEqual(expected, actual)
+            assert expected == actual
 
     def test_multi(self):
         shape = (2, 5)
@@ -74,8 +73,8 @@ class Test__cftime(unittest.TestCase):
             np.testing.assert_array_equal(expected, actual)
 
 
-class Test__falsy(unittest.TestCase):
-    def setUp(self):
+class Test__falsy:
+    def setup_method(self):
         self.kwargs = dict(year=1, month=2, day=3, hour=4, minute=5, second=6)
         self.calendar = "360_day"
         microsecond = 7
@@ -87,10 +86,10 @@ class Test__falsy(unittest.TestCase):
         )
 
     def test_single__none(self):
-        self.assertIsNone(discard_microsecond(None))
+        assert discard_microsecond(None) is None
 
     def test_single__false(self):
-        self.assertFalse(discard_microsecond(False))
+        assert not discard_microsecond(False)
 
     def test_multi__falsy(self):
         falsy = np.array([None, False, 0])
@@ -110,13 +109,9 @@ class Test__falsy(unittest.TestCase):
                 ma.masked,
             ]
         )
-        self.assertEqual(expected.shape, actual.shape)
+        assert expected.shape == actual.shape
         for i, masked in enumerate(mask):
             if masked:
-                self.assertIs(expected[i], actual[i])
+                assert expected[i] is actual[i]
             else:
-                self.assertEqual(expected[i], actual[i])
-
-
-if __name__ == "__main__":
-    unittest.main()
+                assert expected[i] == actual[i]

@@ -5,15 +5,16 @@
 # licensing details.
 """Test function :func:`cf_units.num2date`."""
 
-import unittest
+
+import pytest
 
 from cf_units import num2date
 
 
-class Test(unittest.TestCase):
+class Test:
     def test_num2date_wrong_calendar(self):
-        with self.assertRaisesRegex(
-            ValueError, "illegal calendar or reference date"
+        with pytest.raises(
+            ValueError, match="illegal calendar or reference date"
         ):
             num2date(
                 1,
@@ -22,7 +23,3 @@ class Test(unittest.TestCase):
                 only_use_cftime_datetimes=False,
                 only_use_python_datetimes=True,
             )
-
-
-if __name__ == "__main__":
-    unittest.main()

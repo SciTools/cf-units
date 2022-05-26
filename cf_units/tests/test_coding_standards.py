@@ -6,10 +6,11 @@
 
 import os
 import subprocess
-import unittest
 from datetime import datetime
 from fnmatch import fnmatch
 from glob import glob
+
+import pytest
 
 import cf_units
 
@@ -35,7 +36,7 @@ DOCS_DIRS = [
 ]
 
 
-class TestLicenseHeaders(unittest.TestCase):
+class TestLicenseHeaders:
     @staticmethod
     def whatchanged_parse(whatchanged_output):
         """
@@ -105,7 +106,7 @@ class TestLicenseHeaders(unittest.TestCase):
             last_change_by_fname = self.last_change_by_fname()
         except ValueError:
             # Caught the case where this is not a git repo.
-            return self.skipTest(
+            return pytest.skip(
                 "cf_units installation did not look like a " "git repo."
             )
 
@@ -130,7 +131,3 @@ class TestLicenseHeaders(unittest.TestCase):
             raise AssertionError(
                 "There were license header failures. See stdout."
             )
-
-
-if __name__ == "__main__":
-    unittest.main()

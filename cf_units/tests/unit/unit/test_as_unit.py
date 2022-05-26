@@ -6,7 +6,6 @@
 """Unit tests for the `cf_units.as_unit` function."""
 
 import copy
-import unittest
 
 from cf_units import Unit, as_unit
 
@@ -24,14 +23,12 @@ class StubUnit(object):
         return self.origin
 
 
-class TestAll(unittest.TestCase):
+class TestAll:
     def _assert_unit_equal(self, unit1, unit2):
         # Custom equality assertion of units since equality of the Unit class
         # utilises as_unit.
         for attribute in ["origin", "calendar", "category"]:
-            self.assertEqual(
-                getattr(unit1, attribute), getattr(unit2, attribute)
-            )
+            assert getattr(unit1, attribute) == getattr(unit2, attribute)
 
     def test_cf_unit(self):
         # Ensure that as_unit returns the same cf_unit.Unit object and
@@ -41,7 +38,7 @@ class TestAll(unittest.TestCase):
         result = as_unit(unit)
 
         self._assert_unit_equal(result, target)
-        self.assertIs(result, unit)
+        assert result is unit
 
     def test_non_cf_unit_no_calendar(self):
         # On passing as_unit a cf_unit.Unit-like object (not a cf_unit.Unit
@@ -50,8 +47,8 @@ class TestAll(unittest.TestCase):
         unit = StubUnit()
         result = as_unit(unit)
 
-        self.assertEqual(result.calendar, "standard")
-        self.assertIsInstance(result, Unit)
+        assert result.calendar == "standard"
+        assert isinstance(result, Unit)
 
     def test_non_cf_unit_with_calendar(self):
         # On passing as_unit a cf_unit.Unit-like object (not a cf_unit.Unit
@@ -61,7 +58,3 @@ class TestAll(unittest.TestCase):
         target = copy.copy(unit)
         result = as_unit(unit)
         self._assert_unit_equal(result, target)
-
-
-if __name__ == "__main__":
-    unittest.main()
