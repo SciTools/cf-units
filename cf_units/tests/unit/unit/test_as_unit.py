@@ -24,7 +24,7 @@ class StubUnit(object):
         return self.origin
 
 
-class TestAll(unittest.TestCase):
+class TestAll:
     def _assert_unit_equal(self, unit1, unit2):
         # Custom equality assertion of units since equality of the Unit class
         # utilises as_unit.

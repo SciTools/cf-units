@@ -16,7 +16,7 @@ import cf_units
 from cf_units import _num2date_to_nearest_second
 
 
-class Test(unittest.TestCase):
+class Test:
     def setup_units(self, calendar):
         self.useconds = cf_units.Unit("seconds since 1970-01-01", calendar)
         self.uminutes = cf_units.Unit("minutes since 1970-01-01", calendar)

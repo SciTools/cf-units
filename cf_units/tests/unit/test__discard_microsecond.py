@@ -15,8 +15,8 @@ import numpy.ma as ma
 from cf_units import _discard_microsecond as discard_microsecond
 
 
-class Test__datetime(unittest.TestCase):
-    def setUp(self):
+class Test__datetime:
+    def setup_method(self):
         self.kwargs = dict(year=1, month=2, day=3, hour=4, minute=5, second=6)
         self.expected = datetime.datetime(**self.kwargs, microsecond=0)
 
@@ -37,8 +37,8 @@ class Test__datetime(unittest.TestCase):
         np.testing.assert_array_equal(expected, actual)
 
 
-class Test__cftime(unittest.TestCase):
-    def setUp(self):
+class Test__cftime:
+    def setup_method(self):
         self.kwargs = dict(year=1, month=2, day=3, hour=4, minute=5, second=6)
         self.calendars = cftime._cftime._calendars
 
@@ -74,8 +74,8 @@ class Test__cftime(unittest.TestCase):
             np.testing.assert_array_equal(expected, actual)
 
 
-class Test__falsy(unittest.TestCase):
-    def setUp(self):
+class Test__falsy:
+    def setup_method(self):
         self.kwargs = dict(year=1, month=2, day=3, hour=4, minute=5, second=6)
         self.calendar = "360_day"
         microsecond = 7

@@ -14,7 +14,7 @@ import cf_units
 from cf_units import Unit
 
 
-class Test___init__(unittest.TestCase):
+class Test___init__:
     def test_capitalised_calendar(self):
         calendar = "StAnDaRd"
         expected = cf_units.CALENDAR_STANDARD
@@ -32,7 +32,7 @@ class Test___init__(unittest.TestCase):
         assert u == expected
 
 
-class Test_change_calendar(unittest.TestCase):
+class Test_change_calendar:
     def test_modern_standard_to_proleptic_gregorian(self):
         u = Unit("hours since 1970-01-01 00:00:00", calendar="standard")
         expected = Unit(
@@ -76,7 +76,7 @@ class Test_change_calendar(unittest.TestCase):
             u.change_calendar("standard")
 
 
-class Test_convert__calendar(unittest.TestCase):
+class Test_convert__calendar:
     class MyStr(str):
         pass
 
@@ -125,11 +125,11 @@ class Test_convert__calendar(unittest.TestCase):
                 assert result.dtype == np.int64
 
 
-class Test_convert__endianness_time(unittest.TestCase):
+class Test_convert__endianness_time:
     # Test the behaviour of converting time units of differing
     # dtype endianness.
 
-    def setUp(self):
+    def setup_method(self):
         self.time1_array = np.array([31.5, 32.5, 33.5])
         self.time2_array = np.array([0.5, 1.5, 2.5])
         self.time1_unit = cf_units.Unit(
@@ -163,11 +163,11 @@ class Test_convert__endianness_time(unittest.TestCase):
         np.testing.assert_array_almost_equal(result, self.time2_array)
 
 
-class Test_convert__endianness_deg_to_rad(unittest.TestCase):
+class Test_convert__endianness_deg_to_rad:
     # Test the behaviour of converting radial units of differing
     # dtype endianness.
 
-    def setUp(self):
+    def setup_method(self):
         self.degs_array = np.array([356.7, 356.8, 356.9])
         self.rads_array = np.array([6.22558944, 6.22733477, 6.2290801])
         self.deg = cf_units.Unit("degrees")
@@ -189,11 +189,11 @@ class Test_convert__endianness_deg_to_rad(unittest.TestCase):
         np.testing.assert_array_almost_equal(result, self.rads_array)
 
 
-class Test_convert__endianness_degC_to_kelvin(unittest.TestCase):
+class Test_convert__endianness_degC_to_kelvin:
     # Test the behaviour of converting temperature units of differing
     # dtype endianness.
 
-    def setUp(self):
+    def setup_method(self):
         self.k_array = np.array([356.7, 356.8, 356.9])
         self.degc_array = np.array([83.55, 83.65, 83.75])
         self.degc = cf_units.Unit("degC")
@@ -215,10 +215,10 @@ class Test_convert__endianness_degC_to_kelvin(unittest.TestCase):
         np.testing.assert_array_almost_equal(result, self.k_array)
 
 
-class Test_convert__result_ctype(unittest.TestCase):
+class Test_convert__result_ctype:
     # Test the output ctype of converting an cf_unit.
 
-    def setUp(self):
+    def setup_method(self):
         self.initial_dtype = np.float32
         self.degs_array = np.array(
             [356.7, 356.8, 356.9], dtype=self.initial_dtype
@@ -246,10 +246,10 @@ class Test_convert__result_ctype(unittest.TestCase):
         assert result.dtype == expected_dtype
 
 
-class Test_convert__masked_array(unittest.TestCase):
+class Test_convert__masked_array:
     # Test converting an cf_unit with masked data.
 
-    def setUp(self):
+    def setup_method(self):
         self.deg = cf_units.Unit("degrees")
         self.rad = cf_units.Unit("radians")
         self.degs_array = np.ma.array(
@@ -274,7 +274,7 @@ class Test_convert__masked_array(unittest.TestCase):
         np.testing.assert_array_almost_equal(self.rads_array, result)
 
 
-class Test_is_long_time_interval(unittest.TestCase):
+class Test_is_long_time_interval:
     def test_short_time_interval(self):
         # A short time interval is a time interval from seconds to days.
         unit = Unit("seconds since epoch")
@@ -299,7 +299,7 @@ class Test_is_long_time_interval(unittest.TestCase):
         assert not result
 
 
-class Test_format(unittest.TestCase):
+class Test_format:
     def test_invalid_ut_unit(self):
         # https://github.com/SciTools/cf-units/issues/133 flagged up that
         # format should be a little more tolerant of a Unit that has not been

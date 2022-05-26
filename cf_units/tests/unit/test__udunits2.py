@@ -21,7 +21,7 @@ from cf_units.config import get_xml_path
 _ud.set_error_message_handler(_ud.ignore)
 
 
-class Test_get_system(unittest.TestCase):
+class Test_get_system:
     """
     Test case for operations which create a system object.
 
@@ -44,13 +44,13 @@ class Test_get_system(unittest.TestCase):
         assert ex.errnum == errno.ENOENT
 
 
-class Test_system(unittest.TestCase):
+class Test_system:
     """
     Test case for system operations.
 
     """
 
-    def setUp(self):
+    def setup_method(self):
         try:
             self.system = _ud.read_xml()
         except _ud.UdunitsError:
@@ -92,13 +92,13 @@ class Test_system(unittest.TestCase):
             _ud.parse(self.system, b"jigawatt", _ud.UT_ASCII)
 
 
-class Test_unit(unittest.TestCase):
+class Test_unit:
     """
     Test case for unit operations.
 
     """
 
-    def setUp(self):
+    def setup_method(self):
         try:
             self.system = _ud.read_xml()
         except _ud.UdunitsError:
@@ -217,8 +217,8 @@ class Test_unit(unittest.TestCase):
         assert name_defn == b"meter^-1-kilogram-second^-2"
 
 
-class Test_time_encoding(unittest.TestCase):
-    def setUp(self):
+class Test_time_encoding:
+    def setup_method(self):
         self.year, self.month, self.day = 2000, 1, 1
         self.date_encoding = -31622400.0
         self.hours, self.minutes, self.seconds = 12, 34, 56
@@ -273,13 +273,13 @@ class Test_time_encoding(unittest.TestCase):
         )
 
 
-class Test_convert(unittest.TestCase):
+class Test_convert:
     """
     Test case for convert operations.
 
     """
 
-    def setUp(self):
+    def setup_method(self):
         try:
             system = _ud.read_xml()
         except _ud.UdunitsError:

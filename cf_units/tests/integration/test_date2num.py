@@ -14,8 +14,8 @@ import pytest
 from cf_units import date2num
 
 
-class Test(unittest.TestCase):
-    def setUp(self):
+class Test:
+    def setup_method(self):
         self.unit = "seconds since 1970-01-01"
         self.calendar = "gregorian"
 

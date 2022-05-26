@@ -25,7 +25,7 @@ from cf_units import suppress_errors
 Unit = unit.Unit
 
 
-class Test_unit__creation(unittest.TestCase):
+class Test_unit__creation:
     def test_is_valid_unit_string(self):
         unit_strs = ["    meter", "meter    ", "    meter   "]
         for unit_str in unit_strs:
@@ -77,7 +77,7 @@ class Test_unit__creation(unittest.TestCase):
             Unit("ø")
 
 
-class Test_modulus(unittest.TestCase):
+class Test_modulus:
     def test_modulus__degrees(self):
         u = Unit("degrees")
         assert u.modulus == 360.0
@@ -91,7 +91,7 @@ class Test_modulus(unittest.TestCase):
         assert u.modulus is None
 
 
-class Test_is_convertible(unittest.TestCase):
+class Test_is_convertible:
     def test_convert_distance_to_force(self):
         u = Unit("meter")
         v = Unit("newton")
@@ -121,7 +121,7 @@ class Test_is_convertible(unittest.TestCase):
         assert not v.is_convertible(u)
 
 
-class Test_is_dimensionless(unittest.TestCase):
+class Test_is_dimensionless:
     def test_dimensionless(self):
         u = Unit("1")
         assert u.is_dimensionless()
@@ -139,7 +139,7 @@ class Test_is_dimensionless(unittest.TestCase):
         assert not u.is_dimensionless()
 
 
-class Test_format(unittest.TestCase):
+class Test_format:
     def test_basic(self):
         u = Unit("watt")
         assert u.format() == "W"
@@ -187,7 +187,7 @@ class Test_format(unittest.TestCase):
         assert u.format(unit.UT_LATIN1) == "m²"
 
 
-class Test_name(unittest.TestCase):
+class Test_name:
     def test_basic(self):
         u = Unit("newton")
         assert u.name == "newton"
@@ -201,7 +201,7 @@ class Test_name(unittest.TestCase):
         assert u.name == "no_unit"
 
 
-class Test_symbol(unittest.TestCase):
+class Test_symbol:
     def test_basic(self):
         u = Unit("joule")
         assert u.symbol == "J"
@@ -215,7 +215,7 @@ class Test_symbol(unittest.TestCase):
         assert u.symbol == unit._NO_UNIT_SYMBOL
 
 
-class Test_definition(unittest.TestCase):
+class Test_definition:
     def test_basic(self):
         u = Unit("joule")
         assert u.definition == "m2.kg.s-2"
@@ -229,7 +229,7 @@ class Test_definition(unittest.TestCase):
         assert u.definition == unit._NO_UNIT_SYMBOL
 
 
-class Test__apply_offset(unittest.TestCase):
+class Test__apply_offset:
     def test_add_integer_offset(self):
         u = Unit("meter")
         assert u + 10 == "m @ 10"
@@ -253,7 +253,7 @@ class Test__apply_offset(unittest.TestCase):
             operator.add(u, 10)
 
 
-class Test_offset_by_time(unittest.TestCase):
+class Test_offset_by_time:
     def test_offset(self):
         u = Unit("hour")
         v = u.offset_by_time(unit.encode_time(2007, 1, 15, 12, 6, 0))
@@ -282,7 +282,7 @@ class Test_offset_by_time(unittest.TestCase):
             u.offset_by_time(unit.encode_time(1970, 1, 1, 0, 0, 0))
 
 
-class Test_invert(unittest.TestCase):
+class Test_invert:
     def test_basic(self):
         u = Unit("newton")
         assert u.invert() == "m-1.kg-1.s2"
@@ -302,8 +302,8 @@ class Test_invert(unittest.TestCase):
             u.invert()
 
 
-class Test_root(unittest.TestCase):
-    def setUp(self):
+class Test_root:
+    def setup_method(self):
         unit.suppress_errors()
 
     def test_square_root(self):
@@ -340,7 +340,7 @@ class Test_root(unittest.TestCase):
             u.root(2)
 
 
-class Test_log(unittest.TestCase):
+class Test_log:
     def test_base_2(self):
         u = Unit("hPa")
         assert u.log(2) == "lb(re 100 Pa)"
@@ -371,7 +371,7 @@ class Test_log(unittest.TestCase):
             u.log(10)
 
 
-class Test_multiply(unittest.TestCase):
+class Test_multiply:
     def test_multiply_by_int(self):
         u = Unit("amp")
         assert (u * 10).format() == "10 A"
@@ -411,7 +411,7 @@ class Test_multiply(unittest.TestCase):
             operator.mul(v, u)
 
 
-class Test_divide(unittest.TestCase):
+class Test_divide:
     def test_divide_by_int(self):
         u = Unit("watts")
         assert (u / 10).format() == "0.1 W"
@@ -451,7 +451,7 @@ class Test_divide(unittest.TestCase):
             truediv(v, u)
 
 
-class Test_power(unittest.TestCase):
+class Test_power:
     def test_basic(self):
         u = Unit("m^2")
         assert u**0.5 == Unit("m")
@@ -497,8 +497,8 @@ class Test_power(unittest.TestCase):
             operator.pow(u, v)
 
 
-class Test_power__unknown(unittest.TestCase):
-    def setUp(self):
+class Test_power__unknown:
+    def setup_method(self):
         self.u = Unit("unknown")
 
     def test_integer_power(self):
@@ -522,8 +522,8 @@ class Test_power__unknown(unittest.TestCase):
             operator.pow(self.u, v)
 
 
-class Test_power__no_unit(unittest.TestCase):
-    def setUp(self):
+class Test_power__no_unit:
+    def setup_method(self):
         self.u = Unit("no unit")
 
     def test_integer_power(self):
@@ -553,7 +553,7 @@ class Test_power__no_unit(unittest.TestCase):
             operator.pow(self.u, v)
 
 
-class Test_copy(unittest.TestCase):
+class Test_copy:
     def test_basic(self):
         u = Unit("joule")
         assert copy.copy(u) == u
@@ -569,7 +569,7 @@ class Test_copy(unittest.TestCase):
         assert copy.copy(u).is_no_unit()
 
 
-class Test_stringify(unittest.TestCase):
+class Test_stringify:
     def test___str__(self):
         u = Unit("meter")
         assert str(u) == "meter"
@@ -586,7 +586,7 @@ class Test_stringify(unittest.TestCase):
         assert repr(u) == exp
 
 
-class Test_equality(unittest.TestCase):
+class Test_equality:
     def test_basic(self):
         u = Unit("meter")
         assert u == "meter"
@@ -627,7 +627,7 @@ class Test_equality(unittest.TestCase):
         assert not (u == {})
 
 
-class Test_non_equality(unittest.TestCase):
+class Test_non_equality:
     def test_basic(self):
         u = Unit("meter")
         assert not (u != "meter")
@@ -658,7 +658,7 @@ class Test_non_equality(unittest.TestCase):
         assert u != {}
 
 
-class Test_convert(unittest.TestCase):
+class Test_convert:
     def test_convert_float(self):
         u = Unit("meter")
         v = Unit("mile")
@@ -737,7 +737,7 @@ class Test_convert(unittest.TestCase):
             u.convert(u1point, v)
 
 
-class Test_order(unittest.TestCase):
+class Test_order:
     def test(self):
         m = Unit("meter")
         u = Unit("unknown")
@@ -746,7 +746,7 @@ class Test_order(unittest.TestCase):
         assert sorted(start) == [m, n, u]
 
 
-class Test_is_unknown(unittest.TestCase):
+class Test_is_unknown:
     def _check(self, unknown_str):
         u = Unit(unknown_str)
         assert u.is_unknown()
@@ -771,7 +771,7 @@ class Test_is_unknown(unittest.TestCase):
         assert Unit.__new__(Unit).is_unknown()
 
 
-class Test_is_no_unit(unittest.TestCase):
+class Test_is_no_unit:
     def _check(self, no_unit_str):
         u = Unit(no_unit_str)
         assert u.is_no_unit()
@@ -790,7 +790,7 @@ class Test_is_no_unit(unittest.TestCase):
         assert not u.is_no_unit()
 
 
-class Test_is_udunits(unittest.TestCase):
+class Test_is_udunits:
     def test_basic(self):
         u = Unit("meters")
         assert u.is_udunits()
@@ -804,7 +804,7 @@ class Test_is_udunits(unittest.TestCase):
         assert not u.is_udunits()
 
 
-class Test_is_time_reference(unittest.TestCase):
+class Test_is_time_reference:
     def test_basic(self):
         u = Unit("hours since epoch")
         assert u.is_time_reference()
@@ -822,7 +822,7 @@ class Test_is_time_reference(unittest.TestCase):
         assert not u.is_time_reference()
 
 
-class Test_title(unittest.TestCase):
+class Test_title:
     def test_basic(self):
         u = Unit("meter")
         assert u.title(10) == "10 meter"
@@ -832,7 +832,7 @@ class Test_title(unittest.TestCase):
         assert u.title(10) == "1970-01-01 10:00:00"
 
 
-class Test__immutable(unittest.TestCase):
+class Test__immutable:
     def _set_attr(self, unit, name):
         setattr(unit, name, -999)
         raise ValueError("'Unit' attribute {!r} is mutable!".format(name))
@@ -862,7 +862,7 @@ class Test__immutable(unittest.TestCase):
         assert len(h) == 2
 
 
-class Test__inplace(unittest.TestCase):
+class Test__inplace:
     # Test shared memory for conversion operations.
 
     def test(self):
@@ -929,7 +929,7 @@ class Test__inplace(unittest.TestCase):
         c.convert(orig, f)
 
 
-class TestTimeEncoding(unittest.TestCase):
+class TestTimeEncoding:
     def test_encode_time(self):
         result = unit.encode_time(2006, 1, 15, 12, 6, 0)
         assert result == 159019560.0
@@ -948,7 +948,7 @@ class TestTimeEncoding(unittest.TestCase):
         assert (year, month, day, hour, min, sec) == (2006, 1, 15, 12, 6, 0)
 
 
-class TestNumsAndDates(unittest.TestCase):
+class TestNumsAndDates:
     def test_num2date(self):
         u = Unit(
             "hours since 2010-11-02 12:00:00", calendar=unit.CALENDAR_GREGORIAN
@@ -1005,7 +1005,7 @@ class TestNumsAndDates(unittest.TestCase):
             u.num2pydate(1)
 
 
-class Test_as_unit(unittest.TestCase):
+class Test_as_unit:
     def test_already_unit(self):
         u = Unit("m")
         result = unit.as_unit(u)
@@ -1036,7 +1036,7 @@ class Test_as_unit(unittest.TestCase):
         assert expected == result
 
 
-class Test_is_time(unittest.TestCase):
+class Test_is_time:
     def test_basic(self):
         u = Unit("hours")
         assert u.is_time()
@@ -1054,7 +1054,7 @@ class Test_is_time(unittest.TestCase):
         assert not u.is_time()
 
 
-class Test_is_vertical(unittest.TestCase):
+class Test_is_vertical:
     def test_pressure_unit(self):
         u = Unit("millibar")
         assert u.is_vertical()

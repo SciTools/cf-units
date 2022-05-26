@@ -12,7 +12,7 @@ import pytest
 from cf_units import num2date
 
 
-class Test(unittest.TestCase):
+class Test:
     def test_num2date_wrong_calendar(self):
         with pytest.raises(
             ValueError, match="illegal calendar or reference date"

@@ -13,7 +13,7 @@ import pytest
 from cf_units import num2pydate
 
 
-class Test(unittest.TestCase):
+class Test:
     def test_num2pydate_simple(self):
         result = num2pydate(1, "days since 1970-01-01", calendar="standard")
         expected = datetime.datetime(1970, 1, 2)
