@@ -18,10 +18,10 @@ import cftime
 import numpy as np
 import pytest
 
-import cf_units as unit
+import cf_units
 from cf_units import suppress_errors
 
-Unit = unit.Unit
+Unit = cf_units.Unit
 
 
 class Test_unit__creation:
@@ -36,25 +36,25 @@ class Test_unit__creation:
             Unit("wibble")
 
     def test_calendar(self):
-        calendar = unit.CALENDAR_365_DAY
+        calendar = cf_units.CALENDAR_365_DAY
         u = Unit("hours since 1970-01-01 00:00:00", calendar=calendar)
         assert u.calendar == calendar
 
     def test_calendar_alias(self):
-        calendar = unit.CALENDAR_NO_LEAP
+        calendar = cf_units.CALENDAR_NO_LEAP
         u = Unit("hours since 1970-01-01 00:00:00", calendar=calendar)
-        assert u.calendar == unit.CALENDAR_365_DAY
+        assert u.calendar == cf_units.CALENDAR_365_DAY
 
     def test_no_calendar(self):
         u = Unit("hours since 1970-01-01 00:00:00")
-        assert u.calendar == unit.CALENDAR_STANDARD
+        assert u.calendar == cf_units.CALENDAR_STANDARD
 
     def test_unsupported_calendar(self):
         with pytest.raises(ValueError, match="unsupported calendar"):
             Unit("hours since 1970-01-01 00:00:00", calendar="wibble")
 
     def test_calendar_w_unicode(self):
-        calendar = unit.CALENDAR_365_DAY
+        calendar = cf_units.CALENDAR_365_DAY
         u = Unit("hours\xb2 hours-1 since epoch", calendar=calendar)
         assert u.calendar == calendar
         expected = "hours² hours-1 since 1970-01-01 00:00:00"
@@ -145,27 +145,29 @@ class Test_format:
 
     def test_format_ascii(self):
         u = Unit("watt")
-        assert u.format(unit.UT_ASCII) == "W"
+        assert u.format(cf_units.UT_ASCII) == "W"
 
     def test_format_ut_names(self):
         u = Unit("watt")
-        assert u.format(unit.UT_NAMES) == "watt"
+        assert u.format(cf_units.UT_NAMES) == "watt"
 
     def test_format_unit_definition(self):
         u = Unit("watt")
-        assert u.format(unit.UT_DEFINITION) == "m2.kg.s-3"
+        assert u.format(cf_units.UT_DEFINITION) == "m2.kg.s-3"
 
     def test_format_multiple_options(self):
         u = Unit("watt")
         assert (
-            u.format([unit.UT_NAMES, unit.UT_DEFINITION])
+            u.format([cf_units.UT_NAMES, cf_units.UT_DEFINITION])
             == "meter^2-kilogram-second^-3"
         )
 
     def test_format_multiple_options_utf8(self):
         u = Unit("watt")
         assert (
-            u.format([unit.UT_NAMES, unit.UT_DEFINITION, unit.UT_UTF8])
+            u.format(
+                [cf_units.UT_NAMES, cf_units.UT_DEFINITION, cf_units.UT_UTF8]
+            )
             == "meter²·kilogram·second⁻³"
         )
 
@@ -179,11 +181,11 @@ class Test_format:
 
     def test_format_names_utf8(self):
         u = Unit("m2")
-        assert u.format([unit.UT_UTF8, unit.UT_NAMES]) == "meter²"
+        assert u.format([cf_units.UT_UTF8, cf_units.UT_NAMES]) == "meter²"
 
     def test_format_latin1(self):
         u = Unit("m2")
-        assert u.format(unit.UT_LATIN1) == "m²"
+        assert u.format(cf_units.UT_LATIN1) == "m²"
 
 
 class Test_name:
@@ -207,11 +209,11 @@ class Test_symbol:
 
     def test_unknown(self):
         u = Unit("unknown")
-        assert u.symbol == unit._UNKNOWN_UNIT_SYMBOL
+        assert u.symbol == cf_units._UNKNOWN_UNIT_SYMBOL
 
     def test_no_unit(self):
         u = Unit("no unit")
-        assert u.symbol == unit._NO_UNIT_SYMBOL
+        assert u.symbol == cf_units._NO_UNIT_SYMBOL
 
 
 class Test_definition:
@@ -221,11 +223,11 @@ class Test_definition:
 
     def test_unknown(self):
         u = Unit("unknown")
-        assert u.definition == unit._UNKNOWN_UNIT_SYMBOL
+        assert u.definition == cf_units._UNKNOWN_UNIT_SYMBOL
 
     def test_no_unit(self):
         u = Unit("no unit")
-        assert u.definition == unit._NO_UNIT_SYMBOL
+        assert u.definition == cf_units._NO_UNIT_SYMBOL
 
 
 class Test__apply_offset:
@@ -255,7 +257,7 @@ class Test__apply_offset:
 class Test_offset_by_time:
     def test_offset(self):
         u = Unit("hour")
-        v = u.offset_by_time(unit.encode_time(2007, 1, 15, 12, 6, 0))
+        v = u.offset_by_time(cf_units.encode_time(2007, 1, 15, 12, 6, 0))
         assert v == "(3600 s) @ 20070115T120600.00000000 UTC"
 
     def test_not_numerical_offset(self):
@@ -272,13 +274,13 @@ class Test_offset_by_time:
         u = Unit("unknown")
         emsg = "Failed to offset"
         with pytest.raises(ValueError, match=emsg), suppress_errors():
-            u.offset_by_time(unit.encode_time(1970, 1, 1, 0, 0, 0))
+            u.offset_by_time(cf_units.encode_time(1970, 1, 1, 0, 0, 0))
 
     def test_no_unit(self):
         u = Unit("no unit")
         emsg = "Failed to offset"
         with pytest.raises(ValueError, match=emsg), suppress_errors():
-            u.offset_by_time(unit.encode_time(1970, 1, 1, 0, 0, 0))
+            u.offset_by_time(cf_units.encode_time(1970, 1, 1, 0, 0, 0))
 
 
 class Test_invert:
@@ -303,7 +305,7 @@ class Test_invert:
 
 class Test_root:
     def setup_method(self):
-        unit.suppress_errors()
+        cf_units.suppress_errors()
 
     def test_square_root(self):
         u = Unit("volt^2")
@@ -579,7 +581,8 @@ class Test_stringify:
 
     def test___repr___time_unit(self):
         u = Unit(
-            "hours since 2007-01-15 12:06:00", calendar=unit.CALENDAR_GREGORIAN
+            "hours since 2007-01-15 12:06:00",
+            calendar=cf_units.CALENDAR_GREGORIAN,
         )
         exp = "Unit('hours since 2007-01-15 12:06:00', calendar='standard')"
         assert repr(u) == exp
@@ -827,7 +830,7 @@ class Test_title:
         assert u.title(10) == "10 meter"
 
     def test_time_unit(self):
-        u = Unit("hours since epoch", calendar=unit.CALENDAR_STANDARD)
+        u = Unit("hours since epoch", calendar=cf_units.CALENDAR_STANDARD)
         assert u.title(10) == "1970-01-01 10:00:00"
 
 
@@ -930,19 +933,19 @@ class Test__inplace:
 
 class TestTimeEncoding:
     def test_encode_time(self):
-        result = unit.encode_time(2006, 1, 15, 12, 6, 0)
+        result = cf_units.encode_time(2006, 1, 15, 12, 6, 0)
         assert result == 159019560.0
 
     def test_encode_date(self):
-        result = unit.encode_date(2006, 1, 15)
+        result = cf_units.encode_date(2006, 1, 15)
         assert result == 158976000.0
 
     def test_encode_clock(self):
-        result = unit.encode_clock(12, 6, 0)
+        result = cf_units.encode_clock(12, 6, 0)
         assert result == 43560.0
 
     def test_decode_time(self):
-        result = unit.decode_time(158976000.0 + 43560.0)
+        result = cf_units.decode_time(158976000.0 + 43560.0)
         year, month, day, hour, min, sec, res = result
         assert (year, month, day, hour, min, sec) == (2006, 1, 15, 12, 6, 0)
 
@@ -950,7 +953,8 @@ class TestTimeEncoding:
 class TestNumsAndDates:
     def test_num2date(self):
         u = Unit(
-            "hours since 2010-11-02 12:00:00", calendar=unit.CALENDAR_GREGORIAN
+            "hours since 2010-11-02 12:00:00",
+            calendar=cf_units.CALENDAR_GREGORIAN,
         )
         res = u.num2date(1)
         assert str(res) == "2010-11-02 13:00:00"
@@ -959,7 +963,8 @@ class TestNumsAndDates:
 
     def test_num2date_py_datetime_type(self):
         u = Unit(
-            "hours since 2010-11-02 12:00:00", calendar=unit.CALENDAR_STANDARD
+            "hours since 2010-11-02 12:00:00",
+            calendar=cf_units.CALENDAR_STANDARD,
         )
         res = u.num2date(1, only_use_cftime_datetimes=False)
         assert str(res) == "2010-11-02 13:00:00"
@@ -967,7 +972,8 @@ class TestNumsAndDates:
 
     def test_num2date_wrong_calendar(self):
         u = Unit(
-            "hours since 2010-11-02 12:00:00", calendar=unit.CALENDAR_360_DAY
+            "hours since 2010-11-02 12:00:00",
+            calendar=cf_units.CALENDAR_360_DAY,
         )
         with pytest.raises(
             ValueError, match="illegal calendar or reference date"
@@ -980,14 +986,16 @@ class TestNumsAndDates:
 
     def test_date2num(self):
         u = Unit(
-            "hours since 2010-11-02 12:00:00", calendar=unit.CALENDAR_STANDARD
+            "hours since 2010-11-02 12:00:00",
+            calendar=cf_units.CALENDAR_STANDARD,
         )
         d = datetime.datetime(2010, 11, 2, 13, 0, 0)
         assert str(u.num2date(u.date2num(d))) == "2010-11-02 13:00:00"
 
     def test_num2pydate_simple(self):
         u = Unit(
-            "hours since 2010-11-02 12:00:00", calendar=unit.CALENDAR_STANDARD
+            "hours since 2010-11-02 12:00:00",
+            calendar=cf_units.CALENDAR_STANDARD,
         )
         result = u.num2pydate(1)
         expected = datetime.datetime(2010, 11, 2, 13)
@@ -996,7 +1004,8 @@ class TestNumsAndDates:
 
     def test_num2pydate_wrong_calendar(self):
         u = Unit(
-            "hours since 2010-11-02 12:00:00", calendar=unit.CALENDAR_360_DAY
+            "hours since 2010-11-02 12:00:00",
+            calendar=cf_units.CALENDAR_360_DAY,
         )
         with pytest.raises(
             ValueError, match="illegal calendar or reference date"
@@ -1007,31 +1016,31 @@ class TestNumsAndDates:
 class Test_as_unit:
     def test_already_unit(self):
         u = Unit("m")
-        result = unit.as_unit(u)
+        result = cf_units.as_unit(u)
         assert result is u
 
     def test_known_unit_str(self):
         u_str = "m"
         expected = Unit("m")
-        result = unit.as_unit(u_str)
+        result = cf_units.as_unit(u_str)
         assert expected == result
 
     def test_not_unit_str(self):
         u_str = "wibble"
         emsg = "Failed to parse unit"
         with pytest.raises(ValueError, match=emsg):
-            unit.as_unit(u_str)
+            cf_units.as_unit(u_str)
 
     def test_unknown_str(self):
         u_str = "unknown"
         expected = Unit("unknown")
-        result = unit.as_unit(u_str)
+        result = cf_units.as_unit(u_str)
         assert expected == result
 
     def test_no_unit_str(self):
         u_str = "no_unit"
         expected = Unit("no_unit")
-        result = unit.as_unit(u_str)
+        result = cf_units.as_unit(u_str)
         assert expected == result
 
 
