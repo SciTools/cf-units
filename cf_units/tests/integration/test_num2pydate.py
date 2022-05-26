@@ -24,7 +24,3 @@ class Test:
             ValueError, match="illegal calendar or reference date"
         ):
             num2pydate(1, "days since 1970-01-01", calendar="360_day")
-
-
-if __name__ == "__main__":
-    pytest.main([__file__])

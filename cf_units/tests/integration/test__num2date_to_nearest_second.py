@@ -339,7 +339,3 @@ class Test:
         ]  # rounded up to this
 
         self.check_timedelta(nums, units, expected)
-
-
-if __name__ == "__main__":
-    pytest.main([__file__])

@@ -23,7 +23,3 @@ class Test:
                 only_use_cftime_datetimes=False,
                 only_use_python_datetimes=True,
             )
-
-
-if __name__ == "__main__":
-    pytest.main([__file__])

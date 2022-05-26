@@ -131,7 +131,3 @@ class TestLicenseHeaders:
             raise AssertionError(
                 "There were license header failures. See stdout."
             )
-
-
-if __name__ == "__main__":
-    pytest.main([__file__])

@@ -7,8 +7,6 @@
 
 import copy
 
-import pytest
-
 from cf_units import Unit, as_unit
 
 
@@ -60,7 +58,3 @@ class TestAll:
         target = copy.copy(unit)
         result = as_unit(unit)
         self._assert_unit_equal(result, target)
-
-
-if __name__ == "__main__":
-    pytest.main([__file__])

@@ -10,7 +10,6 @@ import datetime
 import cftime
 import numpy as np
 import numpy.ma as ma
-import pytest
 
 from cf_units import _discard_microsecond as discard_microsecond
 
@@ -116,7 +115,3 @@ class Test__falsy:
                 assert expected[i] is actual[i]
             else:
                 assert expected[i] == actual[i]
-
-
-if __name__ == "__main__":
-    pytest.main([__file__])

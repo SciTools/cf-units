@@ -1082,7 +1082,3 @@ class Test_is_vertical:
     def test_no_unit(self):
         u = Unit("no_unit")
         assert not u.is_vertical()
-
-
-if __name__ == "__main__":
-    pytest.main([__file__])

@@ -307,7 +307,3 @@ class Test_convert:
         res = np.empty_like(arr)
         _ud.convert_doubles(self.converter, arr, res)
         np.testing.assert_array_almost_equal(arr * self.factor, res)
-
-
-if __name__ == "__main__":
-    pytest.main([__file__])

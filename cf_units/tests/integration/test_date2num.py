@@ -69,7 +69,3 @@ class Test:
         exp_emsg = 'interval of "months", "years" .* got "years".'
         with pytest.raises(ValueError, match=exp_emsg):
             date2num(date, unit, self.calendar)
-
-
-if __name__ == "__main__":
-    pytest.main([__file__])

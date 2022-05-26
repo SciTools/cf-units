@@ -305,7 +305,3 @@ class Test_format:
         # constructed correctly when using pytest.
         unit = Unit.__new__(Unit)
         assert unit.format() == "unknown"
-
-
-if __name__ == "__main__":
-    pytest.main([__file__])
