@@ -22,13 +22,13 @@ https://conda.anaconda.org/conda-forge/linux-64/ncurses-6.3-h27087fc_1.tar.bz2#4
 https://conda.anaconda.org/conda-forge/linux-64/openssl-1.1.1o-h166bdaf_0.tar.bz2#6172048796b123e542945d998f5150b7
 https://conda.anaconda.org/conda-forge/linux-64/xz-5.2.5-h516909a_1.tar.bz2#33f601066901f3e1a85af3522a8113f9
 https://conda.anaconda.org/conda-forge/linux-64/yaml-0.2.5-h7f98852_2.tar.bz2#4cb3ad778ec2d5a7acbdf254eb1c42ae
-https://conda.anaconda.org/conda-forge/linux-64/libblas-3.9.0-14_linux64_openblas.tar.bz2#fb31fbbde682414550bbe15e3964420f
-https://conda.anaconda.org/conda-forge/linux-64/readline-8.1-h46c0cb4_0.tar.bz2#5788de3c8d7a7d64ac56c784c4ef48e6
+https://conda.anaconda.org/conda-forge/linux-64/libblas-3.9.0-15_linux64_openblas.tar.bz2#04eb983975a1be3e57d6d667414cd774
+https://conda.anaconda.org/conda-forge/linux-64/readline-8.1.2-h0f457ee_0.tar.bz2#db2ebbe2943aae81ed051a6a9af8e0fa
 https://conda.anaconda.org/conda-forge/linux-64/tk-8.6.12-h27826a3_0.tar.bz2#5b8c42eb62e9fc961af70bdd6a26e168
 https://conda.anaconda.org/conda-forge/linux-64/udunits2-2.2.28-hc3e0081_0.tar.bz2#d4c341e0379c31e9e781d4f204726867
 https://conda.anaconda.org/conda-forge/linux-64/zlib-1.2.12-h166bdaf_0.tar.bz2#c6b89248778ae9a05320f19eb212ad90
-https://conda.anaconda.org/conda-forge/linux-64/libcblas-3.9.0-14_linux64_openblas.tar.bz2#1b41ea4c32014d878e84de4e5690df7a
-https://conda.anaconda.org/conda-forge/linux-64/liblapack-3.9.0-14_linux64_openblas.tar.bz2#13367ebd0243a949cee7564b13c3cd42
+https://conda.anaconda.org/conda-forge/linux-64/libcblas-3.9.0-15_linux64_openblas.tar.bz2#f45968428e445fd0c6472b561145812a
+https://conda.anaconda.org/conda-forge/linux-64/liblapack-3.9.0-15_linux64_openblas.tar.bz2#b7078220384b8bf8db1a45e66412ac4f
 https://conda.anaconda.org/conda-forge/linux-64/sqlite-3.38.5-h4ff8645_0.tar.bz2#a1448f0c31baec3946d2dcf09f905c9e
 https://conda.anaconda.org/conda-forge/linux-64/python-3.8.13-h582c2e5_0_cpython.tar.bz2#8ec74710472994e2411a8020fa8589ce
 https://conda.anaconda.org/conda-forge/noarch/alabaster-0.7.12-py_0.tar.bz2#2489a97287f90176ecdc3ca982b4b0a0
@@ -73,7 +73,7 @@ https://conda.anaconda.org/conda-forge/noarch/packaging-21.3-pyhd8ed1ab_0.tar.bz
 https://conda.anaconda.org/conda-forge/linux-64/pluggy-1.0.0-py38h578d9bd_3.tar.bz2#6ce4ce3d4490a56eb33b52c179609193
 https://conda.anaconda.org/conda-forge/linux-64/pysocks-1.7.1-py38h578d9bd_5.tar.bz2#11113c7e50bb81f30762fe8325f305e1
 https://conda.anaconda.org/conda-forge/linux-64/pyyaml-6.0-py38h0a891b7_4.tar.bz2#ba24ff01bb38c5cd5be54b45ef685db3
-https://conda.anaconda.org/conda-forge/linux-64/setuptools-62.3.2-py38h578d9bd_0.tar.bz2#8b04fc38afd584d2531e630e1a59abd9
+https://conda.anaconda.org/conda-forge/linux-64/setuptools-62.3.4-py38h578d9bd_0.tar.bz2#c58b7548636be9acefa9ba579e5590a4
 https://conda.anaconda.org/conda-forge/linux-64/virtualenv-20.14.1-py38h578d9bd_0.tar.bz2#41427ff3fd8d35e5ab1cdcec4d94ea6b
 https://conda.anaconda.org/conda-forge/linux-64/brotlipy-0.7.0-py38h0a891b7_1004.tar.bz2#9fcaaca218dcfeb8da806d4fd4824aa0
 https://conda.anaconda.org/conda-forge/linux-64/cftime-1.6.0-py38h71d37f0_1.tar.bz2#16d4a68061bf898fa4126cf213ebb14e
@@ -92,6 +92,6 @@ https://conda.anaconda.org/conda-forge/noarch/setuptools_scm-6.4.2-hd8ed1ab_0.ta
 https://conda.anaconda.org/conda-forge/linux-64/pre-commit-2.19.0-py38h578d9bd_0.tar.bz2#aa6a241a741c27c9560fd3cebb3f43ce
 https://conda.anaconda.org/conda-forge/noarch/setuptools_scm_git_archive-1.1-py_0.tar.bz2#014b38e90bea056258c2495dabbf6d56
 https://conda.anaconda.org/conda-forge/noarch/urllib3-1.26.9-pyhd8ed1ab_0.tar.bz2#0ea179ee251aa7100807c35bc0252693
-https://conda.anaconda.org/conda-forge/noarch/requests-2.27.1-pyhd8ed1ab_0.tar.bz2#7c1c427246b057b8fa97200ecdb2ed62
+https://conda.anaconda.org/conda-forge/noarch/requests-2.28.0-pyhd8ed1ab_0.tar.bz2#80c4854bb29f39f202819c4d4294d7c5
 https://conda.anaconda.org/conda-forge/noarch/codecov-2.1.11-pyhd3deb0d_0.tar.bz2#9c661c2c14b4667827218402e6624ad5
 https://conda.anaconda.org/conda-forge/noarch/sphinx-5.0.1-pyh6c4a22f_0.tar.bz2#6b274a73ef9f4634b03fb6f90e784a4f
