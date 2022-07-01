@@ -13,6 +13,8 @@ on:
   pull_request:
 
   push:
+    tags:
+      - "v*"
     branches-ignore:
       - "conda-lock-auto-update"
       - "pre-commit-ci-update-config"
