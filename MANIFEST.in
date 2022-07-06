@@ -6,3 +6,4 @@ include CHANGES COPYING COPYING.LESSER INSTALL
 exclude cf_units/etc/site.cfg
 graft requirements
 prune .github
+exclude cf_units/_version.py
