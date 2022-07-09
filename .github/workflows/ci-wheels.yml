@@ -25,13 +25,24 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build_linux:
+  build_bdist:
     name: "Build bdist ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest]
-        arch: [x86_64]
+        os: [ubuntu-latest, macos-latest]
+        include:
+        - os: ubuntu-latest
+          arch: x86_64
+          incdir: /usr/include/udunits2
+          libdir: /usr/lib64
+          xml_path: /usr/share/udunits/udunits2.xml
+        - os: macos-latest
+          arch: x86_64
+          incdir: /usr/local/Cellar/udunits/2.2.28/include
+          libdir: /usr/local/Cellar/udunits/2.2.28/lib
+          xml_path: /usr/local/Cellar/udunits/2.2.28/share/udunits/udunits2-common.xml
 
     steps:
     - uses: actions/checkout@v3
@@ -46,13 +57,14 @@ jobs:
         CIBW_BUILD_FRONTEND: build
         CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
         CIBW_BEFORE_BUILD_LINUX: yum install -y udunits2-devel
+        CIBW_BEFORE_BUILD_MACOS: brew install udunits
         CIBW_TEST_REQUIRES: pytest
         CIBW_TEST_COMMAND: >
           python -c 'import cf_units; print(f"cf-units v{cf_units.__version__}")' &&
           python -m pytest --pyargs cf_units
-        UDUNITS2_INCDIR: /usr/include/udunits2
-        UDUNITS2_LIBDIR: /usr/lib64
-        UDUNITS2_XML_PATH: /usr/share/udunits/udunits2.xml
+        UDUNITS2_INCDIR: ${{ matrix.incdir }}
+        UDUNITS2_LIBDIR: ${{ matrix.libdir }}
+        UDUNITS2_XML_PATH: ${{ matrix.xml_path }}
         CIBW_ENVIRONMENT_PASS_LINUX: UDUNITS2_INCDIR UDUNITS2_LIBDIR UDUNITS2_XML_PATH
 
     - uses: actions/upload-artifact@v3
@@ -61,38 +73,38 @@ jobs:
         path: ${{ github.workspace }}/wheelhouse/*.whl
 
 
-  build_macos:
-    name: "Build bdist ${{ matrix.os }}"
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [macos-latest]
-        arch: [x86_64]
+  # build_macos:
+  #   name: "Build bdist ${{ matrix.os }}"
+  #   runs-on: ${{ matrix.os }}
+  #   strategy:
+  #     matrix:
+  #       os: [macos-latest]
+  #       arch: [x86_64]
 
-    steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #     with:
+  #       fetch-depth: 0
 
-    - name: "Building ${{ matrix.os }} (${{ matrix.arch }}) wheels"
-      uses: pypa/cibuildwheel@v2.8.0
-      env:
-        CIBW_SKIP: "cp36-* cp37-* pp*"
-        CIBW_ARCHS: ${{ matrix.arch }}
-        CIBW_BUILD_FRONTEND: build
-        CIBW_BEFORE_BUILD_MACOS: brew install udunits
-        CIBW_TEST_REQUIRES: pytest
-        CIBW_TEST_COMMAND: >
-          python -c 'import cf_units; print(f"cf-units v{cf_units.__version__}")' &&
-          python -m pytest --pyargs cf_units
-        UDUNITS2_INCDIR: /usr/local/Cellar/udunits/2.2.28/include
-        UDUNITS2_LIBDIR: /usr/local/Cellar/udunits/2.2.28/lib
-        UDUNITS2_XML_PATH: /usr/local/Cellar/udunits/2.2.28/share/udunits/udunits2-common.xml
+  #   - name: "Building ${{ matrix.os }} (${{ matrix.arch }}) wheels"
+  #     uses: pypa/cibuildwheel@v2.8.0
+  #     env:
+  #       CIBW_SKIP: "cp36-* cp37-* pp*"
+  #       CIBW_ARCHS: ${{ matrix.arch }}
+  #       CIBW_BUILD_FRONTEND: build
+  #       CIBW_BEFORE_BUILD_MACOS: brew install udunits
+  #       CIBW_TEST_REQUIRES: pytest
+  #       CIBW_TEST_COMMAND: >
+  #         python -c 'import cf_units; print(f"cf-units v{cf_units.__version__}")' &&
+  #         python -m pytest --pyargs cf_units
+  #       UDUNITS2_INCDIR: /usr/local/Cellar/udunits/2.2.28/include
+  #       UDUNITS2_LIBDIR: /usr/local/Cellar/udunits/2.2.28/lib
+  #       UDUNITS2_XML_PATH: /usr/local/Cellar/udunits/2.2.28/share/udunits/udunits2-common.xml
 
-    - uses: actions/upload-artifact@v3
-      with:
-        name: pypi-artifacts
-        path: ${{ github.workspace }}/wheelhouse/*.whl
+  #   - uses: actions/upload-artifact@v3
+  #     with:
+  #       name: pypi-artifacts
+  #       path: ${{ github.workspace }}/wheelhouse/*.whl
 
 
   build_sdist:
@@ -115,7 +127,7 @@ jobs:
 
 
   show-artifacts:
-    needs: [build_linux, build_macos, build_sdist]
+    needs: [build_bdist, build_sdist]
     name: "Show artifacts"
     runs-on: ubuntu-latest
     steps:
@@ -130,7 +142,7 @@ jobs:
 
 
   publish-artifacts-test-pypi:
-    needs: [build_linux, build_macos, build_sdist]
+    needs: [build_bdist, build_sdist]
     name: "Publish to Test PyPI"
     runs-on: ubuntu-latest
     # upload to Test PyPI for every commit on main branch
@@ -151,7 +163,7 @@ jobs:
 
 
   publish-artifacts-pypi:
-    needs: [build_linux, build_macos, build_sdist]
+    needs: [build_bdist, build_sdist]
     name: "Publish to PyPI"
     runs-on: ubuntu-latest
     # upload to PyPI for every tag starting with 'v'
