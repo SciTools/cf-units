@@ -65,7 +65,6 @@ jobs:
     name: "Build bdist ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false
       matrix:
         os: [macos-latest]
         arch: [x86_64]
