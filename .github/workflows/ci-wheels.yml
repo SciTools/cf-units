@@ -26,19 +26,19 @@ concurrency:
 
 jobs:
   build_bdist_linux:
-    name: "Build bdist ${{ matrix.arch }} ${{ matrix.os }}"
+    name: "Build bdist ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest]
-        arch: [auto64]
+        arch: [x86_64]
 
     steps:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
-    - name: "Building bdist"
+    - name: "Building ${{ matrix.os }} ${{ matrix.arch }} wheels"
       uses: pypa/cibuildwheel@v2.8.0
       env:
         CIBW_SKIP: "cp36-* cp37-* pp* *-musllinux*"
@@ -62,11 +62,12 @@ jobs:
 
 
   build_bdist_macos:
-    name: "Build bdist ${{ matrix.arch }} ${{ matrix.os }}"
+    name: "Build bdist ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        os: [macos-latest]
+        os: [macos-11, macos-12]
         arch: [x86_64]
 
     steps:
@@ -74,7 +75,7 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: "Building bdist"
+    - name: "Building ${{ matrix.os }} ${{ matrix.arch }} wheels"
       uses: pypa/cibuildwheel@v2.8.0
       env:
         CIBW_SKIP: "cp36-* cp37-* pp*"
