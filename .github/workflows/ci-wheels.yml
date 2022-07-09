@@ -25,13 +25,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build_bdist:
+  build_bdist_linux:
     name: "Build bdist ${{ matrix.arch }} ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false
       matrix:
-        # TBD: extend to support osx and windows
         os: [ubuntu-latest]
         arch: [auto64]
 
@@ -63,6 +61,41 @@ jobs:
         path: ${{ github.workspace }}/wheelhouse/*.whl
 
 
+  build_bdist_macos:
+    name: "Build bdist ${{ matrix.arch }} ${{ matrix.os }}"
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest]
+        arch: [x86_64]
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: "Building bdist"
+      uses: pypa/cibuildwheel@v2.8.0
+      env:
+        CIBW_SKIP: "cp36-* cp37-* pp*"
+        CIBW_ARCHS: ${{ matrix.arch }}
+        CIBW_BUILD_FRONTEND: build
+        CIBW_BEFORE_BUILD_MACOS: brew install udunits
+        CIBW_TEST_REQUIRES: pytest
+        CIBW_TEST_COMMAND: >
+          python -c 'import cf_units; print(f"cf-units v{cf_units.__version__}")' &&
+          python -m pytest --pyargs cf_units
+        UDUNITS2_INCDIR: /usr/local/Cellar/udunits/2.2.28/include
+        UDUNITS2_LIBDIR: /usr/local/Cellar/udunits/2.2.28/lib
+        UDUNITS2_XML_PATH: /usr/local/Cellar/udunits/2.2.28/share/udunits/udunits2-common.xml
+
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: pypi-artifacts
+        path: ${{ github.workspace }}/wheelhouse/*.whl
+
+
   build_sdist:
     name: "Build sdist"
     runs-on: ubuntu-latest
@@ -83,7 +116,7 @@ jobs:
 
 
   show-artifacts:
-    needs: [build_bdist, build_sdist]
+    needs: [build_bdist_linux, build_bdist_macos, build_sdist]
     name: "Show artifacts"
     runs-on: ubuntu-latest
     steps:
@@ -98,7 +131,7 @@ jobs:
 
 
   publish-artifacts-test-pypi:
-    needs: [build_bdist, build_sdist]
+    needs: [build_bdist_linux, build_bdist_macos, build_sdist]
     name: "Publish to Test PyPI"
     runs-on: ubuntu-latest
     # upload to Test PyPI for every commit on main branch
@@ -119,7 +152,7 @@ jobs:
 
 
   publish-artifacts-pypi:
-    needs: [build_bdist, build_sdist]
+    needs: [build_bdist_linux, build_bdist_macos, build_sdist]
     name: "Publish to PyPI"
     runs-on: ubuntu-latest
     # upload to PyPI for every tag starting with 'v'
