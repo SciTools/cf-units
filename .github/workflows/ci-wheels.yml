@@ -31,6 +31,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # TBD: extend to support windows
         os: ["ubuntu", "macos"]
         arch: ["x86_64", "arm64"]
         exclude:
