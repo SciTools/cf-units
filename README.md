@@ -1,6 +1,6 @@
 # [cf-units](https://cf-units.readthedocs.io/en/latest/)
 
-#### Units of measure as defined by the Climate and Forecast (CF) metadata conventions.
+#### Units of measure as defined by the Climate and Forecast (CF) Metadata Conventions.
 
 [comment]: # (https://shields.io/ is a good source of these)
 [![ci-tests](https://github.com/SciTools/cf-units/actions/workflows/ci-tests.yml/badge.svg?branch=main)](https://github.com/SciTools/cf-units/actions/workflows/ci-tests.yml)
@@ -22,7 +22,6 @@
 [![Licence](https://img.shields.io/github/license/SciTools/cf-units)](COPYING)
 [![Contributors](https://img.shields.io/github/contributors/SciTools/cf-units)](https://github.com/SciTools/cf-units/graphs/contributors)
 [![Commits since last release](https://img.shields.io/github/commits-since/SciTools/cf-units/latest.svg)](https://github.com/SciTools/cf-units/commits/main)
-
 
 # Table of Contents
 
