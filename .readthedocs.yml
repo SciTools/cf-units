@@ -10,6 +10,10 @@ build:
       # perform a "git fetch --unshallow" when the cf-units repo
       # becomes incomplete i.e., there is a .git/shallow.
       - git fetch --all
+    pre_install:
+      # create a "common" link to the underlying rtd conda environment,
+      # which maybe named "latest", "stable" or the cf-units version
+      - ln -s ${CONDA_ENVS_PATH}/${CONDA_DEFAULT_ENV} ${CONDA_ENVS_PATH}/common
 
 conda:
   environment: requirements/cf-units.yml
