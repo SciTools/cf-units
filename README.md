@@ -23,7 +23,7 @@
 [![Contributors](https://img.shields.io/github/contributors/SciTools/cf-units)](https://github.com/SciTools/cf-units/graphs/contributors)
 [![Commits since last release](https://img.shields.io/github/commits-since/SciTools/cf-units/latest.svg)](https://github.com/SciTools/cf-units/commits/main)
 
-# Table of Contents
+## Table of Contents
 
 [comment]: # (NOTE: toc auto-generated with
   https://github.com/jonschlinkert/markdown-toc
