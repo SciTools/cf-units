@@ -35,8 +35,8 @@
 
 - [Overview](#overview)
   - [Example](#example)
-- [Get in touch](#get-in-touch)
-- [Credits, copyright and license](#credits-copyright-and-license)
+- [Get in Touch](#get-in-touch)
+- [Credits, Copyright and License](#credits-copyright-and-license)
 
 ## Overview
 
