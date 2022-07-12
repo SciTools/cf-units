@@ -77,7 +77,7 @@
 </a>
 </p>
 
-# Table of contents
+# Table of Contents
 
 [comment]: # (NOTE: toc auto-generated with
   https://github.com/jonschlinkert/markdown-toc
@@ -110,7 +110,7 @@ Documentation can be found at <https://cf-units.readthedocs.io/en/latest/>.
     >>> m.convert(1500, km)
     1.5
 
-## Get in touch
+## Get in Touch
 
 - Questions, ideas, general discussion or announcements
   of related projects: use the
@@ -119,7 +119,7 @@ Documentation can be found at <https://cf-units.readthedocs.io/en/latest/>.
   [submit a GitHub issue](https://github.com/SciTools/cf-units/issues).
 - Suggest features: see our [contributing guide](.github/CONTRIBUTING.md).
 
-## Credits, copyright and license
+## Credits, Copyright and License
 
 cf-units is developed collaboratively under the SciTools umbrella.
 
