@@ -6,7 +6,9 @@ build:
     python: mambaforge-4.10
   jobs:
     post_checkout:
-      - git fetch --unshallow
+      # reference: https://github.com/SciTools/cf-units/pull/272
+      # perform a "git fetch --unshallow" when the cf-units repo
+      # becomes incomplete i.e., there is a .git/shallow.
       - git fetch --all
 
 conda:
