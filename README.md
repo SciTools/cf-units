@@ -1,26 +1,29 @@
 # [cf-units](https://cf-units.readthedocs.io/en/latest/)
 
-#### Units of measure as defined by the Climate and Forecast (CF) metadata conventions.
+#### Units of measure as defined by the Climate and Forecast (CF) Metadata Conventions.
 
 [comment]: # (https://shields.io/ is a good source of these)
-[![Build Status](https://api.cirrus-ci.com/github/SciTools/cf-units.svg)](https://cirrus-ci.com/github/SciTools/cf-units)
+[![ci-tests](https://github.com/SciTools/cf-units/actions/workflows/ci-tests.yml/badge.svg?branch=main)](https://github.com/SciTools/cf-units/actions/workflows/ci-tests.yml)
+[![ci-wheels](https://github.com/SciTools/cf-units/actions/workflows/ci-wheels.yml/badge.svg?branch=main)](https://github.com/SciTools/cf-units/actions/workflows/ci-wheels.yml)
+[![ci-locks](https://github.com/SciTools/cf-units/actions/workflows/ci-locks.yml/badge.svg?branch=main)](https://github.com/SciTools/cf-units/actions/workflows/ci-locks.yml)
+[![Documentation Status](https://readthedocs.org/projects/cf-units/badge/?version=latest)](https://cf-units.readthedocs.io/en/latest/?badge=latest)
 [![Coverage Status](https://codecov.io/gh/SciTools/cf-units/branch/main/graph/badge.svg?token=6LlYlyTUZG)](https://codecov.io/gh/SciTools/cf-units)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/SciTools/cf-units/main.svg)](https://results.pre-commit.ci/latest/github/SciTools/cf-units/main)
-,
+\
 [![conda-forge downloads](https://img.shields.io/conda/vn/conda-forge/cf-units?color=orange&label=conda-forge&logo=conda-forge&logoColor=white)](https://anaconda.org/conda-forge/cf-units)
 [![PyPI](https://img.shields.io/pypi/v/cf-units?color=orange&label=pypi&logo=python&logoColor=white)](https://pypi.org/project/cf-units/)
 [![Latest version](https://img.shields.io/github/tag/SciTools/cf-units)](https://github.com/SciTools/cf-units/releases)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3723086.svg)](https://doi.org/10.5281/zenodo.3723086)
-,
+\
 [![Black](https://img.shields.io/badge/code%20style-black-000000)](https://github.com/psf/black)
 [![Flake8](https://img.shields.io/badge/lint-flake8-lightgrey)](https://github.com/PyCQA/flake8)
 [![isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
-,
+\
 [![Licence](https://img.shields.io/github/license/SciTools/cf-units)](COPYING)
 [![Contributors](https://img.shields.io/github/contributors/SciTools/cf-units)](https://github.com/SciTools/cf-units/graphs/contributors)
 [![Commits since last release](https://img.shields.io/github/commits-since/SciTools/cf-units/latest.svg)](https://github.com/SciTools/cf-units/commits/main)
 
-# Table of contents
+## Table of Contents
 
 [comment]: # (NOTE: toc auto-generated with
   https://github.com/jonschlinkert/markdown-toc
@@ -53,7 +56,7 @@ Documentation can be found at <https://cf-units.readthedocs.io/en/latest/>.
     >>> m.convert(1500, km)
     1.5
 
-## Get in touch
+## Get in Touch
 
 - Questions, ideas, general discussion or announcements
   of related projects: use the
@@ -62,7 +65,7 @@ Documentation can be found at <https://cf-units.readthedocs.io/en/latest/>.
   [submit a GitHub issue](https://github.com/SciTools/cf-units/issues).
 - Suggest features: see our [contributing guide](.github/CONTRIBUTING.md).
 
-## Credits, copyright and license
+## Credits, Copyright and License
 
 cf-units is developed collaboratively under the SciTools umbrella.
 
