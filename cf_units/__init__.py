@@ -964,36 +964,6 @@ class Unit(_OrderedHashable):
         """
         return self.calendar is not None
 
-    def is_long_time_interval(self):
-        """
-        Defines whether this unit describes a time unit with a long time
-        interval ("months" or "years"). These long time intervals *are*
-        supported by `UDUNITS2` but are not supported by `cftime`. This
-        discrepancy means we cannot run self.num2date() on a time unit with
-        a long time interval.
-
-        Returns:
-            Boolean.
-
-        For example:
-
-            >>> import cf_units
-            >>> u = cf_units.Unit('days since epoch')
-            >>> u.is_long_time_interval()
-            False
-            >>> u = cf_units.Unit('years since epoch')
-            >>> u.is_long_time_interval()
-            True
-
-        """
-        result = False
-        long_time_intervals = ["year", "month"]
-        if self.is_time_reference():
-            result = any(
-                interval in self.origin for interval in long_time_intervals
-            )
-        return result
-
     def title(self, value):
         """
         Return the unit value as a title string.
@@ -1928,15 +1898,6 @@ class Unit(_OrderedHashable):
         """
         if self.calendar is None:
             raise ValueError("Unit has undefined calendar")
-
-        # `cftime` cannot parse long time intervals ("months" or "years").
-        if self.is_long_time_interval():
-            interval = self.origin.split(" ")[0]
-            emsg = (
-                'Time units with interval of "months", "years" '
-                '(or singular of these) cannot be processed, got "{!s}".'
-            )
-            raise ValueError(emsg.format(interval))
 
         #
         # ensure to strip out non-parsable 'UTC' postfix, which

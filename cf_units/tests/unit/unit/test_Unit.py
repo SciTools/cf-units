@@ -56,11 +56,6 @@ class Test_change_calendar:
         # the same object.
         assert result is not u
 
-    def test_long_time_interval(self):
-        u = Unit("months since 1970-01-01", calendar="standard")
-        with pytest.raises(ValueError, match="cannot be processed"):
-            u.change_calendar("proleptic_gregorian")
-
     def test_wrong_calendar(self):
         u = Unit("days since 1900-01-01", calendar="360_day")
         with pytest.raises(
@@ -271,31 +266,6 @@ class Test_convert__masked_array:
             self.degs_array, self.rad, ctype=cf_units.FLOAT64
         )
         np.testing.assert_array_almost_equal(self.rads_array, result)
-
-
-class Test_is_long_time_interval:
-    def test_short_time_interval(self):
-        # A short time interval is a time interval from seconds to days.
-        unit = Unit("seconds since epoch")
-        result = unit.is_long_time_interval()
-        assert not result
-
-    def test_long_time_interval(self):
-        # A long time interval is a time interval of months or years.
-        unit = Unit("months since epoch")
-        result = unit.is_long_time_interval()
-        assert result
-
-    def test_calendar(self):
-        # Check that a different calendar does not affect the result.
-        unit = Unit("months since epoch", calendar=cf_units.CALENDAR_360_DAY)
-        result = unit.is_long_time_interval()
-        assert result
-
-    def test_not_time_unit(self):
-        unit = Unit("K")
-        result = unit.is_long_time_interval()
-        assert not result
 
 
 class Test_format:
