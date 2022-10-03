@@ -122,7 +122,7 @@ jobs:
     - name: "Push pull-request"
       id: cpr
       # v3.12.1 (release date 31 Jan 2022)
-      uses: peter-evans/create-pull-request@171dd555b9ab6b18fa02519fdfacbb8bf671e1b4
+      uses: peter-evans/create-pull-request@671dc9c9e0c2d73f07fa45a3eb0220e1622f0c5f
       with:
         token: ${{ steps.generate-token.outputs.token }}
         add-paths: ${{ github.workspace }}/requirements/locks/*.txt
