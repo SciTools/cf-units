@@ -41,7 +41,7 @@ https://conda.anaconda.org/conda-forge/noarch/pyparsing-3.0.9-pyhd8ed1ab_0.tar.b
 https://conda.anaconda.org/conda-forge/noarch/pysocks-1.7.1-pyha2e5f31_6.tar.bz2#2a7de29fb590ca14b5243c4c812c8025
 https://conda.anaconda.org/conda-forge/osx-64/python_abi-3.8-2_cp38.tar.bz2#156803acb0247c263c9586f190b72f1c
 https://conda.anaconda.org/conda-forge/noarch/pytz-2022.2.1-pyhd8ed1ab_0.tar.bz2#974bca71d00364630f63f31fa7e059cb
-https://conda.anaconda.org/conda-forge/noarch/setuptools-65.3.0-pyhd8ed1ab_1.tar.bz2#a64c8af7be7a6348c1d9e530f88fa4da
+https://conda.anaconda.org/conda-forge/noarch/setuptools-65.4.0-pyhd8ed1ab_0.tar.bz2#1fd586687cb05aac5655143c104df8f6
 https://conda.anaconda.org/conda-forge/noarch/snowballstemmer-2.2.0-pyhd8ed1ab_0.tar.bz2#4d22a9315e78c6827f806065957d566e
 https://conda.anaconda.org/conda-forge/noarch/sphinxcontrib-applehelp-1.0.2-py_0.tar.bz2#20b2eaeaeea4ef9a9a0d99770620fd09
 https://conda.anaconda.org/conda-forge/noarch/sphinxcontrib-devhelp-1.0.2-py_0.tar.bz2#68e01cac9d38d0e717cd5c87bc3d2cc9
@@ -57,7 +57,7 @@ https://conda.anaconda.org/conda-forge/noarch/zipp-3.8.1-pyhd8ed1ab_0.tar.bz2#a3
 https://conda.anaconda.org/conda-forge/osx-64/antlr-python-runtime-4.7.2-py38h50d1736_1003.tar.bz2#2bec12040acb2867173db5d4f6bd4d62
 https://conda.anaconda.org/conda-forge/noarch/babel-2.10.3-pyhd8ed1ab_0.tar.bz2#72f1c6d03109d7a70087bc1d029a8eda
 https://conda.anaconda.org/conda-forge/osx-64/cffi-1.15.1-py38h86886aa_0.tar.bz2#fe186a0e00ae437c95dac9df968bd5b4
-https://conda.anaconda.org/conda-forge/osx-64/coverage-6.4.4-py38h35d34b1_0.tar.bz2#2a1500e9ca5d8a6f3bf404fe56218de5
+https://conda.anaconda.org/conda-forge/osx-64/coverage-6.5.0-py38hef030d1_0.tar.bz2#2d05150cf1e6ffc2599b259ff557e625
 https://conda.anaconda.org/conda-forge/osx-64/cython-0.29.32-py38h1c67a95_0.tar.bz2#e762af623066e13f0550ab77509a64c6
 https://conda.anaconda.org/conda-forge/osx-64/docutils-0.19-py38h50d1736_0.tar.bz2#3b52878fc2fbc4c72dcc92622a3c09d4
 https://conda.anaconda.org/conda-forge/osx-64/importlib-metadata-4.11.4-py38h50d1736_0.tar.bz2#0d6e3d579cdc3b3ec70bb174cf8802ba
@@ -82,10 +82,10 @@ https://conda.anaconda.org/conda-forge/osx-64/ukkonen-1.0.1-py38h8b7791e_2.tar.b
 https://conda.anaconda.org/conda-forge/osx-64/cftime-1.6.2-py38hbd87e4b_0.tar.bz2#684a7ba208546f6ea8a5ed3ad255e0ff
 https://conda.anaconda.org/conda-forge/noarch/identify-2.5.5-pyhd8ed1ab_0.tar.bz2#985ef0c4ed7a26731c419818080ef6ce
 https://conda.anaconda.org/conda-forge/noarch/pyopenssl-22.0.0-pyhd8ed1ab_1.tar.bz2#2e7e3630919d29c8216bfa2cd643d79e
-https://conda.anaconda.org/conda-forge/noarch/pytest-cov-3.0.0-pyhd8ed1ab_0.tar.bz2#0f7cac11bb696b62d378bde725bfc3eb
+https://conda.anaconda.org/conda-forge/noarch/pytest-cov-4.0.0-pyhd8ed1ab_0.tar.bz2#c9e3f8bfdb9bfc34aa1836a6ed4b25d7
 https://conda.anaconda.org/conda-forge/noarch/setuptools_scm-7.0.5-hd8ed1ab_0.tar.bz2#be83043fc87fff096056e6598a438745
 https://conda.anaconda.org/conda-forge/osx-64/pre-commit-2.20.0-py38h50d1736_0.tar.bz2#b19811792bd179288b59c45e565ae73b
 https://conda.anaconda.org/conda-forge/noarch/urllib3-1.26.11-pyhd8ed1ab_0.tar.bz2#0738978569b10669bdef41c671252dd1
 https://conda.anaconda.org/conda-forge/noarch/requests-2.28.1-pyhd8ed1ab_1.tar.bz2#089382ee0e2dc2eae33a04cc3c2bddb0
 https://conda.anaconda.org/conda-forge/noarch/codecov-2.1.11-pyhd3deb0d_0.tar.bz2#9c661c2c14b4667827218402e6624ad5
-https://conda.anaconda.org/conda-forge/noarch/sphinx-5.2.1-pyhd8ed1ab_0.tar.bz2#e35fcd36344cd33d66cf3c768c8435ff
+https://conda.anaconda.org/conda-forge/noarch/sphinx-5.2.3-pyhd8ed1ab_0.tar.bz2#8adbb7dd144765e2de4ad4159c740d16
