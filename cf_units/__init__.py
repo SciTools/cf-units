@@ -15,6 +15,7 @@ See also: `UDUNITS-2
 """
 
 import copy
+import math
 from contextlib import contextmanager
 
 import cftime
@@ -32,7 +33,7 @@ from cf_units._udunits2 import (
 
 from . import config
 from ._version import version as __version__  # noqa: F401
-from .util import _OrderedHashable, approx_equal
+from .util import _OrderedHashable
 
 __all__ = [
     "CALENDARS",
@@ -1663,15 +1664,15 @@ class Unit(_OrderedHashable):
             # But if the power is of the form 1/N, where N is an integer
             # (within a certain acceptable accuracy) then we can find the Nth
             # root.
-            if not approx_equal(power, 0.0) and abs(power) < 1:
-                if not approx_equal(1 / power, round(1 / power)):
+            if not math.isclose(power, 0.0) and abs(power) < 1:
+                if not math.isclose(1 / power, round(1 / power)):
                     raise ValueError("Cannot raise a unit by a decimal.")
                 root = int(round(1 / power))
                 result = self.root(root)
             else:
                 # Failing that, check for powers which are (very nearly) simple
                 # integer values.
-                if not approx_equal(power, round(power)):
+                if not math.isclose(power, round(power)):
                     msg = "Cannot raise a unit by a decimal (got %s)." % power
                     raise ValueError(msg)
                 power = int(round(power))
