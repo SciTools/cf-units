@@ -9,6 +9,7 @@ Miscellaneous utility functions.
 """
 
 import abc
+import warnings
 from collections.abc import Hashable
 
 
@@ -17,7 +18,16 @@ def approx_equal(a, b, max_absolute_error=1e-10, max_relative_error=1e-10):
     Returns whether two numbers are almost equal, allowing for the
     finite precision of floating point numbers.
 
+    .. deprecated:: 3.2.0
+       Instead please use :func:`math.isclose`.
+
     """
+    msg = (
+        "cf_units.util.approx_equal has been deprecated and will be removed.  "
+        "Please use math.isclose instead."
+    )
+    warnings.warn(msg, DeprecationWarning, stacklevel=2)
+
     # Deal with numbers close to zero
     if abs(a - b) < max_absolute_error:
         return True
