@@ -11,15 +11,15 @@ https://conda.anaconda.org/conda-forge/win-64/vc-14.3-h3d8a991_9.tar.bz2#ba28983
 https://conda.anaconda.org/conda-forge/win-64/bzip2-1.0.8-h8ffe710_4.tar.bz2#7c03c66026944073040cb19a4f3ec3c9
 https://conda.anaconda.org/conda-forge/win-64/expat-2.5.0-h1537add_0.tar.bz2#6b20c31bd735d2dd5c79ddb5b3524619
 https://conda.anaconda.org/conda-forge/win-64/libffi-3.4.2-h8ffe710_5.tar.bz2#2c96d1b6915b408893f9472569dee135
-https://conda.anaconda.org/conda-forge/win-64/libsqlite-3.39.4-hcfcfb64_0.tar.bz2#9484be835acbd4ec7920ba013a0cc5bf
+https://conda.anaconda.org/conda-forge/win-64/libsqlite-3.40.0-hcfcfb64_0.tar.bz2#5e5a97795de72f8cc3baf3d9ea6327a2
 https://conda.anaconda.org/conda-forge/win-64/libzlib-1.2.13-hcfcfb64_4.tar.bz2#0cc5c5cc64ee1637f37f8540a175854c
 https://conda.anaconda.org/conda-forge/win-64/openssl-3.0.7-hcfcfb64_0.tar.bz2#a87ab36dc95970e3b4b63b7599bebdbe
-https://conda.anaconda.org/conda-forge/win-64/tbb-2021.6.0-h91493d7_1.tar.bz2#7f9dddcd2f9cc334282e4e9c3f7b41ae
+https://conda.anaconda.org/conda-forge/win-64/tbb-2021.7.0-h91493d7_0.tar.bz2#f57be598137919e4f7e7d159960d66a1
 https://conda.anaconda.org/conda-forge/win-64/tk-8.6.12-h8ffe710_0.tar.bz2#c69a5047cc9291ae40afd4a1ad6f0c0f
 https://conda.anaconda.org/conda-forge/win-64/xz-5.2.6-h8d14728_0.tar.bz2#515d77642eaa3639413c6b1bc3f94219
 https://conda.anaconda.org/conda-forge/win-64/yaml-0.2.5-h8ffe710_2.tar.bz2#adbfb9f45d1004a26763652246a33764
 https://conda.anaconda.org/conda-forge/win-64/mkl-2022.1.0-h6a75c08_874.tar.bz2#2ff89a7337a9636029b4db9466e9f8e3
-https://conda.anaconda.org/conda-forge/win-64/sqlite-3.39.4-hcfcfb64_0.tar.bz2#780e5daa2897f989f46bc73f0e43fa62
+https://conda.anaconda.org/conda-forge/win-64/sqlite-3.40.0-hcfcfb64_0.tar.bz2#c71d4be22d8402e7e17386aeb18b930e
 https://conda.anaconda.org/conda-forge/win-64/udunits2-2.2.28-h892ecd3_0.tar.bz2#dad8b5fae263e4e36d859524a3794801
 https://conda.anaconda.org/conda-forge/win-64/libblas-3.9.0-16_win64_mkl.tar.bz2#d2e6f4e86cee2b4e8c27ff6884ccdc61
 https://conda.anaconda.org/conda-forge/win-64/python-3.9.13-hcf16a7b_0_cpython.tar.bz2#6017838044b4b984cffd2600d31a11de
@@ -30,7 +30,7 @@ https://conda.anaconda.org/conda-forge/noarch/cfgv-3.3.1-pyhd8ed1ab_0.tar.bz2#eb
 https://conda.anaconda.org/conda-forge/noarch/charset-normalizer-2.1.1-pyhd8ed1ab_0.tar.bz2#c1d5b294fbf9a795dec349a6f4d8be8e
 https://conda.anaconda.org/conda-forge/noarch/colorama-0.4.6-pyhd8ed1ab_0.tar.bz2#3faab06a954c2a04039983f2c4a50d99
 https://conda.anaconda.org/conda-forge/noarch/distlib-0.3.6-pyhd8ed1ab_0.tar.bz2#b65b4d50dbd2d50fa0aeac367ec9eed7
-https://conda.anaconda.org/conda-forge/noarch/exceptiongroup-1.0.1-pyhd8ed1ab_0.tar.bz2#e6415d628310f067a205448f43421739
+https://conda.anaconda.org/conda-forge/noarch/exceptiongroup-1.0.4-pyhd8ed1ab_0.tar.bz2#e0734d1f12de77f9daca98bda3428733
 https://conda.anaconda.org/conda-forge/noarch/filelock-3.8.0-pyhd8ed1ab_0.tar.bz2#10f0218dbd493ab2e5dc6759ddea4526
 https://conda.anaconda.org/conda-forge/noarch/idna-3.4-pyhd8ed1ab_0.tar.bz2#34272b248891bddccc64479f9a7fffed
 https://conda.anaconda.org/conda-forge/noarch/imagesize-1.4.1-pyhd8ed1ab_0.tar.bz2#7de5386c8fea29e76b303f37dde4c352
