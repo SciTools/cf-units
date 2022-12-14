@@ -269,7 +269,8 @@ class Test_convert__masked_array:
 
 
 class Test_is_long_time_interval:
-    def test_deprecated(self):
+    @staticmethod
+    def test_deprecated():
         unit = Unit("seconds since epoch")
         with pytest.warns(
             DeprecationWarning, match="This method is no longer needed"
