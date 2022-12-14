@@ -16,6 +16,7 @@ See also: `UDUNITS-2
 
 import copy
 from contextlib import contextmanager
+from warnings import warn
 
 import cftime
 import numpy as np
@@ -963,6 +964,48 @@ class Unit(_OrderedHashable):
 
         """
         return self.calendar is not None
+
+    def is_long_time_interval(self):
+        """
+        Defines whether this unit describes a time unit with a long time
+        interval ("months" or "years"). These long time intervals *are*
+        supported by `UDUNITS2` but are not supported by `cftime`. This
+        discrepancy means we cannot run self.num2date() on a time unit with
+        a long time interval.
+
+        .. deprecated:: 3.2.0
+
+            Invalid long time intervals are now defended against within
+            cftime - do not use this routine, as cftime knows best what it can
+            and cannot support.
+
+        Returns:
+            Boolean.
+
+        For example:
+
+            >>> import cf_units
+            >>> u = cf_units.Unit('days since epoch')
+            >>> u.is_long_time_interval()
+            False
+            >>> u = cf_units.Unit('years since epoch')
+            >>> u.is_long_time_interval()
+            True
+
+        """
+        deprecation = (
+            "This method is no longer needed due to cftime's improved "
+            "handling of long time intervals."
+        )
+        warn(deprecation, DeprecationWarning, stacklevel=2)
+
+        result = False
+        long_time_intervals = ["year", "month"]
+        if self.is_time_reference():
+            result = any(
+                interval in self.origin for interval in long_time_intervals
+            )
+        return result
 
     def title(self, value):
         """

@@ -268,6 +268,38 @@ class Test_convert__masked_array:
         np.testing.assert_array_almost_equal(self.rads_array, result)
 
 
+class Test_is_long_time_interval:
+    def test_deprecated(self):
+        unit = Unit("seconds since epoch")
+        with pytest.warns(
+            DeprecationWarning, match="This method is no longer needed"
+        ):
+            _ = unit.is_long_time_interval()
+
+    def test_short_time_interval(self):
+        # A short time interval is a time interval from seconds to days.
+        unit = Unit("seconds since epoch")
+        result = unit.is_long_time_interval()
+        assert not result
+
+    def test_long_time_interval(self):
+        # A long time interval is a time interval of months or years.
+        unit = Unit("months since epoch")
+        result = unit.is_long_time_interval()
+        assert result
+
+    def test_calendar(self):
+        # Check that a different calendar does not affect the result.
+        unit = Unit("months since epoch", calendar=cf_units.CALENDAR_360_DAY)
+        result = unit.is_long_time_interval()
+        assert result
+
+    def test_not_time_unit(self):
+        unit = Unit("K")
+        result = unit.is_long_time_interval()
+        assert not result
+
+
 class Test_format:
     def test_invalid_ut_unit(self):
         # https://github.com/SciTools/cf-units/issues/133 flagged up that
