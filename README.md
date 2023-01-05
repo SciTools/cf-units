@@ -19,7 +19,7 @@
 [![Flake8](https://img.shields.io/badge/lint-flake8-lightgrey)](https://github.com/PyCQA/flake8)
 [![isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 \
-[![Licence](https://img.shields.io/github/license/SciTools/cf-units)](COPYING)
+[![Licence](https://img.shields.io/badge/license-BSD--3-orange)](LICENSE)
 [![Contributors](https://img.shields.io/github/contributors/SciTools/cf-units)](https://github.com/SciTools/cf-units/graphs/contributors)
 [![Commits since last release](https://img.shields.io/github/commits-since/SciTools/cf-units/latest.svg)](https://github.com/SciTools/cf-units/commits/main)
 
@@ -76,8 +76,8 @@ Code is just one of many ways of positively contributing to cf-units, please
 see our [contributing guide](.github/CONTRIBUTING.md) for more details on how
 you can get involved.
 
-cf-units is released under a LGPL license with a shared copyright model.
-See [COPYING](COPYING) and [COPYING.LESSER](COPYING.LESSER) for full terms.
+cf-units is released under a BSD-3 license. See [LICENSE](LICENSE) for full
+terms.
 
 The [Met Office](https://metoffice.gov.uk) has made a significant
 contribution to the development, maintenance and support of this library.
