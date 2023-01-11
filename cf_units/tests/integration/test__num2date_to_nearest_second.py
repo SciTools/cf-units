@@ -1,8 +1,7 @@
 # Copyright cf-units contributors
 #
-# This file is part of cf-units and is released under the LGPL license.
-# See COPYING and COPYING.LESSER in the root of the repository for full
-# licensing details.
+# This file is part of cf-units and is released under the BSD license.
+# See LICENSE in the root of the repository for full licensing details.
 """Test function :func:`cf_units._num2date_to_nearest_second`."""
 
 import datetime
