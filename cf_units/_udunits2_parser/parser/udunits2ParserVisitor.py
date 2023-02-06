@@ -10,7 +10,6 @@ else:
 
 
 class udunits2ParserVisitor(ParseTreeVisitor):
-
     # Visit a parse tree produced by udunits2Parser#unit_spec.
     def visitUnit_spec(self, ctx: udunits2Parser.Unit_specContext):
         return self.visitChildren(ctx)

@@ -58,7 +58,6 @@ def serializedATN():
 
 
 class udunits2Parser(Parser):
-
     grammarFileName = "udunits2Parser.g4"
 
     atn = ATNDeserializer().deserialize(serializedATN())
@@ -215,7 +214,6 @@ class udunits2Parser(Parser):
                 return visitor.visitChildren(self)
 
     def unit_spec(self):
-
         localctx = udunits2Parser.Unit_specContext(self, self._ctx, self.state)
         self.enterRule(localctx, 0, self.RULE_unit_spec)
         self._la = 0  # Token type
@@ -285,7 +283,6 @@ class udunits2Parser(Parser):
                 return visitor.visitChildren(self)
 
     def shift_spec(self):
-
         localctx = udunits2Parser.Shift_specContext(
             self, self._ctx, self.state
         )
@@ -562,7 +559,6 @@ class udunits2Parser(Parser):
                 return visitor.visitChildren(self)
 
     def power(self):
-
         localctx = udunits2Parser.PowerContext(self, self._ctx, self.state)
         self.enterRule(localctx, 6, self.RULE_power)
         try:
@@ -646,7 +642,6 @@ class udunits2Parser(Parser):
                 return visitor.visitChildren(self)
 
     def basic_spec(self):
-
         localctx = udunits2Parser.Basic_specContext(
             self, self._ctx, self.state
         )
@@ -715,7 +710,6 @@ class udunits2Parser(Parser):
                 return visitor.visitChildren(self)
 
     def integer(self):
-
         localctx = udunits2Parser.IntegerContext(self, self._ctx, self.state)
         self.enterRule(localctx, 10, self.RULE_integer)
         self._la = 0  # Token type
@@ -764,7 +758,6 @@ class udunits2Parser(Parser):
                 return visitor.visitChildren(self)
 
     def number(self):
-
         localctx = udunits2Parser.NumberContext(self, self._ctx, self.state)
         self.enterRule(localctx, 12, self.RULE_number)
         try:
@@ -840,7 +833,6 @@ class udunits2Parser(Parser):
                 return visitor.visitChildren(self)
 
     def timestamp(self):
-
         localctx = udunits2Parser.TimestampContext(self, self._ctx, self.state)
         self.enterRule(localctx, 14, self.RULE_timestamp)
         self._la = 0  # Token type
@@ -975,7 +967,6 @@ class udunits2Parser(Parser):
                 return visitor.visitChildren(self)
 
     def signed_clock(self):
-
         localctx = udunits2Parser.Signed_clockContext(
             self, self._ctx, self.state
         )
@@ -1036,7 +1027,6 @@ class udunits2Parser(Parser):
                 return visitor.visitChildren(self)
 
     def timezone_offset(self):
-
         localctx = udunits2Parser.Timezone_offsetContext(
             self, self._ctx, self.state
         )
