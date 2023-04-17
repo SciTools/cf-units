@@ -73,3 +73,9 @@ line_length = 79
 profile = "black"
 skip_gitignore = "True"
 verbose = "False"
+
+[tool.check-manifest]
+ignore = [
+    "cf_units/_version.py",
+    "cf_units/_udunits2.c",
+]

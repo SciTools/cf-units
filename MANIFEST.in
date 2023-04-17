@@ -1,13 +1,14 @@
-# Top-level files
-include CHANGES COPYING COPYING.LESSER INSTALL README.md
 prune .github
+prune docs
+prune requirements
+exclude .git_archival.txt
+exclude .gitattributes
 exclude .gitignore
-
-# Files required for conda package management
-recursive-include requirements *
-
-# Files required to build docs
-recursive-include docs *
-prune docs/build
-
-exclude cf_units/etc/site.cfg
+exclude .pre-commit-config.yaml
+exclude .readthedocs.yml
+exclude CHANGES
+exclude cf_units/etc/site.cfg.*
+recursive-include cf_units *.g4 *.jinja *.md *.pxd *.pyx
+exclude codecov.yml
+exclude INSTALL
+exclude tox.ini
