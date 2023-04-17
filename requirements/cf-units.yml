@@ -5,14 +5,14 @@ channels:
 
 dependencies:
 # setup dependencies
-  - setuptools >=45
-  - setuptools_scm >=7.0
+  - setuptools >=61
+  - setuptools_scm >=7
   - cython
   - numpy
 
 # core dependencies
   - antlr-python-runtime 4.7.2.*
-  - cftime>=1.2
+  - cftime>=1.5.2
   - numpy
   - udunits2
 
