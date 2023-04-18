@@ -3,8 +3,8 @@
 # This file is part of cf-units and is released under the BSD license.
 # See LICENSE in the root of the repository for full licensing details.
 
-import cf_units._udunits2_parser.graph as g
 from cf_units._udunits2_parser import parse
+import cf_units._udunits2_parser.graph as g
 
 
 def test_Node_attributes():

@@ -15,8 +15,7 @@ from .parser.udunits2ParserVisitor import udunits2ParserVisitor
 
 # Dictionary mapping token rule id to token name.
 TOKEN_ID_NAMES = {
-    getattr(udunits2Lexer, rule, None): rule
-    for rule in udunits2Lexer.ruleNames
+    getattr(udunits2Lexer, rule, None): rule for rule in udunits2Lexer.ruleNames
 }
 
 
@@ -169,7 +168,7 @@ class SyntaxErrorRaiser(ErrorListener):
 
     def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
         # https://stackoverflow.com/a/36367357/741316
-        context = ("inline", line, column + 2, "'{}'".format(self.unit_string))
+        context = ("inline", line, column + 2, f"'{self.unit_string}'")
         syntax_error = SyntaxError(msg, context)
         raise syntax_error from None
 
@@ -192,7 +191,7 @@ def _debug_tokens(unit_string):
             continue
         token_type_idx = token.type
         rule = TOKEN_ID_NAMES[token_type_idx]
-        print("%s: %s" % (token.text, rule))
+        print(f"{token.text}: {rule}")
 
 
 def normalize(unit_string):

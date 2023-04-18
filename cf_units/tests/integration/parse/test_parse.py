@@ -167,9 +167,7 @@ def test_invalid_units(_, unit_str):
         cf_valid = False
 
     # Double check that udunits2 can't parse this.
-    assert (
-        cf_valid is False
-    ), "Unit {!r} is unexpectedly valid in UDUNITS2".format(unit_str)
+    assert cf_valid is False, f"Unit {unit_str!r} is unexpectedly valid in UDUNITS2"
 
     try:
         normalize(unit_str)
@@ -178,7 +176,7 @@ def test_invalid_units(_, unit_str):
         can_parse = False
 
     # Now confirm that we couldn't parse this either.
-    msg = "Parser unexpectedly able to deal with {}".format(unit_str)
+    msg = f"Parser unexpectedly able to deal with {unit_str}"
     assert can_parse is False, msg
 
 
@@ -234,15 +232,13 @@ known_issues = [
 ]
 
 
-@pytest.mark.parametrize(
-    "_, unit_str, expected", multi_enumerate(known_issues)
-)
+@pytest.mark.parametrize("_, unit_str, expected", multi_enumerate(known_issues))
 def test_known_issues(_, unit_str, expected):
     # Unfortunately the grammar is not perfect.
     # These are the cases that don't work yet but which do work with udunits.
 
     # Make sure udunits can read it.
-    cf_units.Unit(unit_str).symbol
+    cf_units.Unit(unit_str).symbol  # noqa: B018
 
     if isinstance(expected, type) and issubclass(expected, Exception):
         with pytest.raises(SyntaxError):
@@ -293,7 +289,7 @@ def test_invalid_syntax_units(_, unit_str):
     # allowed with our grammar.
 
     with pytest.raises(ValueError):
-        cf_units.Unit(unit_str).symbol
+        cf_units.Unit(unit_str).symbol  # noqa: B018
 
     with pytest.raises(SyntaxError):
         normalize(unit_str)

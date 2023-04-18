@@ -13,9 +13,9 @@ See also: `UDUNITS-2
 
 """
 
+from contextlib import contextmanager
 import copy
 import math
-from contextlib import contextmanager
 
 import cftime
 import numpy as np
@@ -552,15 +552,13 @@ def _num2date_to_nearest_second(
     # later versions, if one wished to do so for the sake of consistency.
     cftime_unit = unit.cftime_unit
     time_units = cftime_unit.split(" ")[0]
-    has_half_seconds = np.logical_and(
-        time_units == "seconds", time_values % 1.0 == 0.5
-    )
-    num2date_kwargs = dict(
-        units=cftime_unit,
-        calendar=unit.calendar,
-        only_use_cftime_datetimes=only_use_cftime_datetimes,
-        only_use_python_datetimes=only_use_python_datetimes,
-    )
+    has_half_seconds = np.logical_and(time_units == "seconds", time_values % 1.0 == 0.5)
+    num2date_kwargs = {
+        "units": cftime_unit,
+        "calendar": unit.calendar,
+        "only_use_cftime_datetimes": only_use_cftime_datetimes,
+        "only_use_python_datetimes": only_use_python_datetimes,
+    }
     dates = cftime.num2date(time_values, **num2date_kwargs)
     try:
         # We can assume all or none of the dates have a microsecond attribute
@@ -664,11 +662,9 @@ def _ud_value_error(ud_err, message):
 
     ud_msg = ud_err.error_msg()
     if ud_msg:
-        message = "{}: {}".format(message, ud_msg)
+        message = f"{message}: {ud_msg}"
 
-    message = "[{status}] {message}".format(
-        status=ud_err.status_msg(), message=message
-    )
+    message = f"[{ud_err.status_msg()}] {message}"
 
     return ValueError(message)
 
@@ -711,14 +707,10 @@ class Unit(_OrderedHashable):
     # Prevent attribute updates
 
     def __setattr__(self, name, value):
-        raise AttributeError(
-            "Instances of %s are immutable" % type(self).__name__
-        )
+        raise AttributeError("Instances of %s are immutable" % type(self).__name__)
 
     def __delattr__(self, name):
-        raise AttributeError(
-            "Instances of %s are immutable" % type(self).__name__
-        )
+        raise AttributeError("Instances of %s are immutable" % type(self).__name__)
 
     # Declare the attribute names relevant to the ordered and hashable
     #  behaviour.
@@ -825,7 +817,7 @@ class Unit(_OrderedHashable):
                 ut_unit = _ud.parse(_ud_system, unit.encode("utf8"), encoding)
             except _ud.UdunitsError as exception:
                 value_error = _ud_value_error(
-                    exception, 'Failed to parse unit "{}"'.format(str_unit)
+                    exception, f'Failed to parse unit "{str_unit}"'
                 )
                 raise value_error from None
             if _OP_SINCE in unit.lower():
@@ -851,9 +843,7 @@ class Unit(_OrderedHashable):
         )
 
     @classmethod
-    def _new_from_existing_ut(
-        cls, category, ut_unit, calendar=None, origin=None
-    ):
+    def _new_from_existing_ut(cls, category, ut_unit, calendar=None, origin=None):
         # Short-circuit __init__ if we know what we are doing and already
         # have a UT handle.
         unit = cls.__new__(cls)
@@ -989,9 +979,7 @@ class Unit(_OrderedHashable):
         result = False
         long_time_intervals = ["year", "month"]
         if self.is_time_reference():
-            result = any(
-                interval in self.origin for interval in long_time_intervals
-            )
+            result = any(interval in self.origin for interval in long_time_intervals)
         return result
 
     def title(self, value):
@@ -1018,7 +1006,7 @@ class Unit(_OrderedHashable):
             dt = self.num2date(value)
             result = dt.strftime("%Y-%m-%d %H:%M:%S")
         else:
-            result = "%s %s" % (str(value), self)
+            result = f"{str(value)} {self}"
         return result
 
     @property
@@ -1199,9 +1187,7 @@ class Unit(_OrderedHashable):
                     option = [option]
                 for i in option:
                     bitmask |= i
-            encoding = bitmask & (
-                UT_ASCII | UT_ISO_8859_1 | UT_LATIN1 | UT_UTF8
-            )
+            encoding = bitmask & (UT_ASCII | UT_ISO_8859_1 | UT_LATIN1 | UT_UTF8)
             encoding_str = _encoding_lookup[encoding]
             result = _ud.format(self.ut_unit, bitmask)
 
@@ -1307,15 +1293,11 @@ class Unit(_OrderedHashable):
         """
 
         if not isinstance(origin, (float, (int,))):
-            raise TypeError(
-                "a numeric type for the origin argument is" " required"
-            )
+            raise TypeError("a numeric type for the origin argument is" " required")
         try:
             ut_unit = _ud.offset_by_time(self.ut_unit, origin)
         except _ud.UdunitsError as exception:
-            value_error = _ud_value_error(
-                exception, "Failed to offset {!r}".format(self)
-            )
+            value_error = _ud_value_error(exception, f"Failed to offset {self!r}")
             raise value_error from None
         calendar = None
         return Unit._new_from_existing_ut(_CATEGORY_UDUNIT, ut_unit, calendar)
@@ -1386,13 +1368,11 @@ class Unit(_OrderedHashable):
                 except _ud.UdunitsError as exception:
                     value_error = _ud_value_error(
                         exception,
-                        "Failed to take the root of {!r}".format(self),
+                        f"Failed to take the root of {self!r}",
                     )
                     raise value_error from None
                 calendar = None
-                result = Unit._new_from_existing_ut(
-                    _CATEGORY_UDUNIT, ut_unit, calendar
-                )
+                result = Unit._new_from_existing_ut(_CATEGORY_UDUNIT, ut_unit, calendar)
         return result
 
     def log(self, base):
@@ -1423,20 +1403,15 @@ class Unit(_OrderedHashable):
             try:
                 ut_unit = _ud.log(base, self.ut_unit)
             except TypeError:
-                raise TypeError(
-                    "A numeric type for the base argument is " " required"
-                )
+                raise TypeError("A numeric type for the base argument is " " required")
             except _ud.UdunitsError as exception:
                 value_err = _ud_value_error(
                     exception,
-                    "Failed to calculate logorithmic base "
-                    "of {!r}".format(self),
+                    "Failed to calculate logorithmic base " "of {!r}".format(self),
                 )
                 raise value_err from None
             calendar = None
-            result = Unit._new_from_existing_ut(
-                _CATEGORY_UDUNIT, ut_unit, calendar
-            )
+            result = Unit._new_from_existing_ut(_CATEGORY_UDUNIT, ut_unit, calendar)
         return result
 
     def __str__(self):
@@ -1472,7 +1447,7 @@ class Unit(_OrderedHashable):
 
         """
         if self.calendar is None:
-            result = "{}('{}')".format(self.__class__.__name__, self)
+            result = f"{self.__class__.__name__}('{self}')"
         else:
             result = "{}('{}', calendar='{}')".format(
                 self.__class__.__name__, self, self.calendar
@@ -1526,13 +1501,11 @@ class Unit(_OrderedHashable):
             except _ud.UdunitsError as exception:
                 value_err = _ud_value_error(
                     exception,
-                    "Failed to {} {!r} by {!r}".format(op_label, self, other),
+                    f"Failed to {op_label} {self!r} by {other!r}",
                 )
                 raise value_err from None
             calendar = None
-            result = Unit._new_from_existing_ut(
-                _CATEGORY_UDUNIT, ut_unit, calendar
-            )
+            result = Unit._new_from_existing_ut(_CATEGORY_UDUNIT, ut_unit, calendar)
         return result
 
     def __rmul__(self, other):
@@ -1647,9 +1620,7 @@ class Unit(_OrderedHashable):
         try:
             power = float(power)
         except ValueError:
-            raise TypeError(
-                "A numeric value is required for the power" " argument."
-            )
+            raise TypeError("A numeric value is required for the power" " argument.")
 
         if self.is_unknown():
             result = self
@@ -1681,7 +1652,7 @@ class Unit(_OrderedHashable):
                 except _ud.UdunitsError as exception:
                     value_err = _ud_value_error(
                         exception,
-                        "Failed to raise the power of {!r}".format(self),
+                        f"Failed to raise the power of {self!r}",
                     )
                     raise value_err from None
                 result = Unit._new_from_existing_ut(_CATEGORY_UDUNIT, ut_unit)
@@ -1845,20 +1816,18 @@ class Unit(_OrderedHashable):
                 result = cftime.date2num(
                     result_datetimes, other.cftime_unit, other.calendar
                 )
-                convert_type = isinstance(
-                    value, np.ndarray
-                ) and np.issubsctype(value.dtype, np.floating)
+                convert_type = isinstance(value, np.ndarray) and np.issubsctype(
+                    value.dtype, np.floating
+                )
                 if convert_type:
                     result = result.astype(value.dtype)
             else:
                 try:
-                    ut_converter = _ud.get_converter(
-                        self.ut_unit, other.ut_unit
-                    )
+                    ut_converter = _ud.get_converter(self.ut_unit, other.ut_unit)
                 except _ud.UdunitsError as exception:
                     value_err = _ud_value_error(
                         exception,
-                        "Failed to convert {!r} to {!r}".format(self, other),
+                        f"Failed to convert {self!r} to {other!r}",
                     )
                     raise value_err from None
                 if isinstance(result, np.ndarray):
@@ -1881,25 +1850,20 @@ class Unit(_OrderedHashable):
                             result = result.astype(result.dtype.type)
                     # Strict type check of numpy array.
                     if result.dtype.type not in (np.float32, np.float64):
-                        raise TypeError(
-                            "Expect a numpy array of '%s' or '%s'"
-                            % np.float32,
-                            np.float64,
+                        emsg = (
+                            f"Expect a numpy array of '{np.float32}' or '{np.float64}'"
                         )
+                        raise TypeError(emsg)
                     ctype = result.dtype.type
                     # Utilise global convenience dictionary
                     # _cv_convert_array to convert our array in 1d form
                     result_tmp = result.ravel(order="A")
                     # Do the actual conversion.
-                    _cv_convert_array[ctype](
-                        ut_converter, result_tmp, result_tmp
-                    )
+                    _cv_convert_array[ctype](ut_converter, result_tmp, result_tmp)
                     # If result_tmp was a copy, not a view (i.e. not C
                     # contiguous), copy the data back to the original.
                     if not np.shares_memory(result, result_tmp):
-                        result_tmp = result_tmp.reshape(
-                            result.shape, order="A"
-                        )
+                        result_tmp = result_tmp.reshape(result.shape, order="A")
                         if isinstance(result, np.ma.MaskedArray):
                             result.data[...] = result_tmp
                         else:
@@ -1915,9 +1879,7 @@ class Unit(_OrderedHashable):
                     result = _cv_convert_scalar[ctype](ut_converter, result)
             return result
         else:
-            raise ValueError(
-                "Unable to convert from '%r' to '%r'." % (self, other)
-            )
+            raise ValueError(f"Unable to convert from '{self!r}' to '{other!r}'.")
 
     @property
     def cftime_unit(self):

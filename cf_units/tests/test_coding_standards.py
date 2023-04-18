@@ -3,11 +3,11 @@
 # This file is part of cf-units and is released under the BSD license.
 # See LICENSE in the root of the repository for full licensing details.
 
-import os
-import subprocess
 from datetime import datetime
 from fnmatch import fnmatch
 from glob import glob
+import os
+import subprocess
 
 import pytest
 
@@ -28,9 +28,7 @@ DOCS_DIR = cf_units.config.get_option("Resources", "doc_dir", default=DOCS_DIR)
 exclusion = ["Makefile", "make.bat", "build"]
 DOCS_DIRS = glob(os.path.join(DOCS_DIR, "*"))
 DOCS_DIRS = [
-    DOC_DIR
-    for DOC_DIR in DOCS_DIRS
-    if os.path.basename(DOC_DIR) not in exclusion
+    DOC_DIR for DOC_DIR in DOCS_DIRS if os.path.basename(DOC_DIR) not in exclusion
 ]
 
 
@@ -75,7 +73,7 @@ class TestLicenseHeaders:
         """
         # Check the ".git" folder exists at the repo dir.
         if not os.path.isdir(os.path.join(REPO_DIR, ".git")):
-            raise ValueError("{} is not a git repository.".format(REPO_DIR))
+            raise ValueError(f"{REPO_DIR} is not a git repository.")
 
         # Call "git whatchanged" to get the details of all the files and when
         # they were last changed.
@@ -104,12 +102,10 @@ class TestLicenseHeaders:
             last_change_by_fname = self.last_change_by_fname()
         except ValueError:
             # Caught the case where this is not a git repo.
-            return pytest.skip(
-                "cf_units installation did not look like a " "git repo."
-            )
+            return pytest.skip("cf_units installation did not look like a " "git repo.")
 
         failed = False
-        for fname, last_change in sorted(last_change_by_fname.items()):
+        for fname, _last_change in sorted(last_change_by_fname.items()):
             full_fname = os.path.join(REPO_DIR, fname)
             if (
                 full_fname.endswith(".py")
@@ -126,6 +122,4 @@ class TestLicenseHeaders:
                         failed = True
 
         if failed:
-            raise AssertionError(
-                "There were license header failures. See stdout."
-            )
+            raise AssertionError("There were license header failures. See stdout.")

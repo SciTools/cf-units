@@ -8,8 +8,8 @@ Miscellaneous utility functions.
 """
 
 import abc
-import warnings
 from collections.abc import Hashable
+import warnings
 
 
 def approx_equal(a, b, max_absolute_error=1e-10, max_relative_error=1e-10):
@@ -64,8 +64,8 @@ class _MetaOrderedHashable(abc.ABCMeta):
             if "__init__" not in namespace:
                 # Create a default __init__ method for the class
                 method_source = (
-                    "def __init__(self, %s):\n "
-                    "self._init_from_tuple((%s,))" % (args, args)
+                    "def __init__(self, {}):\n "
+                    "self._init_from_tuple(({},))".format(args, args)
                 )
                 exec(method_source, namespace)
 
@@ -74,14 +74,12 @@ class _MetaOrderedHashable(abc.ABCMeta):
             if "_init" not in namespace:
                 # Create a default _init method for the class
                 method_source = (
-                    "def _init(self, %s):\n "
-                    "self._init_from_tuple((%s,))" % (args, args)
+                    "def _init(self, {}):\n "
+                    "self._init_from_tuple(({},))".format(args, args)
                 )
                 exec(method_source, namespace)
 
-        return super(_MetaOrderedHashable, cls).__new__(
-            cls, name, bases, namespace
-        )
+        return super().__new__(cls, name, bases, namespace)
 
 
 class _OrderedHashable(Hashable, metaclass=_MetaOrderedHashable):

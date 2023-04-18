@@ -218,9 +218,7 @@ class Test_convert__result_ctype:
 
     def setup_method(self):
         self.initial_dtype = np.float32
-        self.degs_array = np.array(
-            [356.7, 356.8, 356.9], dtype=self.initial_dtype
-        )
+        self.degs_array = np.array([356.7, 356.8, 356.9], dtype=self.initial_dtype)
         self.deg = cf_units.Unit("degrees")
         self.rad = cf_units.Unit("radians")
 
@@ -260,15 +258,11 @@ class Test_convert__masked_array:
         )
 
     def test_no_type_conversion(self):
-        result = self.deg.convert(
-            self.degs_array, self.rad, ctype=cf_units.FLOAT32
-        )
+        result = self.deg.convert(self.degs_array, self.rad, ctype=cf_units.FLOAT32)
         np.testing.assert_array_almost_equal(self.rads_array, result)
 
     def test_type_conversion(self):
-        result = self.deg.convert(
-            self.degs_array, self.rad, ctype=cf_units.FLOAT64
-        )
+        result = self.deg.convert(self.degs_array, self.rad, ctype=cf_units.FLOAT64)
         np.testing.assert_array_almost_equal(self.rads_array, result)
 
 

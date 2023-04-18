@@ -12,9 +12,7 @@ from cf_units import num2date
 
 class Test:
     def test_num2date_wrong_calendar(self):
-        with pytest.raises(
-            ValueError, match="illegal calendar or reference date"
-        ):
+        with pytest.raises(ValueError, match="illegal calendar or reference date"):
             num2date(
                 1,
                 "days since 1970-01-01",

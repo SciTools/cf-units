@@ -46,30 +46,36 @@ write_to = "cf_units/_version.py"
 local_scheme = "dirty-tag"
 
 [tool.black]
-line-length = 79
-target-version = ["py38", "py39", "py310"]
+line-length = 88
+target-version = ["py38", "py39", "py310", "py311"]
 include = '\.pyi?$'
-exclude = '''
-(
-  /(
-      \.eggs         # exclude a few common directories in the
-    | \.git          # root of the project
-    | \.hg
-    | \.mypy_cache
-    | \.tox
-    | \.venv
-    | _build
-    | buck-out
-    | build
-    | dist
-  )/
-  | _version.py
-)
-'''
 
-[tool.isort]
-known_first_party = "cf_units"
-line_length = 79
-profile = "black"
-skip_gitignore = "True"
-verbose = "False"
+[tool.ruff]
+line-length = 88
+target-version = "py38"
+select = [
+    # pyflakes
+    "F",
+    # pycodestyle
+    "E",
+    "W",
+    # flake8-bugbear
+    "B",
+    # flake8-comprehensions
+    "C4",
+    # isort
+    "I",
+    # pyupgrade
+    "UP",
+]
+ignore = ["B904", "F403", "F405"]
+
+[tool.ruff.isort]
+force-sort-within-sections = true
+known-first-party = ["cf_units"]
+
+[tool.ruff.mccabe]
+max-complexity = 22
+
+[tool.ruff.pydocstyle]
+convention = "numpy"

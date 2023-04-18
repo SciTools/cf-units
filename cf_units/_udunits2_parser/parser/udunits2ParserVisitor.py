@@ -1,4 +1,5 @@
-# Generated from /Users/pelson/dev/scitools/cf-units/cf_units/_udunits2_parser/udunits2Parser.g4 by ANTLR 4.7.2
+# Generated from
+# /Users/pelson/dev/scitools/cf-units/cf_units/_udunits2_parser/udunits2Parser.g4 by ANTLR 4.7.2  # noqa: E501
 from antlr4 import *
 
 if __name__ is not None and "." in __name__:
@@ -6,7 +7,8 @@ if __name__ is not None and "." in __name__:
 else:
     from udunits2Parser import udunits2Parser
 
-# This class defines a complete generic visitor for a parse tree produced by udunits2Parser.
+# This class defines a complete generic visitor for a parse tree
+# produced by udunits2Parser.
 
 
 class udunits2ParserVisitor(ParseTreeVisitor):

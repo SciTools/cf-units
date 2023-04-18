@@ -77,9 +77,7 @@ class Test_system:
         assert angstrom is not None
 
     def test_parse_UTF8(self):
-        angstrom = _ud.parse(
-            self.system, b"\xc3\xa5ngstr\xc3\xb6m", _ud.UT_UTF8
-        )
+        angstrom = _ud.parse(self.system, b"\xc3\xa5ngstr\xc3\xb6m", _ud.UT_UTF8)
 
         assert angstrom is not None
 
@@ -222,9 +220,7 @@ class Test_time_encoding:
         assert self.date_encoding == res_date_encoding
 
     def test_encode_clock(self):
-        res_clock_encoding = _ud.encode_clock(
-            self.hours, self.minutes, self.seconds
-        )
+        res_clock_encoding = _ud.encode_clock(self.hours, self.minutes, self.seconds)
 
         assert self.clock_encoding == res_clock_encoding
 
@@ -259,9 +255,7 @@ class Test_time_encoding:
             self.minutes,
         )
         assert (
-            res_seconds - res_resolution
-            < self.seconds
-            < res_seconds + res_resolution
+            res_seconds - res_resolution < self.seconds < res_seconds + res_resolution
         )
 
 

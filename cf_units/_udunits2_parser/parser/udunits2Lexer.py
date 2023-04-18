@@ -1,7 +1,8 @@
-# Generated from /Users/pelson/dev/scitools/cf-units/cf_units/_udunits2_parser/parser/udunits2Lexer.g4 by ANTLR 4.7.2
-import sys
+# Generated from
+# /Users/pelson/dev/scitools/cf-units/cf_units/_udunits2_parser/parser/udunits2Lexer.g4 by ANTLR 4.7.2  # noqa: E501
 from io import StringIO
-from typing.io import TextIO
+import sys
+from typing import TextIO
 
 from antlr4 import *
 

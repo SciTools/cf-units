@@ -15,7 +15,14 @@ from cf_units import _discard_microsecond as discard_microsecond
 
 class Test__datetime:
     def setup_method(self):
-        self.kwargs = dict(year=1, month=2, day=3, hour=4, minute=5, second=6)
+        self.kwargs = {
+            "year": 1,
+            "month": 2,
+            "day": 3,
+            "hour": 4,
+            "minute": 5,
+            "second": 6,
+        }
         self.expected = datetime.datetime(**self.kwargs, microsecond=0)
 
     def test_single(self):
@@ -37,16 +44,21 @@ class Test__datetime:
 
 class Test__cftime:
     def setup_method(self):
-        self.kwargs = dict(year=1, month=2, day=3, hour=4, minute=5, second=6)
+        self.kwargs = {
+            "year": 1,
+            "month": 2,
+            "day": 3,
+            "hour": 4,
+            "minute": 5,
+            "second": 6,
+        }
         self.calendars = cftime._cftime._calendars
 
     def test_single(self):
         for calendar in self.calendars:
             dt = cftime.datetime(**self.kwargs, calendar=calendar)
             actual = discard_microsecond(dt)
-            expected = cftime.datetime(
-                **self.kwargs, microsecond=0, calendar=calendar
-            )
+            expected = cftime.datetime(**self.kwargs, microsecond=0, calendar=calendar)
             assert expected == actual
 
     def test_multi(self):
@@ -55,34 +67,31 @@ class Test__cftime:
 
         for calendar in self.calendars:
             dates = np.array(
-                [
-                    cftime.datetime(**self.kwargs, calendar=calendar)
-                    for i in range(n)
-                ]
+                [cftime.datetime(**self.kwargs, calendar=calendar) for i in range(n)]
             ).reshape(shape)
             actual = discard_microsecond(dates)
             expected = np.array(
-                [
-                    cftime.datetime(
-                        **self.kwargs, microsecond=0, calendar=calendar
-                    )
-                ]
-                * n
+                [cftime.datetime(**self.kwargs, microsecond=0, calendar=calendar)] * n
             ).reshape(shape)
             np.testing.assert_array_equal(expected, actual)
 
 
 class Test__falsy:
     def setup_method(self):
-        self.kwargs = dict(year=1, month=2, day=3, hour=4, minute=5, second=6)
+        self.kwargs = {
+            "year": 1,
+            "month": 2,
+            "day": 3,
+            "hour": 4,
+            "minute": 5,
+            "second": 6,
+        }
         self.calendar = "360_day"
         microsecond = 7
         self.cftime = cftime.datetime(
             **self.kwargs, microsecond=microsecond, calendar=self.calendar
         )
-        self.datetime = datetime.datetime(
-            **self.kwargs, microsecond=microsecond
-        )
+        self.datetime = datetime.datetime(**self.kwargs, microsecond=microsecond)
 
     def test_single__none(self):
         assert discard_microsecond(None) is None

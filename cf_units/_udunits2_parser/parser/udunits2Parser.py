@@ -1,8 +1,8 @@
-# Generated from /Users/pelson/dev/scitools/cf-units/cf_units/_udunits2_parser/udunits2Parser.g4 by ANTLR 4.7.2
-# encoding: utf-8
-import sys
+# Generated
+# from /Users/pelson/dev/scitools/cf-units/cf_units/_udunits2_parser/udunits2Parser.g4 by ANTLR 4.7.2  # noqa: E501
 from io import StringIO
-from typing.io import TextIO
+import sys
+from typing import TextIO
 
 from antlr4 import *
 
@@ -200,9 +200,7 @@ class udunits2Parser(Parser):
             return self.getToken(udunits2Parser.EOF, 0)
 
         def shift_spec(self):
-            return self.getTypedRuleContext(
-                udunits2Parser.Shift_specContext, 0
-            )
+            return self.getTypedRuleContext(udunits2Parser.Shift_specContext, 0)
 
         def getRuleIndex(self):
             return udunits2Parser.RULE_unit_spec
@@ -283,9 +281,7 @@ class udunits2Parser(Parser):
                 return visitor.visitChildren(self)
 
     def shift_spec(self):
-        localctx = udunits2Parser.Shift_specContext(
-            self, self._ctx, self.state
-        )
+        localctx = udunits2Parser.Shift_specContext(self, self._ctx, self.state)
         self.enterRule(localctx, 2, self.RULE_shift_spec)
         self._la = 0  # Token type
         try:
@@ -414,9 +410,7 @@ class udunits2Parser(Parser):
                     _prevctx = localctx
                     self.state = 66
                     self._errHandler.sync(self)
-                    la_ = self._interp.adaptivePredict(
-                        self._input, 7, self._ctx
-                    )
+                    la_ = self._interp.adaptivePredict(self._input, 7, self._ctx)
                     if la_ == 1:
                         localctx = udunits2Parser.ProductContext(
                             self, _parentctx, _parentState
@@ -536,9 +530,7 @@ class udunits2Parser(Parser):
             self.parser = parser
 
         def basic_spec(self):
-            return self.getTypedRuleContext(
-                udunits2Parser.Basic_specContext, 0
-            )
+            return self.getTypedRuleContext(udunits2Parser.Basic_specContext, 0)
 
         def integer(self):
             return self.getTypedRuleContext(udunits2Parser.IntegerContext, 0)
@@ -622,9 +614,7 @@ class udunits2Parser(Parser):
             return self.getToken(udunits2Parser.OPEN_PAREN, 0)
 
         def shift_spec(self):
-            return self.getTypedRuleContext(
-                udunits2Parser.Shift_specContext, 0
-            )
+            return self.getTypedRuleContext(udunits2Parser.Shift_specContext, 0)
 
         def CLOSE_PAREN(self):
             return self.getToken(udunits2Parser.CLOSE_PAREN, 0)
@@ -642,9 +632,7 @@ class udunits2Parser(Parser):
                 return visitor.visitChildren(self)
 
     def basic_spec(self):
-        localctx = udunits2Parser.Basic_specContext(
-            self, self._ctx, self.state
-        )
+        localctx = udunits2Parser.Basic_specContext(self, self._ctx, self.state)
         self.enterRule(localctx, 8, self.RULE_basic_spec)
         try:
             self.state = 90
@@ -717,9 +705,7 @@ class udunits2Parser(Parser):
             self.enterOuterAlt(localctx, 1)
             self.state = 92
             _la = self._input.LA(1)
-            if not (
-                _la == udunits2Parser.SIGNED_INT or _la == udunits2Parser.INT
-            ):
+            if not (_la == udunits2Parser.SIGNED_INT or _la == udunits2Parser.INT):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -802,9 +788,7 @@ class udunits2Parser(Parser):
             return self.getToken(udunits2Parser.INT, 0)
 
         def signed_clock(self):
-            return self.getTypedRuleContext(
-                udunits2Parser.Signed_clockContext, 0
-            )
+            return self.getTypedRuleContext(udunits2Parser.Signed_clockContext, 0)
 
         def WS(self, i: int = None):
             if i is None:
@@ -813,9 +797,7 @@ class udunits2Parser(Parser):
                 return self.getToken(udunits2Parser.WS, i)
 
         def timezone_offset(self):
-            return self.getTypedRuleContext(
-                udunits2Parser.Timezone_offsetContext, 0
-            )
+            return self.getTypedRuleContext(udunits2Parser.Timezone_offsetContext, 0)
 
         def DT_T_CLOCK(self):
             return self.getToken(udunits2Parser.DT_T_CLOCK, 0)
@@ -844,9 +826,7 @@ class udunits2Parser(Parser):
                 self.enterOuterAlt(localctx, 1)
                 self.state = 98
                 _la = self._input.LA(1)
-                if not (
-                    _la == udunits2Parser.INT or _la == udunits2Parser.DATE
-                ):
+                if not (_la == udunits2Parser.INT or _la == udunits2Parser.DATE):
                     self._errHandler.recoverInline(self)
                 else:
                     self._errHandler.reportMatch(self)
@@ -857,9 +837,7 @@ class udunits2Parser(Parser):
                 self.enterOuterAlt(localctx, 2)
                 self.state = 99
                 _la = self._input.LA(1)
-                if not (
-                    _la == udunits2Parser.INT or _la == udunits2Parser.DATE
-                ):
+                if not (_la == udunits2Parser.INT or _la == udunits2Parser.DATE):
                     self._errHandler.recoverInline(self)
                 else:
                     self._errHandler.reportMatch(self)
@@ -967,9 +945,7 @@ class udunits2Parser(Parser):
                 return visitor.visitChildren(self)
 
     def signed_clock(self):
-        localctx = udunits2Parser.Signed_clockContext(
-            self, self._ctx, self.state
-        )
+        localctx = udunits2Parser.Signed_clockContext(self, self._ctx, self.state)
         self.enterRule(localctx, 16, self.RULE_signed_clock)
         try:
             self.state = 123
@@ -1027,9 +1003,7 @@ class udunits2Parser(Parser):
                 return visitor.visitChildren(self)
 
     def timezone_offset(self):
-        localctx = udunits2Parser.Timezone_offsetContext(
-            self, self._ctx, self.state
-        )
+        localctx = udunits2Parser.Timezone_offsetContext(self, self._ctx, self.state)
         self.enterRule(localctx, 18, self.RULE_timezone_offset)
         try:
             self.state = 127
@@ -1057,8 +1031,8 @@ class udunits2Parser(Parser):
         return localctx
 
     def sempred(self, localctx: RuleContext, ruleIndex: int, predIndex: int):
-        if self._predicates == None:
-            self._predicates = dict()
+        if self._predicates is None:
+            self._predicates = {}
         self._predicates[2] = self.product_sempred
         pred = self._predicates.get(ruleIndex, None)
         if pred is None:

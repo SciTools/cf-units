@@ -10,8 +10,8 @@ Test Unit the wrapper class for Unidata udunits2.
 import copy
 import datetime as datetime
 import operator
-import re
 from operator import truediv
+import re
 
 import cftime
 import numpy as np
@@ -164,9 +164,7 @@ class Test_format:
     def test_format_multiple_options_utf8(self):
         u = Unit("watt")
         assert (
-            u.format(
-                [cf_units.UT_NAMES, cf_units.UT_DEFINITION, cf_units.UT_UTF8]
-            )
+            u.format([cf_units.UT_NAMES, cf_units.UT_DEFINITION, cf_units.UT_UTF8])
             == "meter²·kilogram·second⁻³"
         )
 
@@ -833,7 +831,7 @@ class Test_title:
 class Test__immutable:
     def _set_attr(self, unit, name):
         setattr(unit, name, -999)
-        raise ValueError("'Unit' attribute {!r} is mutable!".format(name))
+        raise ValueError(f"'Unit' attribute {name!r} is mutable!")
 
     def test_immutable(self):
         u = Unit("m")
@@ -889,9 +887,7 @@ class Test__inplace:
 
         # Manufacture a Fortran-ordered nd array to be converted.
         orig = (
-            np.ma.masked_array(
-                np.arange(4, dtype=np.float32), mask=[1, 0, 0, 1]
-            )
+            np.ma.masked_array(np.arange(4, dtype=np.float32), mask=[1, 0, 0, 1])
             .reshape([2, 2])
             .T
         )
@@ -971,9 +967,7 @@ class TestNumsAndDates:
             "hours since 2010-11-02 12:00:00",
             calendar=cf_units.CALENDAR_360_DAY,
         )
-        with pytest.raises(
-            ValueError, match="illegal calendar or reference date"
-        ):
+        with pytest.raises(ValueError, match="illegal calendar or reference date"):
             u.num2date(
                 1,
                 only_use_cftime_datetimes=False,
@@ -1003,9 +997,7 @@ class TestNumsAndDates:
             "hours since 2010-11-02 12:00:00",
             calendar=cf_units.CALENDAR_360_DAY,
         )
-        with pytest.raises(
-            ValueError, match="illegal calendar or reference date"
-        ):
+        with pytest.raises(ValueError, match="illegal calendar or reference date"):
             u.num2pydate(1)
 
 

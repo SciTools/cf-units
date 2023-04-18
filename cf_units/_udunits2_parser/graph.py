@@ -27,10 +27,8 @@ class Node:
 
     def _repr_ctx(self):
         # Return a dictionary that is useful for passing to string.format.
-        kwargs = ", ".join(
-            "{}={!r}".format(key, value) for key, value in self._attrs.items()
-        )
-        return dict(cls_name=self.__class__.__name__, kwargs=kwargs)
+        kwargs = ", ".join(f"{key}={value!r}" for key, value in self._attrs.items())
+        return {"cls_name": self.__class__.__name__, "kwargs": kwargs}
 
     def __repr__(self):
         return "{cls_name}({kwargs})".format(**self._repr_ctx())
@@ -49,7 +47,7 @@ class Terminal(Node):
         return []
 
     def __str__(self):
-        return "{}".format(self.content)
+        return f"{self.content}"
 
 
 class Operand(Terminal):
