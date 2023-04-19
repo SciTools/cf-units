@@ -481,47 +481,6 @@ def num2pydate(time_value, unit, calendar):
     )
 
 
-def _num2date_to_nearest_second(
-    time_value,
-    unit,
-    only_use_cftime_datetimes=True,
-    only_use_python_datetimes=False,
-):
-    """
-    Return datetime encoding of numeric time value with respect to the given
-    time reference units, with a resolution of 1 second.
-
-    * time_value (float):
-        Numeric time value/s.
-    * unit (Unit):
-        cf_units.Unit object with which to perform the conversion/s.
-
-    * only_use_cftime_datetimes (bool):
-        If True, will always return cftime datetime objects, regardless of
-        calendar.  If False, returns datetime.datetime instances where
-        possible.  Defaults to True.
-
-    * only_use_python_datetimes (bool):
-        If True, will always return datetime.datetime instances where
-        possible, and raise an exception if not.  Ignored if
-        only_use_cftime_datetimes is True.  Defaults to False.
-
-    Returns:
-        datetime, or numpy.ndarray of datetime object.
-
-    """
-
-    cftime_unit = unit.cftime_unit
-
-    num2date_kwargs = dict(
-        units=cftime_unit,
-        calendar=unit.calendar,
-        only_use_cftime_datetimes=only_use_cftime_datetimes,
-        only_use_python_datetimes=only_use_python_datetimes,
-    )
-    return cftime.num2date(time_value, **num2date_kwargs)
-
-
 _CACHE = {}
 
 
@@ -1979,13 +1938,15 @@ class Unit(_OrderedHashable):
             ['1970-01-01 06:00:00', '1970-01-01 07:00:00']
 
         """
+        cftime_unit = self.cftime_unit
 
-        return _num2date_to_nearest_second(
-            time_value,
-            self,
+        num2date_kwargs = dict(
+            units=cftime_unit,
+            calendar=self.calendar,
             only_use_cftime_datetimes=only_use_cftime_datetimes,
             only_use_python_datetimes=only_use_python_datetimes,
         )
+        return cftime.num2date(time_value, **num2date_kwargs)
 
     def num2pydate(self, time_value):
         """
