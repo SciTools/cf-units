@@ -1938,15 +1938,13 @@ class Unit(_OrderedHashable):
             ['1970-01-01 06:00:00', '1970-01-01 07:00:00']
 
         """
-        cftime_unit = self.cftime_unit
-
-        num2date_kwargs = dict(
-            units=cftime_unit,
+        return cftime.num2date(
+            time_value,
+            units=self.cftime_unit,
             calendar=self.calendar,
             only_use_cftime_datetimes=only_use_cftime_datetimes,
             only_use_python_datetimes=only_use_python_datetimes,
         )
-        return cftime.num2date(time_value, **num2date_kwargs)
 
     def num2pydate(self, time_value):
         """
