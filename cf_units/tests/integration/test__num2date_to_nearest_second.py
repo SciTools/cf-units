@@ -2,7 +2,7 @@
 #
 # This file is part of cf-units and is released under the BSD license.
 # See LICENSE in the root of the repository for full licensing details.
-"""Test function :func:`cf_units._num2date_to_nearest_second`."""
+"""Test method :meth:`cf_units.Unit.num2date`."""
 
 import datetime
 
@@ -11,7 +11,6 @@ import numpy as np
 import pytest
 
 import cf_units
-from cf_units import _num2date_to_nearest_second
 
 
 class Test:
@@ -23,16 +22,14 @@ class Test:
 
     def check_dates(self, nums, units, expected, only_cftime=True):
         for num, unit, exp in zip(nums, units, expected):
-            res = _num2date_to_nearest_second(
-                num, unit, only_use_cftime_datetimes=only_cftime
-            )
+            res = unit.num2date(num, only_use_cftime_datetimes=only_cftime)
             assert exp == res
             assert isinstance(res, type(exp))
 
     def check_timedelta(self, nums, units, expected):
         for num, unit, exp in zip(nums, units, expected):
             epoch = cftime.num2date(0, unit.cftime_unit, unit.calendar)
-            res = _num2date_to_nearest_second(num, unit)
+            res = unit.num2date(num)
             delta = res - epoch
             assert (delta.days, delta.seconds, delta.microseconds) == exp
 
@@ -40,7 +37,7 @@ class Test:
         unit = cf_units.Unit("seconds since 1970-01-01", "gregorian")
         num = 5.0
         exp = datetime.datetime(1970, 1, 1, 0, 0, 5)
-        res = _num2date_to_nearest_second(num, unit)
+        res = unit.num2date(num)
         assert exp == res
         assert isinstance(res, cftime.datetime)
 
@@ -54,14 +51,14 @@ class Test:
             datetime.datetime(1970, 1, 1, 0, 1, 20),
             datetime.datetime(1970, 1, 1, 0, 1, 40),
         ]
-        res = _num2date_to_nearest_second(nums, unit)
+        res = unit.num2date(nums)
         np.testing.assert_array_equal(exp, res)
 
     def test_multidim_sequence(self):
         unit = cf_units.Unit("seconds since 1970-01-01", "gregorian")
         nums = [[20.0, 40.0, 60.0], [80, 100.0, 120.0]]
         exp_shape = (2, 3)
-        res = _num2date_to_nearest_second(nums, unit)
+        res = unit.num2date(nums)
         assert exp_shape == res.shape
 
     def test_masked_ndarray(self):
@@ -72,7 +69,7 @@ class Test:
             None,
             datetime.datetime(1970, 1, 1, 0, 1),
         ]
-        res = _num2date_to_nearest_second(nums, unit)
+        res = unit.num2date(nums)
         np.testing.assert_array_equal(exp, res)
 
     # Gregorian Calendar tests
@@ -255,9 +252,8 @@ class Test:
         with pytest.raises(
             ValueError, match="illegal calendar or reference date"
         ):
-            _num2date_to_nearest_second(
+            unit.num2date(
                 1,
-                unit,
                 only_use_cftime_datetimes=False,
                 only_use_python_datetimes=True,
             )
