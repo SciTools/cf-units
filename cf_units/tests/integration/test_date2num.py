@@ -53,12 +53,12 @@ class Test:
         res = date2num(dates, self.unit, self.calendar)
         assert exp_shape == res.shape
 
-    def test_discard_microsecond(self):
+    def test_convert_microsecond(self):
         date = datetime.datetime(1970, 1, 1, 0, 0, 5, 750000)
-        exp = 5
+        exp = 5.75
         res = date2num(date, self.unit, self.calendar)
 
-        assert exp == res
+        assert exp == pytest.approx(res)
 
     def test_long_time_interval(self):
         # This test should fail with an error that we need to catch properly.
