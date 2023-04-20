@@ -70,7 +70,7 @@ jobs:
     - name: "Conda environment update"
       if: steps.conda-env-cache.outputs.cache-hit != 'true'
       run: |
-        conda install --name ${{ env.ENV_NAME }} tox
+        conda install --name ${{ env.ENV_NAME }} "tox<4"
 
     - name: "Conda info"
       run: |
