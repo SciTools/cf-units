@@ -23,7 +23,6 @@ CALENDAR_STRINGS = ["standard", "360_day", "365_day"]
     "calendar_const, calendar_str", zip(CALENDAR_CONSTANTS, CALENDAR_STRINGS)
 )
 def test_fractional_second(calendar_const, calendar_str):
-    nums = [0.25, 0.5, 0.75, 1.5, 2.5, 3.5, 4.5]
     unit = cf_units.Unit("seconds since 1970-01-01", calendar_const)
     dates = [
         cftime.datetime(1970, 1, 1, 0, 0, 0, 250000, calendar=calendar_str),
@@ -33,7 +32,9 @@ def test_fractional_second(calendar_const, calendar_str):
         cftime.datetime(1970, 1, 1, 0, 0, 2, 500000, calendar=calendar_str),
         cftime.datetime(1970, 1, 1, 0, 0, 3, 500000, calendar=calendar_str),
         cftime.datetime(1970, 1, 1, 0, 0, 4, 500000, calendar=calendar_str),
+        cftime.datetime(1970, 1, 3, 0, 0, 4, 500000, calendar=calendar_str),
     ]
+    nums = [0.25, 0.5, 0.75, 1.5, 2.5, 3.5, 4.5, 172804.5]
 
     for num, date in zip(nums, dates):
         res = unit.date2num(date)
