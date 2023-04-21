@@ -32,15 +32,15 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        version: [py38, py39, py310]
+        version: [py39, py310, py311]
         include:
           - os: ubuntu-latest
             platform: linux
           - os: ubuntu-latest
-            version: py310
+            version: py311
             posargs: "--cov-report=xml --cov"
             post-command: codecov
-          - version: py310
+          - version: py311
             os: macos-latest
             platform: osx
     steps:
