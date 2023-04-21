@@ -378,33 +378,6 @@ def date2num(date, unit, calendar):
     return unit_inst.date2num(date)
 
 
-def _discard_microsecond(date):
-    """
-    Return a date with the microsecond component discarded.
-
-    Works for scalars, sequences and numpy arrays. Returns a scalar
-    if input is a scalar, else returns a numpy array.
-
-    Args:
-
-    * date (datetime.datetime or cftime.datetime):
-        Date value/s
-
-    Returns:
-        datetime, or numpy.ndarray of datetime object.
-
-    """
-    dates = np.asanyarray(date)
-    shape = dates.shape
-    dates = dates.ravel()
-
-    # using the "and" pattern to support masked arrays of datetimes
-    dates = np.array([dt and dt.replace(microsecond=0) for dt in dates])
-    result = dates[0] if shape == () else dates.reshape(shape)
-
-    return result
-
-
 def num2date(
     time_value,
     unit,
@@ -506,78 +479,6 @@ def num2pydate(time_value, unit, calendar):
         only_use_cftime_datetimes=False,
         only_use_python_datetimes=True,
     )
-
-
-def _num2date_to_nearest_second(
-    time_value,
-    unit,
-    only_use_cftime_datetimes=True,
-    only_use_python_datetimes=False,
-):
-    """
-    Return datetime encoding of numeric time value with respect to the given
-    time reference units, with a resolution of 1 second.
-
-    * time_value (float):
-        Numeric time value/s.
-    * unit (Unit):
-        cf_units.Unit object with which to perform the conversion/s.
-
-    * only_use_cftime_datetimes (bool):
-        If True, will always return cftime datetime objects, regardless of
-        calendar.  If False, returns datetime.datetime instances where
-        possible.  Defaults to True.
-
-    * only_use_python_datetimes (bool):
-        If True, will always return datetime.datetime instances where
-        possible, and raise an exception if not.  Ignored if
-        only_use_cftime_datetimes is True.  Defaults to False.
-
-    Returns:
-        datetime, or numpy.ndarray of datetime object.
-
-    """
-    time_values = np.asanyarray(time_value)
-    shape = time_values.shape
-    time_values = time_values.ravel()
-
-    # We account for the edge case where the time is in seconds and has a
-    # half second: cftime.num2date() may produce a date that would round
-    # down.
-    #
-    # Note that this behaviour is different to the num2date function in version
-    # 1.1 and earlier of cftime that didn't have microsecond precision. In
-    # those versions, a half-second value would be rounded up or down
-    # arbitrarily. It is probably not possible to replicate that behaviour with
-    # later versions, if one wished to do so for the sake of consistency.
-    cftime_unit = unit.cftime_unit
-    time_units = cftime_unit.split(" ")[0]
-    has_half_seconds = np.logical_and(
-        time_units == "seconds", time_values % 1.0 == 0.5
-    )
-    num2date_kwargs = dict(
-        units=cftime_unit,
-        calendar=unit.calendar,
-        only_use_cftime_datetimes=only_use_cftime_datetimes,
-        only_use_python_datetimes=only_use_python_datetimes,
-    )
-    dates = cftime.num2date(time_values, **num2date_kwargs)
-    try:
-        # We can assume all or none of the dates have a microsecond attribute
-        microseconds = np.array([d.microsecond if d else 0 for d in dates])
-    except AttributeError:
-        microseconds = 0
-    round_mask = np.logical_or(has_half_seconds, microseconds != 0)
-    ceil_mask = np.logical_or(has_half_seconds, microseconds >= 500000)
-    if time_values[ceil_mask].size > 0:
-        useconds = Unit("second")
-        second_frac = useconds.convert(0.75, time_units)
-        dates[ceil_mask] = cftime.num2date(
-            time_values[ceil_mask] + second_frac, **num2date_kwargs
-        )
-    dates[round_mask] = _discard_microsecond(dates[round_mask])
-    result = dates[0] if shape == () else dates.reshape(shape)
-    return result
 
 
 _CACHE = {}
@@ -1978,8 +1879,6 @@ class Unit(_OrderedHashable):
             array([5.5, 6.5])
 
         """
-
-        date = _discard_microsecond(date)
         return cftime.date2num(date, self.cftime_unit, self.calendar)
 
     def num2date(
@@ -2039,10 +1938,10 @@ class Unit(_OrderedHashable):
             ['1970-01-01 06:00:00', '1970-01-01 07:00:00']
 
         """
-
-        return _num2date_to_nearest_second(
+        return cftime.num2date(
             time_value,
-            self,
+            units=self.cftime_unit,
+            calendar=self.calendar,
             only_use_cftime_datetimes=only_use_cftime_datetimes,
             only_use_python_datetimes=only_use_python_datetimes,
         )
