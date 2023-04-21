@@ -27,7 +27,7 @@ jobs:
       ENV_NAME: "ci-locks"
     strategy:
       matrix:
-        lock: [py38-lock, py39-lock, py310-lock, py311-lock]
+        lock: [py39-lock, py310-lock, py311-lock]
     steps:
     - name: "Checkout"
       uses: actions/checkout@v3
