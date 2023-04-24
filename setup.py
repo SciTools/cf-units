@@ -1,16 +1,21 @@
 import sys
+import warnings
 from distutils.sysconfig import get_config_var
 from os import environ
 from pathlib import Path
 from shutil import copy
 
+# safe to import numpy here thanks to pep518
+import numpy as np
 from setuptools import Command, Extension, setup
 
 # Default to using cython, but use the .c files if it doesn't exist
 try:
     from Cython.Build import cythonize
 except ImportError:
-    cythonize = False
+    wmsg = "Cython unavailable, unable to cythonize cf-units extensions!"
+    warnings.warn(wmsg)
+    cythonize = None
 
 COMPILER_DIRECTIVES = {}
 DEFINE_MACROS = None
@@ -46,6 +51,7 @@ def get_include_dirs():
         include_dir = get_config_var("INCLUDEDIR")
     if include_dir is not None:
         include_dirs.append(include_dir)
+    include_dirs.append(np.get_include())
     return include_dirs
 
 
@@ -97,28 +103,11 @@ def get_package_data():
     return package_data
 
 
-def numpy_build_ext(pars):
-    from setuptools.command.build_ext import build_ext as _build_ext
+cython_coverage_enabled = (
+    environ.get("CYTHON_COVERAGE", None) or FLAG_COVERAGE in sys.argv
+)
 
-    class build_ext(_build_ext):
-        def finalize_options(self):
-            # See https://github.com/SciTools/cf-units/issues/151
-            def _set_builtin(name, value):
-                if isinstance(__builtins__, dict):
-                    __builtins__[name] = value
-                else:
-                    setattr(__builtins__, name, value)
-
-            _build_ext.finalize_options(self)
-            _set_builtin("__NUMPY_SETUP__", False)
-            import numpy
-
-            self.include_dirs.append(numpy.get_include())
-
-    return build_ext(pars)
-
-
-if FLAG_COVERAGE in sys.argv or environ.get("CYTHON_COVERAGE", None):
+if cythonize and cython_coverage_enabled:
     COMPILER_DIRECTIVES = {"linetrace": True}
     DEFINE_MACROS = [("CYTHON_TRACE", "1"), ("CYTHON_TRACE_NOGIL", "1")]
     if FLAG_COVERAGE in sys.argv:
@@ -144,12 +133,10 @@ if cythonize:
         udunits_ext, compiler_directives=COMPILER_DIRECTIVES, language_level=2
     )
 
-cmdclass = {"clean_cython": CleanCython, "build_ext": numpy_build_ext}
-
-kwargs = dict(
-    cmdclass=cmdclass,
-    ext_modules=[udunits_ext],
-    package_data=get_package_data(),
-)
+kwargs = {
+    "cmdclass": {"clean_cython": CleanCython},
+    "ext_modules": [udunits_ext],
+    "package_data": get_package_data(),
+}
 
 setup(**kwargs)
