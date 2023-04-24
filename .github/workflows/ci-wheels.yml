@@ -26,23 +26,19 @@ concurrency:
 
 jobs:
   build_bdist:
-    name: "Build ${{ matrix.os }} (${{ matrix.arch }}) wheels"
-    runs-on: ${{ matrix.os }}-latest
+    name: "Build ${{ matrix.os }} wheels"
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         # TBD: extend to support windows
-        os: ["ubuntu", "macos"]
-        arch: ["x86_64", "arm64"]
-        exclude:
-        - os: ubuntu
-          arch: arm64
+        os: ["ubuntu-latest", "macos-latest"]
         include:
-        - os: ubuntu
+        - os: ubuntu-latest
           incdir: /usr/include/udunits2
           libdir: /usr/lib64
           xml_path: /usr/share/udunits/udunits2.xml
-        - os: macos
+        - os: macos-latest
           incdir: /usr/local/Cellar/udunits/2.2.28/include
           libdir: /usr/local/Cellar/udunits/2.2.28/lib
           xml_path: /usr/local/Cellar/udunits/2.2.28/share/udunits/udunits2-common.xml
@@ -52,17 +48,18 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: "Building ${{ matrix.os }} (${{ matrix.arch }}) wheels"
+    - name: "Building ${{ matrix.os }} wheels"
       uses: pypa/cibuildwheel@v2.12.3
       env:
         CIBW_SKIP: "cp36-* cp37-* cp38-* pp* *-musllinux*"
-        CIBW_ARCHS: ${{ matrix.arch }}
+        CIBW_ARCHS_LINUX: "x86_64"
+        CIBW_ARCHS_MACOS: "x86_64 arm64"
         CIBW_BUILD_FRONTEND: build
         CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
         CIBW_BEFORE_BUILD_LINUX: yum install -y udunits2-devel
         CIBW_BEFORE_BUILD_MACOS: brew install udunits
         # https://cibuildwheel.readthedocs.io/en/stable/faq/#apple-silicon
-        CIBW_TEST_SKIP: "*_arm64"
+        CIBW_TEST_SKIP: "*-macosx_arm64"
         CIBW_TEST_REQUIRES: pytest
         CIBW_TEST_COMMAND: >
           python -c 'import cf_units; print(f"cf-units v{cf_units.__version__}")' &&
