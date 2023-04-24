@@ -33,10 +33,9 @@ class CleanCython(Command):
     def run(self):
         for path in CFUNITS_DIR.rglob("*"):
             if path.suffix in (".pyc", ".pyo", ".c", ".so"):
-                message = f"clean: removing file {path}"
-            else:
-                message = f"clean: skipping file {path}"
-            print(message)
+                msg = f"clean: removing file {path}"
+                print(msg)
+                path.unlink()
 
 
 def get_include_dirs():
