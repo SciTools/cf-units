@@ -25,22 +25,15 @@ repos:
         types: [file, python]
         args: [--config=./pyproject.toml]
 
--   repo: https://github.com/PyCQA/flake8
-    rev: 7.0.0
-    hooks:
-    -   id: flake8
-        types: [file, python]
-        args: [--config=./setup.cfg]
-
--   repo: https://github.com/PyCQA/isort
-    rev: 5.13.2
-    hooks:
-    -   id: isort
-        types: [file, python]
-        args: [--filter-files]
-
 -   repo: https://github.com/aio-libs/sort-all
     rev: v1.2.0
     hooks:
     -   id: sort-all
         types: [file, python]
+
+-   repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: "v0.0.260"
+    hooks:
+    -   id: ruff
+        types: [file, python]
+        args: [--fix]
