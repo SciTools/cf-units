@@ -46,12 +46,12 @@ write_to = "cf_units/_version.py"
 local_scheme = "dirty-tag"
 
 [tool.black]
-line-length = 88
+line-length = 79
 target-version = ["py38", "py39", "py310", "py311"]
 include = '\.pyi?$'
 
 [tool.ruff]
-line-length = 88
+line-length = 79
 target-version = "py38"
 select = [
     # pyflakes
@@ -71,7 +71,6 @@ select = [
 ignore = ["B904", "F403", "F405"]
 
 [tool.ruff.isort]
-force-sort-within-sections = true
 known-first-party = ["cf_units"]
 
 [tool.ruff.mccabe]
