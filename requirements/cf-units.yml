@@ -11,7 +11,7 @@ dependencies:
   - numpy
 
 # core dependencies
-  - antlr-python-runtime 4.7.2.*
+  - antlr-python-runtime 4.11.1.*
   - cftime>=1.2
   - numpy
   - udunits2
