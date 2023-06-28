@@ -24,7 +24,14 @@ Please commit the changed parser at the same time as any
 changes to the grammar being proposed so that the two can remain in synch.
 
 
-### Testing the gammar
+### Updating the ANTLR version
+
+The above script downloads a Java Jar which needs updating to the same version
+as antlr4-python3-runtime specified in the python requirements.  Once these have
+been updated, run [the script](compile.py) to regenerate the parser.
+
+
+### Testing the grammar
 
 An extensive set of tests exist to confirm that the parser produces equivalent results
 to the UDUNITS-2 reference implementation.
