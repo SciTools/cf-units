@@ -32,15 +32,15 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        version: [py38, py39, py310]
+        version: [py39, py310, py311]
         include:
           - os: ubuntu-latest
             platform: linux
           - os: ubuntu-latest
-            version: py310
+            version: py311
             posargs: "--cov-report=xml --cov"
             post-command: codecov
-          - version: py310
+          - version: py311
             os: macos-latest
             platform: osx
     steps:
@@ -55,7 +55,7 @@ jobs:
         echo "CACHE_PERIOD=$(date +%Y).$(expr $(date +%U) / ${CACHE_WEEKS})" >> ${GITHUB_ENV}
 
     - name: "Conda package cache"
-      uses: actions/cache@v3.0.5
+      uses: actions/cache@v3.3.1
       env:
         # Increment the build number to force a cache refresh.
         CACHE_BUILD: 2
@@ -74,7 +74,7 @@ jobs:
 
     - name: "Conda environment cache"
       id: conda-env-cache
-      uses: actions/cache@v3.0.5
+      uses: actions/cache@v3.3.1
       env:
         # Increment the build number to force a cache refresh.
         CACHE_BUILD: 2
@@ -85,7 +85,7 @@ jobs:
     - name: "Conda environment update"
       if: steps.conda-env-cache.outputs.cache-hit != 'true'
       run: |
-        conda install --name ${{ env.ENV_NAME }} tox
+        conda install --name ${{ env.ENV_NAME }} "tox<4"
 
     - name: "Conda info"
       run: |
@@ -93,7 +93,7 @@ jobs:
         conda list
 
     - name: "Tox cache"
-      uses: actions/cache@v3.0.5
+      uses: actions/cache@v3.3.1
       env:
         # Increment the build number to forece a cache refresh.
         CACHE_BUILD: 2

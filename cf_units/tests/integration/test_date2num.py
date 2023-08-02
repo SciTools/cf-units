@@ -1,8 +1,7 @@
 # Copyright cf-units contributors
 #
-# This file is part of cf-units and is released under the LGPL license.
-# See COPYING and COPYING.LESSER in the root of the repository for full
-# licensing details.
+# This file is part of cf-units and is released under the BSD license.
+# See LICENSE in the root of the repository for full licensing details.
 """Test function :func:`cf_units.date2num`."""
 
 import datetime
@@ -53,9 +52,9 @@ class Test:
         res = date2num(dates, self.unit, self.calendar)
         assert exp_shape == res.shape
 
-    def test_discard_microsecond(self):
+    def test_convert_microsecond(self):
         date = datetime.datetime(1970, 1, 1, 0, 0, 5, 750000)
-        exp = 5
+        exp = 5.75
         res = date2num(date, self.unit, self.calendar)
 
-        assert exp == res
+        assert exp == pytest.approx(res)

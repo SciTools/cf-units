@@ -1,14 +1,14 @@
 # Copyright cf-units contributors
 #
-# This file is part of cf-units and is released under the LGPL license.
-# See COPYING and COPYING.LESSER in the root of the repository for full
-# licensing details.
+# This file is part of cf-units and is released under the BSD license.
+# See LICENSE in the root of the repository for full licensing details.
 """
 Miscellaneous utility functions.
 
 """
 
 import abc
+import warnings
 from collections.abc import Hashable
 
 
@@ -17,7 +17,16 @@ def approx_equal(a, b, max_absolute_error=1e-10, max_relative_error=1e-10):
     Returns whether two numbers are almost equal, allowing for the
     finite precision of floating point numbers.
 
+    .. deprecated:: 3.2.0
+       Instead please use :func:`math.isclose`.
+
     """
+    msg = (
+        "cf_units.util.approx_equal has been deprecated and will be removed.  "
+        "Please use math.isclose instead."
+    )
+    warnings.warn(msg, DeprecationWarning, stacklevel=2)
+
     # Deal with numbers close to zero
     if abs(a - b) < max_absolute_error:
         return True

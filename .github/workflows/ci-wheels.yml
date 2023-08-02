@@ -53,9 +53,9 @@ jobs:
         fetch-depth: 0
 
     - name: "Building ${{ matrix.os }} (${{ matrix.arch }}) wheels"
-      uses: pypa/cibuildwheel@v2.8.0
+      uses: pypa/cibuildwheel@v2.14.0
       env:
-        CIBW_SKIP: "cp36-* cp37-* pp* *-musllinux*"
+        CIBW_SKIP: "cp36-* cp37-* cp38-* pp* *-musllinux*"
         CIBW_ARCHS: ${{ matrix.arch }}
         CIBW_BUILD_FRONTEND: build
         CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014

@@ -1,8 +1,7 @@
 # Copyright cf-units contributors
 #
-# This file is part of cf-units and is released under the LGPL license.
-# See COPYING and COPYING.LESSER in the root of the repository for full
-# licensing details.
+# This file is part of cf-units and is released under the BSD license.
+# See LICENSE in the root of the repository for full licensing details.
 """Unit tests for the `cf_units.Unit` class."""
 
 
@@ -74,7 +73,7 @@ class Test_convert__calendar:
     class MyStr(str):
         pass
 
-    def test_gregorian_calendar_conversion_setup(self):
+    def gregorian_calendar_conversion_setup(self):
         # Reproduces a situation where a unit's gregorian calendar would not
         # match (using the `is` operator) to the literal string 'gregorian',
         # causing an `is not` test to return a false negative.
@@ -89,15 +88,15 @@ class Test_convert__calendar:
         return expected, result
 
     def test_gregorian_calendar_conversion_array(self):
-        expected, result = self.test_gregorian_calendar_conversion_setup()
+        expected, result = self.gregorian_calendar_conversion_setup()
         np.testing.assert_array_equal(expected, result)
 
     def test_gregorian_calendar_conversion_dtype(self):
-        expected, result = self.test_gregorian_calendar_conversion_setup()
+        expected, result = self.gregorian_calendar_conversion_setup()
         assert expected.dtype == result.dtype
 
     def test_gregorian_calendar_conversion_shape(self):
-        expected, result = self.test_gregorian_calendar_conversion_setup()
+        expected, result = self.gregorian_calendar_conversion_setup()
         assert expected.shape == result.shape
 
     def test_non_gregorian_calendar_conversion_dtype(self):
