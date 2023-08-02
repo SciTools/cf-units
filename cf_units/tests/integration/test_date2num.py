@@ -7,6 +7,7 @@
 import datetime
 
 import numpy as np
+import pytest
 
 from cf_units import date2num
 
