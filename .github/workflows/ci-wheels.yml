@@ -48,7 +48,7 @@ jobs:
           xml_path: /usr/local/Cellar/udunits/2.2.28/share/udunits/udunits2-common.xml
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
@@ -82,7 +82,7 @@ jobs:
     name: "Build sdist"
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
