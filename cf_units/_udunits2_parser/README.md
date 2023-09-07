@@ -9,7 +9,6 @@ the multi-mode tokenizer of the UDUNITS-2 grammar.
 The [parser](udunits2Parser.g4) defines the grammar of the tokens, along with
 a number of convenient lexical elements.
 
-
 ### Generating the parser from the grammar
 
 Once the Jinja2 template has been expanded, the
@@ -23,13 +22,11 @@ deployment and testing (we know it isn't ideal, but it really does make things e
 Please commit the changed parser at the same time as any
 changes to the grammar being proposed so that the two can remain in synch.
 
-
 ### Updating the ANTLR version
 
 The above script downloads a Java Jar which needs updating to the same version
 as antlr4-python3-runtime specified in the python requirements.  Once these have
 been updated, run [the script](compile.py) to regenerate the parser.
-
 
 ### Testing the grammar
 
