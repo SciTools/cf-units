@@ -27,7 +27,7 @@ except ImportError:
     raise ImportError("Jinja2 needed to compile the grammar.")
 
 
-JAR_NAME = "antlr-4.7.2-complete.jar"
+JAR_NAME = "antlr-4.11.1-complete.jar"
 JAR_URL = f"https://www.antlr.org/download/{JAR_NAME}"
 HERE = Path(__file__).resolve().parent
 

@@ -1,60 +1,1242 @@
-# Generated from /Users/pelson/dev/scitools/cf-units/cf_units/_udunits2_parser/udunits2Parser.g4 by ANTLR 4.7.2
+# Generated from /home/ruth/git_stuff/cf-units/cf_units/_udunits2_parser/udunits2Parser.g4 by ANTLR 4.11.1
 # encoding: utf-8
 import sys
 from io import StringIO
-from typing.io import TextIO
 
 from antlr4 import *
 
+if sys.version_info[1] > 5:
+    from typing import TextIO
+else:
+    from typing.io import TextIO
+
 
 def serializedATN():
-    with StringIO() as buf:
-        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\35")
-        buf.write("\u0084\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7")
-        buf.write("\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\3\2\5\2\30\n\2\3\2")
-        buf.write("\3\2\3\3\3\3\3\3\5\3\37\n\3\3\3\3\3\5\3#\n\3\3\3\3\3\3")
-        buf.write("\3\3\3\5\3)\n\3\3\3\3\3\5\3-\n\3\3\3\3\3\5\3\61\n\3\3")
-        buf.write("\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\6\4")
-        buf.write("@\n\4\r\4\16\4A\3\4\7\4E\n\4\f\4\16\4H\13\4\3\5\3\5\3")
-        buf.write("\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\5\5U\n\5\3\6\3\6\3")
-        buf.write("\6\3\6\3\6\3\6\5\6]\n\6\3\7\3\7\3\b\3\b\5\bc\n\b\3\t\3")
-        buf.write("\t\3\t\5\th\n\t\3\t\3\t\5\tl\n\t\3\t\5\to\n\t\3\t\3\t")
-        buf.write("\3\t\5\tt\n\t\3\t\5\tw\n\t\5\ty\n\t\3\n\3\n\3\n\5\n~\n")
-        buf.write("\n\3\13\3\13\5\13\u0082\n\13\3\13\2\3\6\f\2\4\6\b\n\f")
-        buf.write("\16\20\22\24\2\4\4\2\3\3\13\13\4\2\13\13\33\33\2\u0096")
-        buf.write("\2\27\3\2\2\2\4\60\3\2\2\2\6\62\3\2\2\2\bT\3\2\2\2\n\\")
-        buf.write("\3\2\2\2\f^\3\2\2\2\16b\3\2\2\2\20x\3\2\2\2\22}\3\2\2")
-        buf.write("\2\24\u0081\3\2\2\2\26\30\5\4\3\2\27\26\3\2\2\2\27\30")
-        buf.write("\3\2\2\2\30\31\3\2\2\2\31\32\7\2\2\3\32\3\3\2\2\2\33\61")
-        buf.write("\5\6\4\2\34\36\5\6\4\2\35\37\7\25\2\2\36\35\3\2\2\2\36")
-        buf.write('\37\3\2\2\2\37 \3\2\2\2 "\7\16\2\2!#\7\25\2\2"!\3\2')
-        buf.write('\2\2"#\3\2\2\2#$\3\2\2\2$%\5\16\b\2%\61\3\2\2\2&(\5\6')
-        buf.write("\4\2')\7\25\2\2('\3\2\2\2()\3\2\2\2)*\3\2\2\2*,\7\16")
-        buf.write("\2\2+-\7\25\2\2,+\3\2\2\2,-\3\2\2\2-.\3\2\2\2./\5\20\t")
-        buf.write("\2/\61\3\2\2\2\60\33\3\2\2\2\60\34\3\2\2\2\60&\3\2\2\2")
-        buf.write("\61\5\3\2\2\2\62\63\b\4\1\2\63\64\5\b\5\2\64F\3\2\2\2")
-        buf.write("\65\66\f\6\2\2\66E\5\b\5\2\678\f\5\2\289\7\5\2\29E\5\b")
-        buf.write("\5\2:;\f\4\2\2;<\7\6\2\2<E\5\b\5\2=?\f\3\2\2>@\7\25\2")
-        buf.write("\2?>\3\2\2\2@A\3\2\2\2A?\3\2\2\2AB\3\2\2\2BC\3\2\2\2C")
-        buf.write("E\5\b\5\2D\65\3\2\2\2D\67\3\2\2\2D:\3\2\2\2D=\3\2\2\2")
-        buf.write("EH\3\2\2\2FD\3\2\2\2FG\3\2\2\2G\7\3\2\2\2HF\3\2\2\2IJ")
-        buf.write("\5\n\6\2JK\5\f\7\2KU\3\2\2\2LU\5\n\6\2MN\5\n\6\2NO\7\20")
-        buf.write("\2\2OP\5\f\7\2PU\3\2\2\2QR\5\n\6\2RS\7\17\2\2SU\3\2\2")
-        buf.write("\2TI\3\2\2\2TL\3\2\2\2TM\3\2\2\2TQ\3\2\2\2U\t\3\2\2\2")
-        buf.write("V]\7\23\2\2WX\7\b\2\2XY\5\4\3\2YZ\7\t\2\2Z]\3\2\2\2[]")
-        buf.write("\5\16\b\2\\V\3\2\2\2\\W\3\2\2\2\\[\3\2\2\2]\13\3\2\2\2")
-        buf.write("^_\t\2\2\2_\r\3\2\2\2`c\5\f\7\2ac\7\r\2\2b`\3\2\2\2ba")
-        buf.write("\3\2\2\2c\17\3\2\2\2dy\t\3\2\2eg\t\3\2\2fh\7\25\2\2gf")
-        buf.write("\3\2\2\2gh\3\2\2\2hi\3\2\2\2in\5\22\n\2jl\7\25\2\2kj\3")
-        buf.write("\2\2\2kl\3\2\2\2lm\3\2\2\2mo\5\24\13\2nk\3\2\2\2no\3\2")
-        buf.write("\2\2oy\3\2\2\2py\7\35\2\2qs\7\34\2\2rt\7\25\2\2sr\3\2")
-        buf.write("\2\2st\3\2\2\2tv\3\2\2\2uw\5\24\13\2vu\3\2\2\2vw\3\2\2")
-        buf.write("\2wy\3\2\2\2xd\3\2\2\2xe\3\2\2\2xp\3\2\2\2xq\3\2\2\2y")
-        buf.write("\21\3\2\2\2z~\7\30\2\2{~\7\31\2\2|~\5\f\7\2}z\3\2\2\2")
-        buf.write("}{\3\2\2\2}|\3\2\2\2~\23\3\2\2\2\177\u0082\7\31\2\2\u0080")
-        buf.write("\u0082\5\f\7\2\u0081\177\3\2\2\2\u0081\u0080\3\2\2\2\u0082")
-        buf.write('\25\3\2\2\2\26\27\36"(,\60ADFT\\bgknsvx}\u0081')
-        return buf.getvalue()
+    return [
+        4,
+        1,
+        27,
+        130,
+        2,
+        0,
+        7,
+        0,
+        2,
+        1,
+        7,
+        1,
+        2,
+        2,
+        7,
+        2,
+        2,
+        3,
+        7,
+        3,
+        2,
+        4,
+        7,
+        4,
+        2,
+        5,
+        7,
+        5,
+        2,
+        6,
+        7,
+        6,
+        2,
+        7,
+        7,
+        7,
+        2,
+        8,
+        7,
+        8,
+        2,
+        9,
+        7,
+        9,
+        1,
+        0,
+        3,
+        0,
+        22,
+        8,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        3,
+        1,
+        29,
+        8,
+        1,
+        1,
+        1,
+        1,
+        1,
+        3,
+        1,
+        33,
+        8,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        3,
+        1,
+        39,
+        8,
+        1,
+        1,
+        1,
+        1,
+        1,
+        3,
+        1,
+        43,
+        8,
+        1,
+        1,
+        1,
+        1,
+        1,
+        3,
+        1,
+        47,
+        8,
+        1,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        1,
+        2,
+        4,
+        2,
+        62,
+        8,
+        2,
+        11,
+        2,
+        12,
+        2,
+        63,
+        1,
+        2,
+        5,
+        2,
+        67,
+        8,
+        2,
+        10,
+        2,
+        12,
+        2,
+        70,
+        9,
+        2,
+        1,
+        3,
+        1,
+        3,
+        1,
+        3,
+        1,
+        3,
+        1,
+        3,
+        1,
+        3,
+        1,
+        3,
+        1,
+        3,
+        1,
+        3,
+        1,
+        3,
+        1,
+        3,
+        3,
+        3,
+        83,
+        8,
+        3,
+        1,
+        4,
+        1,
+        4,
+        1,
+        4,
+        1,
+        4,
+        1,
+        4,
+        1,
+        4,
+        3,
+        4,
+        91,
+        8,
+        4,
+        1,
+        5,
+        1,
+        5,
+        1,
+        6,
+        1,
+        6,
+        3,
+        6,
+        97,
+        8,
+        6,
+        1,
+        7,
+        1,
+        7,
+        1,
+        7,
+        3,
+        7,
+        102,
+        8,
+        7,
+        1,
+        7,
+        1,
+        7,
+        3,
+        7,
+        106,
+        8,
+        7,
+        1,
+        7,
+        3,
+        7,
+        109,
+        8,
+        7,
+        1,
+        7,
+        1,
+        7,
+        1,
+        7,
+        3,
+        7,
+        114,
+        8,
+        7,
+        1,
+        7,
+        3,
+        7,
+        117,
+        8,
+        7,
+        3,
+        7,
+        119,
+        8,
+        7,
+        1,
+        8,
+        1,
+        8,
+        1,
+        8,
+        3,
+        8,
+        124,
+        8,
+        8,
+        1,
+        9,
+        1,
+        9,
+        3,
+        9,
+        128,
+        8,
+        9,
+        1,
+        9,
+        0,
+        1,
+        4,
+        10,
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14,
+        16,
+        18,
+        0,
+        2,
+        2,
+        0,
+        1,
+        1,
+        9,
+        9,
+        2,
+        0,
+        9,
+        9,
+        25,
+        25,
+        148,
+        0,
+        21,
+        1,
+        0,
+        0,
+        0,
+        2,
+        46,
+        1,
+        0,
+        0,
+        0,
+        4,
+        48,
+        1,
+        0,
+        0,
+        0,
+        6,
+        82,
+        1,
+        0,
+        0,
+        0,
+        8,
+        90,
+        1,
+        0,
+        0,
+        0,
+        10,
+        92,
+        1,
+        0,
+        0,
+        0,
+        12,
+        96,
+        1,
+        0,
+        0,
+        0,
+        14,
+        118,
+        1,
+        0,
+        0,
+        0,
+        16,
+        123,
+        1,
+        0,
+        0,
+        0,
+        18,
+        127,
+        1,
+        0,
+        0,
+        0,
+        20,
+        22,
+        3,
+        2,
+        1,
+        0,
+        21,
+        20,
+        1,
+        0,
+        0,
+        0,
+        21,
+        22,
+        1,
+        0,
+        0,
+        0,
+        22,
+        23,
+        1,
+        0,
+        0,
+        0,
+        23,
+        24,
+        5,
+        0,
+        0,
+        1,
+        24,
+        1,
+        1,
+        0,
+        0,
+        0,
+        25,
+        47,
+        3,
+        4,
+        2,
+        0,
+        26,
+        28,
+        3,
+        4,
+        2,
+        0,
+        27,
+        29,
+        5,
+        19,
+        0,
+        0,
+        28,
+        27,
+        1,
+        0,
+        0,
+        0,
+        28,
+        29,
+        1,
+        0,
+        0,
+        0,
+        29,
+        30,
+        1,
+        0,
+        0,
+        0,
+        30,
+        32,
+        5,
+        12,
+        0,
+        0,
+        31,
+        33,
+        5,
+        19,
+        0,
+        0,
+        32,
+        31,
+        1,
+        0,
+        0,
+        0,
+        32,
+        33,
+        1,
+        0,
+        0,
+        0,
+        33,
+        34,
+        1,
+        0,
+        0,
+        0,
+        34,
+        35,
+        3,
+        12,
+        6,
+        0,
+        35,
+        47,
+        1,
+        0,
+        0,
+        0,
+        36,
+        38,
+        3,
+        4,
+        2,
+        0,
+        37,
+        39,
+        5,
+        19,
+        0,
+        0,
+        38,
+        37,
+        1,
+        0,
+        0,
+        0,
+        38,
+        39,
+        1,
+        0,
+        0,
+        0,
+        39,
+        40,
+        1,
+        0,
+        0,
+        0,
+        40,
+        42,
+        5,
+        12,
+        0,
+        0,
+        41,
+        43,
+        5,
+        19,
+        0,
+        0,
+        42,
+        41,
+        1,
+        0,
+        0,
+        0,
+        42,
+        43,
+        1,
+        0,
+        0,
+        0,
+        43,
+        44,
+        1,
+        0,
+        0,
+        0,
+        44,
+        45,
+        3,
+        14,
+        7,
+        0,
+        45,
+        47,
+        1,
+        0,
+        0,
+        0,
+        46,
+        25,
+        1,
+        0,
+        0,
+        0,
+        46,
+        26,
+        1,
+        0,
+        0,
+        0,
+        46,
+        36,
+        1,
+        0,
+        0,
+        0,
+        47,
+        3,
+        1,
+        0,
+        0,
+        0,
+        48,
+        49,
+        6,
+        2,
+        -1,
+        0,
+        49,
+        50,
+        3,
+        6,
+        3,
+        0,
+        50,
+        68,
+        1,
+        0,
+        0,
+        0,
+        51,
+        52,
+        10,
+        4,
+        0,
+        0,
+        52,
+        67,
+        3,
+        6,
+        3,
+        0,
+        53,
+        54,
+        10,
+        3,
+        0,
+        0,
+        54,
+        55,
+        5,
+        3,
+        0,
+        0,
+        55,
+        67,
+        3,
+        6,
+        3,
+        0,
+        56,
+        57,
+        10,
+        2,
+        0,
+        0,
+        57,
+        58,
+        5,
+        4,
+        0,
+        0,
+        58,
+        67,
+        3,
+        6,
+        3,
+        0,
+        59,
+        61,
+        10,
+        1,
+        0,
+        0,
+        60,
+        62,
+        5,
+        19,
+        0,
+        0,
+        61,
+        60,
+        1,
+        0,
+        0,
+        0,
+        62,
+        63,
+        1,
+        0,
+        0,
+        0,
+        63,
+        61,
+        1,
+        0,
+        0,
+        0,
+        63,
+        64,
+        1,
+        0,
+        0,
+        0,
+        64,
+        65,
+        1,
+        0,
+        0,
+        0,
+        65,
+        67,
+        3,
+        6,
+        3,
+        0,
+        66,
+        51,
+        1,
+        0,
+        0,
+        0,
+        66,
+        53,
+        1,
+        0,
+        0,
+        0,
+        66,
+        56,
+        1,
+        0,
+        0,
+        0,
+        66,
+        59,
+        1,
+        0,
+        0,
+        0,
+        67,
+        70,
+        1,
+        0,
+        0,
+        0,
+        68,
+        66,
+        1,
+        0,
+        0,
+        0,
+        68,
+        69,
+        1,
+        0,
+        0,
+        0,
+        69,
+        5,
+        1,
+        0,
+        0,
+        0,
+        70,
+        68,
+        1,
+        0,
+        0,
+        0,
+        71,
+        72,
+        3,
+        8,
+        4,
+        0,
+        72,
+        73,
+        3,
+        10,
+        5,
+        0,
+        73,
+        83,
+        1,
+        0,
+        0,
+        0,
+        74,
+        83,
+        3,
+        8,
+        4,
+        0,
+        75,
+        76,
+        3,
+        8,
+        4,
+        0,
+        76,
+        77,
+        5,
+        14,
+        0,
+        0,
+        77,
+        78,
+        3,
+        10,
+        5,
+        0,
+        78,
+        83,
+        1,
+        0,
+        0,
+        0,
+        79,
+        80,
+        3,
+        8,
+        4,
+        0,
+        80,
+        81,
+        5,
+        13,
+        0,
+        0,
+        81,
+        83,
+        1,
+        0,
+        0,
+        0,
+        82,
+        71,
+        1,
+        0,
+        0,
+        0,
+        82,
+        74,
+        1,
+        0,
+        0,
+        0,
+        82,
+        75,
+        1,
+        0,
+        0,
+        0,
+        82,
+        79,
+        1,
+        0,
+        0,
+        0,
+        83,
+        7,
+        1,
+        0,
+        0,
+        0,
+        84,
+        91,
+        5,
+        17,
+        0,
+        0,
+        85,
+        86,
+        5,
+        6,
+        0,
+        0,
+        86,
+        87,
+        3,
+        2,
+        1,
+        0,
+        87,
+        88,
+        5,
+        7,
+        0,
+        0,
+        88,
+        91,
+        1,
+        0,
+        0,
+        0,
+        89,
+        91,
+        3,
+        12,
+        6,
+        0,
+        90,
+        84,
+        1,
+        0,
+        0,
+        0,
+        90,
+        85,
+        1,
+        0,
+        0,
+        0,
+        90,
+        89,
+        1,
+        0,
+        0,
+        0,
+        91,
+        9,
+        1,
+        0,
+        0,
+        0,
+        92,
+        93,
+        7,
+        0,
+        0,
+        0,
+        93,
+        11,
+        1,
+        0,
+        0,
+        0,
+        94,
+        97,
+        3,
+        10,
+        5,
+        0,
+        95,
+        97,
+        5,
+        11,
+        0,
+        0,
+        96,
+        94,
+        1,
+        0,
+        0,
+        0,
+        96,
+        95,
+        1,
+        0,
+        0,
+        0,
+        97,
+        13,
+        1,
+        0,
+        0,
+        0,
+        98,
+        119,
+        7,
+        1,
+        0,
+        0,
+        99,
+        101,
+        7,
+        1,
+        0,
+        0,
+        100,
+        102,
+        5,
+        19,
+        0,
+        0,
+        101,
+        100,
+        1,
+        0,
+        0,
+        0,
+        101,
+        102,
+        1,
+        0,
+        0,
+        0,
+        102,
+        103,
+        1,
+        0,
+        0,
+        0,
+        103,
+        108,
+        3,
+        16,
+        8,
+        0,
+        104,
+        106,
+        5,
+        19,
+        0,
+        0,
+        105,
+        104,
+        1,
+        0,
+        0,
+        0,
+        105,
+        106,
+        1,
+        0,
+        0,
+        0,
+        106,
+        107,
+        1,
+        0,
+        0,
+        0,
+        107,
+        109,
+        3,
+        18,
+        9,
+        0,
+        108,
+        105,
+        1,
+        0,
+        0,
+        0,
+        108,
+        109,
+        1,
+        0,
+        0,
+        0,
+        109,
+        119,
+        1,
+        0,
+        0,
+        0,
+        110,
+        119,
+        5,
+        27,
+        0,
+        0,
+        111,
+        113,
+        5,
+        26,
+        0,
+        0,
+        112,
+        114,
+        5,
+        19,
+        0,
+        0,
+        113,
+        112,
+        1,
+        0,
+        0,
+        0,
+        113,
+        114,
+        1,
+        0,
+        0,
+        0,
+        114,
+        116,
+        1,
+        0,
+        0,
+        0,
+        115,
+        117,
+        3,
+        18,
+        9,
+        0,
+        116,
+        115,
+        1,
+        0,
+        0,
+        0,
+        116,
+        117,
+        1,
+        0,
+        0,
+        0,
+        117,
+        119,
+        1,
+        0,
+        0,
+        0,
+        118,
+        98,
+        1,
+        0,
+        0,
+        0,
+        118,
+        99,
+        1,
+        0,
+        0,
+        0,
+        118,
+        110,
+        1,
+        0,
+        0,
+        0,
+        118,
+        111,
+        1,
+        0,
+        0,
+        0,
+        119,
+        15,
+        1,
+        0,
+        0,
+        0,
+        120,
+        124,
+        5,
+        22,
+        0,
+        0,
+        121,
+        124,
+        5,
+        23,
+        0,
+        0,
+        122,
+        124,
+        3,
+        10,
+        5,
+        0,
+        123,
+        120,
+        1,
+        0,
+        0,
+        0,
+        123,
+        121,
+        1,
+        0,
+        0,
+        0,
+        123,
+        122,
+        1,
+        0,
+        0,
+        0,
+        124,
+        17,
+        1,
+        0,
+        0,
+        0,
+        125,
+        128,
+        5,
+        23,
+        0,
+        0,
+        126,
+        128,
+        3,
+        10,
+        5,
+        0,
+        127,
+        125,
+        1,
+        0,
+        0,
+        0,
+        127,
+        126,
+        1,
+        0,
+        0,
+        0,
+        128,
+        19,
+        1,
+        0,
+        0,
+        0,
+        20,
+        21,
+        28,
+        32,
+        38,
+        42,
+        46,
+        63,
+        66,
+        68,
+        82,
+        90,
+        96,
+        101,
+        105,
+        108,
+        113,
+        116,
+        118,
+        123,
+        127,
+    ]
 
 
 class udunits2Parser(Parser):
@@ -180,13 +1362,15 @@ class udunits2Parser(Parser):
 
     def __init__(self, input: TokenStream, output: TextIO = sys.stdout):
         super().__init__(input, output)
-        self.checkVersion("4.7.2")
+        self.checkVersion("4.11.1")
         self._interp = ParserATNSimulator(
             self, self.atn, self.decisionsToDFA, self.sharedContextCache
         )
         self._predicates = None
 
     class Unit_specContext(ParserRuleContext):
+        __slots__ = "parser"
+
         def __init__(
             self,
             parser,
@@ -222,16 +1406,7 @@ class udunits2Parser(Parser):
             self.state = 21
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if ((_la) & ~0x3F) == 0 and (
-                (1 << _la)
-                & (
-                    (1 << udunits2Parser.SIGNED_INT)
-                    | (1 << udunits2Parser.OPEN_PAREN)
-                    | (1 << udunits2Parser.INT)
-                    | (1 << udunits2Parser.FLOAT)
-                    | (1 << udunits2Parser.ID)
-                )
-            ) != 0:
+            if ((_la) & ~0x3F) == 0 and ((1 << _la) & 133698) != 0:
                 self.state = 20
                 self.shift_spec()
 
@@ -246,6 +1421,8 @@ class udunits2Parser(Parser):
         return localctx
 
     class Shift_specContext(ParserRuleContext):
+        __slots__ = "parser"
+
         def __init__(
             self,
             parser,
@@ -305,7 +1482,7 @@ class udunits2Parser(Parser):
                 self.state = 28
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if _la == udunits2Parser.WS:
+                if _la == 19:
                     self.state = 27
                     self.match(udunits2Parser.WS)
 
@@ -314,7 +1491,7 @@ class udunits2Parser(Parser):
                 self.state = 32
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if _la == udunits2Parser.WS:
+                if _la == 19:
                     self.state = 31
                     self.match(udunits2Parser.WS)
 
@@ -329,7 +1506,7 @@ class udunits2Parser(Parser):
                 self.state = 38
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if _la == udunits2Parser.WS:
+                if _la == 19:
                     self.state = 37
                     self.match(udunits2Parser.WS)
 
@@ -338,7 +1515,7 @@ class udunits2Parser(Parser):
                 self.state = 42
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if _la == udunits2Parser.WS:
+                if _la == 19:
                     self.state = 41
                     self.match(udunits2Parser.WS)
 
@@ -355,6 +1532,8 @@ class udunits2Parser(Parser):
         return localctx
 
     class ProductContext(ParserRuleContext):
+        __slots__ = "parser"
+
         def __init__(
             self,
             parser,
@@ -506,7 +1685,7 @@ class udunits2Parser(Parser):
                             self.state = 63
                             self._errHandler.sync(self)
                             _la = self._input.LA(1)
-                            if not (_la == udunits2Parser.WS):
+                            if not (_la == 19):
                                 break
 
                         self.state = 65
@@ -526,6 +1705,8 @@ class udunits2Parser(Parser):
         return localctx
 
     class PowerContext(ParserRuleContext):
+        __slots__ = "parser"
+
         def __init__(
             self,
             parser,
@@ -606,6 +1787,8 @@ class udunits2Parser(Parser):
         return localctx
 
     class Basic_specContext(ParserRuleContext):
+        __slots__ = "parser"
+
         def __init__(
             self,
             parser,
@@ -650,12 +1833,12 @@ class udunits2Parser(Parser):
             self.state = 90
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [udunits2Parser.ID]:
+            if token in [17]:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 84
                 self.match(udunits2Parser.ID)
                 pass
-            elif token in [udunits2Parser.OPEN_PAREN]:
+            elif token in [6]:
                 self.enterOuterAlt(localctx, 2)
                 self.state = 85
                 self.match(udunits2Parser.OPEN_PAREN)
@@ -664,11 +1847,7 @@ class udunits2Parser(Parser):
                 self.state = 87
                 self.match(udunits2Parser.CLOSE_PAREN)
                 pass
-            elif token in [
-                udunits2Parser.SIGNED_INT,
-                udunits2Parser.INT,
-                udunits2Parser.FLOAT,
-            ]:
+            elif token in [1, 9, 11]:
                 self.enterOuterAlt(localctx, 3)
                 self.state = 89
                 self.number()
@@ -685,6 +1864,8 @@ class udunits2Parser(Parser):
         return localctx
 
     class IntegerContext(ParserRuleContext):
+        __slots__ = "parser"
+
         def __init__(
             self,
             parser,
@@ -717,9 +1898,7 @@ class udunits2Parser(Parser):
             self.enterOuterAlt(localctx, 1)
             self.state = 92
             _la = self._input.LA(1)
-            if not (
-                _la == udunits2Parser.SIGNED_INT or _la == udunits2Parser.INT
-            ):
+            if not (_la == 1 or _la == 9):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -733,6 +1912,8 @@ class udunits2Parser(Parser):
         return localctx
 
     class NumberContext(ParserRuleContext):
+        __slots__ = "parser"
+
         def __init__(
             self,
             parser,
@@ -764,12 +1945,12 @@ class udunits2Parser(Parser):
             self.state = 96
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [udunits2Parser.SIGNED_INT, udunits2Parser.INT]:
+            if token in [1, 9]:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 94
                 self.integer()
                 pass
-            elif token in [udunits2Parser.FLOAT]:
+            elif token in [11]:
                 self.enterOuterAlt(localctx, 2)
                 self.state = 95
                 self.match(udunits2Parser.FLOAT)
@@ -786,6 +1967,8 @@ class udunits2Parser(Parser):
         return localctx
 
     class TimestampContext(ParserRuleContext):
+        __slots__ = "parser"
+
         def __init__(
             self,
             parser,
@@ -844,9 +2027,7 @@ class udunits2Parser(Parser):
                 self.enterOuterAlt(localctx, 1)
                 self.state = 98
                 _la = self._input.LA(1)
-                if not (
-                    _la == udunits2Parser.INT or _la == udunits2Parser.DATE
-                ):
+                if not (_la == 9 or _la == 25):
                     self._errHandler.recoverInline(self)
                 else:
                     self._errHandler.reportMatch(self)
@@ -857,9 +2038,7 @@ class udunits2Parser(Parser):
                 self.enterOuterAlt(localctx, 2)
                 self.state = 99
                 _la = self._input.LA(1)
-                if not (
-                    _la == udunits2Parser.INT or _la == udunits2Parser.DATE
-                ):
+                if not (_la == 9 or _la == 25):
                     self._errHandler.recoverInline(self)
                 else:
                     self._errHandler.reportMatch(self)
@@ -867,7 +2046,7 @@ class udunits2Parser(Parser):
                 self.state = 101
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if _la == udunits2Parser.WS:
+                if _la == 19:
                     self.state = 100
                     self.match(udunits2Parser.WS)
 
@@ -876,19 +2055,11 @@ class udunits2Parser(Parser):
                 self.state = 108
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if ((_la) & ~0x3F) == 0 and (
-                    (1 << _la)
-                    & (
-                        (1 << udunits2Parser.SIGNED_INT)
-                        | (1 << udunits2Parser.INT)
-                        | (1 << udunits2Parser.WS)
-                        | (1 << udunits2Parser.HOUR_MINUTE)
-                    )
-                ) != 0:
+                if ((_la) & ~0x3F) == 0 and ((1 << _la) & 8913410) != 0:
                     self.state = 105
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if _la == udunits2Parser.WS:
+                    if _la == 19:
                         self.state = 104
                         self.match(udunits2Parser.WS)
 
@@ -910,21 +2081,14 @@ class udunits2Parser(Parser):
                 self.state = 113
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if _la == udunits2Parser.WS:
+                if _la == 19:
                     self.state = 112
                     self.match(udunits2Parser.WS)
 
                 self.state = 116
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if ((_la) & ~0x3F) == 0 and (
-                    (1 << _la)
-                    & (
-                        (1 << udunits2Parser.SIGNED_INT)
-                        | (1 << udunits2Parser.INT)
-                        | (1 << udunits2Parser.HOUR_MINUTE)
-                    )
-                ) != 0:
+                if ((_la) & ~0x3F) == 0 and ((1 << _la) & 8389122) != 0:
                     self.state = 115
                     self.timezone_offset()
 
@@ -939,6 +2103,8 @@ class udunits2Parser(Parser):
         return localctx
 
     class Signed_clockContext(ParserRuleContext):
+        __slots__ = "parser"
+
         def __init__(
             self,
             parser,
@@ -975,17 +2141,17 @@ class udunits2Parser(Parser):
             self.state = 123
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [udunits2Parser.HOUR_MINUTE_SECOND]:
+            if token in [22]:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 120
                 self.match(udunits2Parser.HOUR_MINUTE_SECOND)
                 pass
-            elif token in [udunits2Parser.HOUR_MINUTE]:
+            elif token in [23]:
                 self.enterOuterAlt(localctx, 2)
                 self.state = 121
                 self.match(udunits2Parser.HOUR_MINUTE)
                 pass
-            elif token in [udunits2Parser.SIGNED_INT, udunits2Parser.INT]:
+            elif token in [1, 9]:
                 self.enterOuterAlt(localctx, 3)
                 self.state = 122
                 self.integer()
@@ -1002,6 +2168,8 @@ class udunits2Parser(Parser):
         return localctx
 
     class Timezone_offsetContext(ParserRuleContext):
+        __slots__ = "parser"
+
         def __init__(
             self,
             parser,
@@ -1035,12 +2203,12 @@ class udunits2Parser(Parser):
             self.state = 127
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [udunits2Parser.HOUR_MINUTE]:
+            if token in [23]:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 125
                 self.match(udunits2Parser.HOUR_MINUTE)
                 pass
-            elif token in [udunits2Parser.SIGNED_INT, udunits2Parser.INT]:
+            elif token in [1, 9]:
                 self.enterOuterAlt(localctx, 2)
                 self.state = 126
                 self.integer()
