@@ -40,7 +40,7 @@ jobs:
         echo "CACHE_PERIOD=$(date +%Y).$(expr $(date +%U) / ${CACHE_WEEKS})" >> ${GITHUB_ENV}
 
     - name: "Conda package cache"
-      uses: actions/cache@v3.3.1
+      uses: actions/cache@v3.3.2
       env:
         # Increment the build number to force a cache refresh.
         CACHE_BUILD: 2
@@ -59,7 +59,7 @@ jobs:
 
     - name: "Conda environment cache"
       id: conda-env-cache
-      uses: actions/cache@v3.3.1
+      uses: actions/cache@v3.3.2
       env:
         # Increment the build number to force a cache refresh.
         CACHE_BUILD: 2
@@ -78,7 +78,7 @@ jobs:
         conda list
 
     - name: "Tox cache"
-      uses: actions/cache@v3.3.1
+      uses: actions/cache@v3.3.2
       env:
         # Increment the build number to forece a cache refresh.
         CACHE_BUILD: 2
@@ -113,7 +113,7 @@ jobs:
         path: ${{ github.workspace }}/requirements/locks
 
     - name: "Generate token"
-      uses: tibdex/github-app-token@v1
+      uses: tibdex/github-app-token@v2
       id: generate-token
       with:
         app_id: ${{ secrets.AUTH_APP_ID }}
