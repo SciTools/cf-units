@@ -874,7 +874,7 @@ class Unit(_OrderedHashable):
         discrepancy means we cannot run self.num2date() on a time unit with
         a long time interval.
 
-        .. deprecated:: 3.2.0
+        .. deprecated:: 3.3.0
 
             Invalid long time intervals are now defended against within
             cftime - do not use this routine, as cftime knows best what it can
