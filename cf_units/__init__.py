@@ -16,6 +16,7 @@ See also: `UDUNITS-2
 import copy
 import math
 from contextlib import contextmanager
+from warnings import warn
 
 import cftime
 import numpy as np
@@ -873,6 +874,12 @@ class Unit(_OrderedHashable):
         discrepancy means we cannot run self.num2date() on a time unit with
         a long time interval.
 
+        .. deprecated:: 3.3.0
+
+            Invalid long time intervals are now defended against within
+            cftime - do not use this routine, as cftime knows best what it can
+            and cannot support.
+
         Returns:
             Boolean.
 
@@ -887,6 +894,12 @@ class Unit(_OrderedHashable):
             True
 
         """
+        deprecation = (
+            "This method is no longer needed due to cftime's improved "
+            "handling of long time intervals."
+        )
+        warn(deprecation, DeprecationWarning, stacklevel=2)
+
         result = False
         long_time_intervals = ["year", "month"]
         if self.is_time_reference():
@@ -1829,15 +1842,6 @@ class Unit(_OrderedHashable):
         """
         if self.calendar is None:
             raise ValueError("Unit has undefined calendar")
-
-        # `cftime` cannot parse long time intervals ("months" or "years").
-        if self.is_long_time_interval():
-            interval = self.origin.split(" ")[0]
-            emsg = (
-                'Time units with interval of "months", "years" '
-                '(or singular of these) cannot be processed, got "{!s}".'
-            )
-            raise ValueError(emsg.format(interval))
 
         #
         # ensure to strip out non-parsable 'UTC' postfix, which

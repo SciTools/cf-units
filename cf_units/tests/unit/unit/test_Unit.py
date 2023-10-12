@@ -55,11 +55,6 @@ class Test_change_calendar:
         # the same object.
         assert result is not u
 
-    def test_long_time_interval(self):
-        u = Unit("months since 1970-01-01", calendar="standard")
-        with pytest.raises(ValueError, match="cannot be processed"):
-            u.change_calendar("proleptic_gregorian")
-
     def test_wrong_calendar(self):
         u = Unit("days since 1900-01-01", calendar="360_day")
         with pytest.raises(
@@ -273,6 +268,14 @@ class Test_convert__masked_array:
 
 
 class Test_is_long_time_interval:
+    @staticmethod
+    def test_deprecated():
+        unit = Unit("seconds since epoch")
+        with pytest.warns(
+            DeprecationWarning, match="This method is no longer needed"
+        ):
+            _ = unit.is_long_time_interval()
+
     def test_short_time_interval(self):
         # A short time interval is a time interval from seconds to days.
         unit = Unit("seconds since epoch")

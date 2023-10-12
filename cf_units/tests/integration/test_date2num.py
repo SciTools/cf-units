@@ -59,11 +59,3 @@ class Test:
         res = date2num(date, self.unit, self.calendar)
 
         assert exp == pytest.approx(res)
-
-    def test_long_time_interval(self):
-        # This test should fail with an error that we need to catch properly.
-        unit = "years since 1970-01-01"
-        date = datetime.datetime(1970, 1, 1, 0, 0, 5)
-        exp_emsg = 'interval of "months", "years" .* got "years".'
-        with pytest.raises(ValueError, match=exp_emsg):
-            date2num(date, unit, self.calendar)
