@@ -833,7 +833,7 @@ class Test_title:
 class Test__immutable:
     def _set_attr(self, unit, name):
         setattr(unit, name, -999)
-        raise ValueError("'Unit' attribute {!r} is mutable!".format(name))
+        raise ValueError(f"'Unit' attribute {name!r} is mutable!")
 
     def test_immutable(self):
         u = Unit("m")
