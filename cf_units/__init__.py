@@ -1341,8 +1341,7 @@ class Unit(_OrderedHashable):
             except _ud.UdunitsError as exception:
                 value_err = _ud_value_error(
                     exception,
-                    "Failed to calculate logorithmic base "
-                    f"of {self!r}",
+                    "Failed to calculate logorithmic base " f"of {self!r}",
                 )
                 raise value_err from None
             calendar = None
