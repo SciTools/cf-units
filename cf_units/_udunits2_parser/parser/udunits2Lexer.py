@@ -1,6 +1,5 @@
 # Generated from /home/ruth/git_stuff/cf-units/cf_units/_udunits2_parser/parser/udunits2Lexer.g4 by ANTLR 4.11.1
 import sys
-from io import StringIO
 
 from antlr4 import *
 

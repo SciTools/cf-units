@@ -75,7 +75,7 @@ class TestLicenseHeaders:
         """
         # Check the ".git" folder exists at the repo dir.
         if not os.path.isdir(os.path.join(REPO_DIR, ".git")):
-            raise ValueError("{} is not a git repository.".format(REPO_DIR))
+            raise ValueError(f"{REPO_DIR} is not a git repository.")
 
         # Call "git whatchanged" to get the details of all the files and when
         # they were last changed.

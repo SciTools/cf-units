@@ -169,7 +169,7 @@ class SyntaxErrorRaiser(ErrorListener):
 
     def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
         # https://stackoverflow.com/a/36367357/741316
-        context = ("inline", line, column + 2, "'{}'".format(self.unit_string))
+        context = ("inline", line, column + 2, f"'{self.unit_string}'")
         syntax_error = SyntaxError(msg, context)
         raise syntax_error from None
 

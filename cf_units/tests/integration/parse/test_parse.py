@@ -169,7 +169,7 @@ def test_invalid_units(_, unit_str):
     # Double check that udunits2 can't parse this.
     assert (
         cf_valid is False
-    ), "Unit {!r} is unexpectedly valid in UDUNITS2".format(unit_str)
+    ), f"Unit {unit_str!r} is unexpectedly valid in UDUNITS2"
 
     try:
         normalize(unit_str)
@@ -178,7 +178,7 @@ def test_invalid_units(_, unit_str):
         can_parse = False
 
     # Now confirm that we couldn't parse this either.
-    msg = "Parser unexpectedly able to deal with {}".format(unit_str)
+    msg = f"Parser unexpectedly able to deal with {unit_str}"
     assert can_parse is False, msg
 
 

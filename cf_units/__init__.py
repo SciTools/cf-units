@@ -566,11 +566,9 @@ def _ud_value_error(ud_err, message):
 
     ud_msg = ud_err.error_msg()
     if ud_msg:
-        message = "{}: {}".format(message, ud_msg)
+        message = f"{message}: {ud_msg}"
 
-    message = "[{status}] {message}".format(
-        status=ud_err.status_msg(), message=message
-    )
+    message = f"[{ud_err.status_msg()}] {message}"
 
     return ValueError(message)
 
@@ -727,7 +725,7 @@ class Unit(_OrderedHashable):
                 ut_unit = _ud.parse(_ud_system, unit.encode("utf8"), encoding)
             except _ud.UdunitsError as exception:
                 value_error = _ud_value_error(
-                    exception, 'Failed to parse unit "{}"'.format(str_unit)
+                    exception, f'Failed to parse unit "{str_unit}"'
                 )
                 raise value_error from None
             if _OP_SINCE in unit.lower():
@@ -1228,7 +1226,7 @@ class Unit(_OrderedHashable):
             ut_unit = _ud.offset_by_time(self.ut_unit, origin)
         except _ud.UdunitsError as exception:
             value_error = _ud_value_error(
-                exception, "Failed to offset {!r}".format(self)
+                exception, f"Failed to offset {self!r}"
             )
             raise value_error from None
         calendar = None
@@ -1300,7 +1298,7 @@ class Unit(_OrderedHashable):
                 except _ud.UdunitsError as exception:
                     value_error = _ud_value_error(
                         exception,
-                        "Failed to take the root of {!r}".format(self),
+                        f"Failed to take the root of {self!r}",
                     )
                     raise value_error from None
                 calendar = None
@@ -1344,7 +1342,7 @@ class Unit(_OrderedHashable):
                 value_err = _ud_value_error(
                     exception,
                     "Failed to calculate logorithmic base "
-                    "of {!r}".format(self),
+                    f"of {self!r}",
                 )
                 raise value_err from None
             calendar = None
@@ -1386,7 +1384,7 @@ class Unit(_OrderedHashable):
 
         """
         if self.calendar is None:
-            result = "{}('{}')".format(self.__class__.__name__, self)
+            result = f"{self.__class__.__name__}('{self}')"
         else:
             result = "{}('{}', calendar='{}')".format(
                 self.__class__.__name__, self, self.calendar
@@ -1440,7 +1438,7 @@ class Unit(_OrderedHashable):
             except _ud.UdunitsError as exception:
                 value_err = _ud_value_error(
                     exception,
-                    "Failed to {} {!r} by {!r}".format(op_label, self, other),
+                    f"Failed to {op_label} {self!r} by {other!r}",
                 )
                 raise value_err from None
             calendar = None
@@ -1595,7 +1593,7 @@ class Unit(_OrderedHashable):
                 except _ud.UdunitsError as exception:
                     value_err = _ud_value_error(
                         exception,
-                        "Failed to raise the power of {!r}".format(self),
+                        f"Failed to raise the power of {self!r}",
                     )
                     raise value_err from None
                 result = Unit._new_from_existing_ut(_CATEGORY_UDUNIT, ut_unit)
@@ -1772,7 +1770,7 @@ class Unit(_OrderedHashable):
                 except _ud.UdunitsError as exception:
                     value_err = _ud_value_error(
                         exception,
-                        "Failed to convert {!r} to {!r}".format(self, other),
+                        f"Failed to convert {self!r} to {other!r}",
                     )
                     raise value_err from None
                 if isinstance(result, np.ndarray):
