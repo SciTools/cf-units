@@ -2223,8 +2223,8 @@ class udunits2Parser(Parser):
         return localctx
 
     def sempred(self, localctx: RuleContext, ruleIndex: int, predIndex: int):
-        if self._predicates == None:
-            self._predicates = dict()
+        if self._predicates is None:
+            self._predicates = {}
         self._predicates[2] = self.product_sempred
         pred = self._predicates.get(ruleIndex, None)
         if pred is None:

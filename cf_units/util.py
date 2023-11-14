@@ -64,8 +64,8 @@ class _MetaOrderedHashable(abc.ABCMeta):
             if "__init__" not in namespace:
                 # Create a default __init__ method for the class
                 method_source = (
-                    "def __init__(self, %s):\n "
-                    "self._init_from_tuple((%s,))" % (args, args)
+                    f"def __init__(self, {args}):\n "
+                    f"self._init_from_tuple(({args},))"
                 )
                 exec(method_source, namespace)
 
@@ -74,12 +74,12 @@ class _MetaOrderedHashable(abc.ABCMeta):
             if "_init" not in namespace:
                 # Create a default _init method for the class
                 method_source = (
-                    "def _init(self, %s):\n "
-                    "self._init_from_tuple((%s,))" % (args, args)
+                    f"def _init(self, {args}):\n "
+                    f"self._init_from_tuple(({args},))"
                 )
                 exec(method_source, namespace)
 
-        return super(_MetaOrderedHashable, cls).__new__(
+        return super().__new__(
             cls, name, bases, namespace
         )
 

@@ -191,8 +191,7 @@ with suppress_errors():
         except _ud.UdunitsError as e:
             error_msg = ': "%s"' % e.error_msg() if e.errnum else ""
             raise OSError(
-                "[%s] Failed to open UDUNITS-2 XML unit database%s"
-                % (e.status_msg(), error_msg)
+                f"[{e.status_msg()}] Failed to open UDUNITS-2 XML unit database{error_msg}"
             )
 
 
@@ -930,7 +929,7 @@ class Unit(_OrderedHashable):
             dt = self.num2date(value)
             result = dt.strftime("%Y-%m-%d %H:%M:%S")
         else:
-            result = "%s %s" % (str(value), self)
+            result = f"{str(value)} {self}"
         return result
 
     @property
@@ -1793,8 +1792,7 @@ class Unit(_OrderedHashable):
                     # Strict type check of numpy array.
                     if result.dtype.type not in (np.float32, np.float64):
                         raise TypeError(
-                            "Expect a numpy array of '%s' or '%s'"
-                            % np.float32,
+                            "Expect a numpy array of '{}' or '{}'".format(*np.float32),
                             np.float64,
                         )
                     ctype = result.dtype.type
@@ -1827,7 +1825,7 @@ class Unit(_OrderedHashable):
             return result
         else:
             raise ValueError(
-                "Unable to convert from '%r' to '%r'." % (self, other)
+                f"Unable to convert from '{self!r}' to '{other!r}'."
             )
 
     @property

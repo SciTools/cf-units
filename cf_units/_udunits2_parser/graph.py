@@ -30,7 +30,7 @@ class Node:
         kwargs = ", ".join(
             f"{key}={value!r}" for key, value in self._attrs.items()
         )
-        return dict(cls_name=self.__class__.__name__, kwargs=kwargs)
+        return {"cls_name": self.__class__.__name__, "kwargs": kwargs}
 
     def __repr__(self):
         return "{cls_name}({kwargs})".format(**self._repr_ctx())
