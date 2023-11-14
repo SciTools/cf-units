@@ -192,7 +192,7 @@ def _debug_tokens(unit_string):
             continue
         token_type_idx = token.type
         rule = TOKEN_ID_NAMES[token_type_idx]
-        print("%s: %s" % (token.text, rule))
+        print(f"{token.text}: {rule}")
 
 
 def normalize(unit_string):

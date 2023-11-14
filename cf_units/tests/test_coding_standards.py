@@ -109,7 +109,7 @@ class TestLicenseHeaders:
             )
 
         failed = False
-        for fname, last_change in sorted(last_change_by_fname.items()):
+        for fname, _last_change in sorted(last_change_by_fname.items()):
             full_fname = os.path.join(REPO_DIR, fname)
             if (
                 full_fname.endswith(".py")
