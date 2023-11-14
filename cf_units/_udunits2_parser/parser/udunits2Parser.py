@@ -1,4 +1,4 @@
-# Generated from /home/ruth/git_stuff/cf-units/cf_units/_udunits2_parser/udunits2Parser.g4 by ANTLR 4.11.1
+# Generated from cf_units/_udunits2_parser/udunits2Parser.g4 by ANTLR 4.11.1
 import sys
 
 from antlr4 import *

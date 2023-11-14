@@ -191,7 +191,8 @@ with suppress_errors():
         except _ud.UdunitsError as e:
             error_msg = ': "%s"' % e.error_msg() if e.errnum else ""
             raise OSError(
-                f"[{e.status_msg()}] Failed to open UDUNITS-2 XML unit database{error_msg}"
+                f"[{e.status_msg()}] "
+                f"Failed to open UDUNITS-2 XML unit database{error_msg}"
             )
 
 
@@ -1670,7 +1671,7 @@ class Unit(_OrderedHashable):
             >>> u.change_calendar('standard')
             Unit('days since 1499-12-23T00:00:00', calendar='standard')
 
-        """
+        """  # NOQA E501
         if not self.is_time_reference():
             raise ValueError("unit is not a time reference")
 
