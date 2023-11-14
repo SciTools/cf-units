@@ -929,7 +929,7 @@ class Unit(_OrderedHashable):
             dt = self.num2date(value)
             result = dt.strftime("%Y-%m-%d %H:%M:%S")
         else:
-            result = f"{str(value)} {self}"
+            result = f"{value} {self}"
         return result
 
     @property
@@ -1792,9 +1792,8 @@ class Unit(_OrderedHashable):
                     # Strict type check of numpy array.
                     if result.dtype.type not in (np.float32, np.float64):
                         raise TypeError(
-                            "Expect a numpy array of '{}' or '{}'".format(*np.float32),
-                            np.float64,
-                        )
+                            "Expect a numpy array of "
+                            f"'{np.float32}' or '{np.float64}'")
                     ctype = result.dtype.type
                     # Utilise global convenience dictionary
                     # _cv_convert_array to convert our array in 1d form
