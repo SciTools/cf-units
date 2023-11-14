@@ -1793,7 +1793,8 @@ class Unit(_OrderedHashable):
                     if result.dtype.type not in (np.float32, np.float64):
                         raise TypeError(
                             "Expect a numpy array of "
-                            f"'{np.float32}' or '{np.float64}'")
+                            f"'{np.float32}' or '{np.float64}'"
+                        )
                     ctype = result.dtype.type
                     # Utilise global convenience dictionary
                     # _cv_convert_array to convert our array in 1d form

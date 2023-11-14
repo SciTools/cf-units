@@ -79,9 +79,7 @@ class _MetaOrderedHashable(abc.ABCMeta):
                 )
                 exec(method_source, namespace)
 
-        return super().__new__(
-            cls, name, bases, namespace
-        )
+        return super().__new__(cls, name, bases, namespace)
 
 
 class _OrderedHashable(Hashable, metaclass=_MetaOrderedHashable):
