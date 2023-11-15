@@ -1220,7 +1220,7 @@ class Unit(_OrderedHashable):
 
         if not isinstance(origin, (float, (int,))):
             raise TypeError(
-                "a numeric type for the origin argument is" " required"
+                "a numeric type for the origin argument is required"
             )
         try:
             ut_unit = _ud.offset_by_time(self.ut_unit, origin)
@@ -1336,12 +1336,12 @@ class Unit(_OrderedHashable):
                 ut_unit = _ud.log(base, self.ut_unit)
             except TypeError:
                 raise TypeError(
-                    "A numeric type for the base argument is " " required"
+                    "A numeric type for the base argument is required"
                 )
             except _ud.UdunitsError as exception:
                 value_err = _ud_value_error(
                     exception,
-                    "Failed to calculate logorithmic base " f"of {self!r}",
+                    f"Failed to calculate logorithmic base of {self!r}",
                 )
                 raise value_err from None
             calendar = None
