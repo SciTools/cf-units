@@ -24,7 +24,7 @@ repos:
     -   id: sort-all
         types: [file, python]
 
--   repo: https://github.com/charliermarsh/ruff-pre-commit
+-   repo: https://github.com/astral-sh/ruff-pre-commit
     rev: "v0.1.5"
     hooks:
     # Run the linter
