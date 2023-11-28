@@ -49,7 +49,7 @@ jobs:
         key: ${{ runner.os }}-conda-pkgs-${{ env.ENV_NAME }}-p${{ env.CACHE_PERIOD }}-b${{ env.CACHE_BUILD }}
 
     - name: "Conda install"
-      uses: conda-incubator/setup-miniconda@v2
+      uses: conda-incubator/setup-miniconda@v3
       with:
         miniforge-version: latest
         channels: conda-forge,defaults
