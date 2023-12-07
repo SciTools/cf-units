@@ -32,7 +32,6 @@ from cf_units._udunits2 import (
 )
 
 from . import config
-from ._version import version as __version__  # noqa: F401
 from .util import _OrderedHashable
 
 __all__ = [
