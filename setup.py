@@ -133,9 +133,9 @@ udunits_ext = Extension(
     library_dirs=library_dirs,
     libraries=["udunits2"],
     define_macros=DEFINE_MACROS,
-    runtime_library_dirs=None
-    if sys.platform.startswith("win")
-    else library_dirs,
+    runtime_library_dirs=(
+        None if sys.platform.startswith("win") else library_dirs
+    ),
 )
 
 if cythonize:
