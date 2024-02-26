@@ -242,7 +242,7 @@ def test_known_issues(_, unit_str, expected):
     # These are the cases that don't work yet but which do work with udunits.
 
     # Make sure udunits can read it.
-    cf_units.Unit(unit_str).symbol  # noqa: B018
+    _ = cf_units.Unit(unit_str).symbol
 
     if isinstance(expected, type) and issubclass(expected, Exception):
         with pytest.raises(SyntaxError):
@@ -293,7 +293,7 @@ def test_invalid_syntax_units(_, unit_str):
     # allowed with our grammar.
 
     with pytest.raises(ValueError):
-        cf_units.Unit(unit_str).symbol  # noqa: B018
+        _ = cf_units.Unit(unit_str).symbol
 
     with pytest.raises(SyntaxError):
         normalize(unit_str)

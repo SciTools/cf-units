@@ -73,3 +73,7 @@ max-complexity = 22
 
 [tool.ruff.pydocstyle]
 convention = "numpy"
+
+[tool.ruff.per-file-ignores]
+# Allow the longer comment lines that the generated code produces.
+"cf_units/_udunits2_parser/parser/*.py" = ["E501"]
