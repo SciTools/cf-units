@@ -6,8 +6,7 @@ if __name__ is not None and "." in __name__:
 else:
     from udunits2Parser import udunits2Parser
 
-# This class defines a complete generic visitor for a parse tree produced by
-# udunits2Parser.
+# This class defines a complete generic visitor for a parse tree produced by udunits2Parser.
 
 
 class udunits2ParserVisitor(ParseTreeVisitor):
