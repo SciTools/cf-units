@@ -186,7 +186,8 @@ class Test:
             self.udays,
             self.udays,
         ]
-        # Expected results in (days, seconds, microseconds) delta from unit epoch.
+        # Expected results in (days, seconds, microseconds) delta from unit
+        # epoch.
         expected = [
             (0, nums[0], 0),
             (0, nums[1], 0),
@@ -218,7 +219,8 @@ class Test:
             self.udays,
             self.udays,
         ]
-        # Expected results in (days, seconds, microseconds) delta from unit epoch.
+        # Expected results in (days, seconds, microseconds) delta from unit
+        # epoch.
         expected = [
             (0, nums[0] * 60, 0),
             (0, nums[1] * 60, 0),
@@ -234,7 +236,8 @@ class Test:
         self.setup_units("360_day")
         nums = [0.25, 0.5, 0.75, 1.5, 2.5, 3.5, 4.5]
         units = [self.useconds] * 7
-        # Expected results in (days, seconds, microseconds) delta from unit epoch.
+        # Expected results in (days, seconds, microseconds) delta from unit
+        # epoch.
         expected = [
             (0, 0, 250000),
             (0, 0, 500000),
@@ -273,7 +276,8 @@ class Test:
             self.udays,
             self.udays,
         ]
-        # Expected results in (days, seconds, microseconds) delta from unit epoch.
+        # Expected results in (days, seconds, microseconds) delta from unit
+        # epoch.
         expected = [
             (0, nums[0], 0),
             (0, nums[1], 0),
@@ -305,7 +309,8 @@ class Test:
             self.udays,
             self.udays,
         ]
-        # Expected results in (days, seconds, microseconds) delta from unit epoch.
+        # Expected results in (days, seconds, microseconds) delta from unit
+        # epoch.
         expected = [
             (0, nums[0] * 60, 0),
             (0, nums[1] * 60, 0),
@@ -321,7 +326,8 @@ class Test:
         self.setup_units("365_day")
         nums = [0.25, 0.5, 0.75, 1.5, 2.5, 3.5, 4.5]
         units = [self.useconds] * 7
-        # Expected results in (days, seconds, microseconds) delta from unit epoch.
+        # Expected results in (days, seconds, microseconds) delta from unit
+        # epoch.
         expected = [
             (0, 0, 250000),
             (0, 0, 500000),
