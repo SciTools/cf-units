@@ -1761,7 +1761,7 @@ class Unit(_OrderedHashable):
                 )
                 convert_type = isinstance(
                     value, np.ndarray
-                ) and np.issubsctype(value.dtype, np.floating)
+                ) and np.issubdtype(value.dtype, np.floating)
                 if convert_type:
                     result = result.astype(value.dtype)
             else:
