@@ -4,7 +4,8 @@ requires = [
   "setuptools>=45",
   "setuptools_scm[toml]>=7.0",
   "wheel",
-  "oldest-supported-numpy",
+  "oldest-supported-numpy ; python_version < '3.9'",
+  "numpy>=2.0.0rc1 ; python_version >= '3.9'",
   "Cython"
 ]
 # Defined by PEP 517
