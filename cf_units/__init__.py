@@ -191,8 +191,8 @@ with suppress_errors():
         except _ud.UdunitsError as e:
             error_msg = ': "%s"' % e.error_msg() if e.errnum else ""
             raise OSError(
-                "[%s] Failed to open UDUNITS-2 XML unit database%s"
-                % (e.status_msg(), error_msg)
+                f"[{e.status_msg()}] "
+                f"Failed to open UDUNITS-2 XML unit database{error_msg}"
             )
 
 
@@ -566,11 +566,9 @@ def _ud_value_error(ud_err, message):
 
     ud_msg = ud_err.error_msg()
     if ud_msg:
-        message = "{}: {}".format(message, ud_msg)
+        message = f"{message}: {ud_msg}"
 
-    message = "[{status}] {message}".format(
-        status=ud_err.status_msg(), message=message
-    )
+    message = f"[{ud_err.status_msg()}] {message}"
 
     return ValueError(message)
 
@@ -727,7 +725,7 @@ class Unit(_OrderedHashable):
                 ut_unit = _ud.parse(_ud_system, unit.encode("utf8"), encoding)
             except _ud.UdunitsError as exception:
                 value_error = _ud_value_error(
-                    exception, 'Failed to parse unit "{}"'.format(str_unit)
+                    exception, f'Failed to parse unit "{str_unit}"'
                 )
                 raise value_error from None
             if _OP_SINCE in unit.lower():
@@ -932,7 +930,7 @@ class Unit(_OrderedHashable):
             dt = self.num2date(value)
             result = dt.strftime("%Y-%m-%d %H:%M:%S")
         else:
-            result = "%s %s" % (str(value), self)
+            result = f"{value} {self}"
         return result
 
     @property
@@ -1222,13 +1220,13 @@ class Unit(_OrderedHashable):
 
         if not isinstance(origin, (float, (int,))):
             raise TypeError(
-                "a numeric type for the origin argument is" " required"
+                "a numeric type for the origin argument is required"
             )
         try:
             ut_unit = _ud.offset_by_time(self.ut_unit, origin)
         except _ud.UdunitsError as exception:
             value_error = _ud_value_error(
-                exception, "Failed to offset {!r}".format(self)
+                exception, f"Failed to offset {self!r}"
             )
             raise value_error from None
         calendar = None
@@ -1300,7 +1298,7 @@ class Unit(_OrderedHashable):
                 except _ud.UdunitsError as exception:
                     value_error = _ud_value_error(
                         exception,
-                        "Failed to take the root of {!r}".format(self),
+                        f"Failed to take the root of {self!r}",
                     )
                     raise value_error from None
                 calendar = None
@@ -1338,13 +1336,12 @@ class Unit(_OrderedHashable):
                 ut_unit = _ud.log(base, self.ut_unit)
             except TypeError:
                 raise TypeError(
-                    "A numeric type for the base argument is " " required"
+                    "A numeric type for the base argument is required"
                 )
             except _ud.UdunitsError as exception:
                 value_err = _ud_value_error(
                     exception,
-                    "Failed to calculate logorithmic base "
-                    "of {!r}".format(self),
+                    f"Failed to calculate logorithmic base of {self!r}",
                 )
                 raise value_err from None
             calendar = None
@@ -1386,7 +1383,7 @@ class Unit(_OrderedHashable):
 
         """
         if self.calendar is None:
-            result = "{}('{}')".format(self.__class__.__name__, self)
+            result = f"{self.__class__.__name__}('{self}')"
         else:
             result = "{}('{}', calendar='{}')".format(
                 self.__class__.__name__, self, self.calendar
@@ -1440,7 +1437,7 @@ class Unit(_OrderedHashable):
             except _ud.UdunitsError as exception:
                 value_err = _ud_value_error(
                     exception,
-                    "Failed to {} {!r} by {!r}".format(op_label, self, other),
+                    f"Failed to {op_label} {self!r} by {other!r}",
                 )
                 raise value_err from None
             calendar = None
@@ -1595,7 +1592,7 @@ class Unit(_OrderedHashable):
                 except _ud.UdunitsError as exception:
                     value_err = _ud_value_error(
                         exception,
-                        "Failed to raise the power of {!r}".format(self),
+                        f"Failed to raise the power of {self!r}",
                     )
                     raise value_err from None
                 result = Unit._new_from_existing_ut(_CATEGORY_UDUNIT, ut_unit)
@@ -1674,7 +1671,7 @@ class Unit(_OrderedHashable):
             >>> u.change_calendar('standard')
             Unit('days since 1499-12-23T00:00:00', calendar='standard')
 
-        """
+        """  # NOQA E501
         if not self.is_time_reference():
             raise ValueError("unit is not a time reference")
 
@@ -1772,7 +1769,7 @@ class Unit(_OrderedHashable):
                 except _ud.UdunitsError as exception:
                     value_err = _ud_value_error(
                         exception,
-                        "Failed to convert {!r} to {!r}".format(self, other),
+                        f"Failed to convert {self!r} to {other!r}",
                     )
                     raise value_err from None
                 if isinstance(result, np.ndarray):
@@ -1796,9 +1793,8 @@ class Unit(_OrderedHashable):
                     # Strict type check of numpy array.
                     if result.dtype.type not in (np.float32, np.float64):
                         raise TypeError(
-                            "Expect a numpy array of '%s' or '%s'"
-                            % np.float32,
-                            np.float64,
+                            "Expect a numpy array of "
+                            f"'{np.float32}' or '{np.float64}'"
                         )
                     ctype = result.dtype.type
                     # Utilise global convenience dictionary
@@ -1830,7 +1826,7 @@ class Unit(_OrderedHashable):
             return result
         else:
             raise ValueError(
-                "Unable to convert from '%r' to '%r'." % (self, other)
+                f"Unable to convert from '{self!r}' to '{other!r}'."
             )
 
     @property

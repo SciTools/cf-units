@@ -9,7 +9,7 @@ import copy
 from cf_units import Unit, as_unit
 
 
-class StubUnit(object):
+class StubUnit:
     def __init__(self, calendar=None):
         self.calendar = str(calendar) if calendar is not None else None
         # udunit category

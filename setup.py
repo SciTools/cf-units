@@ -147,10 +147,10 @@ if cythonize:
 
 cmdclass = {"clean_cython": CleanCython, "build_ext": numpy_build_ext}
 
-kwargs = dict(
-    cmdclass=cmdclass,
-    ext_modules=[udunits_ext],
-    package_data=get_package_data(),
-)
+kwargs = {
+    "cmdclass": cmdclass,
+    "ext_modules": [udunits_ext],
+    "package_data": get_package_data(),
+}
 
 setup(**kwargs)
