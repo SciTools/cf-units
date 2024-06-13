@@ -56,7 +56,7 @@ jobs:
         fetch-depth: 0
 
     - name: "Building ${{ matrix.os }} (${{ matrix.arch }}) wheels"
-      uses: pypa/cibuildwheel@v2.16.5
+      uses: pypa/cibuildwheel@v2.19.1
       env:
         CIBW_SKIP: "cp36-* cp37-* cp38-* cp312-* pp* *-musllinux*"
         CIBW_ARCHS: ${{ matrix.arch }}
