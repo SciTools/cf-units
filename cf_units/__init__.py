@@ -181,10 +181,10 @@ LOCALE_LOCK = threading.Lock()
 
 
 @contextmanager
-def us_locale():
+def c_locale():
     with LOCALE_LOCK:
         lc_numeric = locale.getlocale(locale.LC_NUMERIC)
-        locale.setlocale(locale.LC_NUMERIC, "en_US.UTF-8")
+        locale.setlocale(locale.LC_NUMERIC, "C")
         try:
             yield
         finally:
@@ -195,7 +195,7 @@ def us_locale():
 # load the UDUNITS-2 xml-formatted unit-database
 #:
 # Ignore standard noisy UDUNITS-2 start-up.
-with suppress_errors(), us_locale():
+with suppress_errors(), c_locale():
     # Load the unit-database from the default location (modified via
     # the UDUNITS2_XML_PATH environment variable) and if that fails look
     # relative to sys.prefix to support environments such as conda.
