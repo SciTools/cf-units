@@ -65,6 +65,8 @@ jobs:
         CIBW_BEFORE_BUILD_LINUX: yum install -y udunits2-devel
         CIBW_BEFORE_BUILD_MACOS: brew install udunits
         CIBW_TEST_REQUIRES: pytest
+        CIBW_ENVIROMENT: >-
+          MACOSX_DEPLOYMENT_TARGET=14.0
         CIBW_TEST_COMMAND: >
           python -c 'import cf_units; print(f"cf-units v{cf_units.__version__}")' &&
           python -m pytest --pyargs cf_units
