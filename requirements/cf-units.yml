@@ -8,7 +8,7 @@ dependencies:
   - setuptools >=45
   - setuptools_scm >=7.0
   - cython
-  - numpy
+  - numpy==1.26.4
 
 # core dependencies
   - antlr-python-runtime 4.11.1.*  # To update this, see cf_units/_udunits2_parser/README.md
