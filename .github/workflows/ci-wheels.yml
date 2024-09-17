@@ -66,6 +66,7 @@ jobs:
         CIBW_ARCHS: ${{ matrix.arch }}
         CIBW_BUILD_FRONTEND: build
         CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
+        CIBW_ENVIRONMENT: MACOS_DEPLOYMENT_TARGET=14.0
         CIBW_BEFORE_BUILD_LINUX: yum install -y udunits2-devel
         CIBW_BEFORE_BUILD_MACOS: brew install udunits
         CIBW_TEST_REQUIRES: pytest
