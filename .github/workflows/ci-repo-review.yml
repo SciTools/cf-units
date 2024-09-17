@@ -15,8 +15,8 @@ on:
       - "dependabot/*"
 jobs:
   run-repo-review:
-  	runs-on: ubuntu-latest
-	steps:
-	  - uses: scientific-python/repo-review@v0.11.2
-	    with:
-	      plugins: sp-repo-review
+    runs-on: ubuntu-latest
+    steps:
+      - uses: scientific-python/repo-review@v0.11.2
+        with:
+          plugins: sp-repo-review
