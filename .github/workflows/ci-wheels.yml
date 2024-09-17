@@ -33,6 +33,7 @@ jobs:
       matrix:
         # TBD: extend to support windows
         os: ["ubuntu-latest", "macos-latest"]
+        arch: ["x86_64", "arm64"]
         include:
         - os: ubuntu-latest
           arch: x86_64
@@ -49,6 +50,9 @@ jobs:
           incdir: /opt/homebrew/Cellar/udunits/2.2.28/include
           libdir: /opt/homebrew/Cellar/udunits/2.2.28/lib
           xml_path: /opt/homebrew/Cellar/udunits/2.2.28/share/udunits/udunits2-common.xml
+        exclude:
+        - os: ubuntu-latest
+          arch: arm64
 
     steps:
     - uses: actions/checkout@v4
