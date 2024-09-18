@@ -32,28 +32,27 @@ jobs:
       fail-fast: false
       matrix:
         # TBD: extend to support windows
-        # TODO: enable macos support
-        os: ["ubuntu-latest"] # "macos-latest"
+        os: ["ubuntu-latest", "macos-latest"]
         arch: ["x86_64", "arm64"]
         include:
-        - os: ubuntu-latest
-          arch: x86_64
+        - os: "ubuntu-latest"
+          arch: "x86_64"
           incdir: /usr/include/udunits2
           libdir: /usr/lib64
           xml_path: /usr/share/udunits/udunits2.xml
-#        - os: macos-latest
-#          arch: x86_64
-#          incdir: /usr/local/Cellar/udunits/2.2.28/include
-#          libdir: /usr/local/Cellar/udunits/2.2.28/lib
-#          xml_path: /usr/local/Cellar/udunits/2.2.28/share/udunits/udunits2-common.xml
-#        - os: macos-latest
-#          arch: arm64
-#          incdir: /opt/homebrew/Cellar/udunits/2.2.28/include
-#          libdir: /opt/homebrew/Cellar/udunits/2.2.28/lib
-#          xml_path: /opt/homebrew/Cellar/udunits/2.2.28/share/udunits/udunits2-common.xml
+        - os: "macos-latest"
+          arch: "x86_64"
+          incdir: /opt/homebrew/Cellar/udunits/2.2.28/include
+          libdir: /opt/homebrew/Cellar/udunits/2.2.28/lib
+          xml_path: /opt/homebrew/Cellar/udunits/2.2.28/share/udunits/udunits2-common.xml
+        - os: "macos-latest"
+          arch: "arm64"
+          incdir: /opt/homebrew/Cellar/udunits/2.2.28/include
+          libdir: /opt/homebrew/Cellar/udunits/2.2.28/lib
+          xml_path: /opt/homebrew/Cellar/udunits/2.2.28/share/udunits/udunits2-common.xml
         exclude:
-        - os: ubuntu-latest
-          arch: arm64
+        - os: "ubuntu-latest"
+          arch: "arm64"
 
     steps:
     - uses: actions/checkout@v4
