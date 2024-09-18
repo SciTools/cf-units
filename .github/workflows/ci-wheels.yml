@@ -42,9 +42,9 @@ jobs:
           xml_path: /usr/share/udunits/udunits2.xml
         - os: "macos-13"
           arch: "x86_64"
-          incdir: /opt/homebrew/Cellar/udunits/2.2.28/include
-          libdir: /opt/homebrew/Cellar/udunits/2.2.28/lib
-          xml_path: /opt/homebrew/Cellar/udunits/2.2.28/share/udunits/udunits2-common.xml
+          incdir: /usr/local/Cellar/udunits/2.2.28/include
+          libdir: /usr/local/Cellar/udunits/2.2.28/lib
+          xml_path: /usr/local/Cellar/udunits/2.2.28/share/udunits/udunits2-common.xml
         - os: "macos-latest"
           arch: "arm64"
           incdir: /opt/homebrew/Cellar/udunits/2.2.28/include
