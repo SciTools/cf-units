@@ -32,7 +32,7 @@ jobs:
       fail-fast: false
       matrix:
         # TBD: extend to support windows
-        os: ["ubuntu-latest", "macos-13"]
+        os: ["ubuntu-latest", "macos-latest" "macos-13"]
         arch: ["x86_64", "arm64"]
         include:
         - os: "ubuntu-latest"
@@ -45,7 +45,7 @@ jobs:
           incdir: /usr/local/Cellar/udunits/2.2.28/include
           libdir: /usr/local/Cellar/udunits/2.2.28/lib
           xml_path: /usr/local/Cellar/udunits/2.2.28/share/udunits/udunits2-common.xml
-        - os: "macos-13"
+        - os: "macos-latest"
           arch: "arm64"
           incdir: /opt/homebrew/Cellar/udunits/2.2.28/include
           libdir: /opt/homebrew/Cellar/udunits/2.2.28/lib
@@ -70,7 +70,7 @@ jobs:
         CIBW_ARCHS: ${{ matrix.arch }}
         CIBW_BUILD_FRONTEND: build
         CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
-        CIBW_ENVIRONMENT: MACOSX_DEPLOYMENT_TARGET=13.0
+#        CIBW_ENVIRONMENT: MACOSX_DEPLOYMENT_TARGET=13.0
         CIBW_BEFORE_BUILD_LINUX: yum install -y udunits2-devel
         CIBW_BEFORE_BUILD_MACOS: brew install udunits
         CIBW_TEST_REQUIRES: pytest
