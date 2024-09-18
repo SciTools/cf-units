@@ -32,7 +32,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        version: [py310, py311]
+        version: [py310, py311,py312]
         include:
           - os: ubuntu-latest
             platform: linux
@@ -40,10 +40,9 @@ jobs:
             version: py311
             posargs: "--cov-report=xml --cov"
             post-command: codecov
-            # TODO: enable macos support
-#          - os: macos-latest
-#            version: py311
-#            platform: osx
+          - os: macos-latest
+            version: py311
+            platform: osx
     steps:
     - name: "Checkout"
       uses: actions/checkout@v4
