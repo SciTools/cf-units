@@ -108,6 +108,7 @@ jobs:
       env:
         POST_COMMAND: ${{ matrix.post-command }}
       run: |
+        echo $PATH
         export PATH=/opt/homebrew/bin:$PATH
         which git
         tox -e ${{ matrix.version }}-${{ matrix.platform }}-test -- ${{ matrix.posargs }}
