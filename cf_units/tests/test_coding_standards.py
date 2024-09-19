@@ -18,11 +18,8 @@ LICENSE_TEMPLATE = """# Copyright cf-units contributors
 # See LICENSE in the root of the repository for full licensing details."""
 
 
-# Guess cf_units repo directory of cf_units - realpath is used to mitigate
-# against Python finding the cf_units package via a symlink.
-DIR = Path(cf_units.__file__).resolve().parent
-REPO_DIR = DIR.parent
-DOCS_DIR = REPO_DIR / "doc"
+REPO_DIR = Path(__file__).resolve().parents[2]
+DOCS_DIR = REPO_DIR / "docs"
 DOCS_DIR = Path(
     cf_units.config.get_option("Resources", "doc_dir", default=DOCS_DIR)
 )
