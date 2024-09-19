@@ -20,6 +20,8 @@ on:
       - "pre-commit-ci-update-config"
       - "dependabot/*"
 
+  workflow_dispatch:
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -27,13 +29,12 @@ concurrency:
 jobs:
   build_bdist:
     name: "Build ${{ matrix.os }} (${{ matrix.arch }}) wheels"
+    # TBD: extend to support windows
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        # TBD: extend to support windows
-        # TODO: enable macos support
-        os: ["ubuntu-latest"] # "macos-latest"
+        os: ["ubuntu-latest", "macos-latest", "macos-13"]
         arch: ["x86_64", "arm64"]
         include:
         - os: ubuntu-latest
@@ -41,24 +42,32 @@ jobs:
           incdir: /usr/include/udunits2
           libdir: /usr/lib64
           xml_path: /usr/share/udunits/udunits2.xml
-#        - os: macos-latest
-#          arch: x86_64
-#          incdir: /usr/local/Cellar/udunits/2.2.28/include
-#          libdir: /usr/local/Cellar/udunits/2.2.28/lib
-#          xml_path: /usr/local/Cellar/udunits/2.2.28/share/udunits/udunits2-common.xml
-#        - os: macos-latest
-#          arch: arm64
-#          incdir: /opt/homebrew/Cellar/udunits/2.2.28/include
-#          libdir: /opt/homebrew/Cellar/udunits/2.2.28/lib
-#          xml_path: /opt/homebrew/Cellar/udunits/2.2.28/share/udunits/udunits2-common.xml
-        exclude:
-        - os: ubuntu-latest
+        - os: macos-13
+          arch: x86_64
+          incdir: /usr/local/Cellar/udunits/2.2.28/include
+          libdir: /usr/local/Cellar/udunits/2.2.28/lib
+          xml_path: /usr/local/Cellar/udunits/2.2.28/share/udunits/udunits2-common.xml
+        - os: macos-latest
           arch: arm64
+          incdir: /opt/homebrew/Cellar/udunits/2.2.28/include
+          libdir: /opt/homebrew/Cellar/udunits/2.2.28/lib
+          xml_path: /opt/homebrew/Cellar/udunits/2.2.28/share/udunits/udunits2-common.xml
+        exclude:
+        - os: "ubuntu-latest"
+          arch: "arm64"
+        - os: "macos-latest"
+          arch: "x86_64"
+        - os: "macos-13"
+          arch: "arm64"
 
     steps:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
+
+    - name: "Set MACOSX_DEPLOYMENT_TARGET"
+      if: startsWith(matrix.os, 'macos')
+      run: echo "MACOSX_DEPLOYMENT_TARGET=$([[ ${{ matrix.os }} == 'macos-latest' ]] && echo '14.0' || echo '13.0')" >> $GITHUB_ENV
 
     - name: "Building ${{ matrix.os }} (${{ matrix.arch }}) wheels"
       uses: pypa/cibuildwheel@v2.21.1
