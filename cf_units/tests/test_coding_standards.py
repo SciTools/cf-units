@@ -3,11 +3,10 @@
 # This file is part of cf-units and is released under the BSD license.
 # See LICENSE in the root of the repository for full licensing details.
 
-import os
 import subprocess
 from datetime import datetime
 from fnmatch import fnmatch
-from glob import glob
+from pathlib import Path
 
 import pytest
 
@@ -21,16 +20,20 @@ LICENSE_TEMPLATE = """# Copyright cf-units contributors
 
 # Guess cf_units repo directory of cf_units - realpath is used to mitigate
 # against Python finding the cf_units package via a symlink.
-DIR = os.path.realpath(os.path.dirname(cf_units.__file__))
-REPO_DIR = os.path.dirname(DIR)
-DOCS_DIR = os.path.join(REPO_DIR, "doc")
-DOCS_DIR = cf_units.config.get_option("Resources", "doc_dir", default=DOCS_DIR)
+DIR = Path(cf_units.__file__).resolve().parent
+REPO_DIR = DIR.parent
+DOCS_DIR = REPO_DIR / "doc"
+DOCS_DIR = Path(cf_units.config.get_option(
+    "Resources",
+    "doc_dir",
+    default=DOCS_DIR
+))
 exclusion = ["Makefile", "make.bat", "build"]
-DOCS_DIRS = glob(os.path.join(DOCS_DIR, "*"))
+DOCS_DIRS = DOCS_DIR.glob("*")
 DOCS_DIRS = [
     DOC_DIR
     for DOC_DIR in DOCS_DIRS
-    if os.path.basename(DOC_DIR) not in exclusion
+    if DOC_DIR.name not in exclusion
 ]
 
 
@@ -74,7 +77,7 @@ class TestLicenseHeaders:
 
         """
         # Check the ".git" folder exists at the repo dir.
-        if not os.path.isdir(os.path.join(REPO_DIR, ".git")):
+        if not (REPO_DIR / ".git").is_dir():
             raise ValueError("{} is not a git repository.".format(REPO_DIR))
 
         # Call "git whatchanged" to get the details of all the files and when
@@ -110,10 +113,10 @@ class TestLicenseHeaders:
 
         failed = False
         for fname, last_change in sorted(last_change_by_fname.items()):
-            full_fname = os.path.join(REPO_DIR, fname)
+            full_fname = REPO_DIR / fname
             if (
-                full_fname.endswith(".py")
-                and os.path.isfile(full_fname)
+                full_fname.suffix == ".py"
+                and full_fname.is_file()
                 and not any(fnmatch(fname, pat) for pat in exclude_patterns)
             ):
                 with open(full_fname) as fh:
