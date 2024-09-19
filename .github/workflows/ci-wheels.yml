@@ -63,7 +63,7 @@ jobs:
     - name: "Building ${{ matrix.os }} (${{ matrix.arch }}) wheels"
       uses: pypa/cibuildwheel@v2.21.1
       env:
-        CIBW_SKIP: "cp39-* cp313-* pp* *-musllinux*"
+        CIBW_SKIP: "cp312-* cp313-* pp* *-musllinux*"
         CIBW_ARCHS: ${{ matrix.arch }}
         CIBW_BUILD_FRONTEND: build
         CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014

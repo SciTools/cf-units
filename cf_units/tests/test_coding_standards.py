@@ -23,18 +23,12 @@ LICENSE_TEMPLATE = """# Copyright cf-units contributors
 DIR = Path(cf_units.__file__).resolve().parent
 REPO_DIR = DIR.parent
 DOCS_DIR = REPO_DIR / "doc"
-DOCS_DIR = Path(cf_units.config.get_option(
-    "Resources",
-    "doc_dir",
-    default=DOCS_DIR
-))
+DOCS_DIR = Path(
+    cf_units.config.get_option("Resources", "doc_dir", default=DOCS_DIR)
+)
 exclusion = ["Makefile", "make.bat", "build"]
 DOCS_DIRS = DOCS_DIR.glob("*")
-DOCS_DIRS = [
-    DOC_DIR
-    for DOC_DIR in DOCS_DIRS
-    if DOC_DIR.name not in exclusion
-]
+DOCS_DIRS = [DOC_DIR for DOC_DIR in DOCS_DIRS if DOC_DIR.name not in exclusion]
 
 
 class TestLicenseHeaders:
@@ -132,3 +126,86 @@ class TestLicenseHeaders:
             raise AssertionError(
                 "There were license header failures. See stdout."
             )
+
+
+def test_python_versions():
+    """Confirm alignment of ALL files listing supported Python versions."""
+    supported = ["3.9", "3.10", "3.11"]
+    supported_strip = [ver.replace(".", "") for ver in supported]
+    supported_latest = supported_strip[-1]
+
+    workflows_dir = REPO_DIR / ".github" / "workflows"
+
+    # Places that are checked:
+    pyproject_toml_file = REPO_DIR / "pyproject.toml"
+    setup_cfg_file = REPO_DIR / "setup.cfg"
+    tox_file = REPO_DIR / "tox.ini"
+    ci_locks_file = workflows_dir / "ci-locks.yml"
+    ci_tests_file = workflows_dir / "ci-tests.yml"
+    ci_wheels_file = workflows_dir / "ci-wheels.yml"
+
+    text_searches: list[tuple[Path, str]] = [
+        (
+            pyproject_toml_file,
+            "target-version = ["
+            + ", ".join([f'"py{p}"' for p in supported_strip])
+            + "]",
+        ),
+        (
+            setup_cfg_file,
+            "\n    ".join(
+                [
+                    f"Programming Language :: Python :: {ver}"
+                    for ver in supported
+                ]
+            ),
+        ),
+        (
+            tox_file,
+            "[testenv:py{" + ",".join(supported_strip) + "}-lock]",
+        ),
+        (
+            tox_file,
+            "[testenv:py{"
+            + ",".join(supported_strip)
+            + "}-{linux,osx,win}-test]",
+        ),
+        (
+            ci_locks_file,
+            "lock: ["
+            + ", ".join([f"py{p}-lock" for p in supported_strip])
+            + "]",
+        ),
+        (
+            ci_tests_file,
+            (
+                f"os: [ubuntu-latest]\n"
+                f"{8*' '}version: ["
+                + ", ".join([f"py{p}" for p in supported_strip])
+                + "]"
+            ),
+        ),
+        (
+            ci_tests_file,
+            (f"os: ubuntu-latest\n" f"{12*' '}version: py{supported_latest}"),
+        ),
+        (
+            ci_tests_file,
+            (
+                f"#{10*' '}- os: macos-latest\n"
+                f"#{12*' '}version: py{supported_latest}"
+            ),
+        ),
+    ]
+
+    # This routine will not check for file existence first - if files are
+    #  being added/removed we want developers to be aware that this test will
+    #  need to be updated.
+    for path, search in text_searches:
+        assert search in path.read_text()
+
+    ci_wheels_text = ci_wheels_file.read_text()
+    (cibw_line,) = [
+        line for line in ci_wheels_text.splitlines() if "CIBW_SKIP" in line
+    ]
+    assert all([p not in cibw_line for p in supported_strip])
