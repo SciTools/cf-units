@@ -191,6 +191,15 @@ def test_python_versions():
     for path, search in text_searches:
         assert search in path.read_text()
 
+    tox_text = tox_file.read_text()
+    for version in supported_strip:
+        # A fairly lazy implementation, but should catch times when the section
+        #  header does not match the conda_spec for the `tests` section.
+        #  (Note that Tox does NOT provide its own helpful error in these cases).
+        py_version = f"py{version}"
+        assert tox_text.count(f"    {py_version}-") == 3
+        assert tox_text.count(f"{py_version}-lock") == 3
+
     ci_wheels_text = ci_wheels_file.read_text()
     (cibw_line,) = [
         line for line in ci_wheels_text.splitlines() if "CIBW_SKIP" in line
