@@ -73,10 +73,3 @@ line_length = 79
 profile = "black"
 skip_gitignore = "True"
 verbose = "False"
-
-[tool.cibuildwheel]
-environment = {MACOSX_DEPLOYMENT_TARGET = "13.0"}
-
-[tool.cibuildwheel.overrides]
-select = "macos-latest"
-environment = {MACOSX_DEPLOYMENT_TARGET = "14.0"}
