@@ -33,7 +33,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         version: [py310, py311]
-        gitpath-prepend: ""
+        gitpath-prepend: [""]
         include:
           - os: ubuntu-latest
             platform: linux
