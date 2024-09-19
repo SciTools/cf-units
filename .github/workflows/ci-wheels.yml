@@ -40,7 +40,6 @@ jobs:
           incdir: /usr/include/udunits2
           libdir: /usr/lib64
           xml_path: /usr/share/udunits/udunits2.xml
-          mdt: N/A
         - os: macos-13
           arch: x86_64
           incdir: /usr/local/Cellar/udunits/2.2.28/include
