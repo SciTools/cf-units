@@ -191,10 +191,7 @@ def test_python_versions():
         ),
         (
             ci_tests_file,
-            (
-                f"#{10*' '}- os: macos-latest\n"
-                f"#{12*' '}version: py{supported_latest}"
-            ),
+            (f"os: macos-latest\n" f"{12*' '}version: py{supported_latest}"),
         ),
     ]
 
