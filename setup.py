@@ -142,7 +142,6 @@ if cythonize:
     [udunits_ext] = cythonize(
         udunits_ext,
         compiler_directives=COMPILER_DIRECTIVES,
-        language_level="3str",
     )
 
 cmdclass = {"clean_cython": CleanCython, "build_ext": numpy_build_ext}
