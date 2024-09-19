@@ -75,8 +75,8 @@ skip_gitignore = "True"
 verbose = "False"
 
 [tool.cibuildwheel]
-MACOSX_DEPLOYMENT_TARGET = "13.0"
+environment = {MACOSX_DEPLOYMENT_TARGET = "13.0"}
 
 [tool.cibuildwheel.overrides]
 select = "macos-latest"
-MACOSX_DEPLOYMENT_TARGET = "14.0"
+environment = {MACOSX_DEPLOYMENT_TARGET = "14.0"}
