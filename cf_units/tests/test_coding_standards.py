@@ -26,8 +26,10 @@ DOCS_DIR = Path(
 exclusion = ["Makefile", "make.bat", "build"]
 DOCS_DIRS = DOCS_DIR.glob("*")
 DOCS_DIRS = [DOC_DIR for DOC_DIR in DOCS_DIRS if DOC_DIR.name not in exclusion]
+IS_GIT_REPO = (REPO_DIR / ".git").is_dir()
 
 
+@pytest.mark.skipif(not IS_GIT_REPO, reason="Not a git repository.")
 class TestLicenseHeaders:
     @staticmethod
     def whatchanged_parse(whatchanged_output):
@@ -67,10 +69,6 @@ class TestLicenseHeaders:
             or cannot be found by subprocess, an IOError may also be raised.
 
         """
-        # Check the ".git" folder exists at the repo dir.
-        if not (REPO_DIR / ".git").is_dir():
-            raise ValueError("{} is not a git repository.".format(REPO_DIR))
-
         # Call "git whatchanged" to get the details of all the files and when
         # they were last changed.
         output = subprocess.check_output(
@@ -94,13 +92,7 @@ class TestLicenseHeaders:
             "cf_units/_udunits2_parser/parser/*",
         )
 
-        try:
-            last_change_by_fname = self.last_change_by_fname()
-        except ValueError:
-            # Caught the case where this is not a git repo.
-            return pytest.skip(
-                "cf_units installation did not look like a " "git repo."
-            )
+        last_change_by_fname = self.last_change_by_fname()
 
         failed = False
         for fname, last_change in sorted(last_change_by_fname.items()):
@@ -125,6 +117,7 @@ class TestLicenseHeaders:
             )
 
 
+@pytest.mark.skipif(not IS_GIT_REPO, reason="Not a git repository.")
 def test_python_versions():
     """Confirm alignment of ALL files listing supported Python versions."""
     supported = ["3.10", "3.11", "3.12"]
