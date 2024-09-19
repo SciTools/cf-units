@@ -20,6 +20,9 @@ on:
       - "pre-commit-ci-update-config"
       - "dependabot/*"
 
+  workflow_dispatch:
+
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
