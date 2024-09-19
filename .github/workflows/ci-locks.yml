@@ -27,7 +27,7 @@ jobs:
       ENV_NAME: "ci-locks"
     strategy:
       matrix:
-        lock: [py39-lock, py310-lock, py311-lock]
+        lock: [py310-lock, py311-lock, py312-lock]
     steps:
     - name: "Checkout"
       uses: actions/checkout@v4
@@ -54,7 +54,7 @@ jobs:
         miniforge-version: latest
         channels: conda-forge,defaults
         activate-environment: ${{ env.ENV_NAME }}
-        auto-update-conda: true 
+        auto-update-conda: true
         use-only-tar-bz2: true
 
     - name: "Conda environment cache"

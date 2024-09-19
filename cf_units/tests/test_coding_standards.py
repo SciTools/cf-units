@@ -130,7 +130,7 @@ class TestLicenseHeaders:
 
 def test_python_versions():
     """Confirm alignment of ALL files listing supported Python versions."""
-    supported = ["3.9", "3.10", "3.11"]
+    supported = ["3.10", "3.11", "3.12"]
     supported_strip = [ver.replace(".", "") for ver in supported]
     supported_latest = supported_strip[-1]
 
