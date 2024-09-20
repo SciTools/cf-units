@@ -32,20 +32,26 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        version: [py39, py310, py311]
+        version: [py310, py311, py312]
+        gitpath-prepend: [""]
         include:
           - os: ubuntu-latest
             platform: linux
           - os: ubuntu-latest
-            version: py311
+            version: py312
             posargs: "--cov-report=xml --cov"
             post-command: codecov
           - os: macos-latest
-            version: py311
+            version: py312
             platform: osx
+            # On macos, the up-to-date git may not be first on the path
+            # N.B. setting includes a final ":", to simplify the path setting command
+            gitpath-prepend: "/opt/homebrew/bin:"
     steps:
     - name: "Checkout"
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - name: "Environment configure"
       env:
@@ -106,4 +112,7 @@ jobs:
       env:
         POST_COMMAND: ${{ matrix.post-command }}
       run: |
+        export PATH=${{ matrix.gitpath-prepend }}$PATH
+        which git
+        git --version
         tox -e ${{ matrix.version }}-${{ matrix.platform }}-test -- ${{ matrix.posargs }}
