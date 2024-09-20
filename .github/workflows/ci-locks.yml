@@ -89,7 +89,8 @@ jobs:
 
     - name: "Create ${{ matrix.lock }} conda locks"
       run: |
-        tox -e ${{ matrix.lock }} -- --platform osx-64 --platform win-64
+        # omitted for now : -- --platform osx-64 --platform win-64
+        tox -e ${{ matrix.lock }} 
 
     - name: "Upload lock artifacts"
       uses: actions/upload-artifact@v3
