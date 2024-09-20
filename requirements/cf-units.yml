@@ -13,7 +13,7 @@ dependencies:
 # core dependencies
   - antlr-python-runtime 4.11.1.*  # To update this, see cf_units/_udunits2_parser/README.md
   - cftime>=1.2
-  - numpy==1.26.4
+  - numpy<1.99
   - udunits2
 
 # test dependencies
