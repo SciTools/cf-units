@@ -1861,6 +1861,10 @@ class Unit(_OrderedHashable):
         Works for scalars, sequences and numpy arrays. Returns a scalar
         if input is a scalar, else returns a numpy array.
 
+        Return type will be of type `integer` if (all) the times can be
+        encoded exactly as an integer with the specified units,
+        otherwise a float type will be returned.
+
         Args:
 
         * date (datetime):
@@ -1868,7 +1872,7 @@ class Unit(_OrderedHashable):
             The datetime objects should not include a time-zone offset.
 
         Returns:
-            float or numpy.ndarray of float.
+            float/integer or numpy.ndarray of floats/integers
 
         For example:
 
@@ -1881,6 +1885,11 @@ class Unit(_OrderedHashable):
             >>> u.date2num([datetime.datetime(1970, 1, 1, 5, 30),
             ...             datetime.datetime(1970, 1, 1, 6, 30)])
             array([5.5, 6.5])
+
+            # Integer type preferentially returned if possible:
+            >>> u.date2num([datetime.datetime(1970, 1, 1, 5, 0),
+            ...             datetime.datetime(1970, 1, 1, 6, 0)])
+            array([5, 6])
 
         """
         return cftime.date2num(date, self.cftime_unit, self.calendar)
