@@ -91,6 +91,14 @@ jobs:
       run: |
         tox -e ${{ matrix.lock }} -- --platform osx-64 --platform win-64
 
+    - name: "Confirm working dir"
+      run: |
+        pwd
+
+    - name: "Check for local changes"
+      run: |
+        git status
+
     - name: "Upload lock artifacts"
       uses: actions/upload-artifact@v3
       with:
