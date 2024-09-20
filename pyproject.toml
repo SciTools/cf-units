@@ -73,6 +73,3 @@ line_length = 79
 profile = "black"
 skip_gitignore = "True"
 verbose = "False"
-
-[tool.cibuildwheel]
-before-all = "uname -a"
