@@ -144,6 +144,8 @@ if cythonize:
     [udunits_ext] = cythonize(
         udunits_ext,
         compiler_directives=COMPILER_DIRECTIVES,
+        # Assert python 3 source syntax. Default for Cython>=3, but let's be definite.
+        language_level="3str",
     )
 
 cmdclass = {"clean_cython": CleanCython, "build_ext": numpy_build_ext}
