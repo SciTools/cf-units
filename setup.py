@@ -144,7 +144,8 @@ if cythonize:
     [udunits_ext] = cythonize(
         udunits_ext,
         compiler_directives=COMPILER_DIRECTIVES,
-        # Assert python 3 source syntax. Default for Cython>=3, but let's be definite.
+        # Assert python 3 source syntax: Currently required to suppress a warning,
+        #  even though this is now the default (as-of Cython v3).
         language_level="3str",
     )
 
