@@ -33,6 +33,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         version: [py310, py311]
+        gitpath-prepend: [""]
         include:
           - os: ubuntu-latest
             platform: linux
@@ -43,6 +44,9 @@ jobs:
           - os: macos-latest
             version: py311
             platform: osx
+            # On macos, the up-to-date git may not be first on the path
+            # N.B. setting includes a final ":", to simplify the path setting command
+            gitpath-prepend: "/opt/homebrew/bin:"
     steps:
     - name: "Checkout"
       uses: actions/checkout@v4
@@ -108,4 +112,7 @@ jobs:
       env:
         POST_COMMAND: ${{ matrix.post-command }}
       run: |
+        export PATH=${{ matrix.gitpath-prepend }}$PATH
+        which git
+        git --version
         tox -e ${{ matrix.version }}-${{ matrix.platform }}-test -- ${{ matrix.posargs }}
