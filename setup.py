@@ -13,7 +13,9 @@ except ImportError:
     cythonize = False
 
 COMPILER_DIRECTIVES = {}
-DEFINE_MACROS = None
+# This Cython macro disables a build warning, obsolete with Cython>=3
+#  see : https://cython.readthedocs.io/en/latest/src/userguide/migrating_to_cy30.html#numpy-c-api
+DEFINE_MACROS = [("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]
 FLAG_COVERAGE = "--cython-coverage"  # custom flag enabling Cython line tracing
 BASEDIR = Path(__file__).resolve().parent
 PACKAGE = "cf_units"
@@ -119,7 +121,7 @@ def numpy_build_ext(pars):
 
 if FLAG_COVERAGE in sys.argv or environ.get("CYTHON_COVERAGE", None):
     COMPILER_DIRECTIVES = {"linetrace": True}
-    DEFINE_MACROS = [("CYTHON_TRACE", "1"), ("CYTHON_TRACE_NOGIL", "1")]
+    DEFINE_MACROS += [("CYTHON_TRACE", "1"), ("CYTHON_TRACE_NOGIL", "1")]
     if FLAG_COVERAGE in sys.argv:
         sys.argv.remove(FLAG_COVERAGE)
     print('enable: "linetrace" Cython compiler directive')
@@ -142,6 +144,8 @@ if cythonize:
     [udunits_ext] = cythonize(
         udunits_ext,
         compiler_directives=COMPILER_DIRECTIVES,
+        # Assert python 3 source syntax: Currently required to suppress a warning,
+        #  even though this is now the default (as-of Cython v3).
         language_level="3str",
     )
 
