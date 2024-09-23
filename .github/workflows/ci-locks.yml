@@ -104,6 +104,10 @@ jobs:
     name: "Create pull-request"
     runs-on: ubuntu-latest
     steps:
+    - name: "**Disabled**"
+      run: |
+        exit 0
+
     - name: "Checkout"
       uses: actions/checkout@v4
 
