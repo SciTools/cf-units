@@ -1889,7 +1889,7 @@ class Unit(_OrderedHashable):
             # Integer type preferentially returned if possible:
             >>> u.date2num([datetime.datetime(1970, 1, 1, 5, 0),
             ...             datetime.datetime(1970, 1, 1, 6, 0)])
-            array([5, 6])
+            array([5., 6.])
 
         """
         return cftime.date2num(date, self.cftime_unit, self.calendar)
