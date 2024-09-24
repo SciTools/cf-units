@@ -5,7 +5,7 @@ requires = [
   "setuptools_scm[toml]>=7.0",
   "wheel",
   "oldest-supported-numpy",
-  "Cython"
+  "Cython>=3.0"
 ]
 # Defined by PEP 517
 build-backend = "setuptools.build_meta"
@@ -47,7 +47,7 @@ local_scheme = "dirty-tag"
 
 [tool.ruff]
 line-length = 79
-target-version = "py38"
+target-version = ["py310", "py311", "py312"]
 select = [
     # pyflakes
     "F",
@@ -77,3 +77,26 @@ convention = "numpy"
 [tool.ruff.per-file-ignores]
 # Allow the longer comment lines that the generated code produces.
 "cf_units/_udunits2_parser/parser/*.py" = ["E501"]
+
+[tool.repo-review]
+# These are a list of the currently failing tests:
+ignore = [
+  "PY005",  # Has tests folder
+  "PP003",  # Does not list wheel as a build-dep
+  "PP304",  # Sets the log level in pytest
+  "PP305",  # Specifies xfail_strict
+  "PP306",  # Specifies strict config
+  "PP307",  # Specifies strict markers
+  "PP309",  # Filter warnings specified
+  "GH104",  # Use unique names for upload-artifact
+  "GH212",  # Require GHA update grouping
+  "PC110",  # Uses black or ruff-format
+  "PC140",  # Uses a type checker
+  "PC160",  # Uses a spell checker
+  "PC170",  # Uses PyGrep hooks (only needed if rST present)
+  "PC180",  # Uses a markdown formatter
+  "PC190",  # Uses Ruff
+  "PC901",  # Custom pre-commit CI message
+  "MY100",  # Uses MyPy (pyproject config)
+  "RF001",  # Uses RUFF
+]

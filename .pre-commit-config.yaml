@@ -1,5 +1,6 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
+# See https://github.com/scientific-python/cookie#sp-repo-review for repo-review
 
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
@@ -23,6 +24,13 @@ repos:
     hooks:
     -   id: sort-all
         types: [file, python]
+
+-   repo: https://github.com/scientific-python/cookie
+    rev: 2024.08.19
+    hooks:
+    -   id: sp-repo-review
+        additional_dependencies: ["repo-review[cli]"]   # TODO: Only neededed if extra dependencies are required
+        #args: ["--show=errskip"]  # show everything for the moment
 
 -   repo: https://github.com/astral-sh/ruff-pre-commit
     rev: "v0.1.5"
