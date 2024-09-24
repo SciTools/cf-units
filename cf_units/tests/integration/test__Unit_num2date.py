@@ -21,13 +21,13 @@ class Test:
         self.udays = cf_units.Unit("days since 1970-01-01", calendar)
 
     def check_dates(self, nums, units, expected, only_cftime=True):
-        for num, unit, exp in zip(nums, units, expected):
+        for num, unit, exp in zip(nums, units, expected, strict=False):
             res = unit.num2date(num, only_use_cftime_datetimes=only_cftime)
             assert exp == res
             assert isinstance(res, type(exp))
 
     def check_timedelta(self, nums, units, expected):
-        for num, unit, exp in zip(nums, units, expected):
+        for num, unit, exp in zip(nums, units, expected, strict=False):
             epoch = cftime.num2date(0, unit.cftime_unit, unit.calendar)
             res = unit.num2date(num)
             delta = res - epoch

@@ -4,7 +4,6 @@
 # See LICENSE in the root of the repository for full licensing details.
 """Test method :meth:`cf_units.Unit.date2num`."""
 
-
 import cftime
 import pytest
 
@@ -20,7 +19,8 @@ CALENDAR_STRINGS = ["standard", "360_day", "365_day"]
 
 
 @pytest.mark.parametrize(
-    "calendar_const, calendar_str", zip(CALENDAR_CONSTANTS, CALENDAR_STRINGS)
+    "calendar_const, calendar_str",
+    zip(CALENDAR_CONSTANTS, CALENDAR_STRINGS, strict=False),
 )
 def test_fractional_second(calendar_const, calendar_str):
     unit = cf_units.Unit("seconds since 1970-01-01", calendar_const)
@@ -36,6 +36,6 @@ def test_fractional_second(calendar_const, calendar_str):
     ]
     nums = [0.25, 0.5, 0.75, 1.5, 2.5, 3.5, 4.5, 172804.5]
 
-    for num, date in zip(nums, dates):
+    for num, date in zip(nums, dates, strict=False):
         res = unit.date2num(date)
         assert num == pytest.approx(res)
