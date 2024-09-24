@@ -1580,8 +1580,8 @@ class Unit(_OrderedHashable):
                 root = int(round(1 / power))
                 result = self.root(root)
             else:
-                # Failing that, check for powers which are (very nearly) simple
-                # integer values.
+                # Failing that, check for powers which are (very nearly)
+                # simple integer values.
                 if not math.isclose(power, round(power)):
                     msg = f"Cannot raise a unit by a decimal (got {power:s})."
                     raise ValueError(msg)
@@ -1659,10 +1659,10 @@ class Unit(_OrderedHashable):
 
     def change_calendar(self, calendar):
         """
-        Returns a new unit with the requested calendar, modifying the reference
-        date if necessary.  Only works with calendars that represent the real
-        world (standard, proleptic_gregorian, julian) and with short time
-        intervals (days or less).
+        Returns a new unit with the requested calendar, modifying the
+        reference date if necessary.  Only works with calendars that
+        represent the real world (standard, proleptic_gregorian, julian)
+        and with short time intervals (days or less).
 
         For example:
 

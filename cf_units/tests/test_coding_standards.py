@@ -202,7 +202,7 @@ def test_python_versions():
         assert tox_text.count(f"{py_version}-lock") == 3
 
     ci_wheels_text = ci_wheels_file.read_text()
-    (cibw_line,) = (
+    cibw_line = next(
         line for line in ci_wheels_text.splitlines() if "CIBW_SKIP" in line
     )
     assert all([p not in cibw_line for p in supported_strip])
