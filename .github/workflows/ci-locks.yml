@@ -10,7 +10,7 @@ name: ci-locks
 on:
   workflow_dispatch:
   schedule:
-    - cron: "20 14 * * *"
+    - cron: "3 0 * * 1"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
