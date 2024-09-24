@@ -592,7 +592,7 @@ class Unit(_OrderedHashable):
     def _init_from_tuple(self, values):
         # Implements the required interface for an _OrderedHashable.
         # This will also ensure a Unit._init(*Unit.names) method exists.
-        for name, value in zip(self._names, values):
+        for name, value in zip(self._names, values, strict=False):
             object.__setattr__(self, name, value)
 
     # Provide hash semantics
@@ -1385,9 +1385,7 @@ class Unit(_OrderedHashable):
         if self.calendar is None:
             result = f"{self.__class__.__name__}('{self}')"
         else:
-            result = "{}('{}', calendar='{}')".format(
-                self.__class__.__name__, self, self.calendar
-            )
+            result = f"{self.__class__.__name__}('{self}', calendar='{self.calendar}')"
         return result
 
     def _offset_common(self, offset):
