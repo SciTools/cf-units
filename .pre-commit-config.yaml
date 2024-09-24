@@ -33,7 +33,7 @@ repos:
         #args: ["--show=errskip"]  # show everything for the moment
 
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.1.5"
+    rev: "v0.4.10"
     hooks:
     # Run the linter
     -   id: ruff
