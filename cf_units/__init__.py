@@ -189,7 +189,7 @@ with suppress_errors():
         try:
             _ud_system = _ud.read_xml(config.get_xml_path())
         except _ud.UdunitsError as e:
-            error_msg = ': "%s"' % e.error_msg() if e.errnum else ""
+            error_msg = f': "{e.error_msg():s}"' if e.errnum else ""
             raise OSError(
                 f"[{e.status_msg()}] "
                 f"Failed to open UDUNITS-2 XML unit database{error_msg}"
@@ -498,7 +498,7 @@ def as_unit(unit):
         result = unit
     else:
         result = None
-        use_cache = isinstance(unit, (str,)) or unit is None
+        use_cache = isinstance(unit, str) or unit is None
         if use_cache:
             result = _CACHE.get(unit)
         if result is None:
@@ -612,12 +612,12 @@ class Unit(_OrderedHashable):
 
     def __setattr__(self, name, value):
         raise AttributeError(
-            "Instances of %s are immutable" % type(self).__name__
+            f"Instances of {type(self).__name__:s} are immutable"
         )
 
     def __delattr__(self, name):
         raise AttributeError(
-            "Instances of %s are immutable" % type(self).__name__
+            f"Instances of {type(self).__name__:s} are immutable"
         )
 
     # Declare the attribute names relevant to the ordered and hashable
@@ -731,7 +731,7 @@ class Unit(_OrderedHashable):
             if _OP_SINCE in unit.lower():
                 if calendar is None:
                     calendar_ = CALENDAR_STANDARD
-                elif isinstance(calendar, (str,)):
+                elif isinstance(calendar, str):
                     calendar_ = calendar.lower()
                     if calendar_ in CALENDAR_ALIASES:
                         calendar_ = CALENDAR_ALIASES[calendar_]
@@ -1218,7 +1218,7 @@ class Unit(_OrderedHashable):
 
         """
 
-        if not isinstance(origin, (float, (int,))):
+        if not isinstance(origin, float | int)):
             raise TypeError(
                 "a numeric type for the origin argument is required"
             )
@@ -1427,7 +1427,7 @@ class Unit(_OrderedHashable):
         other = as_unit(other)
 
         if self.is_no_unit() or other.is_no_unit():
-            raise ValueError("Cannot %s a 'no-unit'." % op_label)
+            raise ValueError(f"Cannot {op_label:s} a 'no-unit'.")
 
         if self.is_unknown() or other.is_unknown():
             result = Unit(_UNKNOWN_UNIT_STRING)
@@ -1583,7 +1583,7 @@ class Unit(_OrderedHashable):
                 # Failing that, check for powers which are (very nearly) simple
                 # integer values.
                 if not math.isclose(power, round(power)):
-                    msg = "Cannot raise a unit by a decimal (got %s)." % power
+                    msg = f"Cannot raise a unit by a decimal (got {power:s})."
                     raise ValueError(msg)
                 power = int(round(power))
 
