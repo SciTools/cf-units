@@ -5,10 +5,69 @@ requires = [
   "setuptools_scm[toml]>=7.0",
   "wheel",
   "oldest-supported-numpy",
-  "Cython>=3.0"
+  "Cython>=3.0",
 ]
 # Defined by PEP 517
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "cf-units"
+authors = [
+    {name = "cf-units Contributors", email = "scitools.pub@gmail.com"}
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Atmospheric Science",
+    "Topic :: Scientific/Engineering :: Oceanography",
+]
+dependencies = [
+    "antlr4-python3-runtime ==4.11.1",   # To update this, see cf_units/_udunits2_parser/README.md
+    "cftime >=1.2",
+    "jinja2",
+    "numpy ==1.26.4"
+    # udunits2 cannot be installed with pip, and it is expected to be
+    #  installed separately.
+]
+description = "Units of measure as required by the Climate and Forecast (CF) metadata conventions"
+dynamic = [
+    "version",
+]
+keywords = [
+    "units",
+    "cf",
+    "cf-metadata",
+    "netcdf",
+    "science",
+    "earth-science",
+    "oceanography",
+    "meteorology",
+    "climate",
+    "python",
+]
+license.file = "LICENSE"
+readme = "README.md"
+requires-python = ">=3.9"
+
+[project.optional-dependencies]
+docs = ["sphinx"]
+test = ["codecov", "cython", "jinja2", "pip", "pytest", "pytest-cov"]
+all = ["pre-commit", "sphinx", "codecov", "cython", "jinja2", "pip", "pytest", "pytest-cov"]
+
+[project.urls]
+Code = "https://github.com/SciTools/cf-units"
+Discussions = "https://github.com/SciTools/cf-units/discussions"
+Issues = "https://github.com/SciTools/cf-units/issues"
+Documentation = "https://cf-units.readthedocs.io"
 
 [tool.coverage.run]
 branch = true
@@ -40,6 +99,9 @@ addopts = "-ra -v --doctest-modules"
 doctest_optionflags = "NORMALIZE_WHITESPACE ELLIPSIS NUMBER"
 minversion = "6.0"
 testpaths = "cf_units"
+
+[tool.setuptools]
+license-files = ["LICENSE"]
 
 [tool.setuptools_scm]
 write_to = "cf_units/_version.py"
