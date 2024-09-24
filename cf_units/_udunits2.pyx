@@ -19,6 +19,9 @@ import numpy as np
 cimport numpy as np
 from libc cimport errno, string
 
+# Must be called to use the C-API with Numpy
+np.import_array()
+
 
 cdef int _STRING_BUFFER_DEPTH = 128
 cdef list _UT_STATUS = ['UT_SUCCESS', 'UT_BAD_ARG', 'UT_EXISTS', 'UT_NO_UNIT',
