@@ -1385,8 +1385,10 @@ class Unit(_OrderedHashable):
         if self.calendar is None:
             result = f"{self.__class__.__name__}('{self}')"
         else:
-            result = (f"{self.__class__.__name__}"
-                      f"('{self}', calendar='{self.calendar}')")
+            result = (
+                f"{self.__class__.__name__}"
+                f"('{self}', calendar='{self.calendar}')"
+            )
         return result
 
     def _offset_common(self, offset):
