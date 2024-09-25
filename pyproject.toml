@@ -103,6 +103,9 @@ testpaths = "cf_units"
 [tool.setuptools]
 license-files = ["LICENSE"]
 
+[tool.setuptools.packages.find]
+include = ["cf_units"]
+
 [tool.setuptools_scm]
 write_to = "cf_units/_version.py"
 local_scheme = "dirty-tag"
