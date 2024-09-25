@@ -137,9 +137,7 @@ def test_python_versions():
     text_searches: list[tuple[Path, str]] = [
         (
             pyproject_toml_file,
-            "target-version = ["
-            + ", ".join([f'"py{p}"' for p in supported_strip])
-            + "]",
+            f'target-version = "py{supported_strip[0]}"',
         ),
         (
             setup_cfg_file,
