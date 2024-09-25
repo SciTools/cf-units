@@ -110,34 +110,40 @@ include = ["cf_units"]
 write_to = "cf_units/_version.py"
 local_scheme = "dirty-tag"
 
-[tool.black]
+[tool.ruff]
+# Ignore generated code.
+exclude = [
+    "cf_units/_udunits2_parser/parser",
+]
 line-length = 79
-target-version = ["py310", "py311", "py312"]
-include = '\.pyi?$'
-exclude = '''
-(
-  /(
-      \.eggs         # exclude a few common directories in the
-    | \.git          # root of the project
-    | \.hg
-    | \.mypy_cache
-    | \.tox
-    | \.venv
-    | _build
-    | buck-out
-    | build
-    | dist
-  )/
-  | _version.py
-)
-'''
+target-version = "py310"
 
-[tool.isort]
-known_first_party = "cf_units"
-line_length = 79
-profile = "black"
-skip_gitignore = "True"
-verbose = "False"
+[tool.ruff.lint]
+select = [
+    # pyflakes
+    "F",
+    # pycodestyle
+    "E",
+    "W",
+    # flake8-bugbear
+    "B",
+    # flake8-comprehensions
+    "C4",
+    # isort
+    "I",
+    # pyupgrade
+    "UP",
+]
+ignore = ["B904", "F403", "F405"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["cf_units"]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 22
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
 
 [tool.repo-review]
 # These are a list of the currently failing tests:
