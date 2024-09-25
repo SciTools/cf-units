@@ -189,10 +189,10 @@ with suppress_errors():
         try:
             _ud_system = _ud.read_xml(config.get_xml_path())
         except _ud.UdunitsError as e:
-            error_msg = ': "%s"' % e.error_msg() if e.errnum else ""
+            error_msg = f': "{e.error_msg():s}"' if e.errnum else ""
             raise OSError(
-                "[%s] Failed to open UDUNITS-2 XML unit database%s"
-                % (e.status_msg(), error_msg)
+                f"[{e.status_msg()}] "
+                f"Failed to open UDUNITS-2 XML unit database{error_msg}"
             )
 
 
@@ -498,7 +498,7 @@ def as_unit(unit):
         result = unit
     else:
         result = None
-        use_cache = isinstance(unit, (str,)) or unit is None
+        use_cache = isinstance(unit, str) or unit is None
         if use_cache:
             result = _CACHE.get(unit)
         if result is None:
@@ -566,11 +566,9 @@ def _ud_value_error(ud_err, message):
 
     ud_msg = ud_err.error_msg()
     if ud_msg:
-        message = "{}: {}".format(message, ud_msg)
+        message = f"{message}: {ud_msg}"
 
-    message = "[{status}] {message}".format(
-        status=ud_err.status_msg(), message=message
-    )
+    message = f"[{ud_err.status_msg()}] {message}"
 
     return ValueError(message)
 
@@ -594,7 +592,7 @@ class Unit(_OrderedHashable):
     def _init_from_tuple(self, values):
         # Implements the required interface for an _OrderedHashable.
         # This will also ensure a Unit._init(*Unit.names) method exists.
-        for name, value in zip(self._names, values):
+        for name, value in zip(self._names, values, strict=False):
             object.__setattr__(self, name, value)
 
     # Provide hash semantics
@@ -614,12 +612,12 @@ class Unit(_OrderedHashable):
 
     def __setattr__(self, name, value):
         raise AttributeError(
-            "Instances of %s are immutable" % type(self).__name__
+            f"Instances of {type(self).__name__:s} are immutable"
         )
 
     def __delattr__(self, name):
         raise AttributeError(
-            "Instances of %s are immutable" % type(self).__name__
+            f"Instances of {type(self).__name__:s} are immutable"
         )
 
     # Declare the attribute names relevant to the ordered and hashable
@@ -727,13 +725,13 @@ class Unit(_OrderedHashable):
                 ut_unit = _ud.parse(_ud_system, unit.encode("utf8"), encoding)
             except _ud.UdunitsError as exception:
                 value_error = _ud_value_error(
-                    exception, 'Failed to parse unit "{}"'.format(str_unit)
+                    exception, f'Failed to parse unit "{str_unit}"'
                 )
                 raise value_error from None
             if _OP_SINCE in unit.lower():
                 if calendar is None:
                     calendar_ = CALENDAR_STANDARD
-                elif isinstance(calendar, (str,)):
+                elif isinstance(calendar, str):
                     calendar_ = calendar.lower()
                     if calendar_ in CALENDAR_ALIASES:
                         calendar_ = CALENDAR_ALIASES[calendar_]
@@ -932,7 +930,7 @@ class Unit(_OrderedHashable):
             dt = self.num2date(value)
             result = dt.strftime("%Y-%m-%d %H:%M:%S")
         else:
-            result = "%s %s" % (str(value), self)
+            result = f"{value} {self}"
         return result
 
     @property
@@ -1220,15 +1218,15 @@ class Unit(_OrderedHashable):
 
         """
 
-        if not isinstance(origin, (float, (int,))):
+        if not isinstance(origin, float | int):
             raise TypeError(
-                "a numeric type for the origin argument is" " required"
+                "a numeric type for the origin argument is required"
             )
         try:
             ut_unit = _ud.offset_by_time(self.ut_unit, origin)
         except _ud.UdunitsError as exception:
             value_error = _ud_value_error(
-                exception, "Failed to offset {!r}".format(self)
+                exception, f"Failed to offset {self!r}"
             )
             raise value_error from None
         calendar = None
@@ -1300,7 +1298,7 @@ class Unit(_OrderedHashable):
                 except _ud.UdunitsError as exception:
                     value_error = _ud_value_error(
                         exception,
-                        "Failed to take the root of {!r}".format(self),
+                        f"Failed to take the root of {self!r}",
                     )
                     raise value_error from None
                 calendar = None
@@ -1338,13 +1336,12 @@ class Unit(_OrderedHashable):
                 ut_unit = _ud.log(base, self.ut_unit)
             except TypeError:
                 raise TypeError(
-                    "A numeric type for the base argument is " " required"
+                    "A numeric type for the base argument is required"
                 )
             except _ud.UdunitsError as exception:
                 value_err = _ud_value_error(
                     exception,
-                    "Failed to calculate logorithmic base "
-                    "of {!r}".format(self),
+                    f"Failed to calculate logorithmic base of {self!r}",
                 )
                 raise value_err from None
             calendar = None
@@ -1386,10 +1383,11 @@ class Unit(_OrderedHashable):
 
         """
         if self.calendar is None:
-            result = "{}('{}')".format(self.__class__.__name__, self)
+            result = f"{self.__class__.__name__}('{self}')"
         else:
-            result = "{}('{}', calendar='{}')".format(
-                self.__class__.__name__, self, self.calendar
+            result = (
+                f"{self.__class__.__name__}"
+                f"('{self}', calendar='{self.calendar}')"
             )
         return result
 
@@ -1430,7 +1428,7 @@ class Unit(_OrderedHashable):
         other = as_unit(other)
 
         if self.is_no_unit() or other.is_no_unit():
-            raise ValueError("Cannot %s a 'no-unit'." % op_label)
+            raise ValueError(f"Cannot {op_label:s} a 'no-unit'.")
 
         if self.is_unknown() or other.is_unknown():
             result = Unit(_UNKNOWN_UNIT_STRING)
@@ -1440,7 +1438,7 @@ class Unit(_OrderedHashable):
             except _ud.UdunitsError as exception:
                 value_err = _ud_value_error(
                     exception,
-                    "Failed to {} {!r} by {!r}".format(op_label, self, other),
+                    f"Failed to {op_label} {self!r} by {other!r}",
                 )
                 raise value_err from None
             calendar = None
@@ -1583,10 +1581,10 @@ class Unit(_OrderedHashable):
                 root = int(round(1 / power))
                 result = self.root(root)
             else:
-                # Failing that, check for powers which are (very nearly) simple
-                # integer values.
+                # Failing that, check for powers which are (very nearly)
+                # simple integer values.
                 if not math.isclose(power, round(power)):
-                    msg = "Cannot raise a unit by a decimal (got %s)." % power
+                    msg = f"Cannot raise a unit by a decimal (got {power:s})."
                     raise ValueError(msg)
                 power = int(round(power))
 
@@ -1595,7 +1593,7 @@ class Unit(_OrderedHashable):
                 except _ud.UdunitsError as exception:
                     value_err = _ud_value_error(
                         exception,
-                        "Failed to raise the power of {!r}".format(self),
+                        f"Failed to raise the power of {self!r}",
                     )
                     raise value_err from None
                 result = Unit._new_from_existing_ut(_CATEGORY_UDUNIT, ut_unit)
@@ -1662,10 +1660,10 @@ class Unit(_OrderedHashable):
 
     def change_calendar(self, calendar):
         """
-        Returns a new unit with the requested calendar, modifying the reference
-        date if necessary.  Only works with calendars that represent the real
-        world (standard, proleptic_gregorian, julian) and with short time
-        intervals (days or less).
+        Returns a new unit with the requested calendar, modifying the
+        reference date if necessary.  Only works with calendars that
+        represent the real world (standard, proleptic_gregorian, julian)
+        and with short time intervals (days or less).
 
         For example:
 
@@ -1674,7 +1672,7 @@ class Unit(_OrderedHashable):
             >>> u.change_calendar('standard')
             Unit('days since 1499-12-23T00:00:00', calendar='standard')
 
-        """
+        """  # NOQA E501
         if not self.is_time_reference():
             raise ValueError("unit is not a time reference")
 
@@ -1772,7 +1770,7 @@ class Unit(_OrderedHashable):
                 except _ud.UdunitsError as exception:
                     value_err = _ud_value_error(
                         exception,
-                        "Failed to convert {!r} to {!r}".format(self, other),
+                        f"Failed to convert {self!r} to {other!r}",
                     )
                     raise value_err from None
                 if isinstance(result, np.ndarray):
@@ -1796,9 +1794,8 @@ class Unit(_OrderedHashable):
                     # Strict type check of numpy array.
                     if result.dtype.type not in (np.float32, np.float64):
                         raise TypeError(
-                            "Expect a numpy array of '%s' or '%s'"
-                            % np.float32,
-                            np.float64,
+                            "Expect a numpy array of "
+                            f"'{np.float32}' or '{np.float64}'"
                         )
                     ctype = result.dtype.type
                     # Utilise global convenience dictionary
@@ -1830,7 +1827,7 @@ class Unit(_OrderedHashable):
             return result
         else:
             raise ValueError(
-                "Unable to convert from '%r' to '%r'." % (self, other)
+                f"Unable to convert from '{self!r}' to '{other!r}'."
             )
 
     @property
