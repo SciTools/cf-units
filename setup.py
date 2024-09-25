@@ -48,8 +48,8 @@ class CleanCython(Command):
 
 def get_dirs(env_var: str, config_var: str):
     """Get a directory from an environment variable or a distutils config variable."""
-    dir = environ.get(env_var) or get_config_var(config_var)
-    return [dir] if dir else []
+    result = environ.get(env_var) or get_config_var(config_var)
+    return [result] if result else []
 
 
 def get_package_data():
