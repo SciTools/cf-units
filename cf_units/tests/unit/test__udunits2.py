@@ -67,12 +67,12 @@ class Test_system:
         assert unit is not None
 
     def test_parse_latin1(self):
-        angstrom = _ud.parse(self.system, b"\xe5ngstr\xF6m", _ud.UT_LATIN1)
+        angstrom = _ud.parse(self.system, b"\xe5ngstr\xf6m", _ud.UT_LATIN1)
 
         assert angstrom is not None
 
     def test_parse_ISO_8859_1(self):
-        angstrom = _ud.parse(self.system, b"\xe5ngstr\xF6m", _ud.UT_ISO_8859_1)
+        angstrom = _ud.parse(self.system, b"\xe5ngstr\xf6m", _ud.UT_ISO_8859_1)
 
         assert angstrom is not None
 
