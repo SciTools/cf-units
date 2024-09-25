@@ -132,7 +132,7 @@ jobs:
     name: "Publish to Test PyPI"
     runs-on: ubuntu-latest
     # upload to Test PyPI for every commit on main branch
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
     steps:
     - uses: actions/download-artifact@v3
       with:
