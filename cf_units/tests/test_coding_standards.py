@@ -204,5 +204,5 @@ def test_python_versions():
     ci_wheels_text = ci_wheels_file.read_text()
     (cibw_line,) = [
         line for line in ci_wheels_text.splitlines() if "CIBW_SKIP" in line
-    ]  # NOQA C419
-    assert all([p not in cibw_line for p in supported_strip])
+    ]
+    assert all(p not in cibw_line for p in supported_strip)

@@ -32,7 +32,7 @@ repos:
         additional_dependencies: ["repo-review[cli]"]   # TODO: Only neededed if extra dependencies are required
         #args: ["--show=errskip"]  # show everything for the moment
 
--   repo: https://github.com/asottile/blacken-docs
+-   repo: https://github.com/adamchainz/blacken-docs
     rev: 1.16.0
     hooks:
     -   id: blacken-docs
