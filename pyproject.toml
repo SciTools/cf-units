@@ -46,6 +46,9 @@ write_to = "cf_units/_version.py"
 local_scheme = "dirty-tag"
 
 [tool.ruff]
+exclude = [
+    "cf_units/_udunits2_parser/parser",
+]
 line-length = 79
 target-version = "py310"
 
