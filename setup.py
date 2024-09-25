@@ -6,6 +6,12 @@ from shutil import copy
 
 from setuptools import Command, Extension, setup
 
+# Default to using cython, but use the .c files if it doesn't exist
+try:
+    from Cython.Build import cythonize
+except ImportError:
+    cythonize = False
+
 COMPILER_DIRECTIVES = {}
 # This Cython macro disables a build warning, obsolete with Cython>=3
 #  see : https://cython.readthedocs.io/en/latest/src/userguide/migrating_to_cy30.html#numpy-c-api
@@ -124,7 +130,7 @@ library_dirs = get_library_dirs()
 
 udunits_ext = Extension(
     f"{PACKAGE}._udunits2",
-    [str(Path(f"{PACKAGE}") / "_udunits2.pyx")],
+    [str(Path(f"{PACKAGE}") / f"_udunits2.{'pyx' if cythonize else 'c'}")],
     include_dirs=get_include_dirs(),
     library_dirs=library_dirs,
     libraries=["udunits2"],
@@ -133,6 +139,15 @@ udunits_ext = Extension(
         None if sys.platform.startswith("win") else library_dirs
     ),
 )
+
+if cythonize:
+    [udunits_ext] = cythonize(
+        udunits_ext,
+        compiler_directives=COMPILER_DIRECTIVES,
+        # Assert python 3 source syntax: Currently required to suppress a warning,
+        #  even though this is now the default (as-of Cython v3).
+        language_level="3str",
+    )
 
 cmdclass = {"clean_cython": CleanCython, "build_ext": numpy_build_ext}
 
