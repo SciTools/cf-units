@@ -145,7 +145,7 @@ def test_python_versions():
         ),
         (
             pyproject_toml_file,
-            f'target-version = "py{supported_strip[0]}"',
+            f'requires-python = ">={supported[0]}"',
         ),
         (
             tox_file,

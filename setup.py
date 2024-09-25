@@ -47,7 +47,7 @@ class CleanCython(Command):
 
 
 def get_dirs(env_var: str, config_var: str):
-    """Get a directory from an environment variable or a distutils config variable."""
+    """Get a directory from an env variable or a distutils config variable."""
     result = environ.get(env_var) or get_config_var(config_var)
     return [result] if result else []
 
