@@ -46,6 +46,7 @@ write_to = "cf_units/_version.py"
 local_scheme = "dirty-tag"
 
 [tool.ruff]
+# Ignore generated code.
 exclude = [
     "cf_units/_udunits2_parser/parser",
 ]
@@ -78,10 +79,6 @@ max-complexity = 22
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
-
-[tool.ruff.lint.per-file-ignores]
-# Allow the longer comment lines that the generated code produces.
-"cf_units/_udunits2_parser/parser/*.py" = ["E501"]
 
 [tool.repo-review]
 # These are a list of the currently failing tests:
