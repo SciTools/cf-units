@@ -41,7 +41,7 @@ def expand_lexer(source, target):
     MODE_P = re.compile(r"mode ([A-Z_]+)\;")
     TOKEN_P = re.compile(r"([A-Z_]+) ?\:.*")
 
-    with open(source, "r") as fh:
+    with open(source) as fh:
         content = fh.read()
 
     template = jinja2.Environment(loader=jinja2.BaseLoader).from_string(
