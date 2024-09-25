@@ -32,12 +32,18 @@ repos:
         additional_dependencies: ["repo-review[cli]"]   # TODO: Only neededed if extra dependencies are required
         #args: ["--show=errskip"]  # show everything for the moment
 
+-   repo: https://github.com/asottile/blacken-docs
+    rev: 1.16.0
+    hooks:
+    -   id: blacken-docs
+        types: [file, rst]
+
 -   repo: https://github.com/astral-sh/ruff-pre-commit
     rev: "v0.4.10"
     hooks:
     # Run the linter
     -   id: ruff
         types: [file, python]
-        args: [--fix]
+        args: [--fix, --show-fixes]
     # Run the formatter.
     -   id: ruff-format
