@@ -371,7 +371,7 @@ def date2num(date, unit, calendar):
 
         # Integer type preferentially returned if possible:
         >>> dt1 = datetime.datetime(1970, 1, 1, 5, 0)
-        >>>
+        >>> dt2 = datetime.datetime(1970, 1, 1, 6, 0)
         >>> cf_units.date2num([dt1, dt2], 'hours since 1970-01-01 00:00:00',
         ...               cf_units.CALENDAR_STANDARD)
         array([5, 6])
