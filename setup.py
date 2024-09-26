@@ -1,3 +1,8 @@
+"""Setup routines to enable cf-units' Cython elements.
+
+All other setup configuration is in `pyproject.toml`.
+"""
+
 import sys
 from distutils.sysconfig import get_config_var
 from os import environ
@@ -6,7 +11,8 @@ from shutil import copy
 
 from setuptools import Command, Extension, setup
 
-# Default to using cython, but use the .c files if it doesn't exist
+# Default to using cython, but use the .c files if it doesn't exist.
+#  Supports the widest possible range of developer setups.
 try:
     from Cython.Build import cythonize
 except ImportError:
@@ -40,27 +46,14 @@ class CleanCython(Command):
                 path.unlink()
 
 
-def get_include_dirs():
-    include_dirs = []
-    include_dir = environ.get("UDUNITS2_INCDIR")
-    if include_dir is None:
-        include_dir = get_config_var("INCLUDEDIR")
-    if include_dir is not None:
-        include_dirs.append(include_dir)
-    return include_dirs
-
-
-def get_library_dirs():
-    library_dirs = []
-    library_dir = environ.get("UDUNITS2_LIBDIR")
-    if library_dir is None:
-        library_dir = get_config_var("LIBDIR")
-    if library_dir is not None:
-        library_dirs.append(library_dir)
-    return library_dirs
+def get_dirs(env_var: str, config_var: str):
+    """Get a directory from an env variable or a distutils config variable."""
+    result = environ.get(env_var) or get_config_var(config_var)
+    return [result] if result else []
 
 
 def get_package_data():
+    """Find and correctly package the UDUNITS2 XML files for a wheel build."""
     package_data = {}
     # Determine whether we're building a wheel.
     if "bdist_wheel" in sys.argv:
@@ -99,6 +92,7 @@ def get_package_data():
 
 
 def numpy_build_ext(pars):
+    """Make the NumPy headers available for the Cython layer."""
     from setuptools.command.build_ext import build_ext as _build_ext
 
     class build_ext(_build_ext):
@@ -126,12 +120,16 @@ if FLAG_COVERAGE in sys.argv or environ.get("CYTHON_COVERAGE", None):
         sys.argv.remove(FLAG_COVERAGE)
     print('enable: "linetrace" Cython compiler directive')
 
-library_dirs = get_library_dirs()
+include_dirs = get_dirs("UDUNITS2_INCDIR", "INCLUDEDIR")
+library_dirs = get_dirs("UDUNITS2_LIBDIR", "LIBDIR")
 
+# Some of the complexity MUST remain in setup.py due to its dynamic nature. To
+#  reduce confusion, the Extension is 100% defined here, rather than splitting
+#  between setup.py and pyproject.toml `ext-modules`.
 udunits_ext = Extension(
     f"{PACKAGE}._udunits2",
     [str(Path(f"{PACKAGE}") / f"_udunits2.{'pyx' if cythonize else 'c'}")],
-    include_dirs=get_include_dirs(),
+    include_dirs=include_dirs,
     library_dirs=library_dirs,
     libraries=["udunits2"],
     define_macros=DEFINE_MACROS,
@@ -141,6 +139,7 @@ udunits_ext = Extension(
 )
 
 if cythonize:
+    # https://docs.cython.org/en/latest/src/userguide/source_files_and_compilation.html#distributing-cython-modules
     [udunits_ext] = cythonize(
         udunits_ext,
         compiler_directives=COMPILER_DIRECTIVES,
