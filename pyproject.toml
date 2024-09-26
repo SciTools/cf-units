@@ -100,9 +100,6 @@ doctest_optionflags = "NORMALIZE_WHITESPACE ELLIPSIS NUMBER"
 minversion = "6.0"
 testpaths = "cf_units"
 
-[tool.setuptools]
-license-files = ["LICENSE"]
-
 [tool.setuptools.packages.find]
 include = ["cf_units"]
 
