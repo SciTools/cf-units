@@ -144,17 +144,17 @@ if cythonize:
     [udunits_ext] = cythonize(
         udunits_ext,
         compiler_directives=COMPILER_DIRECTIVES,
-        # Assert python 3 source syntax: Currently required to suppress a warning,
-        #  even though this is now the default (as-of Cython v3).
+        # Assert python 3 source syntax: Currently required to suppress a
+        #  warning, even though this is now the default (as-of Cython v3).
         language_level="3str",
     )
 
 cmdclass = {"clean_cython": CleanCython, "build_ext": numpy_build_ext}
 
-kwargs = dict(
-    cmdclass=cmdclass,
-    ext_modules=[udunits_ext],
-    package_data=get_package_data(),
-)
+kwargs = {
+    "cmdclass": cmdclass,
+    "ext_modules": [udunits_ext],
+    "package_data": get_package_data(),
+}
 
 setup(**kwargs)
