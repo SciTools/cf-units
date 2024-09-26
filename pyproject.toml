@@ -33,7 +33,7 @@ classifiers = [
 dependencies = [
     "cftime >=1.2",
     "jinja2",
-    "numpy ==1.26.4"
+    "numpy <2"
     # udunits2 cannot be installed with pip, and it is expected to be
     #  installed separately.
 ]
