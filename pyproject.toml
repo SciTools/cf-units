@@ -59,9 +59,9 @@ readme = "README.md"
 requires-python = ">=3.10"
 
 [project.optional-dependencies]
+all = ["cf-units[docs]", "cf-units[test]"]
 docs = ["sphinx"]
 test = ["codecov", "cython", "jinja2", "pip", "pytest", "pytest-cov"]
-all = ["pre-commit", "sphinx", "codecov", "cython", "jinja2", "pip", "pytest", "pytest-cov"]
 
 [project.urls]
 Code = "https://github.com/SciTools/cf-units"
