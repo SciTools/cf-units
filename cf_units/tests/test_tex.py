@@ -2,6 +2,9 @@
 #
 # This file is part of cf-units and is released under the BSD license.
 # See LICENSE in the root of the repository for full licensing details.
+import pytest
+
+antlr4 = pytest.importorskip("antlr4")
 
 from cf_units.tex import tex
 
