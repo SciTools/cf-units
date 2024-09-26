@@ -103,7 +103,27 @@ def main():
         ],
         check=True,
     )
+    subprocess.run(
+        [
+            "ruff",
+            "format",
+            "./parser/",
+            "--config=../../pyproject.toml",
+        ],
+        check=True,
+    )
 
+    subprocess.run(
+        [
+            "ruff",
+            "check",
+            "--fix",
+            "./parser/",
+            "--config=../../pyproject.toml",
+            "--ignore=E501,C408,E711",
+        ],
+        check=True,
+    )
     print("Done.")
 
 
