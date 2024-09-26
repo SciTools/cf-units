@@ -2,6 +2,9 @@
 #
 # This file is part of cf-units and is released under the BSD license.
 # See LICENSE in the root of the repository for full licensing details.
+import pytest
+
+antlr4 = pytest.importorskip("antlr4")
 
 import cf_units._udunits2_parser.graph as g
 from cf_units._udunits2_parser import parse
