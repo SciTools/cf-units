@@ -336,6 +336,10 @@ def date2num(date, unit, calendar):
     time-zone offset. If there is a time-zone offset in unit, it will be
     applied to the returned numeric values.
 
+    Return type will be of type `integer` if (all) the times can be
+    encoded exactly as an integer with the specified units,
+    otherwise a float type will be returned.
+
     Args:
 
     * date (datetime):
@@ -350,7 +354,7 @@ def date2num(date, unit, calendar):
         Name of the calendar, see cf_units.CALENDARS.
 
     Returns:
-        float, or numpy.ndarray of float.
+        float/integer or numpy.ndarray of floats/integers
 
     For example:
 
@@ -364,6 +368,12 @@ def date2num(date, unit, calendar):
         >>> cf_units.date2num([dt1, dt2], 'hours since 1970-01-01 00:00:00',
         ...               cf_units.CALENDAR_STANDARD)
         array([6.5, 7.5])
+        >>> # Integer type preferentially returned if possible:
+        >>> dt1 = datetime.datetime(1970, 1, 1, 5, 0)
+        >>> dt2 = datetime.datetime(1970, 1, 1, 6, 0)
+        >>> cf_units.date2num([dt1, dt2], 'hours since 1970-01-01 00:00:00',
+        ...               cf_units.CALENDAR_STANDARD)
+        array([5, 6])
 
     """
 
@@ -1882,8 +1892,7 @@ class Unit(_OrderedHashable):
             >>> u.date2num([datetime.datetime(1970, 1, 1, 5, 30),
             ...             datetime.datetime(1970, 1, 1, 6, 30)])
             array([5.5, 6.5])
-
-            # Integer type preferentially returned if possible:
+            >>> # Integer type preferentially returned if possible:
             >>> u.date2num([datetime.datetime(1970, 1, 1, 5, 0),
             ...             datetime.datetime(1970, 1, 1, 6, 0)])
             array([5, 6])
