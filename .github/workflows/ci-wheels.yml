@@ -87,7 +87,7 @@ jobs:
         UDUNITS2_XML_PATH: ${{ matrix.xml_path }}
         CIBW_ENVIRONMENT_PASS_LINUX: UDUNITS2_INCDIR UDUNITS2_LIBDIR UDUNITS2_XML_PATH
 
-    - uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874
+    - uses: actions/upload-artifact@v4.4.0
       with:
         name: pypi-artifacts-bdist
         path: ${{ github.workspace }}/wheelhouse/*.whl
@@ -106,7 +106,7 @@ jobs:
       run: |
         pipx run build --sdist 
 
-    - uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874
+    - uses: actions/upload-artifact@v4.4.0
       with:
         name: pypi-artifacts-sdist
         path: ${{ github.workspace }}/dist/*.tar.gz
@@ -117,7 +117,7 @@ jobs:
     name: "Show artifacts"
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
+    - uses: actions/download-artifact@v4.1.7
       with:
         path: ${{ github.workspace }}/dist
 
@@ -133,7 +133,7 @@ jobs:
     # upload to Test PyPI for every commit on main branch
     if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
     steps:
-    - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
+    - uses: actions/download-artifact@v4.1.7
       with:
         path: ${{ github.workspace }}/dist
 
@@ -153,7 +153,7 @@ jobs:
     # upload to PyPI for every tag starting with 'v'
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
     steps:
-    - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
+    - uses: actions/download-artifact@v4.1.7
       with:
         path: ${{ github.workspace }}/dist
 
