@@ -27,5 +27,8 @@ release = current_version
 # -- Options for HTML output ----------------------------------------------
 
 html_theme = "alabaster"
+html_theme_options = {
+    "description": f"version {release}",
+}
 
 intersphinx_mapping = {"python": ("http://docs.python.org/3/", None)}
