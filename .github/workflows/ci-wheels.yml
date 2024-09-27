@@ -89,7 +89,7 @@ jobs:
 
     - uses: actions/upload-artifact@v4
       with:
-        name: pypi-artifacts-bdist
+        name: pypi-artifacts-bdist-${{ matrix.os }}-${{ matrix.arch }}
         path: ${{ github.workspace }}/wheelhouse/*.whl
 
 
