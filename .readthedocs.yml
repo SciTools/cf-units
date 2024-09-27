@@ -16,6 +16,10 @@ build:
       - ln -s ${CONDA_ENVS_PATH}/${CONDA_DEFAULT_ENV} ${CONDA_ENVS_PATH}/common
 
 conda:
+  # NOTE: the activation script for this environment does not get run.
+  #  Therefore, the UDUNITS2 environment variables are not set.
+  #  They are instead set via the RTD dashboard (not yet possible via this
+  #  configuration file - readthedocs/readthedocs.org#6311).
   environment: requirements/cf-units.yml
 
 sphinx:
