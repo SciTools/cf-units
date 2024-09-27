@@ -1,7 +1,7 @@
 # Generated from /media/important/github/scitools/cf-units/cf_units/_udunits2_parser/udunits2Parser.g4 by ANTLR 4.11.1
 import sys
 
-from antlr4 import *
+from cf_units._udunits2_parser.parser._antlr4_runtime import *
 
 if sys.version_info[1] > 5:
     from typing import TextIO
@@ -1603,7 +1603,7 @@ class udunits2Parser(Parser):
                         )
                         self.state = 51
                         if not self.precpred(self._ctx, 4):
-                            from antlr4.error.Errors import (
+                            from cf_units._udunits2_parser.parser._antlr4_runtime.error.Errors import (
                                 FailedPredicateException,
                             )
 
@@ -1623,7 +1623,7 @@ class udunits2Parser(Parser):
                         )
                         self.state = 53
                         if not self.precpred(self._ctx, 3):
-                            from antlr4.error.Errors import (
+                            from cf_units._udunits2_parser.parser._antlr4_runtime.error.Errors import (
                                 FailedPredicateException,
                             )
 
@@ -1645,7 +1645,7 @@ class udunits2Parser(Parser):
                         )
                         self.state = 56
                         if not self.precpred(self._ctx, 2):
-                            from antlr4.error.Errors import (
+                            from cf_units._udunits2_parser.parser._antlr4_runtime.error.Errors import (
                                 FailedPredicateException,
                             )
 
@@ -1667,7 +1667,7 @@ class udunits2Parser(Parser):
                         )
                         self.state = 59
                         if not self.precpred(self._ctx, 1):
-                            from antlr4.error.Errors import (
+                            from cf_units._udunits2_parser.parser._antlr4_runtime.error.Errors import (
                                 FailedPredicateException,
                             )
 

@@ -5,8 +5,13 @@
 
 import unicodedata
 
-from antlr4 import CommonTokenStream, InputStream
-from antlr4.error.ErrorListener import ErrorListener
+from cf_units._udunits2_parser.parser._antlr4_runtime import (
+    CommonTokenStream,
+    InputStream,
+)
+from cf_units._udunits2_parser.parser._antlr4_runtime.error import (
+    ErrorListener,
+)
 
 from . import graph
 from .parser.udunits2Lexer import udunits2Lexer

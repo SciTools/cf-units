@@ -1,7 +1,7 @@
 # Generated from /media/important/github/scitools/cf-units/cf_units/_udunits2_parser/parser/udunits2Lexer.g4 by ANTLR 4.11.1
 import sys
 
-from antlr4 import *
+from cf_units._udunits2_parser.parser._antlr4_runtime import *
 
 if sys.version_info[1] > 5:
     from typing import TextIO
