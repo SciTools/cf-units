@@ -120,6 +120,7 @@ jobs:
     - uses: actions/download-artifact@v4
       with:
         path: ${{ github.workspace }}/dist
+        merge-multiple: true
 
     - shell: bash
       run: |
@@ -136,6 +137,7 @@ jobs:
     - uses: actions/download-artifact@v4
       with:
         path: ${{ github.workspace }}/dist
+        merge-multiple: true
 
     - uses: pypa/gh-action-pypi-publish@release/v1
       with:
@@ -156,6 +158,7 @@ jobs:
     - uses: actions/download-artifact@v4
       with:
         path: ${{ github.workspace }}/dist
+        merge-multiple: true
 
     - uses: pypa/gh-action-pypi-publish@release/v1
       with:
