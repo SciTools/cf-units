@@ -5,10 +5,70 @@ requires = [
   "setuptools_scm[toml]>=7.0",
   "wheel",
   "oldest-supported-numpy",
-  "Cython>=3.0"
+  "Cython>=3.0",
 ]
 # Defined by PEP 517
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "cf-units"
+authors = [
+    {name = "cf-units Contributors", email = "scitools.pub@gmail.com"}
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Atmospheric Science",
+    "Topic :: Scientific/Engineering :: Oceanography",
+]
+dependencies = [
+    "cftime >=1.2",
+    "jinja2",
+    "numpy <2"
+    # udunits2 cannot be installed with pip, and it is expected to be
+    #  installed separately.
+]
+description = "Units of measure as required by the Climate and Forecast (CF) metadata conventions"
+dynamic = [
+    "version",
+]
+keywords = [
+    "units",
+    "cf",
+    "cf-metadata",
+    "netcdf",
+    "science",
+    "earth-science",
+    "oceanography",
+    "meteorology",
+    "climate",
+    "python",
+]
+license.file = "LICENSE"
+readme = "README.md"
+requires-python = ">=3.10"
+
+[project.optional-dependencies]
+all = ["cf-units[latex]", "cf-units[docs]", "cf-units[test]"]
+# To update antlr: see cf_units/_udunits2_parser/README.md"
+latex = ["antlr4-python3-runtime ==4.11.1"]
+docs = ["sphinx"]
+test = ["codecov", "cython", "jinja2", "pip", "pytest", "pytest-cov"]
+
+[project.urls]
+Code = "https://github.com/SciTools/cf-units"
+Discussions = "https://github.com/SciTools/cf-units/discussions"
+Issues = "https://github.com/SciTools/cf-units/issues"
+Documentation = "https://cf-units.readthedocs.io"
 
 [tool.coverage.run]
 branch = true
@@ -41,38 +101,46 @@ doctest_optionflags = "NORMALIZE_WHITESPACE ELLIPSIS NUMBER"
 minversion = "6.0"
 testpaths = "cf_units"
 
+[tool.setuptools.packages.find]
+include = ["cf_units"]
+
 [tool.setuptools_scm]
 write_to = "cf_units/_version.py"
 local_scheme = "dirty-tag"
 
-[tool.black]
+[tool.ruff]
+# Ignore generated code.
+exclude = [
+    "cf_units/_udunits2_parser/parser",
+]
 line-length = 79
-target-version = ["py310", "py311", "py312"]
-include = '\.pyi?$'
-exclude = '''
-(
-  /(
-      \.eggs         # exclude a few common directories in the
-    | \.git          # root of the project
-    | \.hg
-    | \.mypy_cache
-    | \.tox
-    | \.venv
-    | _build
-    | buck-out
-    | build
-    | dist
-  )/
-  | _version.py
-)
-'''
 
-[tool.isort]
-known_first_party = "cf_units"
-line_length = 79
-profile = "black"
-skip_gitignore = "True"
-verbose = "False"
+[tool.ruff.lint]
+select = [
+    # pyflakes
+    "F",
+    # pycodestyle
+    "E",
+    "W",
+    # flake8-bugbear
+    "B",
+    # flake8-comprehensions
+    "C4",
+    # isort
+    "I",
+    # pyupgrade
+    "UP",
+]
+ignore = ["B904", "F403", "F405"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["cf_units"]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 22
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
 
 [tool.repo-review]
 # These are a list of the currently failing tests:

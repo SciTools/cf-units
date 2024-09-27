@@ -19,27 +19,6 @@ repos:
         # Don't commit to main branch.
     -   id: no-commit-to-branch
 
--   repo: https://github.com/psf/black
-    rev: 24.8.0
-    hooks:
-    -   id: black
-        types: [file, python]
-        args: [--config=./pyproject.toml]
-
--   repo: https://github.com/PyCQA/flake8
-    rev: 7.1.1
-    hooks:
-    -   id: flake8
-        types: [file, python]
-        args: [--config=./setup.cfg]
-
--   repo: https://github.com/PyCQA/isort
-    rev: 5.13.2
-    hooks:
-    -   id: isort
-        types: [file, python]
-        args: [--filter-files]
-
 -   repo: https://github.com/aio-libs/sort-all
     rev: v1.2.0
     hooks:
@@ -52,3 +31,19 @@ repos:
     -   id: sp-repo-review
         additional_dependencies: ["repo-review[cli]"]   # TODO: Only neededed if extra dependencies are required
         #args: ["--show=errskip"]  # show everything for the moment
+
+-   repo: https://github.com/adamchainz/blacken-docs
+    rev: 1.16.0
+    hooks:
+    -   id: blacken-docs
+        types: [file, rst]
+
+-   repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: "v0.4.10"
+    hooks:
+    # Run the linter
+    -   id: ruff
+        types: [file, python]
+        args: [--fix, --show-fixes]
+    # Run the formatter.
+    -   id: ruff-format
