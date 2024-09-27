@@ -12,7 +12,7 @@ dependencies:
 
 # core dependencies
   - cftime>=1.2
-  - numpy<2
+  - numpy>=1.23
   - udunits2
 
 # test dependencies

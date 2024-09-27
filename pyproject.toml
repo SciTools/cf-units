@@ -4,7 +4,7 @@ requires = [
   "setuptools>=45",
   "setuptools_scm[toml]>=7.0",
   "wheel",
-  "oldest-supported-numpy",
+  "numpy",
   "Cython>=3.0",
 ]
 # Defined by PEP 517
@@ -33,7 +33,7 @@ classifiers = [
 dependencies = [
     "cftime >=1.2",
     "jinja2",
-    "numpy <2"
+    "numpy"
     # udunits2 cannot be installed with pip, and it is expected to be
     #  installed separately.
 ]
