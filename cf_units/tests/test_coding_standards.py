@@ -95,7 +95,7 @@ class TestLicenseHeaders:
         last_change_by_fname = self.last_change_by_fname()
 
         failed = False
-        for fname, last_change in sorted(last_change_by_fname.items()):
+        for fname in sorted(last_change_by_fname):
             full_fname = REPO_DIR / fname
             if (
                 full_fname.suffix == ".py"
@@ -128,7 +128,6 @@ def test_python_versions():
 
     # Places that are checked:
     pyproject_toml_file = REPO_DIR / "pyproject.toml"
-    setup_cfg_file = REPO_DIR / "setup.cfg"
     tox_file = REPO_DIR / "tox.ini"
     ci_locks_file = workflows_dir / "ci-locks.yml"
     ci_tests_file = workflows_dir / "ci-tests.yml"
@@ -137,18 +136,16 @@ def test_python_versions():
     text_searches: list[tuple[Path, str]] = [
         (
             pyproject_toml_file,
-            "target-version = ["
-            + ", ".join([f'"py{p}"' for p in supported_strip])
-            + "]",
-        ),
-        (
-            setup_cfg_file,
             "\n    ".join(
                 [
-                    f"Programming Language :: Python :: {ver}"
+                    f'"Programming Language :: Python :: {ver}",'
                     for ver in supported
                 ]
             ),
+        ),
+        (
+            pyproject_toml_file,
+            f'requires-python = ">={supported[0]}"',
         ),
         (
             tox_file,
@@ -193,15 +190,16 @@ def test_python_versions():
 
     tox_text = tox_file.read_text()
     for version in supported_strip:
-        # A fairly lazy implementation, but should catch times when the section
-        #  header does not match the conda_spec for the `tests` section.
-        #  (Note that Tox does NOT provide its own helpful error in these cases).
+        # A fairly lazy implementation, but should catch times when the
+        #  section header does not match the conda_spec for the `tests`
+        #  section. (Note that Tox does NOT provide its own helpful
+        #  error in these cases).
         py_version = f"py{version}"
         assert tox_text.count(f"    {py_version}-") == 3
         assert tox_text.count(f"{py_version}-lock") == 3
 
     ci_wheels_text = ci_wheels_file.read_text()
-    (cibw_line,) = [
+    (cibw_line,) = (
         line for line in ci_wheels_text.splitlines() if "CIBW_SKIP" in line
-    ]
-    assert all([p not in cibw_line for p in supported_strip])
+    )
+    assert all(p not in cibw_line for p in supported_strip)

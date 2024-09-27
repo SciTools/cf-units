@@ -2,6 +2,10 @@
 #
 # This file is part of cf-units and is released under the BSD license.
 # See LICENSE in the root of the repository for full licensing details.
+# ruff: noqa: E402
+import pytest
+
+antlr4 = pytest.importorskip("antlr4")
 
 import re
 
@@ -169,7 +173,7 @@ def test_invalid_units(_, unit_str):
     # Double check that udunits2 can't parse this.
     assert (
         cf_valid is False
-    ), "Unit {!r} is unexpectedly valid in UDUNITS2".format(unit_str)
+    ), f"Unit {unit_str!r} is unexpectedly valid in UDUNITS2"
 
     try:
         normalize(unit_str)
@@ -178,7 +182,7 @@ def test_invalid_units(_, unit_str):
         can_parse = False
 
     # Now confirm that we couldn't parse this either.
-    msg = "Parser unexpectedly able to deal with {}".format(unit_str)
+    msg = f"Parser unexpectedly able to deal with {unit_str}"
     assert can_parse is False, msg
 
 
@@ -242,7 +246,7 @@ def test_known_issues(_, unit_str, expected):
     # These are the cases that don't work yet but which do work with udunits.
 
     # Make sure udunits can read it.
-    cf_units.Unit(unit_str).symbol
+    _ = cf_units.Unit(unit_str).symbol
 
     if isinstance(expected, type) and issubclass(expected, Exception):
         with pytest.raises(SyntaxError):
@@ -293,7 +297,7 @@ def test_invalid_syntax_units(_, unit_str):
     # allowed with our grammar.
 
     with pytest.raises(ValueError):
-        cf_units.Unit(unit_str).symbol
+        _ = cf_units.Unit(unit_str).symbol
 
     with pytest.raises(SyntaxError):
         normalize(unit_str)

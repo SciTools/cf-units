@@ -4,7 +4,6 @@
 # See LICENSE in the root of the repository for full licensing details.
 """Test function :func:`cf_units.num2date`."""
 
-
 import pytest
 
 from cf_units import num2date
