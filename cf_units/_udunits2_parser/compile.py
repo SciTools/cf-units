@@ -68,8 +68,8 @@ def expand_lexer(source, target):
         fh.write(new_content)
 
 
-def vendor_antlr4_runtime(parser_dir: Path):
-    antlr_dest = parser_dir / "_antlr4_runtime"
+def vendor_antlr4_runtime(udunits2_parser_dir: Path):
+    antlr_dest = udunits2_parser_dir / "_antlr4_runtime"
     version_file = antlr_dest / "_antlr4_version.txt"
     existing_version: str | None = None
     if antlr_dest.exists():
@@ -113,11 +113,11 @@ def vendor_antlr4_runtime(parser_dir: Path):
         contents = py_file.read_text()
         contents = contents.replace(
             "import antlr4",
-            "import cf_units._udunits2_parser.parser._antlr4_runtime",
+            "import cf_units._udunits2_parser._antlr4_runtime",
         )
         contents = contents.replace(
             "from antlr4",
-            "from cf_units._udunits2_parser.parser._antlr4_runtime",
+            "from cf_units._udunits2_parser._antlr4_runtime",
         )
         py_file.write_text(contents)
 
@@ -173,7 +173,7 @@ def main():
         )
         py_file.write_text(contents)
 
-    vendor_antlr4_runtime(parser_dir)
+    vendor_antlr4_runtime(HERE)
 
     # Reformat and lint fix the generated code.
     subprocess.run(

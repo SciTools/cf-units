@@ -1,2 +1,3 @@
 .git_archival.txt  export-subst
 cf_units/_udunits2_parser/parser/**/*.py linguist-generated=true
+cf_units/_udunits2_parser/_antlr4_runtime/**/*.py linguist-generated=true

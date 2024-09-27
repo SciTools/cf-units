@@ -110,6 +110,7 @@ local_scheme = "dirty-tag"
 # Ignore generated code.
 exclude = [
     "cf_units/_udunits2_parser/parser",
+    "cf_units/_udunits2_parser/_antlr4_runtime",
 ]
 line-length = 79
 

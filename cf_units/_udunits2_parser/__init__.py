@@ -5,15 +5,14 @@
 
 import unicodedata
 
-from cf_units._udunits2_parser.parser._antlr4_runtime import (
+from . import graph
+from ._antlr4_runtime import (
     CommonTokenStream,
     InputStream,
 )
-from cf_units._udunits2_parser.parser._antlr4_runtime.error import (
+from ._antlr4_runtime.error import (
     ErrorListener,
 )
-
-from . import graph
 from .parser.udunits2Lexer import udunits2Lexer
 from .parser.udunits2Parser import udunits2Parser
 from .parser.udunits2ParserVisitor import udunits2ParserVisitor
