@@ -89,7 +89,7 @@ jobs:
 
     - uses: actions/upload-artifact@v3
       with:
-        name: pypi-artifacts
+        name: pypi-artifacts-bdist
         path: ${{ github.workspace }}/wheelhouse/*.whl
 
 
@@ -108,7 +108,7 @@ jobs:
 
     - uses: actions/upload-artifact@v3
       with:
-        name: pypi-artifacts
+        name: pypi-artifacts-sdist
         path: ${{ github.workspace }}/dist/*.tar.gz
 
 
@@ -119,7 +119,6 @@ jobs:
     steps:
     - uses: actions/download-artifact@v3
       with:
-        name: pypi-artifacts
         path: ${{ github.workspace }}/dist
 
     - shell: bash
@@ -136,7 +135,6 @@ jobs:
     steps:
     - uses: actions/download-artifact@v3
       with:
-        name: pypi-artifacts
         path: ${{ github.workspace }}/dist
 
     - uses: pypa/gh-action-pypi-publish@release/v1
@@ -157,7 +155,6 @@ jobs:
     steps:
     - uses: actions/download-artifact@v3
       with:
-        name: pypi-artifacts
         path: ${{ github.workspace }}/dist
 
     - uses: pypa/gh-action-pypi-publish@release/v1
