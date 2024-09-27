@@ -177,9 +177,7 @@ def main():
             input_stream = FileStream(file_name)
             process(input_stream, class_lexer, class_parser)
         else:
-            print(
-                f"[ERROR] file {os.path.normpath(file_name)} not exist"
-            )
+            print(f"[ERROR] file {os.path.normpath(file_name)} not exist")
 
 
 if __name__ == "__main__":
