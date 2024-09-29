@@ -61,40 +61,18 @@
 # {@link #setDelimiters}. You must escape both start and stop strings
 # {@code \<} and {@code \>}.</p>
 #
-from cf_units._udunits2_parser._antlr4_runtime.CommonTokenStream import (
-    CommonTokenStream,
-)
-from cf_units._udunits2_parser._antlr4_runtime.error.Errors import (
-    ParseCancellationException,
-    RecognitionException,
-)
-from cf_units._udunits2_parser._antlr4_runtime.error.ErrorStrategy import (
-    BailErrorStrategy,
-)
-from cf_units._udunits2_parser._antlr4_runtime.InputStream import InputStream
-from cf_units._udunits2_parser._antlr4_runtime.Lexer import Lexer
-from cf_units._udunits2_parser._antlr4_runtime.ListTokenSource import (
-    ListTokenSource,
-)
-from cf_units._udunits2_parser._antlr4_runtime.ParserRuleContext import (
-    ParserRuleContext,
-)
-from cf_units._udunits2_parser._antlr4_runtime.Token import Token
-from cf_units._udunits2_parser._antlr4_runtime.tree.Chunk import (
-    TagChunk,
-    TextChunk,
-)
-from cf_units._udunits2_parser._antlr4_runtime.tree.RuleTagToken import (
-    RuleTagToken,
-)
-from cf_units._udunits2_parser._antlr4_runtime.tree.TokenTagToken import (
-    TokenTagToken,
-)
-from cf_units._udunits2_parser._antlr4_runtime.tree.Tree import (
-    ParseTree,
-    RuleNode,
-    TerminalNode,
-)
+from ..CommonTokenStream import CommonTokenStream
+from ..error.Errors import ParseCancellationException, RecognitionException
+from ..error.ErrorStrategy import BailErrorStrategy
+from ..InputStream import InputStream
+from ..Lexer import Lexer
+from ..ListTokenSource import ListTokenSource
+from ..ParserRuleContext import ParserRuleContext
+from ..Token import Token
+from ..tree.Chunk import TagChunk, TextChunk
+from ..tree.RuleTagToken import RuleTagToken
+from ..tree.TokenTagToken import TokenTagToken
+from ..tree.Tree import ParseTree, RuleNode, TerminalNode
 
 # need forward declaration
 Parser = None
@@ -177,9 +155,7 @@ class ParseTreePatternMatcher:
     def matchPattern(self, tree: ParseTree, pattern: ParseTreePattern):
         labels = dict()
         mismatchedNode = self.matchImpl(tree, pattern.patternTree, labels)
-        from cf_units._udunits2_parser._antlr4_runtime.tree.ParseTreeMatch import (
-            ParseTreeMatch,
-        )
+        from ..tree.ParseTreeMatch import ParseTreeMatch
 
         return ParseTreeMatch(tree, pattern, labels, mismatchedNode)
 
@@ -191,9 +167,7 @@ class ParseTreePatternMatcher:
         tokenList = self.tokenize(pattern)
         tokenSrc = ListTokenSource(tokenList)
         tokens = CommonTokenStream(tokenSrc)
-        from cf_units._udunits2_parser._antlr4_runtime.ParserInterpreter import (
-            ParserInterpreter,
-        )
+        from ..ParserInterpreter import ParserInterpreter
 
         parserInterp = ParserInterpreter(
             self.parser.grammarFileName,
@@ -217,9 +191,7 @@ class ParseTreePatternMatcher:
         if tokens.LA(1) != Token.EOF:
             raise StartRuleDoesNotConsumeFullPattern()
 
-        from cf_units._udunits2_parser._antlr4_runtime.tree.ParseTreePattern import (
-            ParseTreePattern,
-        )
+        from ..tree.ParseTreePattern import ParseTreePattern
 
         return ParseTreePattern(self, pattern, patternRuleIndex, tree)
 

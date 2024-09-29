@@ -20,37 +20,25 @@
 #  can simply return the predicted token type.</p>
 # /
 
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATN import ATN
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATNConfig import (
-    LexerATNConfig,
-)
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATNConfigSet import (
-    ATNConfigSet,
-    OrderedATNConfigSet,
-)
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATNSimulator import (
-    ATNSimulator,
-)
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATNState import (
-    ATNState,
-    RuleStopState,
-)
-from cf_units._udunits2_parser._antlr4_runtime.atn.LexerActionExecutor import (
-    LexerActionExecutor,
-)
-from cf_units._udunits2_parser._antlr4_runtime.atn.Transition import Transition
-from cf_units._udunits2_parser._antlr4_runtime.dfa.DFAState import DFAState
-from cf_units._udunits2_parser._antlr4_runtime.error.Errors import (
+from ..atn.ATN import ATN
+from ..atn.ATNConfig import LexerATNConfig
+from ..atn.ATNConfigSet import ATNConfigSet, OrderedATNConfigSet
+from ..atn.ATNSimulator import ATNSimulator
+from ..atn.ATNState import ATNState, RuleStopState
+from ..atn.LexerActionExecutor import LexerActionExecutor
+from ..atn.Transition import Transition
+from ..dfa.DFAState import DFAState
+from ..error.Errors import (
     LexerNoViableAltException,
     UnsupportedOperationException,
 )
-from cf_units._udunits2_parser._antlr4_runtime.InputStream import InputStream
-from cf_units._udunits2_parser._antlr4_runtime.PredictionContext import (
+from ..InputStream import InputStream
+from ..PredictionContext import (
     PredictionContext,
     PredictionContextCache,
     SingletonPredictionContext,
 )
-from cf_units._udunits2_parser._antlr4_runtime.Token import Token
+from ..Token import Token
 
 
 class SimState:
@@ -111,7 +99,7 @@ class LexerATNSimulator(ATNSimulator):
         self.line = 1
         # The index of the character relative to the beginning of the line 0..n-1#/
         self.column = 0
-        from cf_units._udunits2_parser._antlr4_runtime.Lexer import Lexer
+        from ..Lexer import Lexer
 
         self.mode = Lexer.DEFAULT_MODE
         # Cache Lexer properties to avoid further imports

@@ -7,12 +7,8 @@
 # Map a predicate to a predicted alternative.#/
 from io import StringIO
 
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATNConfigSet import (
-    ATNConfigSet,
-)
-from cf_units._udunits2_parser._antlr4_runtime.atn.SemanticContext import (
-    SemanticContext,
-)
+from ..atn.ATNConfigSet import ATNConfigSet
+from ..atn.SemanticContext import SemanticContext
 
 
 class PredPrediction:

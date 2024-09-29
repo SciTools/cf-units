@@ -8,7 +8,7 @@
 # This default implementation of {@link TokenFactory} creates
 # {@link CommonToken} objects.
 #
-from cf_units._udunits2_parser._antlr4_runtime.Token import CommonToken
+from .Token import CommonToken
 
 
 class TokenFactory:

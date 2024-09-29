@@ -25,9 +25,9 @@
 #  group values such as this aggregate.  The getters/setters are there to
 #  satisfy the superclass interface.
 
-from cf_units._udunits2_parser._antlr4_runtime.RuleContext import RuleContext
-from cf_units._udunits2_parser._antlr4_runtime.Token import Token
-from cf_units._udunits2_parser._antlr4_runtime.tree.Tree import (
+from .RuleContext import RuleContext
+from .Token import Token
+from .tree.Tree import (
     INVALID_INTERVAL,
     ErrorNodeImpl,
     ParseTree,

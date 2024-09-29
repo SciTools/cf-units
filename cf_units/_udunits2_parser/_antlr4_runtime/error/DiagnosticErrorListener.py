@@ -26,13 +26,10 @@
 
 from io import StringIO
 
-from cf_units._udunits2_parser._antlr4_runtime import DFA, Parser
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATNConfigSet import (
-    ATNConfigSet,
-)
-from cf_units._udunits2_parser._antlr4_runtime.error.ErrorListener import (
-    ErrorListener,
-)
+from ..atn.ATNConfigSet import ATNConfigSet
+from ..dfa.DFA import DFA
+from ..error.ErrorListener import ErrorListener
+from ..Parser import Parser
 
 
 class DiagnosticErrorListener(ErrorListener):

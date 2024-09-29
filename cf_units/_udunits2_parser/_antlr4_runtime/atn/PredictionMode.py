@@ -11,17 +11,11 @@
 
 from enum import Enum
 
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATN import ATN
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATNConfig import ATNConfig
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATNConfigSet import (
-    ATNConfigSet,
-)
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATNState import (
-    RuleStopState,
-)
-from cf_units._udunits2_parser._antlr4_runtime.atn.SemanticContext import (
-    SemanticContext,
-)
+from ..atn.ATN import ATN
+from ..atn.ATNConfig import ATNConfig
+from ..atn.ATNConfigSet import ATNConfigSet
+from ..atn.ATNState import RuleStopState
+from ..atn.SemanticContext import SemanticContext
 
 PredictionMode = None
 

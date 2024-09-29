@@ -10,7 +10,7 @@ from ._antlr4_runtime import (
     CommonTokenStream,
     InputStream,
 )
-from ._antlr4_runtime.error import (
+from ._antlr4_runtime.error.ErrorListener import (
     ErrorListener,
 )
 from .parser.udunits2Lexer import udunits2Lexer

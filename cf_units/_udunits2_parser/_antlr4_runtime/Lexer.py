@@ -15,17 +15,15 @@ if sys.version_info[1] > 5:
     from typing import TextIO
 else:
     from typing.io import TextIO
-from cf_units._udunits2_parser._antlr4_runtime.CommonTokenFactory import (
-    CommonTokenFactory,
-)
-from cf_units._udunits2_parser._antlr4_runtime.error.Errors import (
+from .CommonTokenFactory import CommonTokenFactory
+from .error.Errors import (
     IllegalStateException,
     LexerNoViableAltException,
     RecognitionException,
 )
-from cf_units._udunits2_parser._antlr4_runtime.InputStream import InputStream
-from cf_units._udunits2_parser._antlr4_runtime.Recognizer import Recognizer
-from cf_units._udunits2_parser._antlr4_runtime.Token import Token
+from .InputStream import InputStream
+from .Recognizer import Recognizer
+from .Token import Token
 
 
 class TokenSource:

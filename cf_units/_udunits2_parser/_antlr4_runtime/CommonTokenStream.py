@@ -29,11 +29,9 @@
 # channel.</p>
 # /
 
-from cf_units._udunits2_parser._antlr4_runtime.BufferedTokenStream import (
-    BufferedTokenStream,
-)
-from cf_units._udunits2_parser._antlr4_runtime.Lexer import Lexer
-from cf_units._udunits2_parser._antlr4_runtime.Token import Token
+from .BufferedTokenStream import BufferedTokenStream
+from .Lexer import Lexer
+from .Token import Token
 
 
 class CommonTokenStream(BufferedTokenStream):

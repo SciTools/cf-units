@@ -17,12 +17,9 @@
 #  ATN transitions.</p>
 #
 # need forward declarations
-from cf_units._udunits2_parser._antlr4_runtime.atn.SemanticContext import (
-    PrecedencePredicate,
-    Predicate,
-)
-from cf_units._udunits2_parser._antlr4_runtime.IntervalSet import IntervalSet
-from cf_units._udunits2_parser._antlr4_runtime.Token import Token
+from ..atn.SemanticContext import PrecedencePredicate, Predicate
+from ..IntervalSet import IntervalSet
+from ..Token import Token
 
 ATNState = None
 RuleStartState = None
@@ -307,4 +304,4 @@ Transition.serializationTypes = {
 del ATNState
 del RuleStartState
 
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATNState import *
+from ..atn.ATNState import *

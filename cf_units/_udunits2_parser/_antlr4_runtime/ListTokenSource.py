@@ -12,11 +12,9 @@
 # as the EOF token for every call to {@link #nextToken} after the end of the
 # list is reached. Otherwise, an EOF token will be created.</p>
 #
-from cf_units._udunits2_parser._antlr4_runtime.CommonTokenFactory import (
-    CommonTokenFactory,
-)
-from cf_units._udunits2_parser._antlr4_runtime.Lexer import TokenSource
-from cf_units._udunits2_parser._antlr4_runtime.Token import Token
+from .CommonTokenFactory import CommonTokenFactory
+from .Lexer import TokenSource
+from .Token import Token
 
 
 class ListTokenSource(TokenSource):

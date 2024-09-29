@@ -1,48 +1,27 @@
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATN import ATN
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATNDeserializer import (
-    ATNDeserializer,
-)
-from cf_units._udunits2_parser._antlr4_runtime.atn.LexerATNSimulator import (
-    LexerATNSimulator,
-)
-from cf_units._udunits2_parser._antlr4_runtime.atn.ParserATNSimulator import (
-    ParserATNSimulator,
-)
-from cf_units._udunits2_parser._antlr4_runtime.atn.PredictionMode import (
-    PredictionMode,
-)
-from cf_units._udunits2_parser._antlr4_runtime.BufferedTokenStream import (
-    TokenStream,
-)
-from cf_units._udunits2_parser._antlr4_runtime.CommonTokenStream import (
-    CommonTokenStream,
-)
-from cf_units._udunits2_parser._antlr4_runtime.dfa.DFA import DFA
-from cf_units._udunits2_parser._antlr4_runtime.error.DiagnosticErrorListener import (
-    DiagnosticErrorListener,
-)
-from cf_units._udunits2_parser._antlr4_runtime.error.Errors import (
+from .atn.ATN import ATN
+from .atn.ATNDeserializer import ATNDeserializer
+from .atn.LexerATNSimulator import LexerATNSimulator
+from .atn.ParserATNSimulator import ParserATNSimulator
+from .atn.PredictionMode import PredictionMode
+from .BufferedTokenStream import TokenStream
+from .CommonTokenStream import CommonTokenStream
+from .dfa.DFA import DFA
+from .error.DiagnosticErrorListener import DiagnosticErrorListener
+from .error.Errors import (
     IllegalStateException,
     NoViableAltException,
     RecognitionException,
 )
-from cf_units._udunits2_parser._antlr4_runtime.error.ErrorStrategy import (
-    BailErrorStrategy,
-)
-from cf_units._udunits2_parser._antlr4_runtime.FileStream import FileStream
-from cf_units._udunits2_parser._antlr4_runtime.InputStream import InputStream
-from cf_units._udunits2_parser._antlr4_runtime.Lexer import Lexer
-from cf_units._udunits2_parser._antlr4_runtime.Parser import Parser
-from cf_units._udunits2_parser._antlr4_runtime.ParserRuleContext import (
-    ParserRuleContext,
-    RuleContext,
-)
-from cf_units._udunits2_parser._antlr4_runtime.PredictionContext import (
-    PredictionContextCache,
-)
-from cf_units._udunits2_parser._antlr4_runtime.StdinStream import StdinStream
-from cf_units._udunits2_parser._antlr4_runtime.Token import Token
-from cf_units._udunits2_parser._antlr4_runtime.tree.Tree import (
+from .error.ErrorStrategy import BailErrorStrategy
+from .FileStream import FileStream
+from .InputStream import InputStream
+from .Lexer import Lexer
+from .Parser import Parser
+from .ParserRuleContext import ParserRuleContext, RuleContext
+from .PredictionContext import PredictionContextCache
+from .StdinStream import StdinStream
+from .Token import Token
+from .tree.Tree import (
     ErrorNode,
     ParseTreeListener,
     ParseTreeVisitor,
@@ -50,4 +29,4 @@ from cf_units._udunits2_parser._antlr4_runtime.tree.Tree import (
     RuleNode,
     TerminalNode,
 )
-from cf_units._udunits2_parser._antlr4_runtime.Utils import str_list
+from .Utils import str_list

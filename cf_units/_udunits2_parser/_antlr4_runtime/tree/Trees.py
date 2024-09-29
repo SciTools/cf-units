@@ -8,15 +8,9 @@
 # A set of utility routines useful for all kinds of ANTLR trees.#
 from io import StringIO
 
-from cf_units._udunits2_parser._antlr4_runtime.Token import Token
-from cf_units._udunits2_parser._antlr4_runtime.tree.Tree import (
-    ErrorNode,
-    ParseTree,
-    RuleNode,
-    TerminalNode,
-    Tree,
-)
-from cf_units._udunits2_parser._antlr4_runtime.Utils import escapeWhitespace
+from ..Token import Token
+from ..tree.Tree import ErrorNode, ParseTree, RuleNode, TerminalNode, Tree
+from ..Utils import escapeWhitespace
 
 # need forward declaration
 Parser = None
@@ -109,9 +103,7 @@ class Trees:
     def _findAllNodes(
         cls, t: ParseTree, index: int, findTokens: bool, nodes: list
     ):
-        from cf_units._udunits2_parser._antlr4_runtime.ParserRuleContext import (
-            ParserRuleContext,
-        )
+        from ..ParserRuleContext import ParserRuleContext
 
         # check this node (the root) first
         if findTokens and isinstance(t, TerminalNode):

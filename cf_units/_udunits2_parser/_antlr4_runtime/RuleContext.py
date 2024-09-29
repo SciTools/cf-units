@@ -26,12 +26,8 @@
 # /
 from io import StringIO
 
-from cf_units._udunits2_parser._antlr4_runtime.tree.Tree import (
-    INVALID_INTERVAL,
-    ParseTreeVisitor,
-    RuleNode,
-)
-from cf_units._udunits2_parser._antlr4_runtime.tree.Trees import Trees
+from .tree.Tree import INVALID_INTERVAL, ParseTreeVisitor, RuleNode
+from .tree.Trees import Trees
 
 # need forward declarations
 RuleContext = None

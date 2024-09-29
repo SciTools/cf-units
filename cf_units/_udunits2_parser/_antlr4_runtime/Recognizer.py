@@ -3,12 +3,9 @@
 # Use of this file is governed by the BSD 3-clause license that
 # can be found in the LICENSE.txt file in the project root.
 #
-from cf_units._udunits2_parser._antlr4_runtime.error.ErrorListener import (
-    ConsoleErrorListener,
-    ProxyErrorListener,
-)
-from cf_units._udunits2_parser._antlr4_runtime.RuleContext import RuleContext
-from cf_units._udunits2_parser._antlr4_runtime.Token import Token
+from .error.ErrorListener import ConsoleErrorListener, ProxyErrorListener
+from .RuleContext import RuleContext
+from .Token import Token
 
 # need forward delcaration
 RecognitionException = None
@@ -38,7 +35,7 @@ class Recognizer:
         return major, minor
 
     def checkVersion(self, toolVersion):
-        runtimeVersion = "4.13.2"
+        runtimeVersion = "4.11.1"
         rvmajor, rvminor = self.extractVersion(runtimeVersion)
         tvmajor, tvminor = self.extractVersion(toolVersion)
         if rvmajor != tvmajor or rvminor != tvminor:
@@ -61,9 +58,7 @@ class Recognizer:
     def getTokenTypeMap(self):
         tokenNames = self.getTokenNames()
         if tokenNames is None:
-            from cf_units._udunits2_parser._antlr4_runtime.error.Errors import (
-                UnsupportedOperationException,
-            )
+            from .error.Errors import UnsupportedOperationException
 
             raise UnsupportedOperationException(
                 "The current recognizer does not provide a list of token names."
@@ -82,9 +77,7 @@ class Recognizer:
     def getRuleIndexMap(self):
         ruleNames = self.getRuleNames()
         if ruleNames is None:
-            from cf_units._udunits2_parser._antlr4_runtime.error.Errors import (
-                UnsupportedOperationException,
-            )
+            from .error.Errors import UnsupportedOperationException
 
             raise UnsupportedOperationException(
                 "The current recognizer does not provide a list of rule names."

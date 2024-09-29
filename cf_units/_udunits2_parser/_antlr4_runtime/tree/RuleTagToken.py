@@ -9,7 +9,7 @@
 # rule; e.g., {@code <expr>}. These tokens are created for {@link TagChunk}
 # chunks where the tag corresponds to a parser rule.
 #
-from cf_units._udunits2_parser._antlr4_runtime.Token import Token
+from ..Token import Token
 
 
 class RuleTagToken(Token):

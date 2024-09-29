@@ -2,15 +2,13 @@
 # Use of this file is governed by the BSD 3-clause license that
 # can be found in the LICENSE.txt file in the project root.
 # /
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATN import ATN
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATNDeserializationOptions import (
-    ATNDeserializationOptions,
-)
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATNState import *
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATNType import ATNType
-from cf_units._udunits2_parser._antlr4_runtime.atn.LexerAction import *
-from cf_units._udunits2_parser._antlr4_runtime.atn.Transition import *
-from cf_units._udunits2_parser._antlr4_runtime.Token import Token
+from ..atn.ATN import ATN
+from ..atn.ATNDeserializationOptions import ATNDeserializationOptions
+from ..atn.ATNState import *
+from ..atn.ATNType import ATNType
+from ..atn.LexerAction import *
+from ..atn.Transition import *
+from ..Token import Token
 
 SERIALIZED_VERSION = 4
 
@@ -23,7 +21,7 @@ class ATNDeserializer:
             options = ATNDeserializationOptions.defaultOptions
         self.deserializationOptions = options
 
-    def deserialize(self, data: [int]):
+    def deserialize(self, data: int):
         self.data = data
         self.pos = 0
         self.checkVersion()
@@ -51,7 +49,11 @@ class ATNDeserializer:
         version = self.readInt()
         if version != SERIALIZED_VERSION:
             raise Exception(
-                f"Could not deserialize ATN with version {ord(version)} (expected {SERIALIZED_VERSION})."
+                "Could not deserialize ATN with version "
+                + str(version)
+                + " (expected "
+                + str(SERIALIZED_VERSION)
+                + ")."
             )
 
     def readATN(self):

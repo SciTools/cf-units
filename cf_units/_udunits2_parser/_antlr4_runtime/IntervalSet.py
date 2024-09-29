@@ -6,7 +6,7 @@
 
 from io import StringIO
 
-from cf_units._udunits2_parser._antlr4_runtime.Token import Token
+from .Token import Token
 
 # need forward declarations
 IntervalSet = None

@@ -14,6 +14,7 @@ grammar:
 You're welcome ;).
 
 """
+# ruff: noqa: E501
 
 import collections
 import re
@@ -68,6 +69,55 @@ def expand_lexer(source, target):
         fh.write(new_content)
 
 
+def fixup_antlr_imports(antlr_file_path: Path, contents: str) -> str:
+    depth = len(antlr_file_path.parents) - 1
+
+    # Straighten out some wonky imports.
+    if antlr_file_path.name == "XPathLexer.py":
+        contents = contents.replace(
+            "from antlr4 import *",
+            "\n".join(
+                [
+                    "from antlr4.Lexer import Lexer",
+                    "from antlr4.atn.ATNDeserializer import ATNDeserializer",
+                    "from antlr4.dfa.DFA import DFA",
+                    "from antlr4.RuleContext import RuleContext",
+                    "from antlr4.CommonTokenStream import CommonTokenStream",
+                    "from antlr4.ParserRuleContext import ParserRuleContext",
+                    "from antlr4.tree.Tree import TerminalNode",
+                    "from antlr4.atn.LexerATNSimulator import LexerATNSimulator",
+                    "from antlr4.PredictionContext import PredictionContextCache",
+                ]
+            ),
+        )
+    if antlr_file_path.name == "XPath.py":
+        contents = contents.replace(
+            "from antlr4 import CommonTokenStream, DFA, "
+            "PredictionContextCache, "
+            "Lexer, LexerATNSimulator, ParserRuleContext, TerminalNode",
+            "\n".join(
+                [
+                    "from antlr4.Lexer import Lexer",
+                    "from antlr4.CommonTokenStream import CommonTokenStream",
+                    "from antlr4.ParserRuleContext import ParserRuleContext",
+                    "from antlr4.tree.Tree import TerminalNode",
+                    "from antlr4.atn.LexerATNSimulator import LexerATNSimulator",
+                    "from antlr4.PredictionContext import PredictionContextCache",
+                    "from antlr4.dfa.DFA import DFA",
+                ]
+            ),
+        )
+    contents = contents.replace(
+        "from antlr4 import DFA", "from antlr4.dfa.DFA import DFA"
+    )
+    contents = contents.replace(
+        "from antlr4 import Parser, DFA",
+        "from antlr4.dfa.DFA import DFA\nfrom antlr4.Parser import Parser",
+    )
+    contents = contents.replace("from antlr4", "from " + "." * depth)
+    return contents
+
+
 def vendor_antlr4_runtime(udunits2_parser_dir: Path):
     antlr_dest = udunits2_parser_dir / "_antlr4_runtime"
     version_file = antlr_dest / "_antlr4_version.txt"
@@ -90,15 +140,20 @@ def vendor_antlr4_runtime(udunits2_parser_dir: Path):
                 "install",
                 "--quiet",
                 f"--prefix={tmp_dest}",
-                "antlr4-python3-runtime",
+                f"antlr4-python3-runtime=={ANTLR_VERSION}",
             ],
             check=True,
         )
         [antlr_code_dir] = tmp_dest.glob("lib/python3.*/site-packages/antlr4")
         for py_file in antlr_code_dir.glob("**/*.py"):
-            py_file_dest = antlr_dest / py_file.relative_to(antlr_code_dir)
+            if py_file.name == "_pygrun.py":
+                continue
+            rel_to_antrl_root = py_file.relative_to(antlr_code_dir)
+            contents = py_file.read_text()
+            contents = fixup_antlr_imports(rel_to_antrl_root, contents)
+            py_file_dest = antlr_dest / rel_to_antrl_root
             py_file_dest.parent.mkdir(exist_ok=True)
-            py_file_dest.write_text(py_file.read_text())
+            py_file_dest.write_text(contents)
         shutil.rmtree(tmp_dest)
         version_file.write_text(ANTLR_VERSION)
     else:
@@ -106,7 +161,7 @@ def vendor_antlr4_runtime(udunits2_parser_dir: Path):
 
     # Re-write all imports relating to the antlr4 runtime to be the
     # vendored location.
-    for py_file in Path(".").glob("**/*.py"):
+    for py_file in Path("parser").glob("**/*.py"):
         if py_file.absolute() == Path(__file__).absolute():
             # Don't adapt for vendoring of this file.
             continue

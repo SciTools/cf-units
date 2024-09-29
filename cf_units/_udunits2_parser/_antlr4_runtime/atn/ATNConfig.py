@@ -13,19 +13,10 @@
 # /
 from io import StringIO
 
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATNState import (
-    ATNState,
-    DecisionState,
-)
-from cf_units._udunits2_parser._antlr4_runtime.atn.LexerActionExecutor import (
-    LexerActionExecutor,
-)
-from cf_units._udunits2_parser._antlr4_runtime.atn.SemanticContext import (
-    SemanticContext,
-)
-from cf_units._udunits2_parser._antlr4_runtime.PredictionContext import (
-    PredictionContext,
-)
+from ..atn.ATNState import ATNState, DecisionState
+from ..atn.LexerActionExecutor import LexerActionExecutor
+from ..atn.SemanticContext import SemanticContext
+from ..PredictionContext import PredictionContext
 
 # need a forward declaration
 ATNConfig = None

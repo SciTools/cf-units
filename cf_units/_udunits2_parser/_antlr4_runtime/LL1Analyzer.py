@@ -3,26 +3,23 @@
 # Use of this file is governed by the BSD 3-clause license that
 # can be found in the LICENSE.txt file in the project root.
 # /
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATN import ATN
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATNConfig import ATNConfig
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATNState import (
-    ATNState,
-    RuleStopState,
-)
-from cf_units._udunits2_parser._antlr4_runtime.atn.Transition import (
+from .atn.ATN import ATN
+from .atn.ATNConfig import ATNConfig
+from .atn.ATNState import ATNState, RuleStopState
+from .atn.Transition import (
     AbstractPredicateTransition,
     NotSetTransition,
     RuleTransition,
     WildcardTransition,
 )
-from cf_units._udunits2_parser._antlr4_runtime.IntervalSet import IntervalSet
-from cf_units._udunits2_parser._antlr4_runtime.PredictionContext import (
+from .IntervalSet import IntervalSet
+from .PredictionContext import (
     PredictionContext,
     PredictionContextFromRuleContext,
     SingletonPredictionContext,
 )
-from cf_units._udunits2_parser._antlr4_runtime.RuleContext import RuleContext
-from cf_units._udunits2_parser._antlr4_runtime.Token import Token
+from .RuleContext import RuleContext
+from .Token import Token
 
 
 class LL1Analyzer:

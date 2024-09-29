@@ -35,11 +35,9 @@ class CancellationException(IllegalStateException):
 #  in the input, where it is in the ATN, the rule invocation stack,
 #  and what kind of problem occurred.
 
-from cf_units._udunits2_parser._antlr4_runtime.InputStream import InputStream
-from cf_units._udunits2_parser._antlr4_runtime.ParserRuleContext import (
-    ParserRuleContext,
-)
-from cf_units._udunits2_parser._antlr4_runtime.Recognizer import Recognizer
+from ..InputStream import InputStream
+from ..ParserRuleContext import ParserRuleContext
+from ..Recognizer import Recognizer
 
 
 class RecognitionException(Exception):
@@ -100,7 +98,6 @@ class LexerNoViableAltException(RecognitionException):
         super().__init__(message=None, recognizer=lexer, input=input, ctx=None)
         self.startIndex = startIndex
         self.deadEndConfigs = deadEndConfigs
-        self.message = ""
 
     def __str__(self):
         symbol = ""
@@ -175,9 +172,7 @@ class FailedPredicateException(RecognitionException):
         )
         s = recognizer._interp.atn.states[recognizer.state]
         trans = s.transitions[0]
-        from cf_units._udunits2_parser._antlr4_runtime.atn.Transition import (
-            PredicateTransition,
-        )
+        from ..atn.Transition import PredicateTransition
 
         if isinstance(trans, PredicateTransition):
             self.ruleIndex = trans.ruleIndex

@@ -47,25 +47,16 @@
 # <p>
 # Whitespace is not allowed.</p>
 #
-from cf_units._udunits2_parser._antlr4_runtime import (
-    CommonTokenStream,
-    ParserRuleContext,
-    TerminalNode,
-)
-from cf_units._udunits2_parser._antlr4_runtime.error.ErrorListener import (
-    ErrorListener,
-)
-from cf_units._udunits2_parser._antlr4_runtime.error.Errors import (
-    LexerNoViableAltException,
-)
-from cf_units._udunits2_parser._antlr4_runtime.InputStream import InputStream
-from cf_units._udunits2_parser._antlr4_runtime.Parser import Parser
-from cf_units._udunits2_parser._antlr4_runtime.Token import Token
-from cf_units._udunits2_parser._antlr4_runtime.tree.Tree import ParseTree
-from cf_units._udunits2_parser._antlr4_runtime.tree.Trees import Trees
-from cf_units._udunits2_parser._antlr4_runtime.xpath.XPathLexer import (
-    XPathLexer,
-)
+from ..CommonTokenStream import CommonTokenStream
+from ..error.ErrorListener import ErrorListener
+from ..error.Errors import LexerNoViableAltException
+from ..InputStream import InputStream
+from ..Parser import Parser
+from ..ParserRuleContext import ParserRuleContext
+from ..Token import Token
+from ..tree.Tree import ParseTree, TerminalNode
+from ..tree.Trees import Trees
+from ..xpath.XPathLexer import XPathLexer
 
 
 class XPath:

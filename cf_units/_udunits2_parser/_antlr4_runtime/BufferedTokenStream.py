@@ -15,10 +15,8 @@
 # {@link CommonTokenStream}.</p>
 from io import StringIO
 
-from cf_units._udunits2_parser._antlr4_runtime.error.Errors import (
-    IllegalStateException,
-)
-from cf_units._udunits2_parser._antlr4_runtime.Token import Token
+from .error.Errors import IllegalStateException
+from .Token import Token
 
 # need forward declaration
 Lexer = None
@@ -233,7 +231,7 @@ class BufferedTokenStream(TokenStream):
             raise Exception(
                 str(tokenIndex) + " not in 0.." + str(len(self.tokens) - 1)
             )
-        from cf_units._udunits2_parser._antlr4_runtime.Lexer import Lexer
+        from .Lexer import Lexer
 
         nextOnChannel = self.nextTokenOnChannel(
             tokenIndex + 1, Lexer.DEFAULT_TOKEN_CHANNEL
@@ -252,7 +250,7 @@ class BufferedTokenStream(TokenStream):
             raise Exception(
                 str(tokenIndex) + " not in 0.." + str(len(self.tokens) - 1)
             )
-        from cf_units._udunits2_parser._antlr4_runtime.Lexer import Lexer
+        from .Lexer import Lexer
 
         prevOnChannel = self.previousTokenOnChannel(
             tokenIndex - 1, Lexer.DEFAULT_TOKEN_CHANNEL
@@ -269,9 +267,7 @@ class BufferedTokenStream(TokenStream):
         for i in range(left, right + 1):
             t = self.tokens[i]
             if channel == -1:
-                from cf_units._udunits2_parser._antlr4_runtime.Lexer import (
-                    Lexer,
-                )
+                from .Lexer import Lexer
 
                 if t.channel != Lexer.DEFAULT_TOKEN_CHANNEL:
                     hidden.append(t)

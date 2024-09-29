@@ -1,7 +1,12 @@
-# Generated from XPathLexer.g4 by ANTLR 4.13.1
+# Generated from XPathLexer.g4 by ANTLR 4.9.3
 import sys
 
-from cf_units._udunits2_parser._antlr4_runtime import *
+from ..atn.ATNDeserializer import ATNDeserializer
+from ..atn.LexerATNSimulator import LexerATNSimulator
+from ..dfa.DFA import DFA
+from ..Lexer import Lexer
+from ..PredictionContext import PredictionContextCache
+from ..RuleContext import RuleContext
 
 if sys.version_info[1] > 5:
     from typing import TextIO
@@ -543,7 +548,7 @@ class XPathLexer(Lexer):
 
     def __init__(self, input=None, output: TextIO = sys.stdout):
         super().__init__(input, output)
-        self.checkVersion("4.13.1")
+        self.checkVersion("4.9.3")
         self._interp = LexerATNSimulator(
             self, self.atn, self.decisionsToDFA, PredictionContextCache()
         )

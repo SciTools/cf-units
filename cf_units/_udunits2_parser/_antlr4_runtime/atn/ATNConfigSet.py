@@ -3,26 +3,20 @@
 # Use of this file is governed by the BSD 3-clause license that
 # can be found in the LICENSE.txt file in the project root.
 
-from functools import reduce
-
 #
 # Specialized {@link Set}{@code <}{@link ATNConfig}{@code >} that can track
 # info about the set, with support for combining similar configurations using a
 # graph-structured stack.
 # /
+from functools import reduce
 from io import StringIO
 
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATN import ATN
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATNConfig import ATNConfig
-from cf_units._udunits2_parser._antlr4_runtime.atn.SemanticContext import (
-    SemanticContext,
-)
-from cf_units._udunits2_parser._antlr4_runtime.error.Errors import (
-    IllegalStateException,
-    UnsupportedOperationException,
-)
-from cf_units._udunits2_parser._antlr4_runtime.PredictionContext import merge
-from cf_units._udunits2_parser._antlr4_runtime.Utils import str_list
+from ..atn.ATN import ATN
+from ..atn.ATNConfig import ATNConfig
+from ..atn.SemanticContext import SemanticContext
+from ..error.Errors import IllegalStateException, UnsupportedOperationException
+from ..PredictionContext import merge
+from ..Utils import str_list
 
 ATNSimulator = None
 
@@ -222,9 +216,7 @@ class ATNConfigSet:
             buf.write(str_list(self.configs))
             if self.hasSemanticContext:
                 buf.write(",hasSemanticContext=")
-                buf.write(
-                    str(self.hasSemanticContext).lower()
-                )  # lower() to conform to java output
+                buf.write(str(self.hasSemanticContext))
             if self.uniqueAlt != ATN.INVALID_ALT_NUMBER:
                 buf.write(",uniqueAlt=")
                 buf.write(str(self.uniqueAlt))

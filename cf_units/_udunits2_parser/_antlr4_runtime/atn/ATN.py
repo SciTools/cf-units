@@ -2,14 +2,11 @@
 # Use of this file is governed by the BSD 3-clause license that
 # can be found in the LICENSE.txt file in the project root.
 # /
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATNState import (
-    ATNState,
-    DecisionState,
-)
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATNType import ATNType
-from cf_units._udunits2_parser._antlr4_runtime.IntervalSet import IntervalSet
-from cf_units._udunits2_parser._antlr4_runtime.RuleContext import RuleContext
-from cf_units._udunits2_parser._antlr4_runtime.Token import Token
+from ..atn.ATNState import ATNState, DecisionState
+from ..atn.ATNType import ATNType
+from ..IntervalSet import IntervalSet
+from ..RuleContext import RuleContext
+from ..Token import Token
 
 
 class ATN:
@@ -60,9 +57,7 @@ class ATN:
     #  the rule surrounding {@code s}. In other words, the set will be
     #  restricted to tokens reachable staying within {@code s}'s rule.
     def nextTokensInContext(self, s: ATNState, ctx: RuleContext):
-        from cf_units._udunits2_parser._antlr4_runtime.LL1Analyzer import (
-            LL1Analyzer,
-        )
+        from ..LL1Analyzer import LL1Analyzer
 
         anal = LL1Analyzer(self)
         return anal.LOOK(s, ctx=ctx)

@@ -5,14 +5,9 @@
 # /
 from io import StringIO
 
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATN import ATN
-from cf_units._udunits2_parser._antlr4_runtime.error.Errors import (
-    IllegalStateException,
-)
-from cf_units._udunits2_parser._antlr4_runtime.RuleContext import RuleContext
-
-# dup ParserATNSimulator class var here to avoid circular import; no idea why this can't be in PredictionContext
-_trace_atn_sim = False
+from .atn.ATN import ATN
+from .error.Errors import IllegalStateException
+from .RuleContext import RuleContext
 
 
 class PredictionContext:
@@ -488,17 +483,9 @@ def mergeArrays(
     if mergeCache is not None:
         previous = mergeCache.get((a, b), None)
         if previous is not None:
-            if _trace_atn_sim:
-                print(
-                    "mergeArrays a=" + str(a) + ",b=" + str(b) + " -> previous"
-                )
             return previous
         previous = mergeCache.get((b, a), None)
         if previous is not None:
-            if _trace_atn_sim:
-                print(
-                    "mergeArrays a=" + str(a) + ",b=" + str(b) + " -> previous"
-                )
             return previous
 
     # merge sorted payloads a + b => M
@@ -576,23 +563,15 @@ def mergeArrays(
     if merged == a:
         if mergeCache is not None:
             mergeCache[(a, b)] = a
-        if _trace_atn_sim:
-            print("mergeArrays a=" + str(a) + ",b=" + str(b) + " -> a")
         return a
     if merged == b:
         if mergeCache is not None:
             mergeCache[(a, b)] = b
-        if _trace_atn_sim:
-            print("mergeArrays a=" + str(a) + ",b=" + str(b) + " -> b")
         return b
     combineCommonParents(mergedParents)
 
     if mergeCache is not None:
         mergeCache[(a, b)] = merged
-
-    if _trace_atn_sim:
-        print("mergeArrays a=" + str(a) + ",b=" + str(b) + " -> " + str(M))
-
     return merged
 
 

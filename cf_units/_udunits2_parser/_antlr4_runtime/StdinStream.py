@@ -1,7 +1,7 @@
 import codecs
 import sys
 
-from cf_units._udunits2_parser._antlr4_runtime.InputStream import InputStream
+from .InputStream import InputStream
 
 
 class StdinStream(InputStream):

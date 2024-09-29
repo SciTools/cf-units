@@ -12,11 +12,8 @@
 # not cause bloating of the {@link DFA} created for the lexer.</p>
 
 
-from cf_units._udunits2_parser._antlr4_runtime.atn.LexerAction import (
-    LexerAction,
-    LexerIndexedCustomAction,
-)
-from cf_units._udunits2_parser._antlr4_runtime.InputStream import InputStream
+from ..atn.LexerAction import LexerAction, LexerIndexedCustomAction
+from ..InputStream import InputStream
 
 # need a forward declaration
 Lexer = None

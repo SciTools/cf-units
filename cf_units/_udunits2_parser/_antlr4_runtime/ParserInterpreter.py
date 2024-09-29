@@ -17,35 +17,22 @@
 #
 #  See TestParserInterpreter for examples.
 #
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATN import ATN
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATNState import (
-    ATNState,
-    LoopEndState,
-    StarLoopEntryState,
-)
-from cf_units._udunits2_parser._antlr4_runtime.atn.ParserATNSimulator import (
-    ParserATNSimulator,
-)
-from cf_units._udunits2_parser._antlr4_runtime.atn.Transition import Transition
-from cf_units._udunits2_parser._antlr4_runtime.BufferedTokenStream import (
-    TokenStream,
-)
-from cf_units._udunits2_parser._antlr4_runtime.dfa.DFA import DFA
-from cf_units._udunits2_parser._antlr4_runtime.error.Errors import (
+from .atn.ATN import ATN
+from .atn.ATNState import ATNState, LoopEndState, StarLoopEntryState
+from .atn.ParserATNSimulator import ParserATNSimulator
+from .atn.Transition import Transition
+from .BufferedTokenStream import TokenStream
+from .dfa.DFA import DFA
+from .error.Errors import (
     FailedPredicateException,
     RecognitionException,
     UnsupportedOperationException,
 )
-from cf_units._udunits2_parser._antlr4_runtime.Lexer import Lexer
-from cf_units._udunits2_parser._antlr4_runtime.Parser import Parser
-from cf_units._udunits2_parser._antlr4_runtime.ParserRuleContext import (
-    InterpreterRuleContext,
-    ParserRuleContext,
-)
-from cf_units._udunits2_parser._antlr4_runtime.PredictionContext import (
-    PredictionContextCache,
-)
-from cf_units._udunits2_parser._antlr4_runtime.Token import Token
+from .Lexer import Lexer
+from .Parser import Parser
+from .ParserRuleContext import InterpreterRuleContext, ParserRuleContext
+from .PredictionContext import PredictionContextCache
+from .Token import Token
 
 
 class ParserInterpreter(Parser):

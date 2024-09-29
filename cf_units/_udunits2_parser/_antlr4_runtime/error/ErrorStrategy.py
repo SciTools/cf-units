@@ -3,16 +3,16 @@
 # Use of this file is governed by the BSD 3-clause license that
 # can be found in the LICENSE.txt file in the project root.
 #
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATNState import ATNState
-from cf_units._udunits2_parser._antlr4_runtime.error.Errors import (
+from ..atn.ATNState import ATNState
+from ..error.Errors import (
     FailedPredicateException,
     InputMismatchException,
     NoViableAltException,
     ParseCancellationException,
     RecognitionException,
 )
-from cf_units._udunits2_parser._antlr4_runtime.IntervalSet import IntervalSet
-from cf_units._udunits2_parser._antlr4_runtime.Token import Token
+from ..IntervalSet import IntervalSet
+from ..Token import Token
 
 # need forward declaration
 Parser = None

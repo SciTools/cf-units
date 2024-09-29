@@ -8,41 +8,20 @@ if sys.version_info[1] > 5:
     from typing import TextIO
 else:
     from typing.io import TextIO
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATNDeserializationOptions import (
-    ATNDeserializationOptions,
-)
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATNDeserializer import (
-    ATNDeserializer,
-)
-from cf_units._udunits2_parser._antlr4_runtime.BufferedTokenStream import (
-    TokenStream,
-)
-from cf_units._udunits2_parser._antlr4_runtime.CommonTokenFactory import (
-    TokenFactory,
-)
-from cf_units._udunits2_parser._antlr4_runtime.error.Errors import (
-    RecognitionException,
-    UnsupportedOperationException,
-)
-from cf_units._udunits2_parser._antlr4_runtime.error.ErrorStrategy import (
-    DefaultErrorStrategy,
-)
-from cf_units._udunits2_parser._antlr4_runtime.InputStream import InputStream
-from cf_units._udunits2_parser._antlr4_runtime.Lexer import Lexer
-from cf_units._udunits2_parser._antlr4_runtime.ParserRuleContext import (
-    ParserRuleContext,
-)
-from cf_units._udunits2_parser._antlr4_runtime.Recognizer import Recognizer
-from cf_units._udunits2_parser._antlr4_runtime.RuleContext import RuleContext
-from cf_units._udunits2_parser._antlr4_runtime.Token import Token
-from cf_units._udunits2_parser._antlr4_runtime.tree.ParseTreePatternMatcher import (
-    ParseTreePatternMatcher,
-)
-from cf_units._udunits2_parser._antlr4_runtime.tree.Tree import (
-    ErrorNode,
-    ParseTreeListener,
-    TerminalNode,
-)
+from .atn.ATNDeserializationOptions import ATNDeserializationOptions
+from .atn.ATNDeserializer import ATNDeserializer
+from .BufferedTokenStream import TokenStream
+from .CommonTokenFactory import TokenFactory
+from .error.Errors import RecognitionException, UnsupportedOperationException
+from .error.ErrorStrategy import DefaultErrorStrategy
+from .InputStream import InputStream
+from .Lexer import Lexer
+from .ParserRuleContext import ParserRuleContext
+from .Recognizer import Recognizer
+from .RuleContext import RuleContext
+from .Token import Token
+from .tree.ParseTreePatternMatcher import ParseTreePatternMatcher
+from .tree.Tree import ErrorNode, ParseTreeListener, TerminalNode
 
 
 class TraceListener(ParseTreeListener):

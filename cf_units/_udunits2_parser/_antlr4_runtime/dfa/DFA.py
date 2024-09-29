@@ -2,17 +2,10 @@
 # Copyright (c) 2012-2017 The ANTLR Project. All rights reserved.
 # Use of this file is governed by the BSD 3-clause license that
 # can be found in the LICENSE.txt file in the project root.
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATNConfigSet import (
-    ATNConfigSet,
-)
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATNState import (
-    DecisionState,
-    StarLoopEntryState,
-)
-from cf_units._udunits2_parser._antlr4_runtime.dfa.DFAState import DFAState
-from cf_units._udunits2_parser._antlr4_runtime.error.Errors import (
-    IllegalStateException,
-)
+from ..atn.ATNConfigSet import ATNConfigSet
+from ..atn.ATNState import DecisionState, StarLoopEntryState
+from ..dfa.DFAState import DFAState
+from ..error.Errors import IllegalStateException
 
 
 class DFA:
@@ -130,9 +123,7 @@ class DFA:
     def toString(self, literalNames: list = None, symbolicNames: list = None):
         if self.s0 is None:
             return ""
-        from cf_units._udunits2_parser._antlr4_runtime.dfa.DFASerializer import (
-            DFASerializer,
-        )
+        from ..dfa.DFASerializer import DFASerializer
 
         serializer = DFASerializer(self, literalNames, symbolicNames)
         return str(serializer)
@@ -140,9 +131,7 @@ class DFA:
     def toLexerString(self):
         if self.s0 is None:
             return ""
-        from cf_units._udunits2_parser._antlr4_runtime.dfa.DFASerializer import (
-            LexerDFASerializer,
-        )
+        from ..dfa.DFASerializer import LexerDFASerializer
 
         serializer = LexerDFASerializer(self)
         return str(serializer)

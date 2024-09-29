@@ -9,7 +9,7 @@
 # {@code <ID>}. These tokens are created for {@link TagChunk} chunks where the
 # tag corresponds to a lexer rule or token type.
 #
-from cf_units._udunits2_parser._antlr4_runtime.Token import CommonToken
+from ..Token import CommonToken
 
 
 class TokenTagToken(CommonToken):

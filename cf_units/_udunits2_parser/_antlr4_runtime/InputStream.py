@@ -8,7 +8,7 @@
 #
 #  Vacuum all input from a string and then treat it like a buffer.
 #
-from cf_units._udunits2_parser._antlr4_runtime.Token import Token
+from .Token import Token
 
 
 class InputStream:

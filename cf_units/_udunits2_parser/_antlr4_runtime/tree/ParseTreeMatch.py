@@ -10,10 +10,8 @@
 #
 from io import StringIO
 
-from cf_units._udunits2_parser._antlr4_runtime.tree.ParseTreePattern import (
-    ParseTreePattern,
-)
-from cf_units._udunits2_parser._antlr4_runtime.tree.Tree import ParseTree
+from ..tree.ParseTreePattern import ParseTreePattern
+from ..tree.Tree import ParseTree
 
 
 class ParseTreeMatch:

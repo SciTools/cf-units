@@ -7,7 +7,7 @@
 # The basic notion of a tree has a parent, a payload, and a list of children.
 #  It is the most abstract interface for all the trees used by ANTLR.
 # /
-from cf_units._udunits2_parser._antlr4_runtime.Token import Token
+from ..Token import Token
 
 INVALID_INTERVAL = (-1, -2)
 

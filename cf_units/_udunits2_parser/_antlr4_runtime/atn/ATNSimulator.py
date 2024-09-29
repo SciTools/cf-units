@@ -3,12 +3,10 @@
 # Use of this file is governed by the BSD 3-clause license that
 # can be found in the LICENSE.txt file in the project root.
 # /
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATN import ATN
-from cf_units._udunits2_parser._antlr4_runtime.atn.ATNConfigSet import (
-    ATNConfigSet,
-)
-from cf_units._udunits2_parser._antlr4_runtime.dfa.DFAState import DFAState
-from cf_units._udunits2_parser._antlr4_runtime.PredictionContext import (
+from ..atn.ATN import ATN
+from ..atn.ATNConfigSet import ATNConfigSet
+from ..dfa.DFAState import DFAState
+from ..PredictionContext import (
     PredictionContext,
     PredictionContextCache,
     getCachedPredictionContext,

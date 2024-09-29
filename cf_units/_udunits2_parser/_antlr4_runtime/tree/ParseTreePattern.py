@@ -8,10 +8,8 @@
 # A pattern like {@code <ID> = <expr>;} converted to a {@link ParseTree} by
 # {@link ParseTreePatternMatcher#compile(String, int)}.
 #
-from cf_units._udunits2_parser._antlr4_runtime.tree.ParseTreePatternMatcher import (
-    ParseTreePatternMatcher,
-)
-from cf_units._udunits2_parser._antlr4_runtime.tree.Tree import ParseTree
+from ..tree.ParseTreePatternMatcher import ParseTreePatternMatcher
+from ..tree.Tree import ParseTree
 
 
 class ParseTreePattern:

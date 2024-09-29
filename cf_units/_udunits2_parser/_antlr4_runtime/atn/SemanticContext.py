@@ -13,8 +13,8 @@
 #
 from io import StringIO
 
-from cf_units._udunits2_parser._antlr4_runtime.Recognizer import Recognizer
-from cf_units._udunits2_parser._antlr4_runtime.RuleContext import RuleContext
+from ..Recognizer import Recognizer
+from ..RuleContext import RuleContext
 
 
 class SemanticContext:
@@ -169,9 +169,6 @@ class PrecedencePredicate(SemanticContext):
             return False
         else:
             return self.precedence == other.precedence
-
-    def __str__(self):
-        return "{" + str(self.precedence) + ">=prec}?"
 
 
 # A semantic context which is true whenever none of the contained contexts

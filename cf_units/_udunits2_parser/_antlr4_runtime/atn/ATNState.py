@@ -64,7 +64,7 @@
 # <embed src="images/OptionalNonGreedy.svg" type="image/svg+xml"/>
 #
 
-from cf_units._udunits2_parser._antlr4_runtime.atn.Transition import Transition
+from ..atn.Transition import Transition
 
 INITIAL_NUM_TRANSITIONS = 4
 
