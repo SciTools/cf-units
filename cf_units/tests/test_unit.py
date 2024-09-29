@@ -914,7 +914,8 @@ class Test__inplace:
         f = Unit("deg_f")
 
         # Manufacture a non-native byte-order array to be converted.
-        orig = np.arange(4, dtype=np.float32).newbyteorder().byteswap()
+        arr = np.arange(4, dtype=np.float32)
+        orig = arr.view(arr.dtype.newbyteorder("S"))
 
         emsg = (
             "Unable to convert non-native byte ordered array in-place. "

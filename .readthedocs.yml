@@ -1,7 +1,7 @@
 version: 2
 
 build:
-  os: ubuntu-20.04
+  os: ubuntu-24.04
   tools:
     python: mambaforge-4.10
   jobs:
@@ -14,8 +14,17 @@ build:
       # create a "common" link to the underlying rtd conda environment,
       # which maybe named "latest", "stable" or the cf-units version
       - ln -s ${CONDA_ENVS_PATH}/${CONDA_DEFAULT_ENV} ${CONDA_ENVS_PATH}/common
+      # Need to stash the local changes that Read the Docs makes so that
+      #  setuptools_scm can generate the correct cf-units version.
+      - git stash
+    post_install:
+      - git stash pop
 
 conda:
+  # NOTE: the activation script for this environment does not get run.
+  #  Therefore, the UDUNITS2 environment variables are not set.
+  #  They are instead set via the RTD dashboard (not yet possible via this
+  #  configuration file - readthedocs/readthedocs.org#6311).
   environment: requirements/cf-units.yml
 
 sphinx:
