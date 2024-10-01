@@ -33,13 +33,13 @@ repos:
         #args: ["--show=errskip"]  # show everything for the moment
 
 -   repo: https://github.com/adamchainz/blacken-docs
-    rev: 1.16.0
+    rev: 1.18.0
     hooks:
     -   id: blacken-docs
         types: [file, rst]
 
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.4.10"
+    rev: "v0.6.8"
     hooks:
     # Run the linter
     -   id: ruff
