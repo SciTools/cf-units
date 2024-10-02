@@ -40,7 +40,6 @@ jobs:
           - os: ubuntu-latest
             version: py312
             posargs: "--cov-report=xml --cov"
-            post-command: codecov
           - os: macos-latest
             version: py312
             platform: osx
@@ -109,10 +108,12 @@ jobs:
         key: ${{ runner.os }}-tox-${{ env.ENV_NAME }}-${{ matrix.version }}-p${{ env.CACHE_PERIOD }}-b${{ env.CACHE_BUILD }}-${{ hashFiles(env.TOX_INI) }}
 
     - name: "Run ${{ matrix.os }} on ${{ matrix.version}} tests"
-      env:
-        POST_COMMAND: ${{ matrix.post-command }}
       run: |
         export PATH=${{ matrix.gitpath-prepend }}$PATH
         which git
         git --version
         tox -e ${{ matrix.version }}-${{ matrix.platform }}-test -- ${{ matrix.posargs }}
+
+    - name: "Upload coverage report to Codecov"
+      if: contains(matrix.posargs, "--cov")
+      uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238
