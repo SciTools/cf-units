@@ -93,7 +93,7 @@ jobs:
     - name: "Upload lock artifacts"
       uses: actions/upload-artifact@v4
       with:
-        name: lock-artifacts
+        name: lock-artifact-${{ matrix.lock }}
         path: ${{ github.workspace }}/requirements/locks/${{ matrix.lock }}*.txt
 
 
@@ -108,8 +108,8 @@ jobs:
     - name: "Download lock artifacts"
       uses: actions/download-artifact@v4
       with:
-        name: lock-artifacts
         path: ${{ github.workspace }}/requirements/locks
+        merge-multiple: true
 
     - name: "Generate token"
       uses: tibdex/github-app-token@v2
