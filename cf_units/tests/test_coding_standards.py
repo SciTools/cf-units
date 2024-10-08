@@ -90,6 +90,7 @@ class TestLicenseHeaders:
             "dist/*",
             "cf_units/_version.py",
             "cf_units/_udunits2_parser/parser/*",
+            "cf_units/_udunits2_parser/_antlr4_runtime/*",
         )
 
         last_change_by_fname = self.last_change_by_fname()
