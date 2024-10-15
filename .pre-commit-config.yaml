@@ -33,7 +33,7 @@ repos:
         #args: ["--show=errskip"]  # show everything for the moment
 
 -   repo: https://github.com/adamchainz/blacken-docs
-    rev: 1.18.0
+    rev: 1.19.0
     hooks:
     -   id: blacken-docs
         types: [file, rst]
