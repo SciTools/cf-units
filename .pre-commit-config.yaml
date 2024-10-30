@@ -4,7 +4,7 @@
 
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v5.0.0
     hooks:
         # Prevent giant files from being committed.
     -   id: check-added-large-files
@@ -33,13 +33,13 @@ repos:
         #args: ["--show=errskip"]  # show everything for the moment
 
 -   repo: https://github.com/adamchainz/blacken-docs
-    rev: 1.16.0
+    rev: 1.19.1
     hooks:
     -   id: blacken-docs
         types: [file, rst]
 
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.4.10"
+    rev: "v0.7.1"
     hooks:
     # Run the linter
     -   id: ruff

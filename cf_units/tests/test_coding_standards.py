@@ -128,7 +128,6 @@ def test_python_versions():
 
     # Places that are checked:
     pyproject_toml_file = REPO_DIR / "pyproject.toml"
-    setup_cfg_file = REPO_DIR / "setup.cfg"
     tox_file = REPO_DIR / "tox.ini"
     ci_locks_file = workflows_dir / "ci-locks.yml"
     ci_tests_file = workflows_dir / "ci-tests.yml"
@@ -137,16 +136,16 @@ def test_python_versions():
     text_searches: list[tuple[Path, str]] = [
         (
             pyproject_toml_file,
-            f'target-version = "py{supported_strip[0]}"',
-        ),
-        (
-            setup_cfg_file,
             "\n    ".join(
                 [
-                    f"Programming Language :: Python :: {ver}"
+                    f'"Programming Language :: Python :: {ver}",'
                     for ver in supported
                 ]
             ),
+        ),
+        (
+            pyproject_toml_file,
+            f'requires-python = ">={supported[0]}"',
         ),
         (
             tox_file,

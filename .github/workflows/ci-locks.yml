@@ -40,7 +40,7 @@ jobs:
         echo "CACHE_PERIOD=$(date +%Y).$(expr $(date +%U) / ${CACHE_WEEKS})" >> ${GITHUB_ENV}
 
     - name: "Conda package cache"
-      uses: actions/cache@v4.0.2
+      uses: actions/cache@v4.1.2
       env:
         # Increment the build number to force a cache refresh.
         CACHE_BUILD: 5
@@ -58,7 +58,7 @@ jobs:
 
     - name: "Conda environment cache"
       id: conda-env-cache
-      uses: actions/cache@v4.0.2
+      uses: actions/cache@v4.1.2
       env:
         # Increment the build number to force a cache refresh.
         CACHE_BUILD: 5
@@ -77,7 +77,7 @@ jobs:
         conda list
 
     - name: "Tox cache"
-      uses: actions/cache@v4.0.2
+      uses: actions/cache@v4.1.2
       env:
         # Increment the build number to forece a cache refresh.
         CACHE_BUILD: 5
@@ -91,9 +91,9 @@ jobs:
         tox -e ${{ matrix.lock }} -- --platform osx-64 --platform win-64
 
     - name: "Upload lock artifacts"
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: lock-artifacts
+        name: lock-artifact-${{ matrix.lock }}
         path: ${{ github.workspace }}/requirements/locks/${{ matrix.lock }}*.txt
 
 
@@ -106,10 +106,10 @@ jobs:
       uses: actions/checkout@v4
 
     - name: "Download lock artifacts"
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
-        name: lock-artifacts
         path: ${{ github.workspace }}/requirements/locks
+        merge-multiple: true
 
     - name: "Generate token"
       uses: tibdex/github-app-token@v2

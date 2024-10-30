@@ -70,7 +70,7 @@ jobs:
       run: echo "MACOSX_DEPLOYMENT_TARGET=$([[ ${{ matrix.os }} == 'macos-latest' ]] && echo '14.0' || echo '13.0')" >> $GITHUB_ENV
 
     - name: "Building ${{ matrix.os }} (${{ matrix.arch }}) wheels"
-      uses: pypa/cibuildwheel@v2.21.1
+      uses: pypa/cibuildwheel@v2.21.3
       env:
         CIBW_SKIP: "cp39-* cp313-* pp* *-musllinux*"
         CIBW_ARCHS: ${{ matrix.arch }}
@@ -87,9 +87,9 @@ jobs:
         UDUNITS2_XML_PATH: ${{ matrix.xml_path }}
         CIBW_ENVIRONMENT_PASS_LINUX: UDUNITS2_INCDIR UDUNITS2_LIBDIR UDUNITS2_XML_PATH
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
-        name: pypi-artifacts
+        name: pypi-artifacts-bdist-${{ matrix.os }}-${{ matrix.arch }}
         path: ${{ github.workspace }}/wheelhouse/*.whl
 
 
@@ -106,9 +106,9 @@ jobs:
       run: |
         pipx run build --sdist 
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
-        name: pypi-artifacts
+        name: pypi-artifacts-sdist
         path: ${{ github.workspace }}/dist/*.tar.gz
 
 
@@ -117,10 +117,10 @@ jobs:
     name: "Show artifacts"
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/download-artifact@v3
+    - uses: actions/download-artifact@v4
       with:
-        name: pypi-artifacts
         path: ${{ github.workspace }}/dist
+        merge-multiple: true
 
     - shell: bash
       run: |
@@ -134,10 +134,10 @@ jobs:
     # upload to Test PyPI for every commit on main branch
     if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
     steps:
-    - uses: actions/download-artifact@v3
+    - uses: actions/download-artifact@v4
       with:
-        name: pypi-artifacts
         path: ${{ github.workspace }}/dist
+        merge-multiple: true
 
     - uses: pypa/gh-action-pypi-publish@release/v1
       with:
@@ -155,10 +155,10 @@ jobs:
     # upload to PyPI for every tag starting with 'v'
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
     steps:
-    - uses: actions/download-artifact@v3
+    - uses: actions/download-artifact@v4
       with:
-        name: pypi-artifacts
         path: ${{ github.workspace }}/dist
+        merge-multiple: true
 
     - uses: pypa/gh-action-pypi-publish@release/v1
       with:
