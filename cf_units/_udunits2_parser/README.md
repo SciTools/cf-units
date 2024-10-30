@@ -36,7 +36,7 @@ Since the generated code is committed to this repo, and the ANTRL4 runtime is al
 So, we will  only change the ANTLR4 version if we need new features of the
 parser/lexer generators, or it becomes difficult to support the older version.
 
-Upgrading the version is a simple matter of changing the version in the compile.py
+Upgrading the ANTLR4 version is a simple matter of changing `ANTLR_VERSION` in the compile.py
 script, and then re-running it. This should re-generate the parser/lexer, and update
 the content in the _antlr4_runtime directory. One complexity may be that the imports
 of the ANTRL4 runtime need to be rewritten to support vendoring, and the code needed
