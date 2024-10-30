@@ -58,9 +58,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 
 [project.optional-dependencies]
-all = ["cf-units[latex]", "cf-units[docs]", "cf-units[test]"]
-# To update antlr: see cf_units/_udunits2_parser/README.md"
-latex = ["antlr4-python3-runtime ==4.11.1"]
+all = ["cf-units[docs,test]"]
 docs = ["sphinx"]
 test = ["codecov", "cython", "jinja2", "pip", "pytest", "pytest-cov"]
 
@@ -112,6 +110,7 @@ local_scheme = "dirty-tag"
 # Ignore generated code.
 exclude = [
     "cf_units/_udunits2_parser/parser",
+    "cf_units/_udunits2_parser/_antlr4_runtime",
 ]
 line-length = 79
 
