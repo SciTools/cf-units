@@ -31,16 +31,16 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        version: [py310, py311, py312]
+        version: [py310, py311, py312, py313]
         gitpath-prepend: [""]
         include:
           - os: ubuntu-latest
             platform: linux
           - os: ubuntu-latest
-            version: py312
+            version: py313
             posargs: "--cov-report=xml --cov"
           - os: macos-latest
-            version: py312
+            version: py313
             platform: osx
             # On macos, the up-to-date git may not be first on the path
             # N.B. setting includes a final ":", to simplify the path setting command
