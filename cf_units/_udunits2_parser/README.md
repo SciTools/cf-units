@@ -31,8 +31,11 @@ have a runtime dependency on ANTLR4 (which was found to be challenging due to th
 fact that you need to pin to a specific version of the ANTLR4 runtime, and aligning
 this version with other libraries which also have an ANTLR4 dependency is impractical).
 
-Given that the ANTRL4 runtime is vendored into this project, we have little need
-to upgrade the version unless new features of the parser/lexer generators are needed.
+Since the generated code is committed to this repo, and the ANTRL4 runtime is also vendored into it, we won't ever need to run ANTLR4 unless the grammar changes.
+
+So, we will  only change the ANTLR4 version if we need new features of the
+parser/lexer generators, or it becomes difficult to support the older version.
+
 Upgrading the version is a simple matter of changing the version in the compile.py
 script, and then re-running it. This should re-generate the parser/lexer, and update
 the content in the _antlr4_runtime directory. One complexity may be that the imports
