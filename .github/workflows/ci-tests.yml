@@ -26,7 +26,6 @@ jobs:
       run:
         shell: bash -l {0}
     env:
-      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       CYTHON_COVERAGE: 1
       ENV_NAME: "ci-tests"
     strategy:
@@ -40,7 +39,6 @@ jobs:
           - os: ubuntu-latest
             version: py312
             posargs: "--cov-report=xml --cov"
-            post-command: codecov
           - os: macos-latest
             version: py312
             platform: osx
@@ -61,7 +59,7 @@ jobs:
         echo "CACHE_PERIOD=$(date +%Y).$(expr $(date +%U) / ${CACHE_WEEKS})" >> ${GITHUB_ENV}
 
     - name: "Conda package cache"
-      uses: actions/cache@v4.0.2
+      uses: actions/cache@v4.1.2
       env:
         # Increment the build number to force a cache refresh.
         CACHE_BUILD: 2
@@ -80,7 +78,7 @@ jobs:
 
     - name: "Conda environment cache"
       id: conda-env-cache
-      uses: actions/cache@v4.0.2
+      uses: actions/cache@v4.1.2
       env:
         # Increment the build number to force a cache refresh.
         CACHE_BUILD: 2
@@ -99,7 +97,7 @@ jobs:
         conda list
 
     - name: "Tox cache"
-      uses: actions/cache@v4.0.2
+      uses: actions/cache@v4.1.2
       env:
         # Increment the build number to forece a cache refresh.
         CACHE_BUILD: 2
@@ -109,10 +107,14 @@ jobs:
         key: ${{ runner.os }}-tox-${{ env.ENV_NAME }}-${{ matrix.version }}-p${{ env.CACHE_PERIOD }}-b${{ env.CACHE_BUILD }}-${{ hashFiles(env.TOX_INI) }}
 
     - name: "Run ${{ matrix.os }} on ${{ matrix.version}} tests"
-      env:
-        POST_COMMAND: ${{ matrix.post-command }}
       run: |
         export PATH=${{ matrix.gitpath-prepend }}$PATH
         which git
         git --version
         tox -e ${{ matrix.version }}-${{ matrix.platform }}-test -- ${{ matrix.posargs }}
+
+    - name: "Upload coverage report to Codecov"
+      if: contains(matrix.posargs, '--cov')
+      uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
