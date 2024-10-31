@@ -20,7 +20,7 @@ https://conda.anaconda.org/conda-forge/linux-64/bzip2-1.0.8-h4bc722e_7.conda#62e
 https://conda.anaconda.org/conda-forge/linux-64/libffi-3.4.2-h7f98852_5.tar.bz2#d645c6d2ac96843a2bfaccd2d62b3ac3
 https://conda.anaconda.org/conda-forge/linux-64/libgfortran-14.2.0-h69a702a_1.conda#f1fd30127802683586f768875127a987
 https://conda.anaconda.org/conda-forge/linux-64/libnsl-2.0.1-hd590300_0.conda#30fd6e37fe21f86f4bd26d6ee73eeec7
-https://conda.anaconda.org/conda-forge/linux-64/libsqlite-3.47.0-hadc24fc_0.conda#540296f0ce9d3352188c15a89b30b9ac
+https://conda.anaconda.org/conda-forge/linux-64/libsqlite-3.47.0-hadc24fc_1.conda#b6f02b52a174e612e89548f4663ce56a
 https://conda.anaconda.org/conda-forge/linux-64/libstdcxx-ng-14.2.0-h4852527_1.conda#8371ac6457591af2cf6159439c1fd051
 https://conda.anaconda.org/conda-forge/linux-64/libudunits2-2.2.28-h40f5838_3.conda#4bdace082e911a3e1f1f0b721bed5b56
 https://conda.anaconda.org/conda-forge/linux-64/libuuid-2.38.1-h0b41bf4_0.conda#40b61aab5c7ba9ff276c41cfffe6b80b
@@ -77,12 +77,12 @@ https://conda.anaconda.org/conda-forge/noarch/jinja2-3.1.4-pyhd8ed1ab_0.conda#7b
 https://conda.anaconda.org/conda-forge/linux-64/libcblas-3.9.0-25_linux64_openblas.conda#5dbd1b0fc0d01ec5e0e1fbe667281a11
 https://conda.anaconda.org/conda-forge/linux-64/liblapack-3.9.0-25_linux64_openblas.conda#4dc03a53fc69371a6158d0ed37214cd3
 https://conda.anaconda.org/conda-forge/noarch/nodeenv-1.9.1-pyhd8ed1ab_0.conda#dfe0528d0f1c16c1f7c528ea5536ab30
-https://conda.anaconda.org/conda-forge/noarch/pip-24.2-pyh8b19718_1.conda#6c78fbb8ddfd64bcb55b5cbafd2d2c43
+https://conda.anaconda.org/conda-forge/noarch/pip-24.3.1-pyh8b19718_0.conda#5dd546fe99b44fda83963d15f84263b7
 https://conda.anaconda.org/conda-forge/noarch/pytest-8.3.3-pyhd8ed1ab_0.conda#c03d61f31f38fdb9facf70c29958bf7a
 https://conda.anaconda.org/conda-forge/noarch/typing-extensions-4.12.2-hd8ed1ab_0.conda#52d648bd608f5737b123f510bb5514b5
-https://conda.anaconda.org/conda-forge/noarch/virtualenv-20.27.0-pyhd8ed1ab_0.conda#a6ed1227ba6ec37cfc2b25e6512f729f
+https://conda.anaconda.org/conda-forge/noarch/virtualenv-20.27.1-pyhd8ed1ab_0.conda#dae21509d62aa7bf676279ced3edcb3f
 https://conda.anaconda.org/conda-forge/linux-64/numpy-2.1.2-py312h58c1407_0.conda#b7e9a46277a1ee0afc6311e7760df0c3
-https://conda.anaconda.org/conda-forge/noarch/pytest-cov-5.0.0-pyhd8ed1ab_0.conda#c54c0107057d67ddf077751339ec2c63
+https://conda.anaconda.org/conda-forge/noarch/pytest-cov-6.0.0-pyhd8ed1ab_0.conda#cb8a11b6d209e3d85e5094bdbd9ebd9c
 https://conda.anaconda.org/conda-forge/noarch/setuptools-scm-8.1.0-pyhd8ed1ab_0.conda#ba9f7f0ec4f2a18de3e7bce67c4a431e
 https://conda.anaconda.org/conda-forge/linux-64/ukkonen-1.0.1-py312h68727a3_5.conda#f9664ee31aed96c85b7319ab0a693341
 https://conda.anaconda.org/conda-forge/linux-64/zstandard-0.23.0-py312hef9b889_1.conda#8b7069e9792ee4e5b4919a7a306d2e67
