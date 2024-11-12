@@ -60,3 +60,10 @@ repos:
         args: [--fix, --show-fixes]
     # Run the formatter.
     -   id: ruff-format
+
+-   repo: https://github.com/codespell-project/codespell
+    rev: "v2.3.0"
+    hooks:
+    -   id: codespell
+        types_or: [asciidoc, python, markdown, rst]
+        additional_dependencies: [tomli]
