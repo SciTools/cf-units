@@ -164,3 +164,13 @@ ignore = [
   "MY100",  # Uses MyPy (pyproject config)
   "RF001",  # Uses RUFF
 ]
+
+[tool.mypy]
+enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
+exclude = [
+	"docs",
+	"cf_units/_udunits2_parser",
+]
+ignore_missing_imports = true
+strict = true
+warn_unreachable = true
