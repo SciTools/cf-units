@@ -72,4 +72,6 @@ repos:
     rev: 'v1.13.0'
     hooks:
     -   id: mypy
+        additional_dependencies:
+            - 'types-requests'
         exclude: 'docs|cf_units/_udunits2_parser'
