@@ -98,6 +98,10 @@ exclude_lines = [
 addopts = ["-ra", "-v", "--strict-config", "--strict-markers", "--doctest-modules"]
 log_cli_level = "INFO"
 doctest_optionflags = "NORMALIZE_WHITESPACE ELLIPSIS NUMBER"
+filterwarnings = [
+    "error",
+    "default:This method is no longer needed:DeprecationWarning",   # Added for known warnings
+]
 minversion = "6.0"
 testpaths = "cf_units"
 xfail_strict = true
@@ -148,7 +152,7 @@ convention = "numpy"
 # These are a list of the currently failing tests:
 ignore = [
   "PP003",  # Does not list wheel as a build-dep
-  "PP309",  # Filter warnings specified
+ # "PP309",  # Filter warnings specified
   "GH212",  # Require GHA update grouping
   "PC170",  # Uses PyGrep hooks (only needed if rST present)
   "PC180",  # Uses a markdown formatter
