@@ -154,7 +154,6 @@ ignore = [
   "GH212",  # Require GHA update grouping
   "PC170",  # Uses PyGrep hooks (only needed if rST present)
   "PC180",  # Uses a markdown formatter
-  "PC901",  # Custom pre-commit CI message
   "MY105",  #  MyPy enables redundant-expr  (TODO: see MyPy ignore below)
 ]
 

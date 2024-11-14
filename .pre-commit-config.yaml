@@ -2,6 +2,10 @@
 # See https://pre-commit.com/hooks.html for more hooks
 # See https://github.com/scientific-python/cookie#sp-repo-review for repo-review
 
+ci:
+    autofix_prs: false
+    autoupdate_commit_msg: "chore: update pre-commit hooks"
+
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
