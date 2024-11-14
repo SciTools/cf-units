@@ -75,3 +75,9 @@ repos:
         additional_dependencies:
             - 'types-requests'
         exclude: 'docs|cf_units/_udunits2_parser'
+
+-   repo: https://github.com/abravalheri/validate-pyproject
+    # More exhaustive than Ruff RUF200.
+    rev: "v0.23"
+    hooks:
+    - id: validate-pyproject
