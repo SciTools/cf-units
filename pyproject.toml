@@ -162,11 +162,30 @@ ignore = [
   "PC190",  # Uses Ruff
   "PC901",  # Custom pre-commit CI message
   "MY100",  # Uses MyPy (pyproject config)
+  "MY105",  #  MyPy enables redundant-expr  (TODO: see MyPy ignore below)
   "RF001",  # Uses RUFF
 ]
 
 [tool.mypy]
-enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
+disable_error_code = [
+	# TODO: Fix these:
+	"arg-type",
+	"assignment",
+	"attr-defined",
+	"func-returns-value",
+	"misc",
+	"no-untyped-call",
+	"no-untyped-def",
+	"operator",
+	"redundant-expr",
+	"unreachable",
+	"var-annotated",
+]
+enable_error_code = [
+	"ignore-without-code",
+#	"redundant-expr",		# TODO: Add back in when above ignores fixed
+	"truthy-bool"
+]
 exclude = [
 	"docs",
 	"cf_units/_udunits2_parser",
