@@ -95,10 +95,12 @@ exclude_lines = [
 ]
 
 [tool.pytest.ini_options]
-addopts = "-ra -v --doctest-modules"
+addopts = ["-ra", "-v", "--strict-config", "--strict-markers", "--doctest-modules"]
+log_cli_level = "INFO"
 doctest_optionflags = "NORMALIZE_WHITESPACE ELLIPSIS NUMBER"
 minversion = "6.0"
 testpaths = "cf_units"
+xfail_strict = true
 
 [tool.setuptools.packages.find]
 include = ["cf_units"]
@@ -146,10 +148,6 @@ convention = "numpy"
 # These are a list of the currently failing tests:
 ignore = [
   "PP003",  # Does not list wheel as a build-dep
-  "PP304",  # Sets the log level in pytest
-  "PP305",  # Specifies xfail_strict
-  "PP306",  # Specifies strict config
-  "PP307",  # Specifies strict markers
   "PP309",  # Filter warnings specified
   "GH212",  # Require GHA update grouping
   "PC170",  # Uses PyGrep hooks (only needed if rST present)
