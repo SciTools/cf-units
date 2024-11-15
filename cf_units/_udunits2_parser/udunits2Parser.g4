@@ -36,7 +36,7 @@ power:
 basic_spec:
     ID
     | '(' shift_spec ')'
-// Log not yet implemented, but it is supported in UDUNITS2. 
+// Log not yet implemented, but it is supported in UDUNITS2.
 //    | LOGREF product_spec ')'
     | number
 ;
