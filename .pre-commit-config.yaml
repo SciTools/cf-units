@@ -78,7 +78,7 @@ repos:
     -   id: mypy
         additional_dependencies:
             - 'types-requests'
-        exclude: 'docs/|cf_units/_udunits2_parser/'
+        exclude: 'docs/|cf_units/_udunits2_parser/parser/.*\.py|cf_units/_udunits2_parser/_antlr4_runtime/.*\.py'
 
 -   repo: https://github.com/abravalheri/validate-pyproject
     # More exhaustive than Ruff RUF200.
