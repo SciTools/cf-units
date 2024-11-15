@@ -16,12 +16,12 @@ You're welcome ;).
 # ruff: noqa: E501
 
 import collections
+from pathlib import Path
 import re
 import shutil
 import subprocess
 import sys
 import urllib.request
-from pathlib import Path
 
 try:
     import jinja2

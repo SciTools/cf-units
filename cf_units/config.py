@@ -5,8 +5,8 @@
 
 
 import configparser
-import sys
 from pathlib import Path
+import sys
 from tempfile import NamedTemporaryFile
 
 

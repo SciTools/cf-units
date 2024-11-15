@@ -5,8 +5,8 @@
 """Miscellaneous utility functions."""
 
 import abc
-import warnings
 from collections.abc import Hashable
+import warnings
 
 
 def approx_equal(a, b, max_absolute_error=1e-10, max_relative_error=1e-10):

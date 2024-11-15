@@ -3,10 +3,10 @@
 # This file is part of cf-units and is released under the BSD license.
 # See LICENSE in the root of the repository for full licensing details.
 
-import subprocess
 from datetime import datetime
 from fnmatch import fnmatch
 from pathlib import Path
+import subprocess
 
 import pytest
 

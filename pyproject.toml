@@ -214,7 +214,25 @@ select = [
 ]
 
 [tool.ruff.lint.isort]
+force-sort-within-sections = true
 known-first-party = ["cf_units"]
+
+[tool.ruff.lint.per-file-ignores]
+# All test scripts
+"cf_units/tests/*.py" = [
+     # https://docs.astral.sh/ruff/rules/undocumented-public-module/
+     "D104",  # Missing docstring in public module
+     "D106",  # Missing docstring in public nested class
+     "D205",  # 1 blank line required between summary line and description
+     "D401",  # 1 First line of docstring should be in imperative mood
+     "SLOT000",   # Subclasses of `str` should define `__slots__`
+     "N999",  # Invalid module name
+]
+
+"setup.py" = [
+    "FBT003",  # Boolean positional value in function call
+    "ICN001",  # `numpy` should be imported as `np`
+]
 
 [tool.ruff.lint.mccabe]
 max-complexity = 22

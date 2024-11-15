@@ -12,11 +12,11 @@ See also: `UDUNITS-2
 
 """
 
+from contextlib import contextmanager
 import copy
 import locale
 import math
 import threading
-from contextlib import contextmanager
 from warnings import warn
 
 import cftime

@@ -7,8 +7,8 @@
 import copy
 import datetime as datetime
 import operator
-import re
 from operator import truediv
+import re
 
 import cftime
 import numpy as np
