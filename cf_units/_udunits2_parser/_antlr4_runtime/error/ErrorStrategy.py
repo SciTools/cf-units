@@ -212,7 +212,7 @@ class DefaultErrorStrategy(ErrorStrategy):
 
         s = recognizer._interp.atn.states[recognizer.state]
         la = recognizer.getTokenStream().LA(1)
-        # try cheaper subset first; might get lucky. seems to shave a wee bit off
+        # try cheaper subset first; might get lucky. seems to shave a small bit off
         nextTokens = recognizer.atn.nextTokens(s)
         if la in nextTokens:
             self.nextTokensContext = None

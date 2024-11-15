@@ -69,6 +69,10 @@ Discussions = "https://github.com/SciTools/cf-units/discussions"
 Issues = "https://github.com/SciTools/cf-units/issues"
 Documentation = "https://cf-units.readthedocs.io"
 
+[tool.codespell]
+#ignore-words-list = "Wirth"
+skip = 'cf_units/_udunits2_parser/parser/*,cf_units/_udunits2_parser/_antlr4_runtime/*'
+
 [tool.coverage.run]
 branch = true
 plugins = [
@@ -115,29 +119,107 @@ local_scheme = "dirty-tag"
 
 [tool.ruff]
 # Ignore generated code.
-exclude = [
+extend-exclude = [
     "cf_units/_udunits2_parser/parser",
     "cf_units/_udunits2_parser/_antlr4_runtime",
 ]
-line-length = 79
+line-length = 88
 
 [tool.ruff.lint]
 select = [
-    # pyflakes
-    "F",
-    # pycodestyle
-    "E",
-    "W",
+    "ALL",
+    "D212",  # Multi-line docstring summary should start at the first line
+#    # pyflakes
+#    "F",
+#    # pycodestyle
+#    "E",
+#    "W",
     # flake8-bugbear
-    "B",
-    # flake8-comprehensions
-    "C4",
-    # isort
-    "I",
-    # pyupgrade
-    "UP",
+#    "B",
+#    # flake8-comprehensions
+##    "C4",
+#    # isort
+#    "I",
+#    # pyupgrade
+#    "UP",
 ]
-ignore = ["B904", "F403", "F405"]
+ignore = [
+    # NOTE: Non-permanent exclusions should be added to the ".ruff.toml" file.
+
+    # flake8-commas (COM)
+    # https://docs.astral.sh/ruff/rules/#flake8-commas-com
+    "A001",
+    "ANN001",
+    "ANN003", # Missing type annotation for `**kwargs`
+    "ANN201",
+    "ANN202",
+    "ANN204",
+    "ANN205",
+    "ANN206", # Missing return type annotation for classmethod `_new_from_existing_ut`
+    "ARG002",  # Unused method argument
+    "B904",  # Raise statements in exception handlers that lack a from clause
+    "COM812",  # Trailing comma missing.
+    "COM819",  # Trailing comma prohibited.
+    "D100",
+    "D101",
+    "D102",
+    "D103",
+    "D105",
+    "D205",
+    "D301",  # Use `r"""` if any backslashes in a docstring
+    "D400",
+    "D401",
+    "D404",  # First word of the docstring should not be "This"
+    "DTZ001",
+    "DTZ006",
+    "EM101",
+    "EM102",
+    "F403",  # Wildcard imports
+    "F405",  # Use of name from wildcard import
+    "FBT002",
+    "FIX002",  # Line contains TODO, consider resolving the issue
+    "FLY002",  # Consider f-string instead of string join
+    "INP001",  # File `cf_units/tests/integration/parse/test_parse.py` is part of an implicit namespace package. Add an `__init__.py`.
+    "N801",
+    "N802",
+    "N803",  # Argument name `nextResult` should be lowercase
+    "N803",  # Argument name `offendingSymbol` should be lowercase
+    "N806",  # Variable `MODE_P` in function should be lowercase
+    "N806", #  Variable `TOKEN_P` in function should be lowercase
+    "PGH004", # Use a colon when specifying `noqa` rule codes
+    "PLC0414", # Import alias does not rename original package
+    "PLR0912",  # Too many branches (14 > 12)
+    "PLR0912", # Too many branches (18 > 12)
+    "PLR0913",
+    "PLR2004",
+    "PT006",
+    "PT011",
+    "PT012",
+    "PT019",
+    "PTH123",
+    "RET504",  # Unnecessary assignment to `contents` before `return` statement
+    "RET504",  # Unnecessary assignment to `result` before `return` statement
+    "RUF001",
+    "RUF003",
+    "RUF012",  # Mutable class attributes should be annotated with `typing.ClassVar`
+    "S101",
+    "S102",
+    "S310",  # Audit URL open for permitted schemes. Allowing use of `file
+    "S603",
+    "S607",
+    "S701",  # By default, jinja2 sets `autoescape` to `False`. Consider using `autoescape=True` or the `select_autoescape` function to mitigate XSS vulnerabilities.
+    "SIM108",  # Use ternary operator `op_type = graph.Divide if node.content == "/" else graph.Multiply` instead of `if`-`else`-block
+    "SIM108",  # Use ternary operator `result = handler(content) if callable(handler) else handler` instead of `if`-`else`-block
+    "SIM108",  # Use ternary operator `result = value if inplace else copy.deepcopy(value)` instead of `if`-`else`-block
+    "SLF001",
+    "T201",  #`print` found
+    "TD002",  #Missing author in TODO; try
+    "TD003",  #Missing issue link on the line following this TODO
+    "TD004",  # Missing colon in TODO
+    "TRY003",
+
+]
+preview = false
 
 [tool.ruff.lint.isort]
 known-first-party = ["cf_units"]
@@ -222,6 +304,8 @@ checks = [
     # Record temporarily ignored checks below; will be reviewed at a later date:
     "GL08", # The object does not have a docstring
 
+    "GL09", # Deprecation warning should precede extended
+
     "PR01", # Parameters {xxxx} not documented
 
     "RT01", # No Returns section found
@@ -233,6 +317,9 @@ checks = [
     "SS05", #Summary must start with infinitive verb, not third person
             # (e.g. use "Generate" instead of "Generates")
 
+    "RT03", # Return value has no description
+
+    "RT05", # Return value description should finish with "."
 
 ]
 exclude = [

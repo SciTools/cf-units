@@ -20,9 +20,7 @@ LICENSE_TEMPLATE = """# Copyright cf-units contributors
 
 REPO_DIR = Path(__file__).resolve().parents[2]
 DOCS_DIR = REPO_DIR / "docs"
-DOCS_DIR = Path(
-    cf_units.config.get_option("Resources", "doc_dir", default=DOCS_DIR)
-)
+DOCS_DIR = Path(cf_units.config.get_option("Resources", "doc_dir", default=DOCS_DIR))
 exclusion = ["Makefile", "make.bat", "build"]
 DOCS_DIRS = DOCS_DIR.glob("*")
 DOCS_DIRS = [DOC_DIR for DOC_DIR in DOCS_DIRS if DOC_DIR.name not in exclusion]
@@ -33,8 +31,7 @@ IS_GIT_REPO = (REPO_DIR / ".git").is_dir()
 class TestLicenseHeaders:
     @staticmethod
     def whatchanged_parse(whatchanged_output):
-        """
-        Returns a generator of tuples of data parsed from
+        """Returns a generator of tuples of data parsed from
         "git whatchanged --pretty='TIME:%at'". The tuples are of the form
         ``(filename, last_commit_datetime)``
 
@@ -58,8 +55,7 @@ class TestLicenseHeaders:
 
     @staticmethod
     def last_change_by_fname():
-        """
-        Return a dictionary of all the files under git which maps to
+        """Return a dictionary of all the files under git which maps to
         the datetime of their last modification in the git history.
 
         .. note::
@@ -113,9 +109,7 @@ class TestLicenseHeaders:
                         failed = True
 
         if failed:
-            raise AssertionError(
-                "There were license header failures. See stdout."
-            )
+            raise AssertionError("There were license header failures. See stdout.")
 
 
 @pytest.mark.skipif(not IS_GIT_REPO, reason="Not a git repository.")
@@ -138,10 +132,7 @@ def test_python_versions():
         (
             pyproject_toml_file,
             "\n    ".join(
-                [
-                    f'"Programming Language :: Python :: {ver}",'
-                    for ver in supported
-                ]
+                [f'"Programming Language :: Python :: {ver}",' for ver in supported]
             ),
         ),
         (
@@ -154,15 +145,11 @@ def test_python_versions():
         ),
         (
             tox_file,
-            "[testenv:py{"
-            + ",".join(supported_strip)
-            + "}-{linux,osx,win}-test]",
+            "[testenv:py{" + ",".join(supported_strip) + "}-{linux,osx,win}-test]",
         ),
         (
             ci_locks_file,
-            "lock: ["
-            + ", ".join([f"py{p}-lock" for p in supported_strip])
-            + "]",
+            "lock: [" + ", ".join([f"py{p}-lock" for p in supported_strip]) + "]",
         ),
         (
             ci_tests_file,
@@ -175,11 +162,11 @@ def test_python_versions():
         ),
         (
             ci_tests_file,
-            (f"os: ubuntu-latest\n" f"{12*' '}version: py{supported_latest}"),
+            (f"os: ubuntu-latest\n{12*' '}version: py{supported_latest}"),
         ),
         (
             ci_tests_file,
-            (f"os: macos-latest\n" f"{12*' '}version: py{supported_latest}"),
+            (f"os: macos-latest\n{12*' '}version: py{supported_latest}"),
         ),
     ]
 
@@ -200,7 +187,5 @@ def test_python_versions():
         assert tox_text.count(f"{py_version}-lock") == 3
 
     ci_wheels_text = ci_wheels_file.read_text()
-    (cibw_line,) = (
-        line for line in ci_wheels_text.splitlines() if "CIBW_SKIP" in line
-    )
+    (cibw_line,) = (line for line in ci_wheels_text.splitlines() if "CIBW_SKIP" in line)
     assert all(p not in cibw_line for p in supported_strip)

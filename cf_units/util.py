@@ -2,10 +2,7 @@
 #
 # This file is part of cf-units and is released under the BSD license.
 # See LICENSE in the root of the repository for full licensing details.
-"""
-Miscellaneous utility functions.
-
-"""
+"""Miscellaneous utility functions."""
 
 import abc
 import warnings
@@ -13,8 +10,7 @@ from collections.abc import Hashable
 
 
 def approx_equal(a, b, max_absolute_error=1e-10, max_relative_error=1e-10):
-    """
-    Returns whether two numbers are almost equal, allowing for the
+    """Returns whether two numbers are almost equal, allowing for the
     finite precision of floating point numbers.
 
     .. deprecated:: 3.2.0
@@ -38,8 +34,7 @@ def approx_equal(a, b, max_absolute_error=1e-10, max_relative_error=1e-10):
 
 
 class _MetaOrderedHashable(abc.ABCMeta):
-    """
-    A metaclass that ensures that non-abstract subclasses of _OrderedHashable
+    """A metaclass that ensures that non-abstract subclasses of _OrderedHashable
     without an explicit __init__ method are given a default __init__ method
     with the appropriate method signature.
 
@@ -74,8 +69,7 @@ class _MetaOrderedHashable(abc.ABCMeta):
             if "_init" not in namespace:
                 # Create a default _init method for the class
                 method_source = (
-                    f"def _init(self, {args}):\n "
-                    f"self._init_from_tuple(({args},))"
+                    f"def _init(self, {args}):\n self._init_from_tuple(({args},))"
                 )
                 exec(method_source, namespace)
 
@@ -83,8 +77,7 @@ class _MetaOrderedHashable(abc.ABCMeta):
 
 
 class _OrderedHashable(Hashable, metaclass=_MetaOrderedHashable):
-    """
-    Convenience class for creating "immutable", hashable, and ordered classes.
+    """Convenience class for creating "immutable", hashable, and ordered classes.
 
     Instance identity is defined by the specific list of attribute names
     declared in the abstract attribute "_names". Subclasses must declare the
@@ -100,5 +93,3 @@ class _OrderedHashable(Hashable, metaclass=_MetaOrderedHashable):
         its attributes are themselves hashable.
 
     """
-
-    pass

@@ -2,10 +2,7 @@
 #
 # This file is part of cf-units and is released under the BSD license.
 # See LICENSE in the root of the repository for full licensing details.
-"""
-Test Unit the wrapper class for Unidata udunits2.
-
-"""
+"""Test Unit the wrapper class for Unidata udunits2."""
 
 import copy
 import datetime as datetime
@@ -164,9 +161,7 @@ class Test_format:
     def test_format_multiple_options_utf8(self):
         u = Unit("watt")
         assert (
-            u.format(
-                [cf_units.UT_NAMES, cf_units.UT_DEFINITION, cf_units.UT_UTF8]
-            )
+            u.format([cf_units.UT_NAMES, cf_units.UT_DEFINITION, cf_units.UT_UTF8])
             == "meter²·kilogram·second⁻³"
         )
 
@@ -348,7 +343,7 @@ class Test_log:
 
     def test_negative(self):
         u = Unit("hPa")
-        msg = re.escape("Failed to calculate logorithmic base of Unit('hPa')")
+        msg = re.escape("Failed to calculate logarithmic base of Unit('hPa')")
         with pytest.raises(ValueError, match=msg):
             u.log(-1)
 
@@ -622,13 +617,13 @@ class Test_equality:
 
     def test_not_implemented(self):
         u = Unit("meter")
-        assert not (u == {})
+        assert u != {}
 
 
 class Test_non_equality:
     def test_basic(self):
         u = Unit("meter")
-        assert not (u != "meter")
+        assert u == "meter"
 
     def test_non_equivalent_units(self):
         u = Unit("meter")
@@ -645,11 +640,11 @@ class Test_non_equality:
 
     def test_unknown(self):
         u = Unit("unknown")
-        assert not (u != "unknown")
+        assert u == "unknown"
 
     def test_no_unit(self):
         u = Unit("no_unit")
-        assert not (u != "no_unit")
+        assert u == "no_unit"
 
     def test_not_implemented(self):
         u = Unit("meter")
@@ -887,11 +882,9 @@ class Test__inplace:
         c = Unit("deg_c")
         f = Unit("deg_f")
 
-        # Manufacture a Fortran-ordered nd array to be converted.
+        # Manufacture a Fortran-ordered nd-array to be converted.
         orig = (
-            np.ma.masked_array(
-                np.arange(4, dtype=np.float32), mask=[1, 0, 0, 1]
-            )
+            np.ma.masked_array(np.arange(4, dtype=np.float32), mask=[1, 0, 0, 1])
             .reshape([2, 2])
             .T
         )
@@ -972,9 +965,7 @@ class TestNumsAndDates:
             "hours since 2010-11-02 12:00:00",
             calendar=cf_units.CALENDAR_360_DAY,
         )
-        with pytest.raises(
-            ValueError, match="illegal calendar or reference date"
-        ):
+        with pytest.raises(ValueError, match="illegal calendar or reference date"):
             u.num2date(
                 1,
                 only_use_cftime_datetimes=False,
@@ -1004,9 +995,7 @@ class TestNumsAndDates:
             "hours since 2010-11-02 12:00:00",
             calendar=cf_units.CALENDAR_360_DAY,
         )
-        with pytest.raises(
-            ValueError, match="illegal calendar or reference date"
-        ):
+        with pytest.raises(ValueError, match="illegal calendar or reference date"):
             u.num2pydate(1)
 
 

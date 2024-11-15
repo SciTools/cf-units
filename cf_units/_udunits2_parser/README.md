@@ -26,7 +26,7 @@ changes to the grammar being proposed so that the two can remain in synch.
 ### Updating the ANTLR version
 
 The [compile.py script](compile.py) copies the ANTLR4 runtime into the _antlr4_runtime
-directory, and this should be commited to the repository. This means that we do not
+directory, and this should be committed to the repository. This means that we do not
 have a runtime dependency on ANTLR4 (which was found to be challenging due to the
 fact that you need to pin to a specific version of the ANTLR4 runtime, and aligning
 this version with other libraries which also have an ANTLR4 dependency is impractical).

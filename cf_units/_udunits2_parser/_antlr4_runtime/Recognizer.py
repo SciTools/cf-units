@@ -7,7 +7,7 @@ from .error.ErrorListener import ConsoleErrorListener, ProxyErrorListener
 from .RuleContext import RuleContext
 from .Token import Token
 
-# need forward delcaration
+# need forward declaration
 RecognitionException = None
 
 
