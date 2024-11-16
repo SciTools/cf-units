@@ -283,6 +283,13 @@ warn_unreachable = true
 warn_unused_ignores = true
 warn_unused_configs = true
 
+[[tool.mypy.overrides]]
+module = [
+        "cf_units/_udunits2_parser/parser.*",
+        "cf_units/_udunits2_parser/_antlr4_runtime.*",
+]
+ignore_errors = true
+
 [tool.numpydoc_validation]
 checks = [
     "all",  # Enable all numpydoc validation rules, apart from the following:
