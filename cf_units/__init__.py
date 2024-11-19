@@ -502,7 +502,7 @@ _CACHE = {}
 
 
 def as_unit(unit):
-    """Returns a Unit corresponding to the given unit.
+    """Return a Unit corresponding to the given unit.
 
     .. note::
 
@@ -869,7 +869,7 @@ class Unit(_OrderedHashable):
         return self.calendar is not None
 
     def is_long_time_interval(self):
-        """Defines whether this unit describes a time unit with a long time
+        """Define whether this unit describes a time unit with a long time
         interval ("months" or "years"). These long time intervals *are*
         supported by `UDUNITS2` but are not supported by `cftime`. This
         discrepancy means we cannot run self.num2date() on a time unit with
@@ -1196,7 +1196,7 @@ class Unit(_OrderedHashable):
         return result
 
     def offset_by_time(self, origin):
-        """Returns the time unit offset with respect to the time origin.
+        """Return the time unit offset with respect to the time origin.
 
         Args:
 
@@ -1253,7 +1253,7 @@ class Unit(_OrderedHashable):
         return result
 
     def root(self, root):
-        """Returns the given root of the unit.
+        """Return the given root of the unit.
 
         Args:
 
@@ -1298,7 +1298,7 @@ class Unit(_OrderedHashable):
         return result
 
     def log(self, base):
-        """Returns the logarithmic unit corresponding to the given
+        """Return the logarithmic unit corresponding to the given
         logarithmic base.
 
         Args:
@@ -1337,7 +1337,7 @@ class Unit(_OrderedHashable):
         return result
 
     def __str__(self):
-        """Returns a simple string representation of the unit.
+        """Return a simple string representation of the unit.
 
         Returns
         -------
@@ -1354,7 +1354,7 @@ class Unit(_OrderedHashable):
         return self.origin or self.symbol
 
     def __repr__(self):
-        """Returns a string representation of the unit object.
+        """Return a string representation of the unit object.
 
         Returns
         -------
@@ -1638,7 +1638,7 @@ class Unit(_OrderedHashable):
 
     def change_calendar(self, calendar):
         """
-        Returns a new unit with the requested calendar, modifying the
+        Return a new unit with the requested calendar, modifying the
         reference date if necessary.  Only works with calendars that
         represent the real world (standard, proleptic_gregorian, julian)
         and with short time intervals (days or less).
@@ -1662,7 +1662,7 @@ class Unit(_OrderedHashable):
         return Unit(new_origin, calendar=calendar)
 
     def convert(self, value, other, ctype=FLOAT64, inplace=False):
-        """Converts a single value or NumPy array of values from the current unit
+        """Convert a single value or NumPy array of values from the current unit
         to the other target unit.
 
         If the units are not convertible, then no conversion will take place.
@@ -1800,7 +1800,7 @@ class Unit(_OrderedHashable):
 
     @property
     def cftime_unit(self):
-        """Returns a string suitable for passing as a unit to cftime.num2date and
+        """Return a string suitable for passing as a unit to cftime.num2date and
         cftime.date2num.
 
         """
@@ -1814,7 +1814,7 @@ class Unit(_OrderedHashable):
         return str(self).rstrip(" UTC")
 
     def date2num(self, date):
-        """Returns the numeric time value calculated from the datetime
+        """Return the numeric time value calculated from the datetime
         object using the current calendar and unit time reference.
 
         The current unit time reference must be of the form:
@@ -1863,7 +1863,7 @@ class Unit(_OrderedHashable):
         only_use_cftime_datetimes=True,
         only_use_python_datetimes=False,
     ):
-        """Returns a datetime-like object calculated from the numeric time
+        """Return a datetime-like object calculated from the numeric time
         value using the current calendar and the unit time reference.
 
         The current unit time reference must be of the form:

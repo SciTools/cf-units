@@ -169,7 +169,7 @@ class SyntaxErrorRaiser(ErrorListener):
 
 
 def _debug_tokens(unit_string):
-    """A really handy way of printing the tokens produced for a given input."""
+    """A really handy way of printing the tokens produced for a given input."""  # noqa: D401
     unit_str = unit_string.strip()
     lexer = udunits2Lexer(InputStream(unit_str))
     stream = CommonTokenStream(lexer)

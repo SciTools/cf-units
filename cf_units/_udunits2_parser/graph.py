@@ -108,7 +108,7 @@ class Visitor:
         return visitor(node)
 
     def generic_visit(self, node):
-        """Called if no explicit visitor function exists for a node.
+        """Call if no explicit visitor function exists for a node.
 
         Can also be called by ``visit_<ClassName>`` implementations
         if children of the node are to be processed.
