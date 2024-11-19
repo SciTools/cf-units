@@ -163,7 +163,7 @@ ignore = [
     #"D404",  # docstring-starts-with-this
     "DTZ001",  # call-datetime-without-tzinfo
     "DTZ006",  # call-datetime-fromtimestamp
-    "EM101",  # raw-string-in-exception
+    #"EM101",  # raw-string-in-exception
     "EM102",  # f-string-in-exception
     "F403",  # Wildcard imports
     "F405",  # Use of name from wildcard import

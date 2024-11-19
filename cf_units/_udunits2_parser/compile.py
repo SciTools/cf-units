@@ -26,7 +26,8 @@ import urllib.request
 try:
     import jinja2
 except ImportError:
-    raise ImportError("Jinja2 needed to compile the grammar.")
+    msg = "Jinja2 needed to compile the grammar."
+    raise ImportError(msg)
 
 ANTLR_VERSION = "4.11.1"
 JAR_NAME = f"antlr-{ANTLR_VERSION}-complete.jar"

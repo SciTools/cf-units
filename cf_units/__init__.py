@@ -1216,7 +1216,8 @@ class Unit(_OrderedHashable):
 
         """
         if not isinstance(origin, float | int):
-            raise TypeError("a numeric type for the origin argument is required")
+            msg = "a numeric type for the origin argument is required"
+            raise TypeError(msg)
         try:
             ut_unit = _ud.offset_by_time(self.ut_unit, origin)
         except _ud.UdunitsError as exception:
@@ -1244,7 +1245,8 @@ class Unit(_OrderedHashable):
         if self.is_unknown():
             result = self
         elif self.is_no_unit():
-            raise ValueError("Cannot invert a 'no-unit'.")
+            msg = "Cannot invert a 'no-unit'."
+            raise ValueError(msg)
         else:
             ut_unit = _ud.invert(self.ut_unit)
             result = Unit._new_from_existing_ut(
@@ -1276,11 +1278,13 @@ class Unit(_OrderedHashable):
 
         """
         if round(root) != root:
-            raise TypeError("An integer for the root argument is required")
+            msg = "An integer for the root argument is required"
+            raise TypeError(msg)
         if self.is_unknown():
             result = self
         elif self.is_no_unit():
-            raise ValueError("Cannot take the root of a 'no-unit'.")
+            msg = "Cannot take the root of a 'no-unit'."
+            raise ValueError(msg)
         # only update the unit if it is not scalar
         elif self == Unit("1"):
             result = self
@@ -1320,12 +1324,14 @@ class Unit(_OrderedHashable):
         if self.is_unknown():
             result = self
         elif self.is_no_unit():
-            raise ValueError("Cannot take the logarithm of a 'no-unit'.")
+            msg = "Cannot take the logarithm of a 'no-unit'."
+            raise ValueError(msg)
         else:
             try:
                 ut_unit = _ud.log(base, self.ut_unit)
             except TypeError:
-                raise TypeError("A numeric type for the base argument is required")
+                msg = "A numeric type for the base argument is required"
+                raise TypeError(msg)
             except _ud.UdunitsError as exception:
                 value_err = _ud_value_error(
                     exception,
@@ -1378,7 +1384,8 @@ class Unit(_OrderedHashable):
         if self.is_unknown():
             result = self
         elif self.is_no_unit():
-            raise ValueError("Cannot offset a 'no-unit'.")
+            msg = "Cannot offset a 'no-unit'."
+            raise ValueError(msg)
         else:
             try:
                 ut_unit = _ud.offset(self.ut_unit, offset)
@@ -1540,12 +1547,14 @@ class Unit(_OrderedHashable):
         try:
             power = float(power)
         except ValueError:
-            raise TypeError("A numeric value is required for the power argument.")
+            msg = "A numeric value is required for the power argument."
+            raise TypeError(msg)
 
         if self.is_unknown():
             result = self
         elif self.is_no_unit():
-            raise ValueError("Cannot raise the power of a 'no-unit'.")
+            msg = "Cannot raise the power of a 'no-unit'."
+            raise ValueError(msg)
         elif self == Unit("1"):
             # 1 ** N -> 1
             result = self
@@ -1555,7 +1564,8 @@ class Unit(_OrderedHashable):
         # root.
         elif not math.isclose(power, 0.0) and abs(power) < 1:
             if not math.isclose(1 / power, round(1 / power)):
-                raise ValueError("Cannot raise a unit by a decimal.")
+                msg = "Cannot raise a unit by a decimal."
+                raise ValueError(msg)
             root = int(round(1 / power))
             result = self.root(root)
         else:
@@ -1652,7 +1662,8 @@ class Unit(_OrderedHashable):
 
         """  # NOQA E501
         if not self.is_time_reference():
-            raise ValueError("unit is not a time reference")
+            msg = "unit is not a time reference"
+            raise ValueError(msg)
 
         ref_date = self.num2date(0)
         new_ref_date = ref_date.change_calendar(calendar)
@@ -1760,11 +1771,12 @@ class Unit(_OrderedHashable):
                     # with endianness other than native.
                     if result.dtype.byteorder != "=":
                         if inplace:
-                            raise ValueError(
+                            msg = str(
                                 "Unable to convert non-native byte ordered "
                                 "array in-place. Consider byte-swapping "
                                 "first."
                             )
+                            raise ValueError(msg)
                         result = result.astype(result.dtype.type)
                     # Strict type check of numpy array.
                     if result.dtype.type not in (np.float32, np.float64):
@@ -1788,10 +1800,11 @@ class Unit(_OrderedHashable):
                             result[...] = result_tmp
                 else:
                     if ctype not in _cv_convert_scalar:
-                        raise ValueError(
+                        msg = str(
                             "Invalid target type. Can only "
                             "convert to float or double."
                         )
+                        raise ValueError(msg)
                     # Utilise global convenience dictionary
                     # _cv_convert_scalar
                     result = _cv_convert_scalar[ctype](ut_converter, result)
@@ -1805,7 +1818,8 @@ class Unit(_OrderedHashable):
 
         """
         if self.calendar is None:
-            raise ValueError("Unit has undefined calendar")
+            msg = "Unit has undefined calendar"
+            raise ValueError(msg)
 
         #
         # ensure to strip out non-parsable 'UTC' postfix, which

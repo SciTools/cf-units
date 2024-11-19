@@ -109,7 +109,8 @@ class TestLicenseHeaders:
                         failed = True
 
         if failed:
-            raise AssertionError("There were license header failures. See stdout.")
+            msg = "There were license header failures. See stdout."
+            raise AssertionError(msg)
 
 
 @pytest.mark.skipif(not IS_GIT_REPO, reason="Not a git repository.")
