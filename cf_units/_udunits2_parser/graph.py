@@ -90,7 +90,7 @@ class Timestamp(Terminal):
 
 
 class Visitor:
-    """This class may be used to help traversing an expression graph.
+    """Utiltiy class to help traverse an expression graph.
 
     It follows the same pattern as the Python ``ast.NodeVisitor``.
     Users should typically not need to override either ``visit`` or
