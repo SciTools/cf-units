@@ -73,7 +73,7 @@ def fixup_antlr_imports(antlr_file_path: Path, contents: str) -> str:
     if antlr_file_path.name == "XPathLexer.py":
         contents = contents.replace(
             "from antlr4 import *",
-            "\n".join(
+            "\n".join(  # noqa: FLY002
                 [
                     "from antlr4.Lexer import Lexer",
                     "from antlr4.atn.ATNDeserializer import ATNDeserializer",
@@ -92,7 +92,7 @@ def fixup_antlr_imports(antlr_file_path: Path, contents: str) -> str:
             "from antlr4 import CommonTokenStream, DFA, "
             "PredictionContextCache, "
             "Lexer, LexerATNSimulator, ParserRuleContext, TerminalNode",
-            "\n".join(
+            "\n".join(  # noqa: FLY002
                 [
                     "from antlr4.Lexer import Lexer",
                     "from antlr4.CommonTokenStream import CommonTokenStream",

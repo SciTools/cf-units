@@ -169,7 +169,7 @@ ignore = [
     "F405",  # Use of name from wildcard import
 #    "FBT002", # boolean-default-value-positional-argument
     "FIX002",  # Line contains TODO, consider resolving the issue
-    "FLY002",  # Consider f-string instead of string join
+#    "FLY002",  # Consider f-string instead of string join
     "INP001",  # part of an implicit namespace package. Add an `__init__.py`.
     "N801",  # invalid-class-name
     "N802",  # invalid-function-name
