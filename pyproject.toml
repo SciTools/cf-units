@@ -129,8 +129,6 @@ preview = false
 
 [tool.ruff.lint]
 ignore = [
-    # NOTE: Non-permanent exclusions should be added to the ".ruff.toml" file.
-
     # flake8-commas (COM)
     # https://docs.astral.sh/ruff/rules/#flake8-commas-com
     "COM812",  # Trailing comma missing.
