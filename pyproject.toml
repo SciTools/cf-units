@@ -141,68 +141,67 @@ ignore = [
 
     # TODO: exceptions that still need investigating are below.
     # Might be fixable, or might become permanent (above):
-    "A001",
-    "ANN001",
-    "ANN003", # Missing type annotation for `**kwargs`
-    "ANN201",
-    "ANN202",
-    "ANN204",
-    "ANN205",
-    "ANN206",  # Missing return type annotation for classmethod
+    "A001",  # builtin-variable-shadowing
+    "ANN001",  # missing-type-function-argument
+    "ANN003",  # missing type annotation for `**kwargs`
+    "ANN201",  # missing-return-type-undocumented-public-function
+    "ANN202",  # missing-return-type-private-function
+    "ANN204",  # missing-return-type-special-method
+    "ANN205",  # missing-return-type-static-method
+    "ANN206",  # missing-return-type-class-method
     "ARG002",  # Unused method argument
-    "B904",   # Raise statements in exception handlers that lack a from clause
-    "D100",
-    "D101",
-    "D102",
-    "D103",
-    "D105",
-    "D205",
+    "B904",  # raise-without-from-inside-except
+    "D100",  # undocumented-public-module
+    "D101",  # undocumented-public-class
+    "D102",  # undocumented-public-method
+    "D103",  # undocumented-public-function
+    "D105",  # undocumented-magic-method
+    "D205",  # blank-line-after-summary
     "D301",  # Use `r"""` if any backslashes in a docstring
-    "D400",
-    "D401",
-    "D404",  # First word of the docstring should not be "This"
-    "DTZ001",
-    "DTZ006",
-    "EM101",
-    "EM102",
+    "D400",  # ends-in-period (docstring)
+    "D401",  # non-imperative-mood
+    "D404",  # first-line-capitalized
+    "DTZ001",  # call-datetime-without-tzinfo
+    "DTZ006",  # call-datetime-fromtimestamp
+    "EM101",  # raw-string-in-exception
+    "EM102",  # f-string-in-exception
     "F403",  # Wildcard imports
     "F405",  # Use of name from wildcard import
-    "FBT002",
+    "FBT002", # boolean-default-value-positional-argument
     "FIX002",  # Line contains TODO, consider resolving the issue
     "FLY002",  # Consider f-string instead of string join
     "INP001",  # part of an implicit namespace package. Add an `__init__.py`.
-    "N801",
-    "N802",
+    "N801",  # invalid-class-name
+    "N802",  # invalid-function-name
     "N803",  # Argument name should be lowercase
     "N806",  # Variable in function should be lowercase
     "PGH004", # Use a colon when specifying `noqa` rule codes
     "PLC0414", # Import alias does not rename original package
     "PLR0912",  # Too many branches
-    "PLR0913",
-    "PLR2004",
-    "PT006",
-    "PT011",
-    "PT012",
-    "PT019",
-    "PTH123",
+    "PLR0913",  # too-many-argument
+    "PLR2004",  # magic-value-comparison
+    "PT006",  # pytest-parametrize-names-wrong-type
+    "PT011",  # pytest-raises-too-broad
+    "PT012",  # pytest-raises-with-multiple-statements
+    "PT019",  # pytest-fixture-param-without-value
+    "PTH123",  # builtin-open
     "RET504",  # Unnecessary assignment to before statement
-    "RUF001",
-    "RUF003",
+    "RUF001",  # ambiguous-unicode-character-string
+    "RUF003",  # ambiguous-unicode-character-comment
     "RUF012",  # Mutable class attributes should be annotated with `typing.ClassVar`
-    "S101",
-    "S102",
+    "S101",  # Assert used
+    "S102",  # exec used
     "S310",  # Audit URL open for permitted schemes.
-    "S603",
-    "S607",
+    "S603",  # subprocess-without-shell-equals-true
+    "S607",  # start-process-with-partial-path
     "S701",  # By default, jinja2 sets `autoescape` to `False`.
     "SIM108",  # Use ternary operator instead of `if`-`else`-block
-    "SLF001",
+    "SLF001",  # private-member-access
     "T201",  # `print` found
     "TD002",  # Missing author in TODO; try
     "TD003",  # Missing issue link on the line following this TODO
     "TD004",  # Missing colon in TODO
-    "TRY003",
-
+    "TRY003",  # raise-vanilla-args
 ]
 preview = false
 select = [
