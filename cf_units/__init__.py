@@ -401,8 +401,8 @@ def num2date(
     time_value,
     unit,
     calendar,
-    only_use_cftime_datetimes=True,
-    only_use_python_datetimes=False,
+    only_use_cftime_datetimes=True,  # noqa: FBT002
+    only_use_python_datetimes=False,  # noqa: FBT002
 ):
     """Return datetime encoding of numeric time value (resolution of 1 second).
 
@@ -1661,7 +1661,7 @@ class Unit(_OrderedHashable):
 
         return Unit(new_origin, calendar=calendar)
 
-    def convert(self, value, other, ctype=FLOAT64, inplace=False):
+    def convert(self, value, other, ctype=FLOAT64, inplace=False):  # noqa: FBT002
         """Convert a single value or NumPy array of values from the current unit
         to the other target unit.
 
@@ -1860,8 +1860,8 @@ class Unit(_OrderedHashable):
     def num2date(
         self,
         time_value,
-        only_use_cftime_datetimes=True,
-        only_use_python_datetimes=False,
+        only_use_cftime_datetimes=True,  # noqa: FBT002
+        only_use_python_datetimes=False,  # noqa: FBT002
     ):
         """Return a datetime-like object calculated from the numeric time
         value using the current calendar and the unit time reference.

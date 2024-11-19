@@ -167,7 +167,7 @@ ignore = [
     "EM102",  # f-string-in-exception
     "F403",  # Wildcard imports
     "F405",  # Use of name from wildcard import
-    "FBT002", # boolean-default-value-positional-argument
+#    "FBT002", # boolean-default-value-positional-argument
     "FIX002",  # Line contains TODO, consider resolving the issue
     "FLY002",  # Consider f-string instead of string join
     "INP001",  # part of an implicit namespace package. Add an `__init__.py`.
