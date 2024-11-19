@@ -6,6 +6,9 @@ ci:
     autofix_prs: false
     autoupdate_commit_msg: "chore: update pre-commit hooks"
 
+exclude: 'cf_units/_udunits2_parser/_antlr4_runtime/'
+
+
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
