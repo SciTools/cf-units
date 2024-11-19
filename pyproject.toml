@@ -141,7 +141,7 @@ ignore = [
 
     # TODO: exceptions that still need investigating are below.
     # Might be fixable, or might become permanent (above):
-    "A001",  # builtin-variable-shadowing
+    #"A001",  # builtin-variable-shadowing
     "ANN001",  # missing-type-function-argument
     "ANN003",  # missing type annotation for `**kwargs`
     "ANN201",  # missing-return-type-undocumented-public-function

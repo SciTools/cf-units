@@ -936,8 +936,8 @@ class TestTimeEncoding:
 
     def test_decode_time(self):
         result = cf_units.decode_time(158976000.0 + 43560.0)
-        year, month, day, hour, min, sec, res = result
-        assert (year, month, day, hour, min, sec) == (2006, 1, 15, 12, 6, 0)
+        year, month, day, hour, minute, sec, res = result
+        assert (year, month, day, hour, minute, sec) == (2006, 1, 15, 12, 6, 0)
 
 
 class TestNumsAndDates:
