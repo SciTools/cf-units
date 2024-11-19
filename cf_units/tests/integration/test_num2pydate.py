@@ -19,7 +19,5 @@ class Test:
         assert isinstance(result, datetime.datetime)
 
     def test_num2pydate_wrong_calendar(self):
-        with pytest.raises(
-            ValueError, match="illegal calendar or reference date"
-        ):
+        with pytest.raises(ValueError, match="illegal calendar or reference date"):
             num2pydate(1, "days since 1970-01-01", calendar="360_day")

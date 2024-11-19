@@ -13,14 +13,14 @@ assignees: ''
 ## How to Reproduce
 Steps to reproduce the behaviour:
 
-1. 
-2. 
-3. 
+1.
+2.
+3.
 
 ## Expected Behaviour
 <!-- A clear and concise description of what you expected to happen -->
 
-## Environment 
+## Environment
  - OS & Version: [e.g., Ubuntu 20.04 LTS]
  - cf-units Version: [e.g., From the command line run `python -c "import cf_units; print(cf_units.__version__)"`]
 

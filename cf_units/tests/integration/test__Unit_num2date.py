@@ -20,7 +20,7 @@ class Test:
         self.uhours = cf_units.Unit("hours since 1970-01-01", calendar)
         self.udays = cf_units.Unit("days since 1970-01-01", calendar)
 
-    def check_dates(self, nums, units, expected, only_cftime=True):
+    def check_dates(self, nums, units, expected, only_cftime=True):  # noqa: FBT002
         for num, unit, exp in zip(nums, units, expected, strict=False):
             res = unit.num2date(num, only_use_cftime_datetimes=only_cftime)
             assert exp == res
@@ -252,9 +252,7 @@ class Test:
 
     def test_pydatetime_wrong_calendar(self):
         unit = cf_units.Unit("days since 1970-01-01", calendar="360_day")
-        with pytest.raises(
-            ValueError, match="illegal calendar or reference date"
-        ):
+        with pytest.raises(ValueError, match="illegal calendar or reference date"):
             unit.num2date(
                 1,
                 only_use_cftime_datetimes=False,

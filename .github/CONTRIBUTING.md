@@ -21,11 +21,11 @@ Submitting changes
 
 1. Push your branch to your fork of cf-units.
 1. Submit your pull request.
-1. Note that all authors on pull requests will automatically be asked to sign the 
+1. Note that all authors on pull requests will automatically be asked to sign the
    [SciTools Contributor Licence Agreement](https://cla-assistant.io/SciTools/)
-   (CLA), if they have not already done so. 
+   (CLA), if they have not already done so.
 1. Chillax!
 
 If in doubt, please post in the
-[cf-units Discussions space](https://github.com/SciTools/cf-units/discussions) 
+[cf-units Discussions space](https://github.com/SciTools/cf-units/discussions)
 and we'll be happy to help you.

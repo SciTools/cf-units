@@ -18,7 +18,9 @@ source_suffix = ".rst"
 master_doc = "index"
 
 project = "cf-units"
-copyright = "Copyright cf-units contributors"
+# Note: `project_copyright` can also be used to avoid Ruff "variable shadowing"
+# error; https://github.com/sphinx-doc/sphinx/issues/9845#issuecomment-970391099
+copyright = "Copyright cf-units contributors"  # noqa: A001
 
 current_version = metadata.version("cf_units")
 version = current_version.split("+")[0]

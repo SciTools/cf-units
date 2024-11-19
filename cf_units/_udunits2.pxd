@@ -89,4 +89,3 @@ cdef extern from "udunits2.h":
     double* cv_convert_doubles(cv_converter* converter, double* const in_, size_t count, double* out)
 
     void cv_free(cv_converter* conv)
-
