@@ -31,7 +31,7 @@ IS_GIT_REPO = (REPO_DIR / ".git").is_dir()
 class TestLicenseHeaders:
     @staticmethod
     def whatchanged_parse(whatchanged_output):
-        """Returns a generator of tuples of data parsed from
+        r"""Returns a generator of tuples of data parsed from
         "git whatchanged --pretty='TIME:%at'". The tuples are of the form
         ``(filename, last_commit_datetime)``
 
