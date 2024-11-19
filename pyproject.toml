@@ -70,7 +70,6 @@ Issues = "https://github.com/SciTools/cf-units/issues"
 Documentation = "https://cf-units.readthedocs.io"
 
 [tool.codespell]
-#ignore-words-list = "Wirth"
 skip = 'cf_units/_udunits2_parser/parser/*,cf_units/_udunits2_parser/_antlr4_runtime/*'
 
 [tool.coverage.run]
