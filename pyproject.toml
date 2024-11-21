@@ -1,3 +1,5 @@
+# See https://github.com/SciTools/.github/wiki/Linting for common linter rules
+
 [build-system]
 # Defined by PEP 518
 requires = [

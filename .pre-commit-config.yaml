@@ -2,6 +2,7 @@
 # See https://pre-commit.com/hooks.html for more hooks
 # See https://pre-commit.ci/#configuration
 # See https://github.com/scientific-python/cookie#sp-repo-review for repo-review
+# See https://github.com/SciTools/.github/wiki/Linting for common SciTools linters
 
 ci:
     autofix_prs: false
