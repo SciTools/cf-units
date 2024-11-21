@@ -1650,7 +1650,7 @@ class Unit(_OrderedHashable):
             >>> u.change_calendar('standard')
             Unit('days since 1499-12-23T00:00:00', calendar='standard')
 
-        """  # NOQA E501
+        """
         if not self.is_time_reference():
             raise ValueError("unit is not a time reference")
 

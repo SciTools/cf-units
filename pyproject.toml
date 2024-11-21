@@ -208,7 +208,6 @@ ignore = [
 preview = false
 select = [
     "ALL",
-    "D212",  # Multi-line docstring summary should start at the first line
 ]
 
 [tool.ruff.lint.isort]
