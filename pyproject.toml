@@ -1,3 +1,5 @@
+# See https://github.com/SciTools/.github/wiki/Linting for common linter rules
+
 [build-system]
 # Defined by PEP 518
 requires = [
@@ -69,6 +71,9 @@ Discussions = "https://github.com/SciTools/cf-units/discussions"
 Issues = "https://github.com/SciTools/cf-units/issues"
 Documentation = "https://cf-units.readthedocs.io"
 
+[tool.codespell]
+skip = 'cf_units/_udunits2_parser/parser/*,cf_units/_udunits2_parser/_antlr4_runtime/*'
+
 [tool.coverage.run]
 branch = true
 plugins = [
@@ -95,10 +100,16 @@ exclude_lines = [
 ]
 
 [tool.pytest.ini_options]
-addopts = "-ra -v --doctest-modules"
+addopts = ["-ra", "-v", "--strict-config", "--strict-markers", "--doctest-modules"]
+log_cli_level = "INFO"
 doctest_optionflags = "NORMALIZE_WHITESPACE ELLIPSIS NUMBER"
+filterwarnings = [
+    "error",
+    "default:This method is no longer needed:DeprecationWarning",   # Added for known warnings
+]
 minversion = "6.0"
 testpaths = "cf_units"
+xfail_strict = true
 
 [tool.setuptools.packages.find]
 include = ["cf_units"]
@@ -109,32 +120,119 @@ local_scheme = "dirty-tag"
 
 [tool.ruff]
 # Ignore generated code.
-exclude = [
+extend-exclude = [
     "cf_units/_udunits2_parser/parser",
     "cf_units/_udunits2_parser/_antlr4_runtime",
 ]
-line-length = 79
+line-length = 88
+
+[tool.ruff.format]
+preview = false
 
 [tool.ruff.lint]
-select = [
-    # pyflakes
-    "F",
-    # pycodestyle
-    "E",
-    "W",
-    # flake8-bugbear
-    "B",
-    # flake8-comprehensions
-    "C4",
-    # isort
-    "I",
-    # pyupgrade
-    "UP",
+ignore = [
+    # flake8-commas (COM)
+    # https://docs.astral.sh/ruff/rules/#flake8-commas-com
+    "COM812",  # Trailing comma missing.
+    "COM819",  # Trailing comma prohibited.
+
+    # flake8-implicit-str-concat (ISC)
+    # https://docs.astral.sh/ruff/rules/single-line-implicit-string-concatenation/
+    # NOTE: This rule may cause conflicts when used with "ruff format".
+    "ISC001",  # Implicitly concatenate string literals on one line.
+
+    # TODO: exceptions that still need investigating are below.
+    # Might be fixable, or might become permanent (above):
+    "A001",  # builtin-variable-shadowing
+    "ANN001",  # missing-type-function-argument
+    "ANN003",  # missing type annotation for `**kwargs`
+    "ANN201",  # missing-return-type-undocumented-public-function
+    "ANN202",  # missing-return-type-private-function
+    "ANN204",  # missing-return-type-special-method
+    "ANN205",  # missing-return-type-static-method
+    "ANN206",  # missing-return-type-class-method
+    "ARG002",  # Unused method argument
+    "B904",  # raise-without-from-inside-except
+    "D100",  # undocumented-public-module
+    "D101",  # undocumented-public-class
+    "D102",  # undocumented-public-method
+    "D103",  # undocumented-public-function
+    "D105",  # undocumented-magic-method
+    "D205",  # blank-line-after-summary
+    "D301",  # Use `r"""` if any backslashes in a docstring
+    "D400",  # ends-in-period (docstring)
+    "D401",  # non-imperative-mood
+    "D404",  # first-line-capitalized
+    "DTZ001",  # call-datetime-without-tzinfo
+    "DTZ006",  # call-datetime-fromtimestamp
+    "EM101",  # raw-string-in-exception
+    "EM102",  # f-string-in-exception
+    "F403",  # Wildcard imports
+    "F405",  # Use of name from wildcard import
+    "FBT002", # boolean-default-value-positional-argument
+    "FIX002",  # Line contains TODO, consider resolving the issue
+    "FLY002",  # Consider f-string instead of string join
+    "INP001",  # part of an implicit namespace package. Add an `__init__.py`.
+    "N801",  # invalid-class-name
+    "N802",  # invalid-function-name
+    "N803",  # Argument name should be lowercase
+    "N806",  # Variable in function should be lowercase
+    "PGH004", # Use a colon when specifying `noqa` rule codes
+    "PLC0414", # Import alias does not rename original package
+    "PLR0912",  # Too many branches
+    "PLR0913",  # too-many-argument
+    "PLR2004",  # magic-value-comparison
+    "PT006",  # pytest-parametrize-names-wrong-type
+    "PT011",  # pytest-raises-too-broad
+    "PT012",  # pytest-raises-with-multiple-statements
+    "PT019",  # pytest-fixture-param-without-value
+    "PTH123",  # builtin-open
+    "RET504",  # Unnecessary assignment to before statement
+    "RUF001",  # ambiguous-unicode-character-string
+    "RUF003",  # ambiguous-unicode-character-comment
+    "RUF012",  # Mutable class attributes should be annotated with `typing.ClassVar`
+    "S101",  # Assert used
+    "S102",  # exec used
+    "S310",  # Audit URL open for permitted schemes.
+    "S603",  # subprocess-without-shell-equals-true
+    "S607",  # start-process-with-partial-path
+    "S701",  # By default, jinja2 sets `autoescape` to `False`.
+    "SIM108",  # Use ternary operator instead of `if`-`else`-block
+    "SLF001",  # private-member-access
+    "T201",  # `print` found
+    "TD002",  # Missing author in TODO; try
+    "TD003",  # Missing issue link on the line following this TODO
+    "TD004",  # Missing colon in TODO
+    "TRY003",  # raise-vanilla-args
 ]
-ignore = ["B904", "F403", "F405"]
+preview = false
+select = [
+    "ALL",
+    # Note: the above "all" disables conflicting rules, if you want that
+    # rule it needs to be explicitly enabled below:
+    "D212",  # Multi-line docstring summary should start at the first line
+]
 
 [tool.ruff.lint.isort]
+force-sort-within-sections = true
 known-first-party = ["cf_units"]
+
+[tool.ruff.lint.per-file-ignores]
+# All test scripts
+"cf_units/tests/*.py" = [
+     # https://docs.astral.sh/ruff/rules/undocumented-public-module/
+     "D104",  # Missing docstring in public module
+     "D106",  # Missing docstring in public nested class
+     "D205",  # 1 blank line required between summary line and description
+     "D401",  # 1 First line of docstring should be in imperative mood
+     "SLOT000",   # Subclasses of `str` should define `__slots__`
+     "N999",  # Invalid module name
+]
+
+"setup.py" = [
+    "FBT003",  # Boolean positional value in function call
+    "ICN001",  # `numpy` should be imported as `np`
+]
 
 [tool.ruff.lint.mccabe]
 max-complexity = 22
@@ -145,22 +243,110 @@ convention = "numpy"
 [tool.repo-review]
 # These are a list of the currently failing tests:
 ignore = [
-  "PY005",  # Has tests folder
-  "PP003",  # Does not list wheel as a build-dep
-  "PP304",  # Sets the log level in pytest
-  "PP305",  # Specifies xfail_strict
-  "PP306",  # Specifies strict config
-  "PP307",  # Specifies strict markers
-  "PP309",  # Filter warnings specified
-  "GH104",  # Use unique names for upload-artifact
-  "GH212",  # Require GHA update grouping
-  "PC110",  # Uses black or ruff-format
-  "PC140",  # Uses a type checker
-  "PC160",  # Uses a spell checker
-  "PC170",  # Uses PyGrep hooks (only needed if rST present)
-  "PC180",  # Uses a markdown formatter
-  "PC190",  # Uses Ruff
-  "PC901",  # Custom pre-commit CI message
-  "MY100",  # Uses MyPy (pyproject config)
-  "RF001",  # Uses RUFF
+    # TODO: exceptions that still need investigating are below.
+    # Might be fixable, or might become permanent (above):
+    "GH212",  # Require GHA update grouping
+    "MY105",  # MyPy enables redundant-expr  (TODO: see MyPy ignore below)
+    "PC170",  # Uses PyGrep hooks (only needed if rST present)
+    "PC180",  # Uses a markdown formatter
+    "PP003",  # Does not list wheel as a build-dep
+    "PY005",  # Has tests folder
+]
+
+[tool.mypy]
+disable_error_code = [
+    # TODO: exceptions that still need investigating are below.
+    # Might be fixable, or might become permanent (above):
+	"arg-type",
+	"assignment",
+	"attr-defined",
+	"func-returns-value",
+	"misc",
+	"no-untyped-call",
+	"no-untyped-def",
+	"operator",
+	"redundant-expr",
+	"unreachable",
+	"var-annotated",
+]
+enable_error_code = [
+	"ignore-without-code",
+#	"redundant-expr",		# TODO: Add back in when above ignores fixed
+	"truthy-bool"
+]
+exclude = [
+	"docs/",
+	"cf_units/_udunits2_parser/",
+]
+ignore_missing_imports = true
+strict = true
+warn_unreachable = true
+warn_unused_ignores = true
+warn_unused_configs = true
+
+[[tool.mypy.overrides]]
+module = [
+        "cf_units/_udunits2_parser/parser.*",
+        "cf_units/_udunits2_parser/_antlr4_runtime.*",
+]
+ignore_errors = true
+
+[tool.numpydoc_validation]
+checks = [
+    "all",  # Enable all numpydoc validation rules, apart from the following:
+
+    # -> Docstring text (summary) should start in the line immediately
+    #    after the opening quotes (not in the same line, or leaving a
+    #    blank line in between)
+    "GL01",  # Permit summary line on same line as docstring opening quotes.
+
+    # -> Closing quotes should be placed in the line after the last text
+    #    in the docstring (do not close the quotes in the same line as
+    #    the text, or leave a blank line between the last text and the
+    #    quotes)
+    "GL02",  # Permit a blank line before docstring closing quotes.
+
+    # -> Double line break found; please use only one blank line to
+    #    separate sections or paragraphs, and do not leave blank lines
+    #    at the end of docstrings
+    "GL03",  # Ignoring.
+
+    # -> See Also section not found
+    "SA01",  # Not all docstrings require a "See Also" section.
+
+    # -> No extended summary found
+    "ES01",  # Not all docstrings require an "Extended Summary" section.
+
+    # -> No examples section found
+    "EX01",  # Not all docstrings require an "Examples" section.
+
+    # -> No Yields section found
+    "YD01",  # Not all docstrings require a "Yields" section.
+
+    # TODO: exceptions that still need investigating are below.
+    # Might be fixable, or might become permanent (above):
+    "GL08", # The object does not have a docstring
+
+    "GL09", # Deprecation warning should precede extended
+
+    "PR01", # Parameters {xxxx} not documented
+
+    "RT01", # No Returns section found
+
+    "SS03", # Summary does not end with a period
+
+    "SS06", # Summary should fit in a single line
+
+    "SS05", #Summary must start with infinitive verb, not third person
+            # (e.g. use "Generate" instead of "Generates")
+
+    "RT03", # Return value has no description
+
+    "RT05", # Return value description should finish with "."
+
+]
+exclude = [
+    '\.__eq__$',
+    '\.__ne__$',
+    '\.__repr__$',
 ]

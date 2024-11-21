@@ -5,15 +5,14 @@
 
 
 import configparser
-import sys
 from pathlib import Path
+import sys
 from tempfile import NamedTemporaryFile
 
 
 # Returns simple string options.
 def get_option(section, option, default=None):
-    """
-    Returns the option value for the given section, or the default value
+    """Returns the option value for the given section, or the default value
     if the section/option is not present.
 
     """

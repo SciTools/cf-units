@@ -6,7 +6,8 @@
 
 In most cases, we don't test the correctness
 of the operations, only that they return valid objects or raise an
-exception where expected."""
+exception where expected.
+"""
 
 import errno
 
@@ -20,10 +21,7 @@ _ud.set_error_message_handler(_ud.ignore)
 
 
 class Test_get_system:
-    """
-    Test case for operations which create a system object.
-
-    """
+    """Test case for operations which create a system object."""
 
     def test_read_xml(self):
         try:
@@ -41,10 +39,7 @@ class Test_get_system:
 
 
 class Test_system:
-    """
-    Test case for system operations.
-
-    """
+    """Test case for system operations."""
 
     def setup_method(self):
         try:
@@ -77,9 +72,7 @@ class Test_system:
         assert angstrom is not None
 
     def test_parse_UTF8(self):
-        angstrom = _ud.parse(
-            self.system, b"\xc3\xa5ngstr\xc3\xb6m", _ud.UT_UTF8
-        )
+        angstrom = _ud.parse(self.system, b"\xc3\xa5ngstr\xc3\xb6m", _ud.UT_UTF8)
 
         assert angstrom is not None
 
@@ -89,10 +82,7 @@ class Test_system:
 
 
 class Test_unit:
-    """
-    Test case for unit operations.
-
-    """
+    """Test case for unit operations."""
 
     def setup_method(self):
         try:
@@ -222,9 +212,7 @@ class Test_time_encoding:
         assert self.date_encoding == res_date_encoding
 
     def test_encode_clock(self):
-        res_clock_encoding = _ud.encode_clock(
-            self.hours, self.minutes, self.seconds
-        )
+        res_clock_encoding = _ud.encode_clock(self.hours, self.minutes, self.seconds)
 
         assert self.clock_encoding == res_clock_encoding
 
@@ -259,17 +247,12 @@ class Test_time_encoding:
             self.minutes,
         )
         assert (
-            res_seconds - res_resolution
-            < self.seconds
-            < res_seconds + res_resolution
+            res_seconds - res_resolution < self.seconds < res_seconds + res_resolution
         )
 
 
 class Test_convert:
-    """
-    Test case for convert operations.
-
-    """
+    """Test case for convert operations."""
 
     def setup_method(self):
         try:

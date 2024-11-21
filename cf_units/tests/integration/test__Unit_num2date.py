@@ -252,9 +252,7 @@ class Test:
 
     def test_pydatetime_wrong_calendar(self):
         unit = cf_units.Unit("days since 1970-01-01", calendar="360_day")
-        with pytest.raises(
-            ValueError, match="illegal calendar or reference date"
-        ):
+        with pytest.raises(ValueError, match="illegal calendar or reference date"):
             unit.num2date(
                 1,
                 only_use_cftime_datetimes=False,
