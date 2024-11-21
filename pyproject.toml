@@ -208,6 +208,9 @@ ignore = [
 preview = false
 select = [
     "ALL",
+    # Note: the above "all" disables conflicting rules, if you want that
+    # rule it needs to be explicitly enabled below:
+    "D212",  # Multi-line docstring summary should start at the first line
 ]
 
 [tool.ruff.lint.isort]
