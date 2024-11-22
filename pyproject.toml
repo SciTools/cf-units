@@ -5,7 +5,6 @@
 requires = [
   "setuptools>=45",
   "setuptools_scm[toml]>=7.0",
-  "wheel",
   "numpy",
   "Cython>=3.0",
 ]
@@ -245,12 +244,10 @@ convention = "numpy"
 ignore = [
     # TODO: exceptions that still need investigating are below.
     # Might be fixable, or might become permanent (above):
-    "GH212",  # Require GHA update grouping
     "MY105",  # MyPy enables redundant-expr  (TODO: see MyPy ignore below)
     "PC170",  # Uses PyGrep hooks (only needed if rST present)
     "PC180",  # Uses a markdown formatter
-    "PP003",  # Does not list wheel as a build-dep
-    "PY005",  # Has tests folder
+    "PY005",  # Has tests folder (TODO: it does, but not in standard location)
 ]
 
 [tool.mypy]
