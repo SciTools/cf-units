@@ -1,20 +1,19 @@
 # See https://github.com/SciTools/.github/wiki/Linting for common linter rules
 
 [build-system]
-# Defined by PEP 518
-requires = [
-  "setuptools>=45",
-  "setuptools_scm[toml]>=7.0",
-  "numpy",
-  "Cython>=3.0",
-]
 # Defined by PEP 517
 build-backend = "setuptools.build_meta"
+# Defined by PEP 518
+requires = [
+    "setuptools>=45",
+    "setuptools_scm[toml]>=7.0",
+    "numpy",
+    "Cython>=3.0",
+]
 
 [project]
-name = "cf-units"
 authors = [
-    {name = "cf-units Contributors", email = "scitools.pub@gmail.com"}
+    {name = "cf-units Contributors", email = "scitools.pub@gmail.com"},
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -35,9 +34,7 @@ classifiers = [
 dependencies = [
     "cftime >=1.2",
     "jinja2",
-    "numpy"
-    # udunits2 cannot be installed with pip, and it is expected to be
-    #  installed separately.
+    "numpy",
 ]
 description = "Units of measure as required by the Climate and Forecast (CF) metadata conventions"
 dynamic = [
@@ -55,9 +52,10 @@ keywords = [
     "climate",
     "python",
 ]
-license.file = "LICENSE"
+name = "cf-units"
 readme = "README.md"
 requires-python = ">=3.10"
+license.file = "LICENSE"
 
 [project.optional-dependencies]
 all = ["cf-units[docs,test]"]
@@ -67,19 +65,23 @@ test = ["codecov", "cython", "jinja2", "pip", "pytest", "pytest-cov"]
 [project.urls]
 Code = "https://github.com/SciTools/cf-units"
 Discussions = "https://github.com/SciTools/cf-units/discussions"
-Issues = "https://github.com/SciTools/cf-units/issues"
 Documentation = "https://cf-units.readthedocs.io"
+Issues = "https://github.com/SciTools/cf-units/issues"
 
 [tool.codespell]
 skip = 'cf_units/_udunits2_parser/parser/*,cf_units/_udunits2_parser/_antlr4_runtime/*'
 
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if __name__ == .__main__.:",
+]
+
 [tool.coverage.run]
 branch = true
-plugins = [
-    "Cython.Coverage"
-]
 include = [
-    "cf_units/*"
+    "cf_units/*",
 ]
 omit = [
     "setup.py",
@@ -88,34 +90,122 @@ omit = [
     "cf_units/tests/*",
     "cf_units/_udunits2_parser/parser/*",
     "cf_units/_udunits2_parser/compile.py",
-    ".eggs"
+    ".eggs",
+]
+plugins = [
+    "Cython.Coverage",
 ]
 
-[tool.coverage.report]
-exclude_lines = [
-    "pragma: no cover",
-    "def __repr__",
-    "if __name__ == .__main__.:"
+[tool.mypy]
+disable_error_code = [
+    # TODO: exceptions that still need investigating are below.
+    # Might be fixable, or might become permanent (above):
+    "arg-type",
+    "assignment",
+    "attr-defined",
+    "func-returns-value",
+    "misc",
+    "no-untyped-call",
+    "no-untyped-def",
+    "operator",
+    "redundant-expr",
+    "unreachable",
+    "var-annotated",
+]
+enable_error_code = [
+    "ignore-without-code",
+    # "redundant-expr",		# TODO: Add back in when above ignores fixed
+    "truthy-bool",
+]
+exclude = [
+    "docs/",
+    "cf_units/_udunits2_parser/",
+]
+ignore_missing_imports = true
+strict = true
+warn_unreachable = true
+warn_unused_configs = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+ignore_errors = true
+module = [
+    "cf_units/_udunits2_parser/parser.*",
+    "cf_units/_udunits2_parser/_antlr4_runtime.*",
+]
+
+[tool.numpydoc_validation]
+checks = [
+    "all",  # Enable all numpydoc validation rules, apart from the following:
+
+    # -> Docstring text (summary) should start in the line immediately
+    #    after the opening quotes (not in the same line, or leaving a
+    #    blank line in between)
+    "GL01",  # Permit summary line on same line as docstring opening quotes.
+
+    # -> Closing quotes should be placed in the line after the last text
+    #    in the docstring (do not close the quotes in the same line as
+    #    the text, or leave a blank line between the last text and the
+    # quotes)
+    "GL02",  # Permit a blank line before docstring closing quotes.
+
+    #    -> Double line break found; please use only one blank line to
+    #    separate sections or paragraphs, and do not leave blank lines
+    #    at the end of docstrings
+    "GL03",  # Ignoring.
+
+    # -> See Also section not found
+    "SA01",  # Not all docstrings require a "See Also" section.
+
+    # -> No extended summary found
+    "ES01",  # Not all docstrings require an "Extended Summary" section.
+
+    # -> No examples section found
+    "EX01",  # Not all docstrings require an "Examples" section.
+
+    # -> No Yields section found
+    "YD01",  # Not all docstrings require a "Yields" section.
+
+    # TODO: exceptions that still need investigating are below.
+    # Might be fixable, or might become permanent (above):
+    "GL08",  # The object does not have a docstring
+    "GL09",  # Deprecation warning should precede extended
+    "PR01",  # Parameters {xxxx} not documented
+    "RT01",  # No Returns section found
+    "SS03",  # Summary does not end with a period
+    "SS06",  # Summary should fit in a single line
+    "SS05",  # Summary must start with infinitive verb, not third person
+    "RT03",  # Return value has no description
+    "RT05",  # Return value description should finish with "."
+]
+exclude = [
+    '\.__eq__$',
+    '\.__ne__$',
+    '\.__repr__$',
 ]
 
 [tool.pytest.ini_options]
 addopts = ["-ra", "-v", "--strict-config", "--strict-markers", "--doctest-modules"]
-log_cli_level = "INFO"
 doctest_optionflags = "NORMALIZE_WHITESPACE ELLIPSIS NUMBER"
 filterwarnings = [
     "error",
-    "default:This method is no longer needed:DeprecationWarning",   # Added for known warnings
+    "default:This method is no longer needed:DeprecationWarning",  # Added for known warnings
 ]
+log_cli_level = "INFO"
 minversion = "6.0"
 testpaths = "cf_units"
 xfail_strict = true
 
-[tool.setuptools.packages.find]
-include = ["cf_units"]
-
-[tool.setuptools_scm]
-write_to = "cf_units/_version.py"
-local_scheme = "dirty-tag"
+[tool.repo-review]
+# These are a list of the currently failing tests:
+ignore = [
+    # TODO: exceptions that still need investigating are below.
+    # Might be fixable, or might become permanent (above):
+    "MY105",  # MyPy enables redundant-expr  (TODO: see MyPy ignore below)
+    "PC170",  # Uses PyGrep hooks (only needed if rST present)
+    "PC180",  # Uses a markdown formatter
+    "PY005",  # Has tests folder (TODO: it does, but not in standard location)
+]
 
 [tool.ruff]
 # Ignore generated code.
@@ -168,7 +258,7 @@ ignore = [
     "EM102",  # f-string-in-exception
     "F403",  # Wildcard imports
     "F405",  # Use of name from wildcard import
-    "FBT002", # boolean-default-value-positional-argument
+    "FBT002",  # boolean-default-value-positional-argument
     "FIX002",  # Line contains TODO, consider resolving the issue
     "FLY002",  # Consider f-string instead of string join
     "INP001",  # part of an implicit namespace package. Add an `__init__.py`.
@@ -176,8 +266,8 @@ ignore = [
     "N802",  # invalid-function-name
     "N803",  # Argument name should be lowercase
     "N806",  # Variable in function should be lowercase
-    "PGH004", # Use a colon when specifying `noqa` rule codes
-    "PLC0414", # Import alias does not rename original package
+    "PGH004",  # Use a colon when specifying `noqa` rule codes
+    "PLC0414",  # Import alias does not rename original package
     "PLR0912",  # Too many branches
     "PLR0913",  # too-many-argument
     "PLR2004",  # magic-value-comparison
@@ -216,134 +306,31 @@ select = [
 force-sort-within-sections = true
 known-first-party = ["cf_units"]
 
+[tool.ruff.lint.mccabe]
+max-complexity = 22
+
 [tool.ruff.lint.per-file-ignores]
 # All test scripts
 "cf_units/tests/*.py" = [
-     # https://docs.astral.sh/ruff/rules/undocumented-public-module/
-     "D104",  # Missing docstring in public module
-     "D106",  # Missing docstring in public nested class
-     "D205",  # 1 blank line required between summary line and description
-     "D401",  # 1 First line of docstring should be in imperative mood
-     "SLOT000",   # Subclasses of `str` should define `__slots__`
-     "N999",  # Invalid module name
+    # https://docs.astral.sh/ruff/rules/undocumented-public-module/
+    "D104",  # Missing docstring in public module
+    "D106",  # Missing docstring in public nested class
+    "D205",  # 1 blank line required between summary line and description
+    "D401",  # 1 First line of docstring should be in imperative mood
+    "SLOT000",  # Subclasses of `str` should define `__slots__`
+    "N999",  # Invalid module name
 ]
-
 "setup.py" = [
     "FBT003",  # Boolean positional value in function call
     "ICN001",  # `numpy` should be imported as `np`
 ]
 
-[tool.ruff.lint.mccabe]
-max-complexity = 22
-
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
 
-[tool.repo-review]
-# These are a list of the currently failing tests:
-ignore = [
-    # TODO: exceptions that still need investigating are below.
-    # Might be fixable, or might become permanent (above):
-    "MY105",  # MyPy enables redundant-expr  (TODO: see MyPy ignore below)
-    "PC170",  # Uses PyGrep hooks (only needed if rST present)
-    "PC180",  # Uses a markdown formatter
-    "PY005",  # Has tests folder (TODO: it does, but not in standard location)
-]
+[tool.setuptools.packages.find]
+include = ["cf_units"]
 
-[tool.mypy]
-disable_error_code = [
-    # TODO: exceptions that still need investigating are below.
-    # Might be fixable, or might become permanent (above):
-	"arg-type",
-	"assignment",
-	"attr-defined",
-	"func-returns-value",
-	"misc",
-	"no-untyped-call",
-	"no-untyped-def",
-	"operator",
-	"redundant-expr",
-	"unreachable",
-	"var-annotated",
-]
-enable_error_code = [
-	"ignore-without-code",
-#	"redundant-expr",		# TODO: Add back in when above ignores fixed
-	"truthy-bool"
-]
-exclude = [
-	"docs/",
-	"cf_units/_udunits2_parser/",
-]
-ignore_missing_imports = true
-strict = true
-warn_unreachable = true
-warn_unused_ignores = true
-warn_unused_configs = true
-
-[[tool.mypy.overrides]]
-module = [
-        "cf_units/_udunits2_parser/parser.*",
-        "cf_units/_udunits2_parser/_antlr4_runtime.*",
-]
-ignore_errors = true
-
-[tool.numpydoc_validation]
-checks = [
-    "all",  # Enable all numpydoc validation rules, apart from the following:
-
-    # -> Docstring text (summary) should start in the line immediately
-    #    after the opening quotes (not in the same line, or leaving a
-    #    blank line in between)
-    "GL01",  # Permit summary line on same line as docstring opening quotes.
-
-    # -> Closing quotes should be placed in the line after the last text
-    #    in the docstring (do not close the quotes in the same line as
-    #    the text, or leave a blank line between the last text and the
-    #    quotes)
-    "GL02",  # Permit a blank line before docstring closing quotes.
-
-    # -> Double line break found; please use only one blank line to
-    #    separate sections or paragraphs, and do not leave blank lines
-    #    at the end of docstrings
-    "GL03",  # Ignoring.
-
-    # -> See Also section not found
-    "SA01",  # Not all docstrings require a "See Also" section.
-
-    # -> No extended summary found
-    "ES01",  # Not all docstrings require an "Extended Summary" section.
-
-    # -> No examples section found
-    "EX01",  # Not all docstrings require an "Examples" section.
-
-    # -> No Yields section found
-    "YD01",  # Not all docstrings require a "Yields" section.
-
-    # TODO: exceptions that still need investigating are below.
-    # Might be fixable, or might become permanent (above):
-    "GL08", # The object does not have a docstring
-
-    "GL09", # Deprecation warning should precede extended
-
-    "PR01", # Parameters {xxxx} not documented
-
-    "RT01", # No Returns section found
-
-    "SS03", # Summary does not end with a period
-
-    "SS06", # Summary should fit in a single line
-
-    "SS05", #Summary must start with infinitive verb, not third person
-            # (e.g. use "Generate" instead of "Generates")
-
-    "RT03", # Return value has no description
-
-    "RT05", # Return value description should finish with "."
-
-]
-exclude = [
-    '\.__eq__$',
-    '\.__ne__$',
-    '\.__repr__$',
-]
+[tool.setuptools_scm]
+local_scheme = "dirty-tag"
+write_to = "cf_units/_version.py"
