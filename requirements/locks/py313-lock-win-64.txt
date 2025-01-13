@@ -24,7 +24,7 @@ https://conda.anaconda.org/conda-forge/win-64/tk-8.6.13-h5226925_1.conda#fc04836
 https://conda.anaconda.org/conda-forge/win-64/yaml-0.2.5-h8ffe710_2.tar.bz2#adbfb9f45d1004a26763652246a33764
 https://conda.anaconda.org/conda-forge/win-64/libudunits2-2.2.28-hfda9870_3.conda#528685735279bf54fee178ea57bf8417
 https://conda.anaconda.org/conda-forge/win-64/libxml2-2.13.5-he286e8c_1.conda#77eaa84f90fc90643c5a0be0aa9bdd1b
-https://conda.anaconda.org/conda-forge/win-64/python-3.13.1-h071d269_102_cp313.conda#70568ba8bbd5f0c7b830e690775eb8b7
+https://conda.anaconda.org/conda-forge/win-64/python-3.13.1-h071d269_104_cp313.conda#90fb3fd36c4abab2d7d5df39e248386d
 https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.6-h0ea2cb4_0.conda#9a17230f95733c04dc40a2b1e5491d74
 https://conda.anaconda.org/conda-forge/noarch/alabaster-1.0.0-pyhd8ed1ab_1.conda#1fd9696649f65fd6611fcdb4ffec738a
 https://conda.anaconda.org/conda-forge/noarch/antlr-python-runtime-4.11.1-pyhd8ed1ab_0.tar.bz2#15109c4977d39ad7aa3423f57243e286
@@ -50,10 +50,10 @@ https://conda.anaconda.org/conda-forge/noarch/pip-24.3.1-pyh145f28c_2.conda#7660
 https://conda.anaconda.org/conda-forge/noarch/platformdirs-4.3.6-pyhd8ed1ab_1.conda#577852c7e53901ddccc7e6a9959ddebe
 https://conda.anaconda.org/conda-forge/noarch/pluggy-1.5.0-pyhd8ed1ab_1.conda#e9dcbce5f45f9ee500e728ae58b605b6
 https://conda.anaconda.org/conda-forge/noarch/pycparser-2.22-pyh29332c3_1.conda#12c566707c80111f9799308d9e265aef
-https://conda.anaconda.org/conda-forge/noarch/pygments-2.18.0-pyhd8ed1ab_1.conda#b38dc0206e2a530e5c2cf11dc086b31a
+https://conda.anaconda.org/conda-forge/noarch/pygments-2.19.1-pyhd8ed1ab_0.conda#232fb4577b6687b2d503ef8e254270c9
 https://conda.anaconda.org/conda-forge/noarch/pytz-2024.2-pyhd8ed1ab_1.conda#f26ec986456c30f6dff154b670ae140f
 https://conda.anaconda.org/conda-forge/win-64/pyyaml-6.0.2-py313ha7868ed_1.conda#c1743e5c4c7402a14b515cf276778e59
-https://conda.anaconda.org/conda-forge/noarch/setuptools-75.6.0-pyhff2d567_1.conda#fc80f7995e396cbaeabd23cf46c413dc
+https://conda.anaconda.org/conda-forge/noarch/setuptools-75.8.0-pyhff2d567_0.conda#8f28e299c11afdd79e0ec1e279dcdc52
 https://conda.anaconda.org/conda-forge/noarch/snowballstemmer-2.2.0-pyhd8ed1ab_0.tar.bz2#4d22a9315e78c6827f806065957d566e
 https://conda.anaconda.org/conda-forge/noarch/sphinxcontrib-jsmath-1.0.1-pyhd8ed1ab_1.conda#fa839b5ff59e192f411ccc7dae6588bb
 https://conda.anaconda.org/conda-forge/noarch/toml-0.10.2-pyhd8ed1ab_1.conda#b0dd904de08b7db706167240bf37b164
