@@ -1768,8 +1768,7 @@ class Unit(_OrderedHashable):
                     # Strict type check of numpy array.
                     if result.dtype.type not in (np.float32, np.float64):
                         raise TypeError(
-                            "Expect a numpy array of "
-                            f"'{np.float32}' or '{np.float64}'"
+                            f"Expect a numpy array of '{np.float32}' or '{np.float64}'"
                         )
                     ctype = result.dtype.type
                     # Utilise global convenience dictionary
@@ -1788,8 +1787,7 @@ class Unit(_OrderedHashable):
                 else:
                     if ctype not in _cv_convert_scalar:
                         raise ValueError(
-                            "Invalid target type. Can only "
-                            "convert to float or double."
+                            "Invalid target type. Can only convert to float or double."
                         )
                     # Utilise global convenience dictionary
                     # _cv_convert_scalar
