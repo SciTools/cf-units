@@ -70,8 +70,7 @@ def get_package_data():
         xml_database = Path(xml_database)
         if not xml_database.is_file():
             emsg = (
-                f"Can't open {xml_env} file {xml_database} "
-                "during cf-units wheel build."
+                f"Can't open {xml_env} file {xml_database} during cf-units wheel build."
             )
             raise ValueError(emsg)
         # We have a valid XML file, so copy the distro bundle into the

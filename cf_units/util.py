@@ -59,8 +59,7 @@ class _MetaOrderedHashable(abc.ABCMeta):
             if "__init__" not in namespace:
                 # Create a default __init__ method for the class
                 method_source = (
-                    f"def __init__(self, {args}):\n "
-                    f"self._init_from_tuple(({args},))"
+                    f"def __init__(self, {args}):\n self._init_from_tuple(({args},))"
                 )
                 exec(method_source, namespace)
 

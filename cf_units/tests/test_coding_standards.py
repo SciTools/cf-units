@@ -155,18 +155,18 @@ def test_python_versions():
             ci_tests_file,
             (
                 f"os: [ubuntu-latest]\n"
-                f"{8*' '}version: ["
+                f"{8 * ' '}version: ["
                 + ", ".join([f"py{p}" for p in supported_strip])
                 + "]"
             ),
         ),
         (
             ci_tests_file,
-            (f"os: ubuntu-latest\n{12*' '}version: py{supported_latest}"),
+            (f"os: ubuntu-latest\n{12 * ' '}version: py{supported_latest}"),
         ),
         (
             ci_tests_file,
-            (f"os: macos-latest\n{12*' '}version: py{supported_latest}"),
+            (f"os: macos-latest\n{12 * ' '}version: py{supported_latest}"),
         ),
     ]
 
