@@ -54,9 +54,9 @@ jobs:
           xml_path: /opt/homebrew/Cellar/udunits/2.2.28/share/udunits/udunits2-common.xml
         - os: "windows-latest"
           arch: "AMD64"
-          xml_path: "C:/lib/share/udunits/udunits2.xml"
-          incdir: C:/lib/include/
-          libdir: C:/lib/lib/
+          xml_path: 'C:\Users\runneradmin\miniconda3\envs\build\Library\share\udunits\udunits2-common.xml'
+          incdir: 'C:\Users\runneradmin\miniconda3\envs\build\Library\include'
+          libdir: 'C:\Users\runneradmin\miniconda3\envs\build\Library\lib'
         exclude:
         - os: "ubuntu-latest"
           arch: "arm64"
@@ -74,40 +74,20 @@ jobs:
       if: startsWith(matrix.os, 'macos')
       run: echo "MACOSX_DEPLOYMENT_TARGET=$([[ ${{ matrix.os }} == 'macos-latest' ]] && echo '14.0' || echo '13.0')" >> $GITHUB_ENV
 
-    - name: Export GitHub Actions cache environment variables
-      # https://learn.microsoft.com/en-us/vcpkg/consume/binary-caching-github-actions-cache
+
+    - name: "Conda install"
       if: runner.os == 'Windows'
-      uses: actions/github-script@v7
+      uses: conda-incubator/setup-miniconda@v3
       with:
-        script: |
-          const path = require('path')
-          core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
-          core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
-          core.exportVariable('VCPKG_ROOT', process.env.VCPKG_INSTALLATION_ROOT);
+        miniforge-version: latest
+        channels: conda-forge
+        activate-environment: build
+        auto-update-conda: true
+        conda-remove-defaults: true
 
-    - name: "install expat on win32"
+    - name: "install udunits2 for windows"
       if: runner.os == 'Windows'
-      run: vcpkg install expat:x64-windows
-      env:
-        # cache vcpkg
-        VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
-
-    - name: "setup udunits2 on windows"
-      if: runner.os == 'Windows'
-      shell: bash
-      run: |
-        set -e -u -o -x pipefail
-
-        cd ~/Downloads
-        C:/msys64/usr/bin/wget.exe https://downloads.unidata.ucar.edu/udunits/2.2.28/udunits-2.2.28.zip
-
-        unzip udunits-2.2.28.zip
-
-        cd ./udunits-2.2.28/
-
-        cmake -DCMAKE_TOOLCHAIN_FILE="C:/vcpkg/scripts/buildsystems/vcpkg.cmake" -B build -S . -D CMAKE_INSTALL_PREFIX=C:/lib/ -D CMAKE_BUILD_TYPE=release
-        cmake --build build --config Release
-        cmake --install build
+      run: conda install udunits2
 
     - name: "Building ${{ matrix.os }} (${{ matrix.arch }}) wheels"
       uses: pypa/cibuildwheel@v2.22.0
@@ -130,9 +110,8 @@ jobs:
         CIBW_ENVIRONMENT_PASS_LINUX: UDUNITS2_INCDIR UDUNITS2_LIBDIR UDUNITS2_XML_PATH
         CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: >-
           delvewheel repair -v
-          --add-path=C:\\lib\\bin\\
-          --add-path=C:\\lib\\lib\\
-          --add-path=${{ env.VCPKG_ROOT }}/installed/x64-windows/bin/
+          --add-path=C:\Users\runneradmin\miniconda3\envs\build\Library\lib
+          --add-path=C:\Users\runneradmin\miniconda3\envs\build\Library\bin
           --wheel-dir={dest_dir}
           {wheel}
 
