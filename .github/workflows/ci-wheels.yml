@@ -52,6 +52,11 @@ jobs:
           incdir: /opt/homebrew/Cellar/udunits/2.2.28/include
           libdir: /opt/homebrew/Cellar/udunits/2.2.28/lib
           xml_path: /opt/homebrew/Cellar/udunits/2.2.28/share/udunits/udunits2-common.xml
+        - os: "windows-latest"
+          arch: "AMD64"
+          xml_path: "C:/lib/share/udunits/udunits2.xml"
+          incdir: C:/lib/include/
+          libdir: C:/lib/lib/
         exclude:
         - os: "ubuntu-latest"
           arch: "arm64"
@@ -69,6 +74,41 @@ jobs:
       if: startsWith(matrix.os, 'macos')
       run: echo "MACOSX_DEPLOYMENT_TARGET=$([[ ${{ matrix.os }} == 'macos-latest' ]] && echo '14.0' || echo '13.0')" >> $GITHUB_ENV
 
+    - name: Export GitHub Actions cache environment variables
+      # https://learn.microsoft.com/en-us/vcpkg/consume/binary-caching-github-actions-cache
+      if: runner.os == 'Windows'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const path = require('path')
+          core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+          core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+          core.exportVariable('VCPKG_ROOT', process.env.VCPKG_INSTALLATION_ROOT);
+
+    - name: "install expat on win32"
+      if: runner.os == 'Windows'
+      run: vcpkg install expat:x64-windows
+      env:
+        # cache vcpkg
+        VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
+
+    - name: "setup udunits2 on windows"
+      if: runner.os == 'Windows'
+      shell: bash
+      run: |
+        set -e -u -o -x pipefail
+
+        cd ~/Downloads
+        C:/msys64/usr/bin/wget.exe https://downloads.unidata.ucar.edu/udunits/2.2.28/udunits-2.2.28.zip
+
+        unzip udunits-2.2.28.zip
+
+        cd ./udunits-2.2.28/
+
+        cmake -DCMAKE_TOOLCHAIN_FILE="C:/vcpkg/scripts/buildsystems/vcpkg.cmake" -B build -S . -D CMAKE_INSTALL_PREFIX=C:/lib/ -D CMAKE_BUILD_TYPE=release
+        cmake --build build --config Release
+        cmake --install build
+
     - name: "Building ${{ matrix.os }} (${{ matrix.arch }}) wheels"
       uses: pypa/cibuildwheel@v2.22.0
       env:
@@ -78,14 +118,23 @@ jobs:
         CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
         CIBW_BEFORE_BUILD_LINUX: yum install -y udunits2-devel
         CIBW_BEFORE_BUILD_MACOS: brew install udunits
+        CIBW_BEFORE_BUILD_WINDOWS: python -m pip install delvewheel
         CIBW_TEST_REQUIRES: pytest
         CIBW_TEST_COMMAND: >
           python -c 'import cf_units; print(f"cf-units v{cf_units.__version__}")' &&
           python -m pytest --pyargs cf_units
+        CIBW_TEST_COMMAND_WINDOWS: python -m pytest --pyargs cf_units
         UDUNITS2_INCDIR: ${{ matrix.incdir }}
         UDUNITS2_LIBDIR: ${{ matrix.libdir }}
         UDUNITS2_XML_PATH: ${{ matrix.xml_path }}
         CIBW_ENVIRONMENT_PASS_LINUX: UDUNITS2_INCDIR UDUNITS2_LIBDIR UDUNITS2_XML_PATH
+        CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: >-
+          delvewheel repair -v
+          --add-path=C:\\lib\\bin\\
+          --add-path=C:\\lib\\lib\\
+          --add-path=${{ env.VCPKG_ROOT }}/installed/x64-windows/bin/
+          --wheel-dir={dest_dir}
+          {wheel}
 
     - uses: actions/upload-artifact@v4
       with:
