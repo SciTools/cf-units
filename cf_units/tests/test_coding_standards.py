@@ -99,7 +99,7 @@ class TestLicenseHeaders:
                 and full_fname.is_file()
                 and not any(fnmatch(fname, pat) for pat in exclude_patterns)
             ):
-                with open(full_fname) as fh:
+                with open(full_fname, encoding="utf-8") as fh:
                     content = fh.read()
                     if not content.startswith(LICENSE_TEMPLATE):
                         print(
