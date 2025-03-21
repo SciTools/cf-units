@@ -104,7 +104,7 @@ jobs:
           python -c 'import cf_units; print(f"cf-units v{cf_units.__version__}")' &&
           python -m pytest --pyargs cf_units
         CIBW_TEST_COMMAND_WINDOWS: >
-          python -c 'import cf_units; print(f"cf-units v{cf_units.__version__}")' ;
+          python -c "import cf_units; print(f'cf-units v{cf_units.__version__}')" ;
           python -m pytest --pyargs cf_units
         UDUNITS2_INCDIR: ${{ matrix.incdir }}
         UDUNITS2_LIBDIR: ${{ matrix.libdir }}
