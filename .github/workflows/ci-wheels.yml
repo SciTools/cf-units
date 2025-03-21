@@ -100,10 +100,10 @@ jobs:
         CIBW_BEFORE_BUILD_MACOS: brew install udunits
         CIBW_BEFORE_BUILD_WINDOWS: python -m pip install delvewheel
         CIBW_TEST_REQUIRES: pytest
+        #CIBW_TEST_COMMAND: >
+        #  python -c 'import cf_units; print(f"cf-units v{cf_units.__version__}")' &&
+        #  python -m pytest --pyargs cf_units
         CIBW_TEST_COMMAND: >
-          python -c 'import cf_units; print(f"cf-units v{cf_units.__version__}")' &&
-          python -m pytest --pyargs cf_units
-        CIBW_TEST_COMMAND_WINDOWS: >
           python -c "import cf_units; print(f'cf-units v{cf_units.__version__}')" &&
           python -m pytest --pyargs cf_units
         UDUNITS2_INCDIR: ${{ matrix.incdir }}
