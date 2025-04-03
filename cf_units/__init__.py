@@ -1556,7 +1556,7 @@ class Unit(_OrderedHashable):
         elif not math.isclose(power, 0.0) and abs(power) < 1:
             if not math.isclose(1 / power, round(1 / power)):
                 raise ValueError("Cannot raise a unit by a decimal.")
-            root = int(round(1 / power))
+            root = round(1 / power)
             result = self.root(root)
         else:
             # Failing that, check for powers which are (very nearly)
@@ -1564,7 +1564,7 @@ class Unit(_OrderedHashable):
             if not math.isclose(power, round(power)):
                 msg = f"Cannot raise a unit by a decimal (got {power:s})."
                 raise ValueError(msg)
-            power = int(round(power))
+            power = round(power)
 
             try:
                 ut_unit = _ud.raise_(self.ut_unit, power)
