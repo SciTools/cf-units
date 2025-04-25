@@ -100,8 +100,8 @@ class UnitParseVisitor(udunits2ParserVisitor):
         return result
 
     def visitProduct(self, ctx):
-        # UDUNITS grammar makes no parse distinction for Product
-        # types ('/' and '*'), so we have to do the grunt work here.
+        # UDUNITS grammar makes no parse distinction for Product types
+        # ('/' and '*'), so we have to do the grunt work here.
         nodes = self.visitChildren(ctx)
 
         op_type = graph.Multiply

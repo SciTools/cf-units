@@ -202,7 +202,6 @@ ignore = [
     # TODO: exceptions that still need investigating are below.
     # Might be fixable, or might become permanent (above):
     "MY105",  # MyPy enables redundant-expr  (TODO: see MyPy ignore below)
-    "PC170",  # Uses PyGrep hooks (only needed if rST present)
     "PC180",  # Uses a markdown formatter
     "PY005",  # Has tests folder (TODO: it does, but not in standard location)
 ]
