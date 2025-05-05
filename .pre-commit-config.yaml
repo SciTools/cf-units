@@ -72,7 +72,7 @@ repos:
         types: [file, python]
 
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.11.2"
+    rev: "v0.11.8"
     hooks:
     # Run the linter
     -   id: ruff
@@ -88,7 +88,7 @@ repos:
         types: [file, python]
 
 -   repo: https://github.com/scientific-python/cookie
-    rev: 2025.01.22
+    rev: 2025.05.02
     hooks:
     -   id: sp-repo-review
         additional_dependencies: ["repo-review[cli]"]   # TODO: Only neededed if extra dependencies are required
