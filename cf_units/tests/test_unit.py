@@ -7,10 +7,10 @@
 import copy
 import datetime as datetime
 import operator
+from operator import truediv
 import pickle
 import re
 import tempfile
-from operator import truediv
 
 import cftime
 import numpy as np
@@ -466,13 +466,14 @@ class Test_invalid_origin_post_operation:
         assert x.origin is None
         assert x == u.symbol
 
+
 class Test_pickle_with_unit_operations:
     def test_pickle_unit(self):
         u = Unit("K")
         with tempfile.NamedTemporaryFile(mode="w+b", delete=True) as temp_file:
             pickle.dump(u, temp_file)
             temp_file.seek(0)
-            assert pickle.load(temp_file) == u # noqa: S301
+            assert pickle.load(temp_file) == u  # noqa: S301
 
     def test_pickle_unit_operation_unit_1(self):
         u = Unit("K")
@@ -480,7 +481,7 @@ class Test_pickle_with_unit_operations:
         with tempfile.NamedTemporaryFile(mode="w+b", delete=True) as temp_file:
             pickle.dump(u * v, temp_file)
             temp_file.seek(0)
-            assert pickle.load(temp_file) == u # noqa: S301
+            assert pickle.load(temp_file) == u  # noqa: S301
 
     def test_pickle_unit_operation_unit(self):
         u = Unit("m")
@@ -488,7 +489,8 @@ class Test_pickle_with_unit_operations:
         with tempfile.NamedTemporaryFile(mode="w+b", delete=True) as temp_file:
             pickle.dump(u / v, temp_file)
             temp_file.seek(0)
-            assert pickle.load(temp_file) == u / v # noqa: S301
+            assert pickle.load(temp_file) == u / v  # noqa: S301
+
 
 class Test_power:
     def test_basic(self):
