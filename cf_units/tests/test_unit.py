@@ -444,7 +444,6 @@ class Test_divide:
 
 
 class Test_unvalid_origin_post_operation:
-
     def test_unit_1_multiply(self):
         u = Unit("m")
         v = Unit(1)
@@ -461,7 +460,7 @@ class Test_unvalid_origin_post_operation:
 
     def test_unit_1_power(self):
         u = Unit("m")
-        x = u ** 1
+        x = u**1
         assert x.origin is None
         assert x == u.symbol
 
