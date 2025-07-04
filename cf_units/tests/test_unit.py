@@ -56,8 +56,7 @@ class Test_unit__creation:
         calendar = cf_units.CALENDAR_365_DAY
         u = Unit("hours\xb2 hours-1 since epoch", calendar=calendar)
         assert u.calendar == calendar
-        #expected = "hours² hours-1 since 1970-01-01 00:00:00"
-        expected = "hey bill"
+        expected = "hours² hours-1 since 1970-01-01 00:00:00"
         assert u.origin == expected
 
     def test_unicode_valid(self):
