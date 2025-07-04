@@ -8,7 +8,9 @@ import copy
 import datetime as datetime
 import operator
 from operator import truediv
+import pickle
 import re
+import tempfile
 
 import cftime
 import numpy as np
@@ -441,6 +443,53 @@ class Test_divide:
         with pytest.raises(ValueError, match="Cannot divide"):
             truediv(u, v)
             truediv(v, u)
+
+
+class Test_invalid_origin_post_operation:
+    def test_unit_1_multiply(self):
+        u = Unit("m")
+        v = Unit(1)
+        x = u * v
+        assert x.origin is None
+        assert x == u.symbol
+
+    def test_unit_1_divide(self):
+        u = Unit("m")
+        v = Unit(1)
+        x = u / v
+        assert x.origin is None
+        assert x == u.symbol
+
+    def test_unit_1_power(self):
+        u = Unit("m")
+        x = u**1
+        assert x.origin is None
+        assert x == u.symbol
+
+
+class Test_pickle_with_unit_operations:
+    def test_pickle_unit(self):
+        u = Unit("K")
+        with tempfile.NamedTemporaryFile(mode="w+b", delete=True) as temp_file:
+            pickle.dump(u, temp_file)
+            temp_file.seek(0)
+            assert pickle.load(temp_file) == u  # noqa: S301
+
+    def test_pickle_unit_operation_unit_1(self):
+        u = Unit("K")
+        v = Unit(1)
+        with tempfile.NamedTemporaryFile(mode="w+b", delete=True) as temp_file:
+            pickle.dump(u * v, temp_file)
+            temp_file.seek(0)
+            assert pickle.load(temp_file) == u  # noqa: S301
+
+    def test_pickle_unit_operation_unit(self):
+        u = Unit("m")
+        v = Unit("s")
+        with tempfile.NamedTemporaryFile(mode="w+b", delete=True) as temp_file:
+            pickle.dump(u / v, temp_file)
+            temp_file.seek(0)
+            assert pickle.load(temp_file) == u / v  # noqa: S301
 
 
 class Test_power:

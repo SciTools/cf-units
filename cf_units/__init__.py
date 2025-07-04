@@ -776,7 +776,10 @@ class Unit(_OrderedHashable):
     def __getstate__(self):
         # state capture method for Pickle.dump()
         #  - return the instance data needed to reconstruct a Unit value
-        return {"unit_text": self.origin, "calendar": self.calendar}
+        # After certain operations, self.origin will be set to None,
+        # so we need to use self.symbol for these cases
+        origin = self.origin or self.symbol
+        return {"unit_text": origin, "calendar": self.calendar}
 
     def __setstate__(self, state):
         # object reconstruction method for Pickle.load()
