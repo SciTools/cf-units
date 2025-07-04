@@ -56,7 +56,8 @@ class Test_unit__creation:
         calendar = cf_units.CALENDAR_365_DAY
         u = Unit("hours\xb2 hours-1 since epoch", calendar=calendar)
         assert u.calendar == calendar
-        expected = "hours² hours-1 since 1970-01-01 00:00:00"
+        #expected = "hours² hours-1 since 1970-01-01 00:00:00"
+        expected = "hey bill"
         assert u.origin == expected
 
     def test_unicode_valid(self):
@@ -446,6 +447,29 @@ class Test_divide:
         with pytest.raises(ValueError, match="Cannot divide"):
             truediv(u, v)
             truediv(v, u)
+
+
+class Test_unvalid_origin_post_operation:
+
+    def test_unit_1_multiply(self):
+        u = Unit("m")
+        v = Unit(1)
+        x = u * v
+        assert x.origin is None
+        assert x == u.symbol
+
+    def test_unit_1_divide(self):
+        u = Unit("m")
+        v = Unit(1)
+        x = u / v
+        assert x.origin is None
+        assert x == u.symbol
+
+    def test_unit_1_power(self):
+        u = Unit("m")
+        x = u ** 1
+        assert x.origin is None
+        assert x == u.symbol
 
 
 class Test_power:
