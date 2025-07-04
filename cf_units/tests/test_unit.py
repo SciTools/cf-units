@@ -7,13 +7,14 @@
 import copy
 import datetime as datetime
 import operator
-from operator import truediv
+import pickle
 import re
+import tempfile
+from operator import truediv
 
 import cftime
 import numpy as np
 import pytest
-import pickle
 
 import cf_units
 from cf_units import suppress_errors
@@ -468,32 +469,26 @@ class Test_invalid_origin_post_operation:
 class Test_pickle_with_unit_operations:
     def test_pickle_unit(self):
         u = Unit("K")
-        path = "/tmp/res.pkl"
-        with open(path, "wb") as f:
-            pickle.dump(u, f)
-        with open(path, "rb") as g:
-            assert pickle.load(g) == u
-        os.remove(path)
+        with tempfile.NamedTemporaryFile(mode="w+b", delete=True) as temp_file:
+            pickle.dump(u, temp_file)
+            temp_file.seek(0)
+            assert pickle.load(temp_file) == u # noqa: S301
 
     def test_pickle_unit_operation_unit_1(self):
         u = Unit("K")
         v = Unit(1)
-        path = "/tmp/res.pkl"
-        with open(path, "wb") as f:
-            pickle.dump(u * v, f)
-        with open(path, "rb") as g:
-            assert pickle.load(g) == u
-        os.remove(path)
+        with tempfile.NamedTemporaryFile(mode="w+b", delete=True) as temp_file:
+            pickle.dump(u * v, temp_file)
+            temp_file.seek(0)
+            assert pickle.load(temp_file) == u # noqa: S301
 
     def test_pickle_unit_operation_unit(self):
         u = Unit("m")
         v = Unit("s")
-        path = "/tmp/res.pkl"
-        with open(path, "wb") as f:
-            pickle.dump(u / v, f)
-        with open(path, "rb") as g:
-            assert pickle.load(g) == u / v
-        os.remove(path)
+        with tempfile.NamedTemporaryFile(mode="w+b", delete=True) as temp_file:
+            pickle.dump(u / v, temp_file)
+            temp_file.seek(0)
+            assert pickle.load(temp_file) == u / v # noqa: S301
 
 class Test_power:
     def test_basic(self):
