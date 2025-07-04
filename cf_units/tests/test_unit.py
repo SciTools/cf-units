@@ -13,6 +13,7 @@ import re
 import cftime
 import numpy as np
 import pytest
+import pickle
 
 import cf_units
 from cf_units import suppress_errors
@@ -464,6 +465,23 @@ class Test_invalid_origin_post_operation:
         assert x.origin is None
         assert x == u.symbol
 
+class Test_pickle_with_unit_operations:
+    def test_pickle_unit(self):
+        u = Unit("m")
+        pickle.dump(u, open("/tmp/res.pkl", "wb"))
+        assert pickle.load(open("/tmp/res.pkl", "rb")) == u
+
+    def test_pickle_unit_operation_unit_1(self):
+        u = Unit("m")
+        v = Unit("1")
+        pickle.dump(u * v, open("/tmp/res.pkl", "wb"))
+        assert pickle.load(open("/tmp/res.pkl", "rb")) == u
+
+    def test_pickle_unit_operation_unit(self):
+        u = Unit("m")
+        v = Unit("s")
+        pickle.dump(u / v, open("/tmp/res.pkl", "wb"))
+        assert pickle.load(open("/tmp/res.pkl", "rb")) == u / v
 
 class Test_power:
     def test_basic(self):
