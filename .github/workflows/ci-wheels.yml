@@ -52,6 +52,11 @@ jobs:
           incdir: /opt/homebrew/Cellar/udunits/2.2.28/include
           libdir: /opt/homebrew/Cellar/udunits/2.2.28/lib
           xml_path: /opt/homebrew/Cellar/udunits/2.2.28/share/udunits/udunits2-common.xml
+        - os: "windows-latest"
+          arch: "AMD64"
+          xml_path: 'C:\Users\runneradmin\miniconda3\envs\build\Library\share\udunits\udunits2-common.xml'
+          incdir: 'C:\Users\runneradmin\miniconda3\envs\build\Library\include'
+          libdir: 'C:\Users\runneradmin\miniconda3\envs\build\Library\lib'
         exclude:
         - os: "ubuntu-latest"
           arch: "arm64"
@@ -69,27 +74,49 @@ jobs:
       if: startsWith(matrix.os, 'macos')
       run: echo "MACOSX_DEPLOYMENT_TARGET=$([[ ${{ matrix.os }} == 'macos-latest' ]] && echo '14.0' || echo '13.0')" >> $GITHUB_ENV
 
+
+    - name: "Conda install"
+      if: runner.os == 'Windows'
+      uses: conda-incubator/setup-miniconda@v3
+      with:
+        miniforge-version: latest
+        channels: conda-forge
+        activate-environment: build
+        auto-update-conda: true
+        conda-remove-defaults: true
+
+    - name: "install udunits2 for windows"
+      if: runner.os == 'Windows'
+      run: conda install udunits2
+
     - name: "Building ${{ matrix.os }} (${{ matrix.arch }}) wheels"
-      uses: pypa/cibuildwheel@v2.21.1
+      uses: pypa/cibuildwheel@v3.0.0
       env:
-        CIBW_SKIP: "cp39-* cp313-* pp* *-musllinux*"
+        CIBW_SKIP: "cp39-* pp* *-musllinux*"
         CIBW_ARCHS: ${{ matrix.arch }}
         CIBW_BUILD_FRONTEND: build
         CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
         CIBW_BEFORE_BUILD_LINUX: yum install -y udunits2-devel
         CIBW_BEFORE_BUILD_MACOS: brew install udunits
+        CIBW_BEFORE_BUILD_WINDOWS: python -m pip install delvewheel
         CIBW_TEST_REQUIRES: pytest
         CIBW_TEST_COMMAND: >
-          python -c 'import cf_units; print(f"cf-units v{cf_units.__version__}")' &&
+          python -c "import cf_units; print(f'cf-units v{cf_units.__version__}')" &&
           python -m pytest --pyargs cf_units
         UDUNITS2_INCDIR: ${{ matrix.incdir }}
         UDUNITS2_LIBDIR: ${{ matrix.libdir }}
         UDUNITS2_XML_PATH: ${{ matrix.xml_path }}
         CIBW_ENVIRONMENT_PASS_LINUX: UDUNITS2_INCDIR UDUNITS2_LIBDIR UDUNITS2_XML_PATH
+        CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: >-
+          delvewheel repair -v
+          --add-path=C:\Users\runneradmin\miniconda3\envs\build\Library\lib
+          --add-path=C:\Users\runneradmin\miniconda3\envs\build\Library\bin
+          --wheel-dir={dest_dir}
+          {wheel}
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
-        name: pypi-artifacts
+        name: pypi-artifacts-bdist-${{ matrix.os }}-${{ matrix.arch }}
         path: ${{ github.workspace }}/wheelhouse/*.whl
 
 
@@ -104,11 +131,11 @@ jobs:
     - name: "Building sdist"
       shell: bash
       run: |
-        pipx run build --sdist 
+        pipx run build --sdist
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
-        name: pypi-artifacts
+        name: pypi-artifacts-sdist
         path: ${{ github.workspace }}/dist/*.tar.gz
 
 
@@ -117,10 +144,10 @@ jobs:
     name: "Show artifacts"
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/download-artifact@v3
+    - uses: actions/download-artifact@v4
       with:
-        name: pypi-artifacts
         path: ${{ github.workspace }}/dist
+        merge-multiple: true
 
     - shell: bash
       run: |
@@ -134,10 +161,10 @@ jobs:
     # upload to Test PyPI for every commit on main branch
     if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
     steps:
-    - uses: actions/download-artifact@v3
+    - uses: actions/download-artifact@v4
       with:
-        name: pypi-artifacts
         path: ${{ github.workspace }}/dist
+        merge-multiple: true
 
     - uses: pypa/gh-action-pypi-publish@release/v1
       with:
@@ -155,10 +182,10 @@ jobs:
     # upload to PyPI for every tag starting with 'v'
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
     steps:
-    - uses: actions/download-artifact@v3
+    - uses: actions/download-artifact@v4
       with:
-        name: pypi-artifacts
         path: ${{ github.workspace }}/dist
+        merge-multiple: true
 
     - uses: pypa/gh-action-pypi-publish@release/v1
       with:

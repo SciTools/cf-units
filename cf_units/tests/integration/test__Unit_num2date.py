@@ -21,13 +21,13 @@ class Test:
         self.udays = cf_units.Unit("days since 1970-01-01", calendar)
 
     def check_dates(self, nums, units, expected, only_cftime=True):
-        for num, unit, exp in zip(nums, units, expected):
+        for num, unit, exp in zip(nums, units, expected, strict=False):
             res = unit.num2date(num, only_use_cftime_datetimes=only_cftime)
             assert exp == res
             assert isinstance(res, type(exp))
 
     def check_timedelta(self, nums, units, expected):
-        for num, unit, exp in zip(nums, units, expected):
+        for num, unit, exp in zip(nums, units, expected, strict=False):
             epoch = cftime.num2date(0, unit.cftime_unit, unit.calendar)
             res = unit.num2date(num)
             delta = res - epoch
@@ -186,7 +186,8 @@ class Test:
             self.udays,
             self.udays,
         ]
-        # Expected results in (days, seconds, microseconds) delta from unit epoch.
+        # Expected results in (days, seconds, microseconds) delta from unit
+        # epoch.
         expected = [
             (0, nums[0], 0),
             (0, nums[1], 0),
@@ -218,7 +219,8 @@ class Test:
             self.udays,
             self.udays,
         ]
-        # Expected results in (days, seconds, microseconds) delta from unit epoch.
+        # Expected results in (days, seconds, microseconds) delta from unit
+        # epoch.
         expected = [
             (0, nums[0] * 60, 0),
             (0, nums[1] * 60, 0),
@@ -234,7 +236,8 @@ class Test:
         self.setup_units("360_day")
         nums = [0.25, 0.5, 0.75, 1.5, 2.5, 3.5, 4.5]
         units = [self.useconds] * 7
-        # Expected results in (days, seconds, microseconds) delta from unit epoch.
+        # Expected results in (days, seconds, microseconds) delta from unit
+        # epoch.
         expected = [
             (0, 0, 250000),
             (0, 0, 500000),
@@ -249,9 +252,7 @@ class Test:
 
     def test_pydatetime_wrong_calendar(self):
         unit = cf_units.Unit("days since 1970-01-01", calendar="360_day")
-        with pytest.raises(
-            ValueError, match="illegal calendar or reference date"
-        ):
+        with pytest.raises(ValueError, match="illegal calendar or reference date"):
             unit.num2date(
                 1,
                 only_use_cftime_datetimes=False,
@@ -273,7 +274,8 @@ class Test:
             self.udays,
             self.udays,
         ]
-        # Expected results in (days, seconds, microseconds) delta from unit epoch.
+        # Expected results in (days, seconds, microseconds) delta from unit
+        # epoch.
         expected = [
             (0, nums[0], 0),
             (0, nums[1], 0),
@@ -305,7 +307,8 @@ class Test:
             self.udays,
             self.udays,
         ]
-        # Expected results in (days, seconds, microseconds) delta from unit epoch.
+        # Expected results in (days, seconds, microseconds) delta from unit
+        # epoch.
         expected = [
             (0, nums[0] * 60, 0),
             (0, nums[1] * 60, 0),
@@ -321,7 +324,8 @@ class Test:
         self.setup_units("365_day")
         nums = [0.25, 0.5, 0.75, 1.5, 2.5, 3.5, 4.5]
         units = [self.useconds] * 7
-        # Expected results in (days, seconds, microseconds) delta from unit epoch.
+        # Expected results in (days, seconds, microseconds) delta from unit
+        # epoch.
         expected = [
             (0, 0, 250000),
             (0, 0, 500000),

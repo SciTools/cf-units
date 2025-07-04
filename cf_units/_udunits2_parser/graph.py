@@ -5,19 +5,13 @@
 
 
 class Node:
-    """
-    Represents a node in an expression graph.
-
-    """
+    """Represents a node in an expression graph."""
 
     def __init__(self, **kwargs):
         self._attrs = kwargs
 
     def children(self):
-        """
-        Return the children of this node.
-
-        """
+        """Return the children of this node."""
         # Since this is py>=36, the order of the attributes is well defined.
         return list(self._attrs.values())
 
@@ -27,20 +21,15 @@ class Node:
 
     def _repr_ctx(self):
         # Return a dictionary that is useful for passing to string.format.
-        kwargs = ", ".join(
-            "{}={!r}".format(key, value) for key, value in self._attrs.items()
-        )
-        return dict(cls_name=self.__class__.__name__, kwargs=kwargs)
+        kwargs = ", ".join(f"{key}={value!r}" for key, value in self._attrs.items())
+        return {"cls_name": self.__class__.__name__, "kwargs": kwargs}
 
     def __repr__(self):
         return "{cls_name}({kwargs})".format(**self._repr_ctx())
 
 
 class Terminal(Node):
-    """
-    A generic terminal node in an expression graph.
-
-    """
+    """A generic terminal node in an expression graph."""
 
     def __init__(self, content):
         super().__init__(content=content)
@@ -49,7 +38,7 @@ class Terminal(Node):
         return []
 
     def __str__(self):
-        return "{}".format(self.content)
+        return f"{self.content}"
 
 
 class Operand(Terminal):
@@ -62,8 +51,6 @@ class Number(Terminal):
 
 class Identifier(Terminal):
     """The unit itself (e.g. meters, m, km and π)"""
-
-    pass
 
 
 class BinaryOp(Node):
@@ -103,8 +90,7 @@ class Timestamp(Terminal):
 
 
 class Visitor:
-    """
-    This class may be used to help traversing an expression graph.
+    """This class may be used to help traversing an expression graph.
 
     It follows the same pattern as the Python ``ast.NodeVisitor``.
     Users should typically not need to override either ``visit`` or
@@ -122,8 +108,7 @@ class Visitor:
         return visitor(node)
 
     def generic_visit(self, node):
-        """
-        Called if no explicit visitor function exists for a node.
+        """Called if no explicit visitor function exists for a node.
 
         Can also be called by ``visit_<ClassName>`` implementations
         if children of the node are to be processed.

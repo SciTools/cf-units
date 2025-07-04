@@ -1,19 +1,27 @@
-import sys
+"""Setup routines to enable cf-units' Cython elements.
+
+All other setup configuration is in `pyproject.toml`.
+"""
+
 from distutils.sysconfig import get_config_var
 from os import environ
 from pathlib import Path
 from shutil import copy
+import sys
 
 from setuptools import Command, Extension, setup
 
-# Default to using cython, but use the .c files if it doesn't exist
+# Default to using cython, but use the .c files if it doesn't exist.
+#  Supports the widest possible range of developer setups.
 try:
     from Cython.Build import cythonize
 except ImportError:
     cythonize = False
 
 COMPILER_DIRECTIVES = {}
-DEFINE_MACROS = None
+# This Cython macro disables a build warning, obsolete with Cython>=3
+#  see : https://cython.readthedocs.io/en/latest/src/userguide/migrating_to_cy30.html#numpy-c-api
+DEFINE_MACROS = [("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]
 FLAG_COVERAGE = "--cython-coverage"  # custom flag enabling Cython line tracing
 BASEDIR = Path(__file__).resolve().parent
 PACKAGE = "cf_units"
@@ -38,27 +46,14 @@ class CleanCython(Command):
                 path.unlink()
 
 
-def get_include_dirs():
-    include_dirs = []
-    include_dir = environ.get("UDUNITS2_INCDIR")
-    if include_dir is None:
-        include_dir = get_config_var("INCLUDEDIR")
-    if include_dir is not None:
-        include_dirs.append(include_dir)
-    return include_dirs
-
-
-def get_library_dirs():
-    library_dirs = []
-    library_dir = environ.get("UDUNITS2_LIBDIR")
-    if library_dir is None:
-        library_dir = get_config_var("LIBDIR")
-    if library_dir is not None:
-        library_dirs.append(library_dir)
-    return library_dirs
+def get_dirs(env_var: str, config_var: str):
+    """Get a directory from an env variable or a distutils config variable."""
+    result = environ.get(env_var) or get_config_var(config_var)
+    return [result] if result else []
 
 
 def get_package_data():
+    """Find and correctly package the UDUNITS2 XML files for a wheel build."""
     package_data = {}
     # Determine whether we're building a wheel.
     if "bdist_wheel" in sys.argv:
@@ -75,8 +70,7 @@ def get_package_data():
         xml_database = Path(xml_database)
         if not xml_database.is_file():
             emsg = (
-                f"Can't open {xml_env} file {xml_database} "
-                "during cf-units wheel build."
+                f"Can't open {xml_env} file {xml_database} during cf-units wheel build."
             )
             raise ValueError(emsg)
         # We have a valid XML file, so copy the distro bundle into the
@@ -97,6 +91,7 @@ def get_package_data():
 
 
 def numpy_build_ext(pars):
+    """Make the NumPy headers available for the Cython layer."""
     from setuptools.command.build_ext import build_ext as _build_ext
 
     class build_ext(_build_ext):
@@ -119,38 +114,43 @@ def numpy_build_ext(pars):
 
 if FLAG_COVERAGE in sys.argv or environ.get("CYTHON_COVERAGE", None):
     COMPILER_DIRECTIVES = {"linetrace": True}
-    DEFINE_MACROS = [("CYTHON_TRACE", "1"), ("CYTHON_TRACE_NOGIL", "1")]
+    DEFINE_MACROS += [("CYTHON_TRACE", "1"), ("CYTHON_TRACE_NOGIL", "1")]
     if FLAG_COVERAGE in sys.argv:
         sys.argv.remove(FLAG_COVERAGE)
     print('enable: "linetrace" Cython compiler directive')
 
-library_dirs = get_library_dirs()
+include_dirs = get_dirs("UDUNITS2_INCDIR", "INCLUDEDIR")
+library_dirs = get_dirs("UDUNITS2_LIBDIR", "LIBDIR")
 
+# Some of the complexity MUST remain in setup.py due to its dynamic nature. To
+#  reduce confusion, the Extension is 100% defined here, rather than splitting
+#  between setup.py and pyproject.toml `ext-modules`.
 udunits_ext = Extension(
     f"{PACKAGE}._udunits2",
     [str(Path(f"{PACKAGE}") / f"_udunits2.{'pyx' if cythonize else 'c'}")],
-    include_dirs=get_include_dirs(),
+    include_dirs=include_dirs,
     library_dirs=library_dirs,
     libraries=["udunits2"],
     define_macros=DEFINE_MACROS,
-    runtime_library_dirs=(
-        None if sys.platform.startswith("win") else library_dirs
-    ),
+    runtime_library_dirs=(None if sys.platform.startswith("win") else library_dirs),
 )
 
 if cythonize:
+    # https://docs.cython.org/en/latest/src/userguide/source_files_and_compilation.html#distributing-cython-modules
     [udunits_ext] = cythonize(
         udunits_ext,
         compiler_directives=COMPILER_DIRECTIVES,
+        # Assert python 3 source syntax: Currently required to suppress a
+        #  warning, even though this is now the default (as-of Cython v3).
         language_level="3str",
     )
 
 cmdclass = {"clean_cython": CleanCython, "build_ext": numpy_build_ext}
 
-kwargs = dict(
-    cmdclass=cmdclass,
-    ext_modules=[udunits_ext],
-    package_data=get_package_data(),
-)
+kwargs = {
+    "cmdclass": cmdclass,
+    "ext_modules": [udunits_ext],
+    "package_data": get_package_data(),
+}
 
 setup(**kwargs)

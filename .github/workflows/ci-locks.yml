@@ -27,7 +27,7 @@ jobs:
       ENV_NAME: "ci-locks"
     strategy:
       matrix:
-        lock: [py39-lock, py310-lock, py311-lock]
+        lock: [py310-lock, py311-lock, py312-lock, py313-lock]
     steps:
     - name: "Checkout"
       uses: actions/checkout@v4
@@ -40,10 +40,10 @@ jobs:
         echo "CACHE_PERIOD=$(date +%Y).$(expr $(date +%U) / ${CACHE_WEEKS})" >> ${GITHUB_ENV}
 
     - name: "Conda package cache"
-      uses: actions/cache@v4.0.2
+      uses: actions/cache@v4.2.3
       env:
         # Increment the build number to force a cache refresh.
-        CACHE_BUILD: 2
+        CACHE_BUILD: 5
       with:
         path: ~/conda_pkgs_dir
         key: ${{ runner.os }}-conda-pkgs-${{ env.ENV_NAME }}-p${{ env.CACHE_PERIOD }}-b${{ env.CACHE_BUILD }}
@@ -52,17 +52,16 @@ jobs:
       uses: conda-incubator/setup-miniconda@v3
       with:
         miniforge-version: latest
-        channels: conda-forge,defaults
+        channels: conda-forge
         activate-environment: ${{ env.ENV_NAME }}
-        auto-update-conda: true 
-        use-only-tar-bz2: true
+        auto-update-conda: true
 
     - name: "Conda environment cache"
       id: conda-env-cache
-      uses: actions/cache@v4.0.2
+      uses: actions/cache@v4.2.3
       env:
         # Increment the build number to force a cache refresh.
-        CACHE_BUILD: 2
+        CACHE_BUILD: 5
       with:
         path: ${{ env.CONDA }}/envs/${{ env.ENV_NAME }}
         key: ${{ runner.os }}-conda-env-${{ env.ENV_NAME }}-p${{ env.CACHE_PERIOD }}-b${{ env.CACHE_BUILD }}
@@ -78,10 +77,10 @@ jobs:
         conda list
 
     - name: "Tox cache"
-      uses: actions/cache@v4.0.2
+      uses: actions/cache@v4.2.3
       env:
         # Increment the build number to forece a cache refresh.
-        CACHE_BUILD: 2
+        CACHE_BUILD: 5
         TOX_INI: ${{ github.workspace }}/tox.ini
       with:
         path: ${{ github.workspace }}/.tox
@@ -92,9 +91,9 @@ jobs:
         tox -e ${{ matrix.lock }} -- --platform osx-64 --platform win-64
 
     - name: "Upload lock artifacts"
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: lock-artifacts
+        name: lock-artifact-${{ matrix.lock }}
         path: ${{ github.workspace }}/requirements/locks/${{ matrix.lock }}*.txt
 
 
@@ -107,10 +106,10 @@ jobs:
       uses: actions/checkout@v4
 
     - name: "Download lock artifacts"
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
-        name: lock-artifacts
         path: ${{ github.workspace }}/requirements/locks
+        merge-multiple: true
 
     - name: "Generate token"
       uses: tibdex/github-app-token@v2
@@ -122,7 +121,7 @@ jobs:
     - name: "Push pull-request"
       id: cpr
       # v3.12.1 (release date 31 Jan 2022)
-      uses: peter-evans/create-pull-request@9153d834b60caba6d51c9b9510b087acf9f33f83
+      uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e
       with:
         token: ${{ steps.generate-token.outputs.token }}
         add-paths: ${{ github.workspace }}/requirements/locks/*.txt

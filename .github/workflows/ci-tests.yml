@@ -26,23 +26,28 @@ jobs:
       run:
         shell: bash -l {0}
     env:
-      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       CYTHON_COVERAGE: 1
       ENV_NAME: "ci-tests"
     strategy:
       matrix:
         os: [ubuntu-latest]
-        version: [py310, py311]
+        version: [py310, py311, py312, py313]
+        gitpath-prepend: [""]
         include:
           - os: ubuntu-latest
             platform: linux
           - os: ubuntu-latest
-            version: py311
+            version: py313
             posargs: "--cov-report=xml --cov"
-            post-command: codecov
           - os: macos-latest
-            version: py311
+            version: py313
             platform: osx
+            # On macos, the up-to-date git may not be first on the path
+            # N.B. setting includes a final ":", to simplify the path setting command
+            gitpath-prepend: "/opt/homebrew/bin:"
+          - os: windows-latest
+            version: py313
+            platform: win
     steps:
     - name: "Checkout"
       uses: actions/checkout@v4
@@ -57,7 +62,7 @@ jobs:
         echo "CACHE_PERIOD=$(date +%Y).$(expr $(date +%U) / ${CACHE_WEEKS})" >> ${GITHUB_ENV}
 
     - name: "Conda package cache"
-      uses: actions/cache@v4.0.2
+      uses: actions/cache@v4.2.3
       env:
         # Increment the build number to force a cache refresh.
         CACHE_BUILD: 2
@@ -69,14 +74,13 @@ jobs:
       uses: conda-incubator/setup-miniconda@v3
       with:
         miniforge-version: latest
-        channels: conda-forge,defaults
+        channels: conda-forge
         activate-environment: ${{ env.ENV_NAME }}
-        auto-update-conda: false
-        use-only-tar-bz2: true
+        auto-update-conda: true
 
     - name: "Conda environment cache"
       id: conda-env-cache
-      uses: actions/cache@v4.0.2
+      uses: actions/cache@v4.2.3
       env:
         # Increment the build number to force a cache refresh.
         CACHE_BUILD: 2
@@ -95,7 +99,7 @@ jobs:
         conda list
 
     - name: "Tox cache"
-      uses: actions/cache@v4.0.2
+      uses: actions/cache@v4.2.3
       env:
         # Increment the build number to forece a cache refresh.
         CACHE_BUILD: 2
@@ -104,8 +108,30 @@ jobs:
         path: ${{ github.workspace }}/.tox
         key: ${{ runner.os }}-tox-${{ env.ENV_NAME }}-${{ matrix.version }}-p${{ env.CACHE_PERIOD }}-b${{ env.CACHE_BUILD }}-${{ hashFiles(env.TOX_INI) }}
 
+    # setuptools can't find shared library installed by conda on windows
+    # so we need to prepare environment variables for it
+    - name: Export environment variables for UDUNITS2 lookup
+      if: runner.os == 'Windows'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const path = require('path')
+
+          const base = path.join('.tox/${{ matrix.version }}-${{ matrix.platform }}-test')
+
+          core.exportVariable('UDUNITS2_INCDIR', path.join(base, 'Library/include/'));
+          core.exportVariable('UDUNITS2_LIBDIR', path.join(base, 'Library/lib/'));
+          core.exportVariable('UDUNITS2_XML_PATH', path.join(base, 'Library/share/udunits/udunits2.xml'));
+
     - name: "Run ${{ matrix.os }} on ${{ matrix.version}} tests"
-      env:
-        POST_COMMAND: ${{ matrix.post-command }}
       run: |
+        export PATH=${{ matrix.gitpath-prepend }}$PATH
+        which git
+        git --version
         tox -e ${{ matrix.version }}-${{ matrix.platform }}-test -- ${{ matrix.posargs }}
+
+    - name: "Upload coverage report to Codecov"
+      if: contains(matrix.posargs, '--cov')
+      uses: codecov/codecov-action@18283e04ce6e62d37312384ff67231eb8fd56d24
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}

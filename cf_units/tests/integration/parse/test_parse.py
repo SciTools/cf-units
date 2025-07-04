@@ -2,7 +2,7 @@
 #
 # This file is part of cf-units and is released under the BSD license.
 # See LICENSE in the root of the repository for full licensing details.
-
+# ruff: noqa: E402
 import re
 
 import pytest
@@ -25,7 +25,7 @@ testdata = [
     "2.e-6",
     ".1e2",
     ".1e2.2",
-    "2e",  # <- TODO: Assert this isn't 2e1, but is infact the unit e *2
+    "2e",  # <- TODO: Assert this isn't 2e1, but is in fact the unit e *2
     "m",
     "meter",
     # Multiplication
@@ -148,7 +148,7 @@ def test_normed_units_equivalent(_, unit_str):
     unit_expr = normalize(unit_str)
     parsed_expr_symbol = cf_units.Unit(unit_expr).symbol
 
-    # Whilst the symbolic form from udunits is ugly, it *is* acurate,
+    # Whilst the symbolic form from udunits is ugly, it *is* accurate,
     # so check that the two represent the same unit.
     assert raw_symbol == parsed_expr_symbol
 
@@ -167,9 +167,7 @@ def test_invalid_units(_, unit_str):
         cf_valid = False
 
     # Double check that udunits2 can't parse this.
-    assert (
-        cf_valid is False
-    ), "Unit {!r} is unexpectedly valid in UDUNITS2".format(unit_str)
+    assert cf_valid is False, f"Unit {unit_str!r} is unexpectedly valid in UDUNITS2"
 
     try:
         normalize(unit_str)
@@ -178,7 +176,7 @@ def test_invalid_units(_, unit_str):
         can_parse = False
 
     # Now confirm that we couldn't parse this either.
-    msg = "Parser unexpectedly able to deal with {}".format(unit_str)
+    msg = f"Parser unexpectedly able to deal with {unit_str}"
     assert can_parse is False, msg
 
 
@@ -234,15 +232,13 @@ known_issues = [
 ]
 
 
-@pytest.mark.parametrize(
-    "_, unit_str, expected", multi_enumerate(known_issues)
-)
+@pytest.mark.parametrize("_, unit_str, expected", multi_enumerate(known_issues))
 def test_known_issues(_, unit_str, expected):
     # Unfortunately the grammar is not perfect.
     # These are the cases that don't work yet but which do work with udunits.
 
     # Make sure udunits can read it.
-    cf_units.Unit(unit_str).symbol
+    _ = cf_units.Unit(unit_str).symbol
 
     if isinstance(expected, type) and issubclass(expected, Exception):
         with pytest.raises(SyntaxError):
@@ -293,7 +289,7 @@ def test_invalid_syntax_units(_, unit_str):
     # allowed with our grammar.
 
     with pytest.raises(ValueError):
-        cf_units.Unit(unit_str).symbol
+        _ = cf_units.Unit(unit_str).symbol
 
     with pytest.raises(SyntaxError):
         normalize(unit_str)

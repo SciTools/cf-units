@@ -5,18 +5,21 @@
 
 import unicodedata
 
-from antlr4 import CommonTokenStream, InputStream
-from antlr4.error.ErrorListener import ErrorListener
-
 from . import graph
+from ._antlr4_runtime import (
+    CommonTokenStream,
+    InputStream,
+)
+from ._antlr4_runtime.error.ErrorListener import (
+    ErrorListener,
+)
 from .parser.udunits2Lexer import udunits2Lexer
 from .parser.udunits2Parser import udunits2Parser
 from .parser.udunits2ParserVisitor import udunits2ParserVisitor
 
 # Dictionary mapping token rule id to token name.
 TOKEN_ID_NAMES = {
-    getattr(udunits2Lexer, rule, None): rule
-    for rule in udunits2Lexer.ruleNames
+    getattr(udunits2Lexer, rule, None): rule for rule in udunits2Lexer.ruleNames
 }
 
 
@@ -29,10 +32,7 @@ def handle_UNICODE_EXPONENT(string):
 
 
 class UnitParseVisitor(udunits2ParserVisitor):
-    """
-    A visitor which converts the parse tree into an abstract expression graph.
-
-    """
+    """A visitor which converts the parse tree into an abstract expression graph."""
 
     #: A dictionary mapping lexer TOKEN names to the action that should be
     #: taken on them when visited. For full context of what is allowed, see
@@ -78,10 +78,7 @@ class UnitParseVisitor(udunits2ParserVisitor):
         return result
 
     def visitTerminal(self, ctx):
-        """
-        Return a graph.Node, or None, to represent the given lexer terminal.
-
-        """
+        """Return a graph.Node, or None, to represent the given lexer terminal."""
         content = ctx.getText()
 
         symbol_idx = ctx.symbol.type
@@ -103,8 +100,8 @@ class UnitParseVisitor(udunits2ParserVisitor):
         return result
 
     def visitProduct(self, ctx):
-        # UDUNITS grammar makes no parse distinction for Product
-        # types ('/' and '*'), so we have to do the grunt work here.
+        # UDUNITS grammar makes no parse distinction for Product types
+        # ('/' and '*'), so we have to do the grunt work here.
         nodes = self.visitChildren(ctx)
 
         op_type = graph.Multiply
@@ -158,10 +155,7 @@ class UnitParseVisitor(udunits2ParserVisitor):
 
 
 class SyntaxErrorRaiser(ErrorListener):
-    """
-    Turn any parse errors into sensible SyntaxErrors.
-
-    """
+    """Turn any parse errors into sensible SyntaxErrors."""
 
     def __init__(self, unit_string):
         self.unit_string = unit_string
@@ -169,16 +163,13 @@ class SyntaxErrorRaiser(ErrorListener):
 
     def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
         # https://stackoverflow.com/a/36367357/741316
-        context = ("inline", line, column + 2, "'{}'".format(self.unit_string))
+        context = ("inline", line, column + 2, f"'{self.unit_string}'")
         syntax_error = SyntaxError(msg, context)
         raise syntax_error from None
 
 
 def _debug_tokens(unit_string):
-    """
-    A really handy way of printing the tokens produced for a given input.
-
-    """
+    """A really handy way of printing the tokens produced for a given input."""
     unit_str = unit_string.strip()
     lexer = udunits2Lexer(InputStream(unit_str))
     stream = CommonTokenStream(lexer)
@@ -192,12 +183,11 @@ def _debug_tokens(unit_string):
             continue
         token_type_idx = token.type
         rule = TOKEN_ID_NAMES[token_type_idx]
-        print("%s: %s" % (token.text, rule))
+        print(f"{token.text}: {rule}")
 
 
 def normalize(unit_string):
-    """
-    Parse the given unit string, and return its string representation.
+    """Parse the given unit string, and return its string representation.
 
     No standardisation of units, nor simplification of expressions is done,
     but some tokens and operators will be converted to their canonical form.

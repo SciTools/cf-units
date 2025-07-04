@@ -1,9 +1,20 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
+# See https://pre-commit.ci/#configuration
+# See https://github.com/scientific-python/cookie#sp-repo-review for repo-review
+# See https://github.com/SciTools/.github/wiki/Linting for common SciTools linters
+
+ci:
+    autofix_prs: false
+    autoupdate_commit_msg: "chore: update pre-commit hooks"
+
+exclude: 'cf_units/_udunits2_parser/_antlr4_runtime/'
+
+minimum_pre_commit_version: 1.21.0
 
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v5.0.0
     hooks:
         # Prevent giant files from being committed.
     -   id: check-added-large-files
@@ -15,32 +26,101 @@ repos:
     -   id: check-merge-conflict
         # Check for debugger imports and py37+ `breakpoint()` calls in Python source.
     -   id: debug-statements
+        # Check TOML file syntax.
+    -   id: check-toml
+        # Check YAML file syntax.
+    -   id: check-yaml
+        # Makes sure files end in a newline and only a newline.
+        # Duplicates Ruff W292 but also works on non-Python files.
+    -   id: end-of-file-fixer
+        # Replaces or checks mixed line ending.
+    -   id: mixed-line-ending
         # Don't commit to main branch.
     -   id: no-commit-to-branch
+        # Trims trailing whitespace.
+        # Duplicates Ruff W291 but also works on non-Python files.
+    -   id: trailing-whitespace
 
--   repo: https://github.com/psf/black
-    rev: 24.4.0
-    hooks:
-    -   id: black
-        types: [file, python]
-        args: [--config=./pyproject.toml]
+# Hooks from all other repos
+# NOTE : keep these in hook-name (aka 'id') order
 
--   repo: https://github.com/PyCQA/flake8
-    rev: 7.0.0
+-   repo: https://github.com/adamchainz/blacken-docs
+    rev: 1.19.1
     hooks:
-    -   id: flake8
-        types: [file, python]
-        args: [--config=./setup.cfg]
+    -   id: blacken-docs
+        types: [file, rst]
 
--   repo: https://github.com/PyCQA/isort
-    rev: 5.13.2
+-   repo: https://github.com/codespell-project/codespell
+    rev: "v2.4.1"
     hooks:
-    -   id: isort
+    -   id: codespell
+        types_or: [asciidoc, python, markdown, rst]
+        additional_dependencies: [tomli]
+
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: 'v1.15.0'
+    hooks:
+    -   id: mypy
+        additional_dependencies:
+            - 'types-requests'
+        exclude: 'docs/|cf_units/_udunits2_parser/parser/.*\.py|cf_units/_udunits2_parser/_antlr4_runtime/.*\.py'
+
+-   repo: https://github.com/numpy/numpydoc
+    rev: v1.8.0
+    hooks:
+      - id: numpydoc-validation
         types: [file, python]
-        args: [--filter-files]
+
+-   repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: "v0.11.11"
+    hooks:
+    # Run the linter
+    -   id: ruff
+        types: [file, python]
+        args: [--fix, --show-fixes]
+    # Run the formatter.
+    -   id: ruff-format
 
 -   repo: https://github.com/aio-libs/sort-all
-    rev: v1.2.0
+    rev: v1.3.0
     hooks:
     -   id: sort-all
         types: [file, python]
+
+-   repo: https://github.com/scientific-python/cookie
+    rev: 2025.05.02
+    hooks:
+    -   id: sp-repo-review
+        additional_dependencies: ["repo-review[cli]"]   # TODO: Only neededed if extra dependencies are required
+        #args: ["--show=errskip"]  # show everything for the moment
+
+-   repo: https://github.com/abravalheri/validate-pyproject
+    # More exhaustive than Ruff RUF200.
+    rev: "v0.24.1"
+    hooks:
+    - id: validate-pyproject
+
+- repo: https://github.com/pre-commit/pygrep-hooks
+  rev: v1.10.0
+  hooks:
+    - id: python-check-blanket-noqa
+      # Enforce that all noqa annotations always occur with specific codes.
+    - id: python-check-blanket-type-ignore
+      # Enforce that "# type: ignore" annotations always occur with specific codes.
+    - id: python-check-mock-methods
+      # Prevent common mistakes of assert mck.not_called(), assert
+      # mck.called_once_with(...) and mck.assert_called.
+    - id: python-no-eval
+      # A quick check for the eval() built-in function
+    - id: python-no-log-warn
+      # A quick check for the deprecated .warn() method of python loggers
+    - id: python-use-type-annotations
+      # Enforce that python3.6+ type annotations are used instead of type comments
+    - id: rst-backticks
+      # Detect common mistake of using single backticks when writing rst.
+    - id: rst-directive-colons
+      # Detect mistake of rst directive not ending with double colon.
+    - id: rst-inline-touching-normal
+      # Detect mistake of inline code touching normal text in rst.
+    - id: text-unicode-replacement-char
+      # Forbid files which have a UTF-8 Unicode replacement character.
