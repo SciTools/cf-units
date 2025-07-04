@@ -443,7 +443,7 @@ class Test_divide:
             truediv(v, u)
 
 
-class Test_unvalid_origin_post_operation:
+class Test_invalid_origin_post_operation:
     def test_unit_1_multiply(self):
         u = Unit("m")
         v = Unit(1)
