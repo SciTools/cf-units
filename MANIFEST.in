@@ -8,8 +8,7 @@
 #---------
 # SECTION: main code sources
 # N.B. package dir is "lib" not "src"
-recursive-include cf_units *.py *.pdx *.pyx *.c
-exclude cf_units/etc/site.cfg
+recursive-include cf_units *.py *.pxd *.pyx *.c *.g4 *.jinja *.md *.template *.txt
     # principles:
     #    - *no* "prune" command is used
     #    - use "include-recursive", by relevant file extensions
@@ -45,12 +44,17 @@ recursive-include requirements *
 
 #---------
 # SECTION: root files
+exclude .git_archival.txt
 exclude .gitignore
+exclude .pre-commit-config.yaml
+exclude .readthedocs.yml
 exclude CHANGES
 include COPYING
 include COPYING.LESSER
 include INSTALL
 include README.md
+exclude codecov.yml
+include tox.ini
     # principles:
     #    - *ANY* file in the root should be explicitly "include"- or "exclude"-d
     #         - EXCEPT (possibly) those covered by setuptools default rules (see above link)
@@ -65,3 +69,25 @@ include README.md
 # SECTION: generic exclusions
 # (1) top-level directories to omit entirely
 prune .github
+prune .tox
+prune .coverage
+# (2) top-level files to omit
+exclude .coveragerc
+# (3) file types (path patterns) to skip everywhere
+global-exclude *.py[cod]
+global-exclude __pycache__
+    # principles:
+    #    - common directories, files and file-types to be generally ignored
+    #        - all outside version control, temporary non-coding output and cache data
+    #             produced by dev processes, automation or user tools
+    #    - by having this section LAST, it can remove files which might have been added by
+    #        previous sections -- such as python compiler cache files
+    #    - can include this section as **boilerplate** :
+    #        - won't all exist in every repo, but including them all does no harm
+
+#
+#=================================
+# Local Cf-Units-specific settings
+#
+exclude cf_units/etc/site.cfg
+exclude cf_units/_version.py
