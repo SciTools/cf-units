@@ -7,8 +7,7 @@
 
 #---------
 # SECTION: main code sources
-# N.B. package dir is "lib" not "src"
-recursive-include cf_units *.py *.pxd *.pyx *.c *.g4 *.jinja *.md *.template *.txt
+recursive-include cf_units *.py *.pxd *.pyx */_udunits2.c *.g4 *.jinja *.md *.template *.txt
     # principles:
     #    - *no* "prune" command is used
     #    - use "include-recursive", by relevant file extensions
