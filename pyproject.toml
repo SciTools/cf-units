@@ -68,6 +68,13 @@ Discussions = "https://github.com/SciTools/cf-units/discussions"
 Documentation = "https://cf-units.readthedocs.io"
 Issues = "https://github.com/SciTools/cf-units/issues"
 
+[tool.check-manifest]
+ignore = [
+    "cf_units/_udunits2.c",
+    "cf_units/_udunits2.cpython-*.so",
+    "cf_units/_version.py",
+]
+
 [tool.codespell]
 skip = 'cf_units/_udunits2_parser/parser/*,cf_units/_udunits2_parser/_antlr4_runtime/*'
 

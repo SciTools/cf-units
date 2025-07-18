@@ -12,7 +12,7 @@
 #---------
 # SECTION: main code sources
 #
-recursive-include cf_units *.py *.pyx *.pxd *.template
+recursive-include cf_units *.c *.py *.pyx *.pxd *.so *.template
 recursive-include cf_units/_udunits2_parser *
     # principles:
     #    - *no* "prune" command is used
