@@ -94,7 +94,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: lock-artifact-${{ matrix.lock }}
-        path: ${{ github.workspace }}/requirements/locks/${{ matrix.lock }}*.txt
+        path: ${{ github.workspace }}/requirements/locks/${{ matrix.lock }}*.lock
 
 
   create-pr:
@@ -124,7 +124,7 @@ jobs:
       uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e
       with:
         token: ${{ steps.generate-token.outputs.token }}
-        add-paths: ${{ github.workspace }}/requirements/locks/*.txt
+        add-paths: ${{ github.workspace }}/requirements/locks/*.lock
         commit-message: "updated conda lock files"
         branch: conda-lock-auto-update
         delete-branch: true

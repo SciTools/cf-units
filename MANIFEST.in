@@ -35,7 +35,6 @@ recursive-include requirements *.txt
     # hints:
     #    - not all projects include requirements, but they can be drawn in anyway by dynamic dependencies
     #        in the setuptools build process, linked via config in pyproject.toml
-    #    - for some repos, the *.txt are actually lockfiles.  This probably needs fixing.
 
 
 #---------
