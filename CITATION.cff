@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If cf-units played an important role in your research then please add us to your reference list by using the references below."
+title: "cf-units"
+authors:
+    - name: "cf-units repository contributors"
+abstract: "Units of measure as defined by the Climate and Forecast (CF) Metadata Conventions."
+license: "BSD-3-Clause"
+license-url: "https://spdx.org/licenses/BSD-3-Clause.html"
+doi: "10.5281/zenodo.1257902"
+url: "http://www.scitools.org.uk/"
+repository-code: "https://github.com/SciTools/cf-units"
+type: "software"
