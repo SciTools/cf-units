@@ -3,7 +3,6 @@
 # This file is part of cf-units and is released under the BSD license.
 # See LICENSE in the root of the repository for full licensing details.
 
-from datetime import datetime
 from fnmatch import fnmatch
 from pathlib import Path
 import subprocess
@@ -29,55 +28,24 @@ IS_GIT_REPO = (REPO_DIR / ".git").is_dir()
 
 @pytest.mark.skipif(not IS_GIT_REPO, reason="Not a git repository.")
 class TestLicenseHeaders:
-    @staticmethod
-    def whatchanged_parse(whatchanged_output):
-        """Returns a generator of tuples of data parsed from
-        "git whatchanged --pretty='TIME:%at'". The tuples are of the form
-        ``(filename, last_commit_datetime)``
+    class NongitError(ValueError):
+        pass
 
-        Sample input::
-
-            ['TIME:1366884020', '',
-             ':000000 100644 0000000... 5862ced... A\tcf_units/cf_units.py']
-
-        """
-        dt = None
-        for line in whatchanged_output:
-            if not line.strip():
-                continue
-            elif line.startswith("TIME:"):
-                dt = datetime.fromtimestamp(int(line[5:]))
-            else:
-                # Non blank, non date, line -> must be the lines
-                # containing the file info.
-                fname = " ".join(line.split("\t")[1:])
-                yield fname, dt
-
-    @staticmethod
-    def last_change_by_fname():
-        """Return a dictionary of all the files under git which maps to
-        the datetime of their last modification in the git history.
-
-        .. note::
-
-            This function raises a ValueError if the repo root does
-            not have a ".git" folder. If git is not installed on the system,
-            or cannot be found by subprocess, an IOError may also be raised.
-
-        """
-        # Call "git whatchanged" to get the details of all the files and when
-        # they were last changed.
+    @classmethod
+    def all_git_filepaths(cls):
+        """Return a list of all the files under git."""
         output = subprocess.check_output(
-            ["git", "whatchanged", "--pretty=TIME:%ct"], cwd=REPO_DIR
+            ["git", "ls-files"],
+            cwd=REPO_DIR,
         )
-        output = str(output.decode("ascii"))
-        output = output.split("\n")
-        res = {}
-        for fname, dt in TestLicenseHeaders.whatchanged_parse(output):
-            if fname not in res or dt > res[fname]:
-                res[fname] = dt
 
-        return res
+        # Result has one file-path per line.
+        output_lines = output.decode("ascii").split("\n")
+        # Strip off any leading+trailing whitespace.
+        output_lines = [line.strip() for line in output_lines]
+        # Ignore blank lines.
+        output_lines = [line for line in output_lines if len(line) > 0]
+        return output_lines
 
     def test_license_headers(self):
         exclude_patterns = (
@@ -89,10 +57,10 @@ class TestLicenseHeaders:
             "cf_units/_udunits2_parser/_antlr4_runtime/*",
         )
 
-        last_change_by_fname = self.last_change_by_fname()
+        file_paths = self.all_git_filepaths()
 
         failed = False
-        for fname in sorted(last_change_by_fname):
+        for fname in sorted(file_paths):
             full_fname = REPO_DIR / fname
             if (
                 full_fname.suffix == ".py"
