@@ -92,7 +92,7 @@ def get_package_data():
 
 def numpy_build_ext(pars):
     """Make the NumPy headers available for the Cython layer."""
-    from setuptools.command.build_ext import build_ext as _build_ext
+    from setuptools.command.build_ext import build_ext as _build_ext  # noqa: PLC0415
 
     class build_ext(_build_ext):
         def finalize_options(self):
@@ -105,7 +105,7 @@ def numpy_build_ext(pars):
 
             _build_ext.finalize_options(self)
             _set_builtin("__NUMPY_SETUP__", False)
-            import numpy
+            import numpy  # noqa: PLC0415
 
             self.include_dirs.append(numpy.get_include())
 
