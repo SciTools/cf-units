@@ -13,7 +13,6 @@ grammar:
 You're welcome ;).
 
 """
-# ruff: noqa: E501
 
 import collections
 from pathlib import Path
