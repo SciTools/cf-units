@@ -45,7 +45,7 @@ repos:
 # NOTE : keep these in hook-name (aka 'id') order
 
 -   repo: https://github.com/adamchainz/blacken-docs
-    rev: 1.19.1
+    rev: 1.20.0
     hooks:
     -   id: blacken-docs
         types: [file, rst]
@@ -72,7 +72,7 @@ repos:
         types: [file, python]
 
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.12.11"
+    rev: "v0.12.12"
     hooks:
     # Run the linter
     -   id: ruff
