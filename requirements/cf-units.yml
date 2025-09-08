@@ -5,8 +5,8 @@ channels:
 
 dependencies:
 # setup dependencies
-  - setuptools >=45
-  - setuptools_scm >=7.0
+  - setuptools >=77.0.3
+  - setuptools_scm >=8.0
   - cython >=3.0
   - numpy
 
