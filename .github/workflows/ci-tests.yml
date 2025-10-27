@@ -31,7 +31,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        version: [py310, py311, py312, py313]
+        version: [py311, py312, py313, py314]
         gitpath-prepend: [""]
         include:
           - os: ubuntu-latest

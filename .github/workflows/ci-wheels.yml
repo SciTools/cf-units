@@ -11,7 +11,6 @@ name: ci-wheels
 
 on:
   pull_request:
-
   push:
     tags:
       - "v*"
@@ -29,13 +28,10 @@ concurrency:
 jobs:
   build_bdist:
     name: "Build ${{ matrix.os }} (${{ matrix.arch }}) wheels"
-    # TBD: extend to support windows
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: ["ubuntu-latest", "macos-latest", "macos-13"]
-        arch: ["x86_64", "arm64"]
         include:
         - os: ubuntu-latest
           arch: x86_64
@@ -57,23 +53,15 @@ jobs:
           xml_path: 'C:\Users\runneradmin\miniconda3\envs\build\Library\share\udunits\udunits2-common.xml'
           incdir: 'C:\Users\runneradmin\miniconda3\envs\build\Library\include'
           libdir: 'C:\Users\runneradmin\miniconda3\envs\build\Library\lib'
-        exclude:
-        - os: "ubuntu-latest"
-          arch: "arm64"
-        - os: "macos-latest"
-          arch: "x86_64"
-        - os: "macos-13"
-          arch: "arm64"
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         fetch-depth: 0
 
     - name: "Set MACOSX_DEPLOYMENT_TARGET"
       if: startsWith(matrix.os, 'macos')
       run: echo "MACOSX_DEPLOYMENT_TARGET=$([[ ${{ matrix.os }} == 'macos-latest' ]] && echo '15.0' || echo '13.0')" >> $GITHUB_ENV
-
 
     - name: "Conda install"
       if: runner.os == 'Windows'
@@ -90,9 +78,10 @@ jobs:
       run: conda install udunits2
 
     - name: "Building ${{ matrix.os }} (${{ matrix.arch }}) wheels"
-      uses: pypa/cibuildwheel@v3.0.1
+      uses: pypa/cibuildwheel@v3.2.1
       env:
-        CIBW_SKIP: "cp39-* pp* *-musllinux*"
+        CIBW_SKIP: "*-musllinux*"
+        CIBW_BUILD: "cp311-* cp314-*"
         CIBW_ARCHS: ${{ matrix.arch }}
         CIBW_BUILD_FRONTEND: build
         CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
@@ -133,7 +122,7 @@ jobs:
       run: |
         pipx run build --sdist
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v5
       with:
         name: pypi-artifacts-sdist
         path: ${{ github.workspace }}/dist/*.tar.gz
@@ -144,7 +133,7 @@ jobs:
     name: "Show artifacts"
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@v5
       with:
         path: ${{ github.workspace }}/dist
         merge-multiple: true
@@ -161,7 +150,7 @@ jobs:
     # upload to Test PyPI for every commit on main branch
     if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
     steps:
-    - uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@v5
       with:
         path: ${{ github.workspace }}/dist
         merge-multiple: true
@@ -182,7 +171,7 @@ jobs:
     # upload to PyPI for every tag starting with 'v'
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
     steps:
-    - uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@v5
       with:
         path: ${{ github.workspace }}/dist
         merge-multiple: true
