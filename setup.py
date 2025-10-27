@@ -25,7 +25,7 @@ DEFINE_MACROS = [
     ("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION"),
     # 0x030B0000 -> 3.11
     ("Py_LIMITED_API", "0x030B0000"),
-    (CYTHON_LIMITED_API, None),
+    ("CYTHON_LIMITED_API", None),
 ]
 FLAG_COVERAGE = "--cython-coverage"  # custom flag enabling Cython line tracing
 BASEDIR = Path(__file__).resolve().parent
