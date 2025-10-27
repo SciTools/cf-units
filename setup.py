@@ -22,7 +22,12 @@ except ImportError:
 COMPILER_DIRECTIVES = {}
 # This Cython macro disables a build warning, obsolete with Cython>=3
 #  see : https://cython.readthedocs.io/en/latest/src/userguide/migrating_to_cy30.html#numpy-c-api
-DEFINE_MACROS = [("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]
+DEFINE_MACROS = [
+    ("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION"),
+    # 0x030B0000 -> 3.11
+    ("Py_LIMITED_API", "0x030B0000"),
+    ("CYTHON_LIMITED_API", None),
+]
 FLAG_COVERAGE = "--cython-coverage"  # custom flag enabling Cython line tracing
 BASEDIR = Path(__file__).resolve().parent
 PACKAGE = "cf_units"
@@ -128,8 +133,9 @@ udunits_ext = Extension(
     include_dirs=include_dirs,
     library_dirs=library_dirs,
     libraries=["udunits2"],
-    define_macros=DEFINE_MACROS,
     runtime_library_dirs=(None if sys.platform.startswith("win") else library_dirs),
+    define_macros=DEFINE_MACROS,
+    py_limited_api=True,
 )
 
 if cythonize:
@@ -148,6 +154,7 @@ kwargs = {
     "cmdclass": cmdclass,
     "ext_modules": [udunits_ext],
     "package_data": get_package_data(),
+    "options": {"bdist_wheel": {"py_limited_api": "cp311"}},
 }
 
 setup(**kwargs)

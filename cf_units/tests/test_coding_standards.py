@@ -85,7 +85,7 @@ class TestLicenseHeaders:
 @pytest.mark.skipif(not IS_GIT_REPO, reason="Not a git repository.")
 def test_python_versions():
     """Confirm alignment of ALL files listing supported Python versions."""
-    supported = ["3.10", "3.11", "3.12", "3.13"]
+    supported = ["3.11", "3.12", "3.13", "3.14"]
     supported_strip = [ver.replace(".", "") for ver in supported]
     _parsed = [Version(v) for v in supported]
     supported_latest = str(max(_parsed)).replace(".", "")
