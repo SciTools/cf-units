@@ -30,7 +30,7 @@ jobs:
         lock: [py310-lock, py311-lock, py312-lock, py313-lock]
     steps:
     - name: "Checkout"
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
 
     - name: "Environment configure"
       env:
@@ -103,7 +103,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: "Checkout"
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
 
     - name: "Download lock artifacts"
       uses: actions/download-artifact@v6
@@ -121,7 +121,7 @@ jobs:
     - name: "Push pull-request"
       id: cpr
       # v3.12.1 (release date 31 Jan 2022)
-      uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e
+      uses: peter-evans/create-pull-request@84ae59a2cdc2258d6fa0732dd66352dddae2a412
       with:
         token: ${{ steps.generate-token.outputs.token }}
         add-paths: ${{ github.workspace }}/requirements/locks/*.lock
