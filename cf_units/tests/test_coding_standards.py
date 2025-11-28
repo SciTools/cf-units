@@ -7,7 +7,9 @@ from fnmatch import fnmatch
 from pathlib import Path
 import subprocess
 
+from packaging.version import Version
 import pytest
+import tomli
 
 import cf_units
 
@@ -85,7 +87,8 @@ def test_python_versions():
     """Confirm alignment of ALL files listing supported Python versions."""
     supported = ["3.10", "3.11", "3.12", "3.13"]
     supported_strip = [ver.replace(".", "") for ver in supported]
-    supported_latest = supported_strip[-1]
+    _parsed = [Version(v) for v in supported]
+    supported_latest = str(max(_parsed)).replace(".", "")
 
     workflows_dir = REPO_DIR / ".github" / "workflows"
 
@@ -105,7 +108,7 @@ def test_python_versions():
         ),
         (
             pyproject_toml_file,
-            f'requires-python = ">={supported[0]}"',
+            f'requires-python = ">={min(_parsed)}"',
         ),
         (
             tox_file,
@@ -117,7 +120,7 @@ def test_python_versions():
         ),
         (
             ci_locks_file,
-            "lock: [" + ", ".join([f"py{p}-lock" for p in supported_strip]) + "]",
+            f'NAME: "cf-units-py{supported_latest}"',
         ),
         (
             ci_tests_file,
@@ -157,3 +160,11 @@ def test_python_versions():
     ci_wheels_text = ci_wheels_file.read_text()
     (cibw_line,) = (line for line in ci_wheels_text.splitlines() if "CIBW_SKIP" in line)
     assert all(p not in cibw_line for p in supported_strip)
+
+    with pyproject_toml_file.open("rb") as f:
+        data = tomli.load(f)
+    pixi_envs = data.get("tool", {}).get("pixi", {}).get("environments", {})
+    for version in supported_strip:
+        py_version = f"py{version}"
+        assert py_version in pixi_envs
+        assert [k.endswith(py_version) for k in pixi_envs].count(True) == 5
