@@ -260,8 +260,12 @@ jinja2 = "*"
 pytest = "*"
 pytest-cov = "*"
 
-[tool.pixi.feature.py311.dependencies]
+[tool.pixi.feature.py310.dependencies]
 # Pip is in here because version-specific considerations are sometimes expected.
+pip = "*"
+python = "3.10.*"
+
+[tool.pixi.feature.py311.dependencies]
 pip = "*"
 python = "3.11.*"
 
