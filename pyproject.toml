@@ -242,6 +242,13 @@ pytest = { cmd = ["pytest"], depends-on = ["build"] }
 sphinx = "*"
 antlr-python-runtime = "4.11.1.*"  # To update this, see cf_units/_udunits2_parser/README.md
 
+[tool.pixi.feature.docs.pypi-dependencies]
+cf-units = { path = ".", editable = true }
+
+[tool.pixi.feature.docs.tasks]
+clean = { cmd = ["make", "clean"], cwd = "docs" }
+html = { cmd = ["make", "html"], cwd = "docs", depends-on = ["clean"] }
+
 [tool.pixi.feature.test.dependencies]
 codecov = "*"
 jinja2 = "*"
