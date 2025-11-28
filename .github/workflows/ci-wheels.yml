@@ -103,7 +103,7 @@ jobs:
           --wheel-dir={dest_dir}
           {wheel}
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v5
       with:
         name: pypi-artifacts-bdist-${{ matrix.os }}-${{ matrix.arch }}
         path: ${{ github.workspace }}/wheelhouse/*.whl
@@ -113,7 +113,7 @@ jobs:
     name: "Build sdist"
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         fetch-depth: 0
 
@@ -133,7 +133,7 @@ jobs:
     name: "Show artifacts"
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/download-artifact@v5
+    - uses: actions/download-artifact@v6
       with:
         path: ${{ github.workspace }}/dist
         merge-multiple: true
@@ -150,7 +150,7 @@ jobs:
     # upload to Test PyPI for every commit on main branch
     if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
     steps:
-    - uses: actions/download-artifact@v5
+    - uses: actions/download-artifact@v6
       with:
         path: ${{ github.workspace }}/dist
         merge-multiple: true
@@ -171,7 +171,7 @@ jobs:
     # upload to PyPI for every tag starting with 'v'
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
     steps:
-    - uses: actions/download-artifact@v5
+    - uses: actions/download-artifact@v6
       with:
         path: ${{ github.workspace }}/dist
         merge-multiple: true
