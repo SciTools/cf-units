@@ -89,6 +89,7 @@ jobs:
         body-path: ${{ github.workspace }}/diff.md
         labels: |
           Bot
+          New: Pull Request
 
     - name: "Show pull-request"
       if: steps.cpr.outputs.pull-request-number != ''
