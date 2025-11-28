@@ -54,13 +54,6 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: "Pixi setup"
-      uses: prefix-dev/setup-pixi@82d477f15f3a381dbcc8adc1206ce643fe110fb7
-      with:
-        environments: "${{ matrix.version }}-test"
-        frozen: true
-        activate-environment: true
-
     # setuptools can't find shared library installed by conda on windows
     # so we need to prepare environment variables for it
     - name: Export environment variables for UDUNITS2 lookup
@@ -75,6 +68,13 @@ jobs:
           core.exportVariable('UDUNITS2_INCDIR', path.join(base, 'Library/include/'));
           core.exportVariable('UDUNITS2_LIBDIR', path.join(base, 'Library/lib/'));
           core.exportVariable('UDUNITS2_XML_PATH', path.join(base, 'Library/share/udunits/udunits2.xml'));
+
+    - name: "Pixi setup"
+      uses: prefix-dev/setup-pixi@82d477f15f3a381dbcc8adc1206ce643fe110fb7
+      with:
+        environments: "${{ matrix.version }}-test"
+        frozen: true
+        activate-environment: true
 
     - name: "Run ${{ matrix.os }} on ${{ matrix.version}} tests"
       run: |
