@@ -1,6 +1,7 @@
 # ⚠️
 
-This directory contains:
+This directory contains auto-generated locked Conda environment files (`*.txt`) for the latest `python` distribution and each `platform` supported by `cf-units`.
 
-- The `locks` directory which contains auto-generated `conda-lock` environment files for each `python` distribution and `platform` supported by `cf-units`.
-- The `cf-units.yml` `conda` environment file which defines the **top-level** dependencies of `cf-units`.
+An equivalent explicit YAML (`*.yml`) file is also generated for the latest `python` distribution.
+
+Please **do not** manually edit these files as they will be overwritten by the `ci-locks` GHA CI workflow.

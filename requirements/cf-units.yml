@@ -1,31 +1,33 @@
-name: cf-units-dev
-
+name: cf-units-py313
 channels:
-  - conda-forge
-
+- conda-forge
+- nodefaults
 dependencies:
-# setup dependencies
-  - setuptools >=77.0.3
-  - setuptools_scm >=8.0
-  - cython >=3.0
-  - numpy
-
-# core dependencies
-  - cftime>=1.2
-  - numpy>=1.23
-  - udunits2
-
-# test dependencies
+- codecov *
+- jinja2 *
+- pytest *
+- pytest-cov *
+- pip *
+- pre-commit *
+- sphinx *
+- antlr-python-runtime 4.11.1.*
+- python 3.13.* *_cp313
+- python >=3.10
+- cftime >=1.2
+- cython >=3.0
+- numpy >=1.23
+- setuptools >=77.0.3
+- setuptools_scm >=8.0
+- udunits2 *
+- pip
+- pip:
   - codecov
+  - cython
   - jinja2
+  - pip
   - pytest
   - pytest-cov
-
-# dev dependencies
-  - pip
-  - pre-commit
-
-# docs dependencies
+  - -e .
   - sphinx
-# latex
-  - antlr-python-runtime 4.11.1.*  # To update this, see cf_units/_udunits2_parser/README.md
+  - cftime>=1.2
+  - numpy

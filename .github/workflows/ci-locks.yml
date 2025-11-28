@@ -3,7 +3,7 @@
 #   - https://github.com/actions/checkout
 #   - https://github.com/actions/download-artifact
 #   - https://github.com/actions/upload-artifact
-#   - https://github.com/conda-incubator/setup-miniconda
+#   - https://github.com/prefix-dev/setup-pixi
 
 name: ci-locks
 
@@ -18,83 +18,41 @@ concurrency:
 
 jobs:
   build-locks:
-    name: "Build ${{ matrix.lock }}"
+    name: "Build locks"
     runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash -l {0}
     env:
-      ENV_NAME: "ci-locks"
-    strategy:
-      matrix:
-        lock: [py310-lock, py311-lock, py312-lock, py313-lock]
+      SHELLOPTS: "errexit:pipefail"
+      NAME: "cf-units-py313"
     steps:
     - name: "Checkout"
       uses: actions/checkout@v5
 
-    - name: "Environment configure"
-      env:
-        # Maximum cache period (in weeks) before forcing a cache refresh.
-        CACHE_WEEKS: 2
-      run: |
-        echo "CACHE_PERIOD=$(date +%Y).$(expr $(date +%U) / ${CACHE_WEEKS})" >> ${GITHUB_ENV}
-
-    - name: "Conda package cache"
-      uses: actions/cache@v4.3.0
-      env:
-        # Increment the build number to force a cache refresh.
-        CACHE_BUILD: 5
+    - name: "Pixi setup"
+      uses: prefix-dev/setup-pixi@82d477f15f3a381dbcc8adc1206ce643fe110fb7
       with:
-        path: ~/conda_pkgs_dir
-        key: ${{ runner.os }}-conda-pkgs-${{ env.ENV_NAME }}-p${{ env.CACHE_PERIOD }}-b${{ env.CACHE_BUILD }}
+        run-install: false
 
-    - name: "Conda install"
-      uses: conda-incubator/setup-miniconda@v3
-      with:
-        miniforge-version: latest
-        channels: conda-forge
-        activate-environment: ${{ env.ENV_NAME }}
-        auto-update-conda: true
-
-    - name: "Conda environment cache"
-      id: conda-env-cache
-      uses: actions/cache@v4.3.0
-      env:
-        # Increment the build number to force a cache refresh.
-        CACHE_BUILD: 5
-      with:
-        path: ${{ env.CONDA }}/envs/${{ env.ENV_NAME }}
-        key: ${{ runner.os }}-conda-env-${{ env.ENV_NAME }}-p${{ env.CACHE_PERIOD }}-b${{ env.CACHE_BUILD }}
-
-    - name: "Conda environment update"
-      if: steps.conda-env-cache.outputs.cache-hit != 'true'
+    - name: "refresh pixi"
       run: |
-        conda install --name ${{ env.ENV_NAME }} "tox<4"
+        pixi update --json | pixi exec pixi-diff-to-markdown > diff.md
+        if [ $(wc -c < diff.md) -lt 10 ]; then
+            rm -f diff.md
+        fi
 
-    - name: "Conda info"
+    - name: "refresh locks"
+      if: ${{ hashFiles('diff.md') }}
       run: |
-        conda info
-        conda list
-
-    - name: "Tox cache"
-      uses: actions/cache@v4.3.0
-      env:
-        # Increment the build number to forece a cache refresh.
-        CACHE_BUILD: 5
-        TOX_INI: ${{ github.workspace }}/tox.ini
-      with:
-        path: ${{ github.workspace }}/.tox
-        key: ${{ runner.os }}-tox-${{ env.ENV_NAME }}-${{ matrix.lock }}-p${{ env.CACHE_PERIOD }}-b${{ env.CACHE_BUILD }}-${{ hashFiles(env.TOX_INI) }}
-
-    - name: "Create ${{ matrix.lock }} conda locks"
-      run: |
-        tox -e ${{ matrix.lock }} -- --platform osx-64 --platform win-64
+        pixi workspace export conda-explicit-spec --environment ${{ env.NAME }} --frozen --ignore-pypi-errors requirements
+        pixi workspace export conda-environment --environment ${{ env.NAME }} requirements/cf-units.yml
 
     - name: "Upload lock artifacts"
       uses: actions/upload-artifact@v5
       with:
         name: lock-artifact-${{ matrix.lock }}
-        path: ${{ github.workspace }}/requirements/locks/${{ matrix.lock }}*.lock
+        path: ${{ github.workspace }}/requirements/*
 
 
   create-pr:
@@ -108,11 +66,11 @@ jobs:
     - name: "Download lock artifacts"
       uses: actions/download-artifact@v6
       with:
-        path: ${{ github.workspace }}/requirements/locks
+        path: ${{ github.workspace }}/requirements
         merge-multiple: true
 
     - name: "Generate token"
-      uses: tibdex/github-app-token@v2
+      uses: actions/create-github-app-token@v2
       id: generate-token
       with:
         app_id: ${{ secrets.AUTH_APP_ID }}
@@ -120,19 +78,16 @@ jobs:
 
     - name: "Push pull-request"
       id: cpr
-      # v3.12.1 (release date 31 Jan 2022)
       uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e
       with:
         token: ${{ steps.generate-token.outputs.token }}
-        add-paths: ${{ github.workspace }}/requirements/locks/*.lock
-        commit-message: "updated conda lock files"
-        branch: conda-lock-auto-update
+        add-paths: ${{ github.workspace }}/requirements/*
+        commit-message: "updated lock files"
+        branch: pixi-auto-update
         delete-branch: true
-        title: "[cf-units.ci] conda lock auto-update"
-        body: |
-          Conda lock files auto-updated to latest resolved environment for `cf-units` dependencies.
+        title: "[cf-units.ci] pixi lock auto-update"
+        body-path: ${{ github.workspace }}/diff.md
         labels: |
-          New: Pull Request
           Bot
 
     - name: "Show pull-request"
