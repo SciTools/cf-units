@@ -58,8 +58,7 @@ jobs:
       uses: prefix-dev/setup-pixi@82d477f15f3a381dbcc8adc1206ce643fe110fb7
       with:
         environments: "${{ matrix.version }}-test"
-        # TODO: set to true
-        frozen: false
+        frozen: true
         activate-environment: true
 
     # setuptools can't find shared library installed by conda on windows
