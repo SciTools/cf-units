@@ -63,7 +63,7 @@ jobs:
         script: |
           const path = require('path')
 
-          const base = path.join('.pixi/envs/${{ matrix.version }}-test')
+          const base = path.join('.pixi/envs/test-${{ matrix.version }}')
 
           core.exportVariable('UDUNITS2_INCDIR', path.join(base, 'Library/include/'));
           core.exportVariable('UDUNITS2_LIBDIR', path.join(base, 'Library/lib/'));
@@ -72,7 +72,7 @@ jobs:
     - name: "Pixi setup"
       uses: prefix-dev/setup-pixi@82d477f15f3a381dbcc8adc1206ce643fe110fb7
       with:
-        environments: "${{ matrix.version }}-test"
+        environments: "test-${{ matrix.version }}"
         frozen: true
         activate-environment: true
 
