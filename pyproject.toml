@@ -201,6 +201,11 @@ dev = { features = ["dev"], solve-group = "default" }
 docs = { features = ["docs"], solve-group = "default" }
 test = { features = ["test", "dev"], solve-group = "default" }
 
+py310 = { features = ["py310"], solve-group = "py310" }
+py310-dev = { features = ["dev", "py310"], solve-group = "py310" }
+py310-docs = { features = ["docs", "py310"], solve-group = "py310" }
+py310-test = { features = ["test", "dev", "py310"], solve-group = "py310" }
+
 py311 = { features = ["py311"], solve-group = "py311" }
 py311-dev = { features = ["dev", "py311"], solve-group = "py311" }
 py311-docs = { features = ["docs", "py311"], solve-group = "py311" }
