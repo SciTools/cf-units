@@ -10,6 +10,7 @@ from shutil import copy
 import sys
 
 from setuptools import Command, Extension, setup
+from setuptools.command import build_ext
 
 # Default to using cython, but use the .c files if it doesn't exist.
 #  Supports the widest possible range of developer setups.
@@ -90,26 +91,22 @@ def get_package_data():
     return package_data
 
 
-def numpy_build_ext(pars):
-    """Make the NumPy headers available for the Cython layer."""
-    from setuptools.command.build_ext import build_ext as _build_ext  # noqa: PLC0415
+class NumpyBuildExt(build_ext.build_ext):
+    """Subclass of build_ext to make NumPy headers available for the Cython layer."""
 
-    class build_ext(_build_ext):
-        def finalize_options(self):
-            # See https://github.com/SciTools/cf-units/issues/151
-            def _set_builtin(name, value):
-                if isinstance(__builtins__, dict):
-                    __builtins__[name] = value
-                else:
-                    setattr(__builtins__, name, value)
+    def finalize_options(self):
+        # See https://github.com/SciTools/cf-units/issues/151
+        def _set_builtin(name, value):
+            if isinstance(__builtins__, dict):
+                __builtins__[name] = value
+            else:
+                setattr(__builtins__, name, value)
 
-            _build_ext.finalize_options(self)
-            _set_builtin("__NUMPY_SETUP__", False)
-            import numpy  # noqa: PLC0415
+        super().finalize_options()
+        _set_builtin("__NUMPY_SETUP__", False)
+        import numpy  # noqa: PLC0415
 
-            self.include_dirs.append(numpy.get_include())
-
-    return build_ext(pars)
+        self.include_dirs.append(numpy.get_include())
 
 
 if FLAG_COVERAGE in sys.argv or environ.get("CYTHON_COVERAGE", None):
@@ -145,7 +142,7 @@ if cythonize:
         language_level="3str",
     )
 
-cmdclass = {"clean_cython": CleanCython, "build_ext": numpy_build_ext}
+cmdclass = {"clean_cython": CleanCython, "build_ext": NumpyBuildExt}
 
 kwargs = {
     "cmdclass": cmdclass,
