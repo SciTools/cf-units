@@ -94,7 +94,6 @@ def test_python_versions():
 
     # Places that are checked:
     pyproject_toml_file = REPO_DIR / "pyproject.toml"
-    tox_file = REPO_DIR / "tox.ini"
     ci_locks_file = workflows_dir / "ci-locks.yml"
     ci_tests_file = workflows_dir / "ci-tests.yml"
     ci_wheels_file = workflows_dir / "ci-wheels.yml"
@@ -109,14 +108,6 @@ def test_python_versions():
         (
             pyproject_toml_file,
             f'requires-python = ">={min(_parsed)}"',
-        ),
-        (
-            tox_file,
-            "[testenv:py{" + ",".join(supported_strip) + "}-lock]",
-        ),
-        (
-            tox_file,
-            "[testenv:py{" + ",".join(supported_strip) + "}-{linux,osx,win}-test]",
         ),
         (
             ci_locks_file,
@@ -146,16 +137,6 @@ def test_python_versions():
     #  need to be updated.
     for path, search in text_searches:
         assert search in path.read_text()
-
-    tox_text = tox_file.read_text()
-    for version in supported_strip:
-        # A fairly lazy implementation, but should catch times when the
-        #  section header does not match the conda_spec for the `tests`
-        #  section. (Note that Tox does NOT provide its own helpful
-        #  error in these cases).
-        py_version = f"py{version}"
-        assert tox_text.count(f"    {py_version}-") == 3
-        assert tox_text.count(f"{py_version}-lock") == 3
 
     ci_wheels_text = ci_wheels_file.read_text()
     (cibw_line,) = (line for line in ci_wheels_text.splitlines() if "CIBW_SKIP" in line)
