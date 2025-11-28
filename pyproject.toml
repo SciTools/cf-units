@@ -60,7 +60,7 @@ license-files = ["LICENSE"]
 [project.optional-dependencies]
 all = ["cf-units[docs,test]"]
 docs = ["sphinx"]
-test = ["codecov", "cython", "jinja2", "pip", "pytest", "pytest-cov"]
+test = ["codecov", "cython", "jinja2", "pip", "pytest", "pytest-cov", "tomli"]
 
 [project.urls]
 Code = "https://github.com/SciTools/cf-units"
@@ -264,6 +264,7 @@ codecov = "*"
 jinja2 = "*"
 pytest = "*"
 pytest-cov = "*"
+tomli = "*"
 
 [tool.pixi.feature.py310.dependencies]
 # Pip is in here because version-specific considerations are sometimes expected.
