@@ -30,7 +30,7 @@ jobs:
         lock: [py310-lock, py311-lock, py312-lock, py313-lock]
     steps:
     - name: "Checkout"
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
 
     - name: "Environment configure"
       env:
@@ -40,7 +40,7 @@ jobs:
         echo "CACHE_PERIOD=$(date +%Y).$(expr $(date +%U) / ${CACHE_WEEKS})" >> ${GITHUB_ENV}
 
     - name: "Conda package cache"
-      uses: actions/cache@v4.3.0
+      uses: actions/cache@v5.0.1
       env:
         # Increment the build number to force a cache refresh.
         CACHE_BUILD: 5
@@ -58,7 +58,7 @@ jobs:
 
     - name: "Conda environment cache"
       id: conda-env-cache
-      uses: actions/cache@v4.3.0
+      uses: actions/cache@v5.0.1
       env:
         # Increment the build number to force a cache refresh.
         CACHE_BUILD: 5
@@ -77,7 +77,7 @@ jobs:
         conda list
 
     - name: "Tox cache"
-      uses: actions/cache@v4.3.0
+      uses: actions/cache@v5.0.1
       env:
         # Increment the build number to forece a cache refresh.
         CACHE_BUILD: 5
@@ -91,7 +91,7 @@ jobs:
         tox -e ${{ matrix.lock }} -- --platform osx-64 --platform win-64
 
     - name: "Upload lock artifacts"
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: lock-artifact-${{ matrix.lock }}
         path: ${{ github.workspace }}/requirements/locks/${{ matrix.lock }}*.lock
@@ -103,10 +103,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: "Checkout"
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
 
     - name: "Download lock artifacts"
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@v7
       with:
         path: ${{ github.workspace }}/requirements/locks
         merge-multiple: true
@@ -121,7 +121,7 @@ jobs:
     - name: "Push pull-request"
       id: cpr
       # v3.12.1 (release date 31 Jan 2022)
-      uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e
+      uses: peter-evans/create-pull-request@98357b18bf14b5342f975ff684046ec3b2a07725
       with:
         token: ${{ steps.generate-token.outputs.token }}
         add-paths: ${{ github.workspace }}/requirements/locks/*.lock
