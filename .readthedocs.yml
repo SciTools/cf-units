@@ -18,13 +18,14 @@ build:
       - git fetch --unshallow
       - git fetch --all
     pre_install:
-      # Need to stash the local changes that Read the Docs makes so that
+      # Need to stash any local changes that Read the Docs makes so that
       #  setuptools_scm can generate the correct cf-units version.
       - git stash
     install:
       - pixi install --frozen --environment docs
     post_install:
-      - git stash pop
+      # Restore any local changes stashed earlier, if there were any.
+      - if git stash list | grep .; then git stash pop; fi
     build:
       html:
         - pixi run --frozen --environment docs readthedocs
