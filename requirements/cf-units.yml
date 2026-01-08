@@ -20,3 +20,14 @@ dependencies:
 - setuptools_scm >=8.0
 - udunits2 *
 - pip
+- pip:
+  - codecov
+  - cython
+  - jinja2
+  - pip
+  - pytest
+  - pytest-cov
+  - -e .
+  - sphinx
+  - cftime>=1.2
+  - numpy
