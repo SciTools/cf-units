@@ -81,7 +81,7 @@ jobs:
         export PATH=${{ matrix.gitpath-prepend }}$PATH
         which git
         git --version
-        pixi run pytest ${{ matrix.posargs }}
+        pixi run --frozen pytest ${{ matrix.posargs }}
 
     - name: "Upload coverage report to Codecov"
       if: contains(matrix.posargs, '--cov')
