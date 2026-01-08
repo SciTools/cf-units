@@ -258,6 +258,7 @@ cf-units = { path = ".", editable = true }
 [tool.pixi.feature.docs.tasks]
 clean = { cmd = ["make", "clean"], cwd = "docs" }
 html = { cmd = ["make", "html"], cwd = "docs", depends-on = ["clean"] }
+readthedocs = { cmd = ["make", "html", "SPHINXOPTS=--show-traceback", "BUILDDIR=$READTHEDOCS_OUTPUT"], cwd = "docs" }
 
 [tool.pixi.feature.test.dependencies]
 codecov = "*"
