@@ -51,8 +51,9 @@ jobs:
     - name: "Upload lock artifacts"
       uses: actions/upload-artifact@v5
       with:
-        name: lock-artifact-${{ matrix.lock }}
-        path: ${{ github.workspace }}/requirements/*
+        path: |
+          ${{ github.workspace }}/pixi.lock
+          ${{ github.workspace }}/requirements/*
 
 
   create-pr:
@@ -66,8 +67,7 @@ jobs:
     - name: "Download lock artifacts"
       uses: actions/download-artifact@v6
       with:
-        path: ${{ github.workspace }}/requirements
-        merge-multiple: true
+        path: ${{ github.workspace }}
 
     - name: "Generate token"
       uses: actions/create-github-app-token@v2
