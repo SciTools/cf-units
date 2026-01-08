@@ -34,7 +34,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["ubuntu-latest", "macos-latest", "macos-13"]
+        os: ["ubuntu-latest", "macos-latest", "macos-15-intel"]
         arch: ["x86_64", "arm64"]
         include:
         - os: ubuntu-latest
@@ -42,7 +42,7 @@ jobs:
           incdir: /usr/include/udunits2
           libdir: /usr/lib64
           xml_path: /usr/share/udunits/udunits2.xml
-        - os: macos-13
+        - os: macos-15-intel
           arch: x86_64
           incdir: /usr/local/Cellar/udunits/2.2.28/include
           libdir: /usr/local/Cellar/udunits/2.2.28/lib
@@ -62,7 +62,7 @@ jobs:
           arch: "arm64"
         - os: "macos-latest"
           arch: "x86_64"
-        - os: "macos-13"
+        - os: "macos-15-intel"
           arch: "arm64"
 
     steps:
@@ -72,7 +72,8 @@ jobs:
 
     - name: "Set MACOSX_DEPLOYMENT_TARGET"
       if: startsWith(matrix.os, 'macos')
-      run: echo "MACOSX_DEPLOYMENT_TARGET=$([[ ${{ matrix.os }} == 'macos-latest' ]] && echo '15.0' || echo '13.0')" >> $GITHUB_ENV
+      # Allows version targets to be set per architecture.
+      run: echo "MACOSX_DEPLOYMENT_TARGET=$([[ ${{ matrix.os }} == 'macos-latest' ]] && echo '15.0' || echo '15.0')" >> $GITHUB_ENV
 
 
     - name: "Conda install"
