@@ -202,29 +202,10 @@ docs = { features = ["docs"], solve-group = "default" }
 test = { features = ["test", "dev"], solve-group = "default" }
 cf-units = { features = ["test", "dev", "docs"], solve-group = "default" }
 
-py310 = { features = ["py310"], solve-group = "py310" }
-dev-py310 = { features = ["dev", "py310"], solve-group = "py310" }
-docs-py310 = { features = ["docs", "py310"], solve-group = "py310" }
-test-py310 = { features = ["test", "dev", "py310"], solve-group = "py310" }
-cf-units-py310 = { features = ["test", "dev", "docs", "py310"], solve-group = "py310" }
-
-py311 = { features = ["py311"], solve-group = "py311" }
-dev-py311 = { features = ["dev", "py311"], solve-group = "py311" }
-docs-py311 = { features = ["docs", "py311"], solve-group = "py311" }
-test-py311 = { features = ["test", "dev", "py311"], solve-group = "py311" }
-cf-units-py311 = { features = ["test", "dev", "docs", "py311"], solve-group = "py311" }
-
-py312 = { features = ["py312"], solve-group = "py312" }
-dev-py312 = { features = ["dev", "py312"], solve-group = "py312" }
-docs-py312 = { features = ["docs", "py312"], solve-group = "py312" }
-test-py312 = { features = ["test", "dev", "py312"], solve-group = "py312" }
-cf-units-py312 = { features = ["test", "dev", "docs", "py312"], solve-group = "py312" }
-
-py313 = { features = ["py313"], solve-group = "py313" }
-dev-py313 = { features = ["dev", "py313"], solve-group = "py313" }
-docs-py313 = { features = ["docs", "py313"], solve-group = "py313" }
-test-py313 = { features = ["test", "dev", "py313"], solve-group = "py313" }
-cf-units-py313 = { features = ["test", "dev", "docs", "py313"], solve-group = "py313" }
+cf-units-py310 = { features = ["test", "dev", "docs", "py310"] }
+cf-units-py311 = { features = ["test", "dev", "docs", "py311"] }
+cf-units-py312 = { features = ["test", "dev", "docs", "py312"] }
+cf-units-py313 = { features = ["test", "dev", "docs", "py313"] }
 
 [tool.pixi.dependencies]
 cftime = ">=1.2"
