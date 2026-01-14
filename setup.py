@@ -4,10 +4,11 @@ All other setup configuration is in `pyproject.toml`.
 """
 
 from distutils.sysconfig import get_config_var
-from os import environ
+from os import environ, getenv
 from pathlib import Path
 from shutil import copy
 import sys
+import sysconfig
 
 from setuptools import Command, Extension, setup
 from setuptools.command import build_ext
@@ -19,15 +20,26 @@ try:
 except ImportError:
     cythonize = False
 
+USE_PY_LIMITED_API = (
+    # Builds are not ABI3 default
+    getenv("CF_UNITS_LIMITED_API", "0") == "1"
+    and sys.version_info >= (3, 11)
+    # Free-threaded builds do not support ABI3
+    and not sysconfig.get_config_var("Py_GIL_DISABLED")
+)
+
 COMPILER_DIRECTIVES = {}
 # This Cython macro disables a build warning, obsolete with Cython>=3
 #  see : https://cython.readthedocs.io/en/latest/src/userguide/migrating_to_cy30.html#numpy-c-api
-DEFINE_MACROS = [
-    ("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION"),
-    # 0x030B0000 -> 3.11
-    ("Py_LIMITED_API", "0x030B0000"),
-    ("CYTHON_LIMITED_API", None),
-]
+DEFINE_MACROS = [("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]
+if USE_PY_LIMITED_API:
+    DEFINE_MACROS.append(
+        [
+            # 0x030B0000 -> 3.11
+            ("Py_LIMITED_API", "0x030B0000"),
+            ("CYTHON_LIMITED_API", None),
+        ]
+    )
 FLAG_COVERAGE = "--cython-coverage"  # custom flag enabling Cython line tracing
 BASEDIR = Path(__file__).resolve().parent
 PACKAGE = "cf_units"
@@ -150,11 +162,16 @@ if cythonize:
 
 cmdclass = {"clean_cython": CleanCython, "build_ext": NumpyBuildExt}
 
+if USE_PY_LIMITED_API:
+    SETUP_OPTIONS = {"bdist_wheel": {"py_limited_api": "cp311"}}
+else:
+    SETUP_OPTIONS = {}
+
 kwargs = {
     "cmdclass": cmdclass,
     "ext_modules": [udunits_ext],
     "package_data": get_package_data(),
-    "options": {"bdist_wheel": {"py_limited_api": "cp311"}},
+    "opention": SETUP_OPTIONS,
 }
 
 setup(**kwargs)
