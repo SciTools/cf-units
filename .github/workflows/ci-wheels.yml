@@ -93,7 +93,7 @@ jobs:
     - name: "Building ${{ matrix.os }} (${{ matrix.arch }}) wheels"
       uses: pypa/cibuildwheel@v3.3.1
       env:
-        CF_UNITS_LIMITED_API: "1"
+        CIBW_ENVIRONMENT: CF_UNITS_LIMITED_API="1"
         CIBW_SKIP: "pp* *-musllinux*"
         CIBW_ARCHS: ${{ matrix.arch }}
         CIBW_BUILD: "cp311-* cp314-*"
