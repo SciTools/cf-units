@@ -166,7 +166,7 @@ kwargs = {
     "cmdclass": cmdclass,
     "ext_modules": [udunits_ext],
     "package_data": get_package_data(),
-    "opention": SETUP_OPTIONS,
+    "options": SETUP_OPTIONS,
 }
 
 setup(**kwargs)
