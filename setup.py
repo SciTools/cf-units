@@ -33,13 +33,8 @@ COMPILER_DIRECTIVES = {}
 #  see : https://cython.readthedocs.io/en/latest/src/userguide/migrating_to_cy30.html#numpy-c-api
 DEFINE_MACROS = [("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]
 if USE_PY_LIMITED_API:
-    DEFINE_MACROS.append(
-        [
-            # 0x030B0000 -> 3.11
-            ("Py_LIMITED_API", "0x030B0000"),
-            ("CYTHON_LIMITED_API", None),
-        ]
-    )
+    # 0x030B0000 -> 3.11
+    DEFINE_MACROS.append(("Py_LIMITED_API", "0x030B0000"))
 FLAG_COVERAGE = "--cython-coverage"  # custom flag enabling Cython line tracing
 BASEDIR = Path(__file__).resolve().parent
 PACKAGE = "cf_units"
