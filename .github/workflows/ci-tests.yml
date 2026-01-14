@@ -48,6 +48,7 @@ jobs:
           - os: windows-latest
             version: py313
             platform: win
+      fail-fast: false
     steps:
     - name: "Checkout"
       uses: actions/checkout@v6
