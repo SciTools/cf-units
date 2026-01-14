@@ -37,16 +37,16 @@ jobs:
           - os: ubuntu-latest
             platform: linux
           - os: ubuntu-latest
-            version: py313
+            version: py314
             posargs: "--cov-report=xml --cov"
           - os: macos-latest
-            version: py313
+            version: py314
             platform: osx
             # On macos, the up-to-date git may not be first on the path
             # N.B. setting includes a final ":", to simplify the path setting command
             gitpath-prepend: "/opt/homebrew/bin:"
           - os: windows-latest
-            version: py313
+            version: py314
             platform: win
       fail-fast: false
     steps:
