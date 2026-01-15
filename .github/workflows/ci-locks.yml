@@ -28,7 +28,7 @@ jobs:
       NAME: "cf-units-py313"
     steps:
     - name: "Checkout"
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
 
     - name: "Pixi setup"
       uses: prefix-dev/setup-pixi@82d477f15f3a381dbcc8adc1206ce643fe110fb7
@@ -49,7 +49,7 @@ jobs:
         pixi workspace export conda-environment --environment ${{ env.NAME }} requirements/cf-units.yml
 
     - name: "Upload lock artifacts"
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         path: |
           ${{ github.workspace }}/pixi.lock
@@ -62,10 +62,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: "Checkout"
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
 
     - name: "Download lock artifacts"
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@v7
       with:
         path: ${{ github.workspace }}
 
@@ -78,7 +78,7 @@ jobs:
 
     - name: "Push pull-request"
       id: cpr
-      uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e
+      uses: peter-evans/create-pull-request@98357b18bf14b5342f975ff684046ec3b2a07725
       with:
         token: ${{ steps.generate-token.outputs.token }}
         add-paths: ${{ github.workspace }}/requirements/*
