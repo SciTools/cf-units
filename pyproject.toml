@@ -21,10 +21,10 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: Implementation :: CPython",
     "Topic :: Scientific/Engineering",
     "Topic :: Scientific/Engineering :: Atmospheric Science",
@@ -53,7 +53,7 @@ keywords = [
 ]
 name = "cf-units"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = "BSD-3-Clause"
 license-files = ["LICENSE"]
 
@@ -202,12 +202,6 @@ docs = { features = ["docs"], solve-group = "default" }
 test = { features = ["test", "dev"], solve-group = "default" }
 cf-units = { features = ["test", "dev", "docs"], solve-group = "default" }
 
-py310 = { features = ["py310"], solve-group = "py310" }
-dev-py310 = { features = ["dev", "py310"], solve-group = "py310" }
-docs-py310 = { features = ["docs", "py310"], solve-group = "py310" }
-test-py310 = { features = ["test", "dev", "py310"], solve-group = "py310" }
-cf-units-py310 = { features = ["test", "dev", "docs", "py310"], solve-group = "py310" }
-
 py311 = { features = ["py311"], solve-group = "py311" }
 dev-py311 = { features = ["dev", "py311"], solve-group = "py311" }
 docs-py311 = { features = ["docs", "py311"], solve-group = "py311" }
@@ -225,6 +219,12 @@ dev-py313 = { features = ["dev", "py313"], solve-group = "py313" }
 docs-py313 = { features = ["docs", "py313"], solve-group = "py313" }
 test-py313 = { features = ["test", "dev", "py313"], solve-group = "py313" }
 cf-units-py313 = { features = ["test", "dev", "docs", "py313"], solve-group = "py313" }
+
+py314 = { features = ["py314"], solve-group = "py314" }
+dev-py314 = { features = ["dev", "py314"], solve-group = "py314" }
+docs-py314 = { features = ["docs", "py314"], solve-group = "py314" }
+test-py314 = { features = ["test", "dev", "py314"], solve-group = "py314" }
+cf-units-py314 = { features = ["test", "dev", "docs", "py314"], solve-group = "py314" }
 
 [tool.pixi.dependencies]
 cftime = ">=1.2"
@@ -267,11 +267,6 @@ pytest = "*"
 pytest-cov = "*"
 tomli = "*"
 
-[tool.pixi.feature.py310.dependencies]
-# Pip is in here because version-specific considerations are sometimes expected.
-pip = "*"
-python = "3.10.*"
-
 [tool.pixi.feature.py311.dependencies]
 pip = "*"
 python = "3.11.*"
@@ -284,6 +279,11 @@ python = "3.12.*"
 pip = "*"
 # cp313 = new syntax available for 3.13. onwards.
 python = { version= "3.13.*", build = "*_cp313" }
+
+[tool.pixi.feature.py314.dependencies]
+pip = "*"
+python = { version= "3.14.*", build = "*_cp314" }
+
 
 [tool.pytest.ini_options]
 addopts = ["-ra", "-v", "--strict-config", "--strict-markers", "--doctest-modules"]

@@ -85,7 +85,7 @@ class TestLicenseHeaders:
 @pytest.mark.skipif(not IS_GIT_REPO, reason="Not a git repository.")
 def test_python_versions():
     """Confirm alignment of ALL files listing supported Python versions."""
-    supported = ["3.10", "3.11", "3.12", "3.13"]
+    supported = ["3.11", "3.12", "3.13", "3.14"]
     supported_strip = [ver.replace(".", "") for ver in supported]
     _parsed = [Version(v) for v in supported]
     supported_latest = str(max(_parsed)).replace(".", "")
@@ -139,8 +139,12 @@ def test_python_versions():
         assert search in path.read_text()
 
     ci_wheels_text = ci_wheels_file.read_text()
-    (cibw_line,) = (line for line in ci_wheels_text.splitlines() if "CIBW_SKIP" in line)
-    assert all(p not in cibw_line for p in supported_strip)
+    (cibw_line,) = (
+        line for line in ci_wheels_text.splitlines() if "CIBW_BUILD:" in line
+    )
+    # Only check if min (ABI3) and latest are tested as wheels.
+    min_and_max = supported_strip[:: len(supported_strip) - 1]
+    assert all(p in cibw_line for p in min_and_max)
 
     with pyproject_toml_file.open("rb") as f:
         data = tomli.load(f)

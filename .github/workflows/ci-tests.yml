@@ -31,23 +31,24 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        version: [py310, py311, py312, py313]
+        version: [py311, py312, py313, py314]
         gitpath-prepend: [""]
         include:
           - os: ubuntu-latest
             platform: linux
           - os: ubuntu-latest
-            version: py313
+            version: py314
             posargs: "--cov-report=xml --cov"
           - os: macos-latest
-            version: py313
+            version: py314
             platform: osx
             # On macos, the up-to-date git may not be first on the path
             # N.B. setting includes a final ":", to simplify the path setting command
             gitpath-prepend: "/opt/homebrew/bin:"
           - os: windows-latest
-            version: py313
+            version: py314
             platform: win
+      fail-fast: false
     steps:
     - name: "Checkout"
       uses: actions/checkout@v6
@@ -81,7 +82,10 @@ jobs:
         export PATH=${{ matrix.gitpath-prepend }}$PATH
         which git
         git --version
-        pixi run --frozen pytest ${{ matrix.posargs }}
+        pip install -e . --no-build-isolation --no-deps
+        pushd requirements/
+        pixi run --frozen pytest --pyargs cf_units ${{ matrix.posargs }}
+        popd
 
     - name: "Upload coverage report to Codecov"
       if: contains(matrix.posargs, '--cov')

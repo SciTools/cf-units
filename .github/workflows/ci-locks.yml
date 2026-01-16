@@ -25,7 +25,7 @@ jobs:
         shell: bash -l {0}
     env:
       SHELLOPTS: "errexit:pipefail"
-      NAME: "cf-units-py313"
+      NAME: "cf-units-py314"
     steps:
     - name: "Checkout"
       uses: actions/checkout@v6
