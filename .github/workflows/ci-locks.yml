@@ -20,6 +20,8 @@ jobs:
   build-locks:
     name: "Build locks"
     runs-on: ubuntu-latest
+    outputs:
+      updated: ${{ steps.refresh-locks.outputs.updated }}
     defaults:
       run:
         shell: bash -l {0}
@@ -43,23 +45,28 @@ jobs:
         fi
 
     - name: "refresh locks"
+      id: refresh-locks
       if: ${{ hashFiles('diff.md') }}
       run: |
         pixi workspace export conda-explicit-spec --environment ${{ env.NAME }} --frozen --ignore-pypi-errors requirements
         pixi workspace export conda-environment --environment ${{ env.NAME }} requirements/cf-units.yml
+        echo "updated=true" >> $GITHUB_OUTPUT
 
     - name: "Upload lock artifacts"
       uses: actions/upload-artifact@v6
+      if: steps.refresh-locks.outputs.updated == 'true'
       with:
         path: |
           ${{ github.workspace }}/pixi.lock
           ${{ github.workspace }}/requirements/*
+          ${{ github.workspace }}/diff.md
 
 
   create-pr:
     needs: build-locks
     name: "Create pull-request"
     runs-on: ubuntu-latest
+    if: needs.build-locks.outputs.updated == 'true'
     steps:
     - name: "Checkout"
       uses: actions/checkout@v6
@@ -81,7 +88,9 @@ jobs:
       uses: peter-evans/create-pull-request@98357b18bf14b5342f975ff684046ec3b2a07725
       with:
         token: ${{ steps.generate-token.outputs.token }}
-        add-paths: ${{ github.workspace }}/requirements/*
+        add-paths: |
+          ${{ github.workspace }}/pixi.lock
+          ${{ github.workspace }}/requirements/*
         commit-message: "updated lock files"
         branch: pixi-auto-update
         delete-branch: true
