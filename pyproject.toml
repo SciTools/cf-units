@@ -246,7 +246,7 @@ build = { cmd = ["python", "setup.py", "build_ext", "--inplace"], depends-on = [
 clean = { cmd = ["python", "setup.py", "clean_cython"] }
 fmt = "ruff format"
 lint = "ruff check"
-pytest = { cmd = ["pytest"], depends-on = ["build"] }
+pytest = { cmd = "cd .. && pytest --pyargs cf_units", depends-on = ["build"] }
 
 [tool.pixi.feature.docs.dependencies]
 sphinx = "*"
