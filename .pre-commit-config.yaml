@@ -45,7 +45,7 @@ repos:
 # NOTE : keep these in hook-name (aka 'id') order
 
 -   repo: https://github.com/adamchainz/blacken-docs
-    rev: 1.19.1
+    rev: 1.20.0
     hooks:
     -   id: blacken-docs
         types: [file, rst]
@@ -58,7 +58,7 @@ repos:
         additional_dependencies: [tomli]
 
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: 'v1.17.1'
+    rev: 'v1.19.1'
     hooks:
     -   id: mypy
         additional_dependencies:
@@ -66,13 +66,13 @@ repos:
         exclude: 'docs/|cf_units/_udunits2_parser/parser/.*\.py|cf_units/_udunits2_parser/_antlr4_runtime/.*\.py'
 
 -   repo: https://github.com/numpy/numpydoc
-    rev: v1.9.0
+    rev: v1.10.0
     hooks:
       - id: numpydoc-validation
         types: [file, python]
 
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.12.11"
+    rev: "v0.14.13"
     hooks:
     # Run the linter
     -   id: ruff
@@ -88,7 +88,7 @@ repos:
         types: [file, python]
 
 -   repo: https://github.com/scientific-python/cookie
-    rev: 2025.05.02
+    rev: 2025.11.21
     hooks:
     -   id: sp-repo-review
         additional_dependencies: ["repo-review[cli]"]   # TODO: Only neededed if extra dependencies are required
