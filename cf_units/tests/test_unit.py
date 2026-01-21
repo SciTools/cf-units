@@ -315,7 +315,7 @@ class Test_root:
 
     def test_not_integer(self):
         u = Unit("volt")
-        with pytest.raises(TypeError, match="integer .* required"):
+        with pytest.raises(TypeError, match=r"integer .* required"):
             u.root(1.2)
 
     def test_meaningless_operation(self):
@@ -985,7 +985,7 @@ class TestTimeEncoding:
 
     def test_decode_time(self):
         result = cf_units.decode_time(158976000.0 + 43560.0)
-        year, month, day, hour, min, sec, res = result
+        year, month, day, hour, min, sec, _ = result
         assert (year, month, day, hour, min, sec) == (2006, 1, 15, 12, 6, 0)
 
 
