@@ -6,7 +6,9 @@
 
 ci:
     autofix_prs: false
+    autofix_commit_msg: "style: pre-commit fixes"
     autoupdate_commit_msg: "chore: update pre-commit hooks"
+    autoupdate_schedule: "monthly"
 
 exclude: 'cf_units/_udunits2_parser/_antlr4_runtime/'
 
@@ -75,7 +77,7 @@ repos:
     rev: "v0.14.13"
     hooks:
     # Run the linter
-    -   id: ruff
+    -   id: ruff-check
         types: [file, python]
         args: [--fix, --show-fixes]
     # Run the formatter.
