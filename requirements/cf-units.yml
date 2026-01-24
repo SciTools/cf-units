@@ -1,4 +1,4 @@
-name: cf-units-py313
+name: cf-units-py314
 channels:
 - conda-forge
 - nodefaults
@@ -7,12 +7,13 @@ dependencies:
 - jinja2 *
 - pytest *
 - pytest-cov *
+- tomli *
 - pip *
 - pre-commit *
 - sphinx *
 - antlr-python-runtime 4.11.1.*
-- python 3.13.* *_cp313
-- python >=3.10
+- python 3.14.* *_cp314
+- python >=3.11
 - cftime >=1.2
 - cython >=3.0
 - numpy >=1.23
@@ -27,6 +28,7 @@ dependencies:
   - pip
   - pytest
   - pytest-cov
+  - tomli
   - -e .
   - sphinx
   - cftime>=1.2
