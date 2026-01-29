@@ -42,6 +42,11 @@ jobs:
           incdir: /usr/include/udunits2
           libdir: /usr/lib64
           xml_path: /usr/share/udunits/udunits2.xml
+        - os: ubuntu-24.04-arm
+          arch: aarch64
+          incdir: /usr/include/udunits2
+          libdir: /usr/lib/aarch64-linux-gnu
+          xml_path: /usr/share/udunits/udunits2.xml
         - os: macos-15-intel
           arch: x86_64
           incdir: /usr/local/Cellar/udunits/2.2.28/include
