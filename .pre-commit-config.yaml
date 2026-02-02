@@ -74,7 +74,7 @@ repos:
         types: [file, python]
 
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.14.13"
+    rev: "v0.14.14"
     hooks:
     # Run the linter
     -   id: ruff-check
