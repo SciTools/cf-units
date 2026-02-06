@@ -92,6 +92,8 @@ jobs:
           ${{ github.workspace }}/pixi.lock
           ${{ github.workspace }}/requirements/*
         commit-message: "updated lock files"
+        committer: "Lockfile bot <noreply@github.com>"
+        author: "Lockfile bot <noreply@github.com>"
         branch: pixi-auto-update
         delete-branch: true
         title: "[cf-units.ci] pixi lock auto-update"
