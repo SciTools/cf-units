@@ -13,7 +13,7 @@ https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.7-h534d264_6.conda#053b84
 https://conda.anaconda.org/conda-forge/noarch/tzdata-2025c-hc9c84f9_1.conda#ad659d0a2b3e47e38d829aa8cad2d610
 https://conda.anaconda.org/conda-forge/win-64/tk-8.6.13-h6ed50ae_3.conda#0481bfd9814bf525bd4b3ee4b51494c4
 https://conda.anaconda.org/conda-forge/noarch/python_abi-3.14-8_cp314.conda#0539938c55b6b1a59b560e843ad864a4
-https://conda.anaconda.org/conda-forge/noarch/ca-certificates-2026.1.4-h4c7d964_0.conda#84d389c9eee640dda3d26fc5335c67d8
+https://conda.anaconda.org/conda-forge/noarch/ca-certificates-2026.2.25-h4c7d964_0.conda#f001e6e220355b7f87403a4d0e5bf1ca
 https://conda.anaconda.org/conda-forge/win-64/openssl-3.6.1-hf411b9b_1.conda#eb585509b815415bc964b2c7e11c7eb3
 https://conda.anaconda.org/conda-forge/win-64/libsqlite-3.51.2-hf5d6505_0.conda#903979414b47d777d548e5f0165e6cd8
 https://conda.anaconda.org/conda-forge/win-64/libmpdec-4.0.0-hfd05255_1.conda#e4a9fc2bba3b022dad998c78856afe47
@@ -34,7 +34,7 @@ https://conda.anaconda.org/conda-forge/noarch/backports.zstd-1.3.0-py314h680f03e
 https://conda.anaconda.org/conda-forge/noarch/urllib3-2.6.3-pyhd8ed1ab_0.conda#9272daa869e03efe68833e3dc7a02130
 https://conda.anaconda.org/conda-forge/noarch/idna-3.11-pyhd8ed1ab_0.conda#53abe63df7e10a6ba605dc5f9f961d36
 https://conda.anaconda.org/conda-forge/noarch/charset-normalizer-3.4.4-pyhd8ed1ab_0.conda#a22d1fd9bf98827e280a02875d9a007a
-https://conda.anaconda.org/conda-forge/noarch/certifi-2026.1.4-pyhd8ed1ab_0.conda#eacc711330cd46939f66cd401ff9c44b
+https://conda.anaconda.org/conda-forge/noarch/certifi-2026.2.25-pyhd8ed1ab_0.conda#765c4d97e877cdbbb88ff33152b86125
 https://conda.anaconda.org/conda-forge/noarch/requests-2.32.5-pyhcf101f3_1.conda#c65df89a0b2e321045a9e01d1337b182
 https://conda.anaconda.org/conda-forge/noarch/pygments-2.19.2-pyhd8ed1ab_0.conda#6b6ece66ebcae2d5f326c77ef2c5a066
 https://conda.anaconda.org/conda-forge/noarch/packaging-26.0-pyhcf101f3_0.conda#b76541e68fea4d511b1ac46a28dcd2c6
@@ -67,16 +67,17 @@ https://conda.anaconda.org/conda-forge/noarch/pytest-9.0.2-pyhcf101f3_0.conda#2b
 https://conda.anaconda.org/conda-forge/win-64/coverage-7.13.4-py314h2359020_0.conda#ac7417dc27e19765fd50f547d9a9e445
 https://conda.anaconda.org/conda-forge/noarch/pytest-cov-7.0.0-pyhcf101f3_1.conda#6891acad5e136cb62a8c2ed2679d6528
 https://conda.anaconda.org/conda-forge/noarch/platformdirs-4.9.2-pyhcf101f3_0.conda#4fefefb892ce9cc1539405bec2f1a6cd
-https://conda.anaconda.org/conda-forge/noarch/filelock-3.24.3-pyhd8ed1ab_0.conda#9dbb20eec24beb026291c20a35ce1ff9
+https://conda.anaconda.org/conda-forge/noarch/filelock-3.25.0-pyhd8ed1ab_0.conda#49a92015e912176999ae81bea11ea778
+https://conda.anaconda.org/conda-forge/noarch/python-discovery-1.1.0-pyhcf101f3_0.conda#ee4e2cad073411bdfa8598f599537498
 https://conda.anaconda.org/conda-forge/noarch/distlib-0.4.0-pyhd8ed1ab_0.conda#003b8ba0a94e2f1e117d0bd46aebc901
-https://conda.anaconda.org/conda-forge/noarch/virtualenv-20.38.0-pyhcf101f3_0.conda#eaf8f08a04ab2d8612e45aa4f4c33357
+https://conda.anaconda.org/conda-forge/noarch/virtualenv-21.0.0-pyhcf101f3_0.conda#0d574419484a88ee7e753cc0c80ee2c1
 https://conda.anaconda.org/conda-forge/win-64/yaml-0.2.5-h6a83c73_3.conda#433699cba6602098ae8957a323da2664
 https://conda.anaconda.org/conda-forge/win-64/pyyaml-6.0.3-py314h2359020_1.conda#0cd9b88826d0f8db142071eb830bce56
 https://conda.anaconda.org/conda-forge/noarch/nodeenv-1.10.0-pyhd8ed1ab_0.conda#eb52d14a901e23c39e9e7b4a1a5c015f
 https://conda.anaconda.org/conda-forge/noarch/pycparser-2.22-pyh29332c3_1.conda#12c566707c80111f9799308d9e265aef
 https://conda.anaconda.org/conda-forge/win-64/cffi-2.0.0-py314h5a2d7ad_1.conda#c360170be1c9183654a240aadbedad94
 https://conda.anaconda.org/conda-forge/win-64/ukkonen-1.1.0-py314h909e829_0.conda#54e012b629ac5a40c9b3fa32738375dc
-https://conda.anaconda.org/conda-forge/noarch/identify-2.6.16-pyhd8ed1ab_0.conda#8bc5851c415865334882157127e75799
+https://conda.anaconda.org/conda-forge/noarch/identify-2.6.17-pyhd8ed1ab_0.conda#5b7ae2ec4e0750e094f804a6cf1b2a37
 https://conda.anaconda.org/conda-forge/noarch/cfgv-3.5.0-pyhd8ed1ab_0.conda#381bd45fb7aa032691f3063aff47e3a1
 https://conda.anaconda.org/conda-forge/noarch/pre-commit-4.5.1-pyha770c72_0.conda#7f3ac694319c7eaf81a0325d6405e974
 https://conda.anaconda.org/conda-forge/noarch/pip-26.0.1-pyh145f28c_0.conda#09a970fbf75e8ed1aa633827ded6aa4f
@@ -89,7 +90,7 @@ https://conda.anaconda.org/conda-forge/win-64/libxml2-2.15.1-h779ef1b_1.conda#68
 https://conda.anaconda.org/conda-forge/win-64/libwinpthread-12.0.0.r4.gg4f2fc60ca-h57928b3_10.conda#8a86073cf3b343b87d03f41790d8b4e5
 https://conda.anaconda.org/conda-forge/win-64/libhwloc-2.12.2-default_h4379cf1_1000.conda#3b576f6860f838f950c570f4433b086e
 https://conda.anaconda.org/conda-forge/win-64/tbb-2022.3.0-h3155e25_2.conda#0f9817ffbe25f9e69ceba5ea70c52606
-https://conda.anaconda.org/conda-forge/win-64/llvm-openmp-21.1.8-h4fa8253_0.conda#0d8b425ac862bcf17e4b28802c9351cb
+https://conda.anaconda.org/conda-forge/win-64/llvm-openmp-22.1.0-h4fa8253_0.conda#e5505e0b7d6ef5c19d5c0c1884a2f494
 https://conda.anaconda.org/conda-forge/win-64/mkl-2025.3.0-hac47afa_455.conda#fd05d1e894497b012d05a804232254ed
 https://conda.anaconda.org/conda-forge/win-64/libblas-3.11.0-5_hf2e6a31_mkl.conda#f9decf88743af85c9c9e05556a4c47c0
 https://conda.anaconda.org/conda-forge/win-64/liblapack-3.11.0-5_hf9ab0e9_mkl.conda#e62c42a4196dee97d20400612afcb2b1
