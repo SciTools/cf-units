@@ -77,7 +77,7 @@ jobs:
         path: ${{ github.workspace }}
 
     - name: "Generate token"
-      uses: actions/create-github-app-token@v2
+      uses: actions/create-github-app-token@v3
       id: generate-token
       with:
         app-id: ${{ secrets.AUTH_APP_ID }}
