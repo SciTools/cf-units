@@ -59,7 +59,7 @@ jobs:
     # so we need to prepare environment variables for it
     - name: Export environment variables for UDUNITS2 lookup
       if: runner.os == 'Windows'
-      uses: actions/github-script@v8
+      uses: actions/github-script@v9
       with:
         script: |
           const path = require('path')
