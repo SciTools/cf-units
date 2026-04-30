@@ -83,7 +83,7 @@ jobs:
 
     - name: "Conda install"
       if: runner.os == 'Windows'
-      uses: conda-incubator/setup-miniconda@v3
+      uses: conda-incubator/setup-miniconda@v4
       with:
         miniforge-version: latest
         channels: conda-forge
@@ -96,7 +96,7 @@ jobs:
       run: conda install udunits2
 
     - name: "Building ${{ matrix.os }} (${{ matrix.arch }}) wheels"
-      uses: pypa/cibuildwheel@v3.4.0
+      uses: pypa/cibuildwheel@v3.4.1
       env:
         CIBW_ENVIRONMENT: CF_UNITS_LIMITED_API="1"
         CIBW_SKIP: "pp* *-musllinux*"
