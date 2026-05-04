@@ -53,14 +53,14 @@ repos:
         types: [file, rst]
 
 -   repo: https://github.com/codespell-project/codespell
-    rev: "v2.4.1"
+    rev: "v2.4.2"
     hooks:
     -   id: codespell
         types_or: [asciidoc, python, markdown, rst]
         additional_dependencies: [tomli]
 
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: 'v1.19.1'
+    rev: 'v1.20.2'
     hooks:
     -   id: mypy
         additional_dependencies:
@@ -74,7 +74,7 @@ repos:
         types: [file, python]
 
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.15.4"
+    rev: "v0.15.12"
     hooks:
     # Run the linter
     -   id: ruff-check
@@ -90,7 +90,7 @@ repos:
         types: [file, python]
 
 -   repo: https://github.com/scientific-python/cookie
-    rev: 2025.11.21
+    rev: 2026.04.04
     hooks:
     -   id: sp-repo-review
         additional_dependencies: ["repo-review[cli]"]   # TODO: Only neededed if extra dependencies are required
