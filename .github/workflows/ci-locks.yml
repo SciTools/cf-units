@@ -30,10 +30,10 @@ jobs:
       NAME: "cf-units-py314"
     steps:
     - name: "Checkout"
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
 
     - name: "Pixi setup"
-      uses: prefix-dev/setup-pixi@1b2de7f3351f171c8b4dfeb558c639cb58ed4ec0
+      uses: prefix-dev/setup-pixi@5185adfbffb4bd703da3010310260805d89ebb11
       with:
         run-install: false
 
@@ -69,7 +69,7 @@ jobs:
     if: needs.build-locks.outputs.updated == 'true'
     steps:
     - name: "Checkout"
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
 
     - name: "Download lock artifacts"
       uses: actions/download-artifact@v8
