@@ -78,7 +78,7 @@ jobs:
     - name: "Set MACOSX_DEPLOYMENT_TARGET"
       if: startsWith(matrix.os, 'macos')
       # Allows version targets to be set per architecture.
-      run: echo "MACOSX_DEPLOYMENT_TARGET=$([[ ${{ matrix.os }} == 'macos-latest' ]] && echo '26.0' || echo '26.0')" >> $GITHUB_ENV
+      run: echo "MACOSX_DEPLOYMENT_TARGET=$([[ ${{ matrix.os }} == 'macos-latest' ]] && echo '26.0' || echo '15.0')" >> $GITHUB_ENV
 
 
     - name: "Conda install"
