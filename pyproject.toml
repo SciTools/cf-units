@@ -374,6 +374,7 @@ ignore = [
     "PLC0414",  # Import alias does not rename original package
     "PLR0912",  # Too many branches
     "PLR0913",  # too-many-argument
+    "PLR0917",  # too-many-postional-arguments
     "PLR2004",  # magic-value-comparison
     "PT006",  # pytest-parametrize-names-wrong-type
     "PT011",  # pytest-raises-too-broad
@@ -405,6 +406,9 @@ select = [
     # rule it needs to be explicitly enabled below:
     "D212",  # Multi-line docstring summary should start at the first line
 ]
+
+[tool.ruff.lint.flake8-copyright]
+notice-rgx = "(?i)copyright.*cf-units contributors"
 
 [tool.ruff.lint.isort]
 force-sort-within-sections = true
