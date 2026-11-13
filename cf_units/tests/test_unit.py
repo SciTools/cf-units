@@ -701,6 +701,83 @@ class Test_non_equality:
 
 
 class Test_convert:
+    @pytest.mark.parametrize("dtype", [np.float32, np.float64])
+    @pytest.mark.parametrize(
+        ("origin", "other_origin", "calendar", "offset"),
+        [
+            ("m", "meters", None, 0),
+            ("days since 2000-02-30", "days since 2000-03-01", "360_day", -1),
+            ("days since 1900-02-29", "days since 1900-03-01", "all_leap", -1),
+            ("days since 1900-02-29", "days since 1900-03-01", "366_day", -1),
+            ("days since 1900-02-29", "days since 1900-03-01", "julian", -1),
+            ("days since 2000-1-1", "days since 2000-01-01", "360_day", 0),
+            (
+                "days since 2000-02-30 00:00:00 +1",
+                "days since 2000-03-01 00:00:00 +01:00",
+                "360_day",
+                -1,
+            ),
+            (
+                "days since 1900-02-29 00:00:00 -6:00",
+                "days since 1900-03-01 00:00:00 -06:00",
+                "all_leap",
+                -1,
+            ),
+        ],
+    )
+    def test_equal_udunits(self, dtype, origin, other_origin, calendar, offset):
+        u = Unit(origin, calendar=calendar)
+        v = Unit(other_origin, calendar=calendar)
+        assert (u == v) == (offset == 0)
+        assert u.convert(0, v) == offset
+
+        original = np.array([1, 2], dtype=dtype)
+        result = u.convert(original, v)
+        np.testing.assert_array_equal(result, original + offset)
+        assert result.dtype == dtype
+        assert not np.shares_memory(result, original)
+        result[0] = 99
+        np.testing.assert_array_equal(original, [1, 2])
+
+        if offset == 0:
+            assert u.convert(original, v, inplace=True) is original
+
+    @pytest.mark.parametrize("dtype", [np.float32, np.float64])
+    @pytest.mark.parametrize(
+        "calendar",
+        ["standard", "360_day", "all_leap", "julian", "noleap", "proleptic_gregorian"],
+    )
+    @pytest.mark.parametrize(
+        ("origin", "timezone", "other_timezone"),
+        [
+            ("2000-03-01 00:00:00", "+1", "+01:00"),
+            ("2000-03-01 00:00:00", "-6:00", "-06:00"),
+            ("2000-03-01 00:00:00", "+130", "+01:30"),
+            ("2000-01-01T00:00:00.5", "-1", "-01:00"),
+        ],
+    )
+    def test_timezone_identity(self, dtype, calendar, origin, timezone, other_timezone):
+        u = Unit(f"days since {origin} {timezone}", calendar=calendar)
+        v = Unit(f"days since {origin} {other_timezone}", calendar=calendar)
+        assert u == v
+        assert v == u
+        assert u.num2date(0) == v.num2date(0)
+        other_calendar = "julian" if calendar != "julian" else "360_day"
+        assert u != Unit(u.origin, calendar=other_calendar)
+        assert u.convert(0, v) == 0
+
+        original = np.array([1, 2], dtype=dtype)
+        result = u.convert(original, v)
+        np.testing.assert_array_equal(result, original)
+        assert result.dtype == dtype
+        assert result is not original
+        assert not np.shares_memory(result, original)
+        result[0] = 99
+        np.testing.assert_array_equal(original, [1, 2])
+
+        assert u.convert(original, v, inplace=True) is original
+        np.testing.assert_array_equal(original, [1, 2])
+
     def test_convert_float(self):
         u = Unit("meter")
         v = Unit("mile")
