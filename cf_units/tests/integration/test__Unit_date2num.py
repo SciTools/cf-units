@@ -39,3 +39,13 @@ def test_fractional_second(calendar_const, calendar_str):
     for num, date in zip(nums, dates, strict=False):
         res = unit.date2num(date)
         assert num == pytest.approx(res)
+
+
+@pytest.mark.parametrize("calendar", CALENDAR_STRINGS)
+@pytest.mark.parametrize(
+    "timezone, expected", [("-6:00", -6), ("+5:30", 5.5), ("-6", -6)]
+)
+def test_single_digit_timezone_hour(calendar, timezone, expected):
+    unit = cf_units.Unit(f"hours since 1800-01-01 00:00:00 {timezone}", calendar)
+    date = cftime.datetime(1800, 1, 1, calendar=calendar)
+    assert unit.date2num(date) == pytest.approx(expected)

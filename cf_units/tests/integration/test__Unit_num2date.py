@@ -337,3 +337,13 @@ class Test:
         ]
 
         self.check_timedelta(nums, units, expected)
+
+
+@pytest.mark.parametrize("calendar", ["standard", "360_day", "365_day"])
+@pytest.mark.parametrize(
+    "timezone, padded", [("-6:00", "-06:00"), ("+5:30", "+05:30"), ("-6", "-06")]
+)
+def test_single_digit_timezone_hour(calendar, timezone, padded):
+    unit = cf_units.Unit(f"hours since 1800-01-01 00:00:00 {timezone}", calendar)
+    expected = cftime.num2date(0, f"hours since 1800-01-01 00:00:00 {padded}", calendar)
+    assert unit.num2date(0) == expected
