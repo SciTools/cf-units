@@ -161,7 +161,7 @@ class SyntaxErrorRaiser(ErrorListener):
         self.unit_string = unit_string
         super(ErrorListener, self).__init__()
 
-    def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
+    def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):  # noqa: PLR0917
         # https://stackoverflow.com/a/36367357/741316
         context = ("inline", line, column + 2, f"'{self.unit_string}'")
         syntax_error = SyntaxError(msg, context)
