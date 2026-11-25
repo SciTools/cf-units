@@ -5,7 +5,7 @@
 """Test Unit the wrapper class for Unidata udunits2."""
 
 import copy
-import datetime as datetime
+import datetime  # noqa: ICN001
 import operator
 from operator import truediv
 import pickle

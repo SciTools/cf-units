@@ -309,6 +309,7 @@ ignore = [
     "MY105",  # MyPy enables redundant-expr  (TODO: see MyPy ignore below)
     "PC180",  # Uses a markdown formatter
     "PY005",  # Has tests folder (TODO: it does, but not in standard location)
+    "SEC001",   # Uses zizmor
 ]
 
 [tool.ruff]
@@ -409,6 +410,9 @@ select = [
 [tool.ruff.lint.isort]
 force-sort-within-sections = true
 known-first-party = ["cf_units"]
+
+[tool.ruff.lint.flake8-copyright]
+notice-rgx = "^[ #]*Copyright cf-units contributors"
 
 [tool.ruff.lint.mccabe]
 max-complexity = 22

@@ -4,7 +4,7 @@
 # See LICENSE in the root of the repository for full licensing details.
 """Test method :meth:`cf_units.Unit.num2date`."""
 
-import datetime
+import datetime  # noqa: ICN001
 
 import cftime
 import numpy as np

@@ -4,7 +4,7 @@
 # See LICENSE in the root of the repository for full licensing details.
 """Test function :func:`cf_units.date2num`."""
 
-import datetime
+import datetime  # noqa: ICN001
 
 import numpy as np
 import pytest

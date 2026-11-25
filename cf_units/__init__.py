@@ -215,7 +215,7 @@ with suppress_errors(), c_locale():
 ########################################################################
 
 
-def encode_time(year, month, day, hour, minute, second):
+def encode_time(year, month, day, hour, minute, second):  # noqa: PLR0917
     """Return date/clock time encoded as a double precision value.
 
     Encoding performed using UDUNITS-2 hybrid Gregorian/Julian calendar.
